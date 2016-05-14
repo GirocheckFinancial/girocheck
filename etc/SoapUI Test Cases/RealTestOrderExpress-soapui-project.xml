@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="RealTestOrderExpress" resourceRoot="" soapui-version="4.6.4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="ScanPortBinding" type="wsdl" bindingName="{http://scan.girocheck.smartbt.com/}ScanPortBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/NewSVN/GiroCheck/etc/SoapUI%20Test%20Cases/TestOrderExpressFrontWSDL.xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\NewSVN\GiroCheck\etc\SoapUI%20Test%20Cases\TestOrderExpressFrontWSDL.xml"><con:part><con:url>file:\C:\NewSVN\GiroCheck\etc\SoapUI%20Test%20Cases\TestOrderExpressFrontWSDL.xml</con:url><con:content><![CDATA[<!--Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown.-->
+<definitions targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="http://mi2dev.warp68.net:45080/TestOrderExpressFront/Scan?xsd=1"/>
+    </xsd:schema>
+  </types>
+  <message name="orderExpress">
+    <part name="parameters" element="tns:orderExpress"/>
+  </message>
+  <message name="orderExpressResponse">
+    <part name="parameters" element="tns:orderExpressResponse"/>
+  </message>
+  <message name="checkAuth">
+    <part name="parameters" element="tns:checkAuth"/>
+  </message>
+  <message name="checkAuthResponse">
+    <part name="parameters" element="tns:checkAuthResponse"/>
+  </message>
+  <portType name="Scan">
+    <operation name="orderExpress">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/orderExpressRequest" message="tns:orderExpress"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/orderExpressResponse" message="tns:orderExpressResponse"/>
+    </operation>
+    <operation name="checkAuth">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest" message="tns:checkAuth"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthResponse" message="tns:checkAuthResponse"/>
+    </operation>
+  </portType>
+  <binding name="ScanPortBinding" type="tns:Scan">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="orderExpress">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="checkAuth">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="Scan">
+    <port name="ScanPort" binding="tns:ScanPortBinding">
+      <soap:address location="http://mi2dev.warp68.net:45080/TestOrderExpressFront/Scan"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>http://mi2dev.warp68.net:45080/TestOrderExpressFront/Scan?xsd=1</con:url><con:content><![CDATA[<!--Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown.-->
+<xs:schema version="1.0" targetNamespace="http://scan.girocheck.smartbt.com/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="orderExpress" type="tns:orderExpress"/>
+  <xs:element name="orderExpressResponse" type="tns:orderExpressResponse"/>
+  <xs:element name="checkAuth" type="tns:checkAuth"/>
+  <xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+  <xs:complexType name="orderExpress">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:orderExpressRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderExpressRequest">
+    <xs:sequence>
+      <xs:element name="requestType" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+      <xs:element name="login" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="idPos" type="xs:string" minOccurs="0"/>
+      <xs:element name="idService" type="xs:string" minOccurs="0"/>
+      <xs:element name="dateTime" type="xs:string" minOccurs="0"/>
+      <xs:element name="deposit" type="xs:string" minOccurs="0"/>
+      <xs:element name="tax" type="xs:string" minOccurs="0"/>
+      <xs:element name="total" type="xs:string" minOccurs="0"/>
+      <xs:element name="rate" type="xs:string" minOccurs="0"/>
+      <xs:element name="relieve" type="xs:string" minOccurs="0"/>
+      <xs:element name="idDestiny" type="xs:string" minOccurs="0"/>
+      <xs:element name="bankAutho" type="xs:string" minOccurs="0"/>
+      <xs:element name="firstName" type="xs:string" minOccurs="0"/>
+      <xs:element name="lastName" type="xs:string" minOccurs="0"/>
+      <xs:element name="bornDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="street" type="xs:string" minOccurs="0"/>
+      <xs:element name="number" type="xs:string" minOccurs="0"/>
+      <xs:element name="zipCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="idPais" type="xs:string" minOccurs="0"/>
+      <xs:element name="idEstado" type="xs:string" minOccurs="0"/>
+      <xs:element name="poblacion" type="xs:string" minOccurs="0"/>
+      <xs:element name="telephone" type="xs:string" minOccurs="0"/>
+      <xs:element name="idOcupation" type="xs:string" minOccurs="0"/>
+      <xs:element name="idType" type="xs:integer" minOccurs="0"/>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="orderExpressResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:OrderExpressRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderExpressRes">
+    <xs:sequence>
+      <xs:element name="authoNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="opCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="opCode2" type="xs:string" minOccurs="0"/>
+      <xs:element name="idConsignor" type="xs:string" minOccurs="0"/>
+      <xs:element name="idBeneficiary" type="xs:string" minOccurs="0"/>
+      <xs:element name="bankAutho" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuth">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+      <xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+      <xs:element name="addressForm" type="xs:base64Binary" minOccurs="0"/>
+      <!--<xs:element name="achForm" type="xs:base64Binary" minOccurs="0"/>-->
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="crc" type="xs:string" minOccurs="0"/>
+      <xs:element name="data" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+      <xs:element name="micr" type="xs:string" minOccurs="0"/>
+      <xs:element name="phone" type="xs:string" minOccurs="0"/>
+      <xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+      <xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+      \
+      <xs:element name="serial" type="xs:string" minOccurs="0"/>
+      <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+      <xs:element name="operation" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthRes">
+    <xs:sequence>
+      <!--<xs:element name="checkId" type="xs:string" minOccurs="0"/>-->
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://mi2dev.warp68.net:45080/TestOrderExpressFront/Scan</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="checkAuth" bindingOperationName="checkAuth" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://mi2dev.warp68.net:45080/TestOrderExpressFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuth>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <addressCorrect>?</addressCorrect>
+            <!--Optional:-->
+            <addressForm>cid:485776512249</addressForm>
+            <!--Optional:-->
+            <amount>?</amount>
+            <!--Optional:-->
+            <backTiff>cid:10007316111</backTiff>
+            <!--Optional:-->
+            <batchName>?</batchName>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <checkBack>cid:159122663434</checkBack>
+            <!--Optional:-->
+            <checkFront>cid:698213024740</checkFront>
+            <!--Optional:-->
+            <crc>?</crc>
+            <!--Zero or more repetitions:-->
+            <data>?</data>
+            <!--Optional:-->
+            <emailAddress>?</emailAddress>
+            <!--Optional:-->
+            <frontTiff>cid:721669254436</frontTiff>
+            <!--Optional:-->
+            <idBack>cid:17374035443</idBack>
+            <!--Optional:-->
+            <idFront>cid:1183218498805</idFront>
+            <!--Optional:-->
+            <iqaRawData>?</iqaRawData>
+            <!--Optional:-->
+            <micr>?</micr>
+            <!--Optional:-->
+            <phone>?</phone>
+            <!--Optional:-->
+            <scanTime>?</scanTime>
+            <!--Optional:-->
+            <scannerManufacturer>?</scannerManufacturer>
+            <!--Optional:-->
+            <sendTime>?</sendTime>
+            <!--Optional:-->
+            <serial>?</serial>
+            <!--Optional:-->
+            <ssn>?</ssn>
+            <!--Optional:-->
+            <operation>?</operation>
+         </arg0>
+      </scan:checkAuth>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="orderExpress" bindingOperationName="orderExpress" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://mi2dev.warp68.net:45080/TestOrderExpressFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:orderExpress>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <requestType>?</requestType>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <login>?</login>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <idPos>?</idPos>
+            <!--Optional:-->
+            <idService>?</idService>
+            <!--Optional:-->
+            <dateTime>?</dateTime>
+            <!--Optional:-->
+            <deposit>?</deposit>
+            <!--Optional:-->
+            <tax>?</tax>
+            <!--Optional:-->
+            <total>?</total>
+            <!--Optional:-->
+            <rate>?</rate>
+            <!--Optional:-->
+            <relieve>?</relieve>
+            <!--Optional:-->
+            <idDestiny>?</idDestiny>
+            <!--Optional:-->
+            <bankAutho>?</bankAutho>
+            <!--Optional:-->
+            <firstName>?</firstName>
+            <!--Optional:-->
+            <lastName>?</lastName>
+            <!--Optional:-->
+            <bornDate>?</bornDate>
+            <!--Optional:-->
+            <street>?</street>
+            <!--Optional:-->
+            <number>?</number>
+            <!--Optional:-->
+            <zipCode>?</zipCode>
+            <!--Optional:-->
+            <idPais>?</idPais>
+            <!--Optional:-->
+            <idEstado>?</idEstado>
+            <!--Optional:-->
+            <poblacion>?</poblacion>
+            <!--Optional:-->
+            <telephone>?</telephone>
+            <!--Optional:-->
+            <idOcupation>?</idOcupation>
+            <!--Optional:-->
+            <idType>?</idType>
+            <!--Optional:-->
+            <id>?</id>
+         </arg0>
+      </scan:orderExpress>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/orderExpressRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

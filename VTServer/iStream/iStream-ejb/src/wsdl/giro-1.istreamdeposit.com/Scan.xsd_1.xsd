@@ -1,0 +1,658 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.2.0-1 (tags/2.2.0u1-7139; 2012-06-02T10:55:19+0000) JAXWS-RI/2.2.6-2 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:tns="http://web.service.scanner.tc.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://web.service.scanner.tc.com/">
+
+<xs:element name="authenticate" type="tns:authenticate"/>
+
+<xs:element name="authenticateResponse" type="tns:authenticateResponse"/>
+
+<xs:element name="changePassword" type="tns:changePassword"/>
+
+<xs:element name="changePasswordResponse" type="tns:changePasswordResponse"/>
+
+<xs:element name="checkAuth" type="tns:checkAuth"/>
+
+<xs:element name="checkAuthLocationConfig" type="tns:checkAuthLocationConfig"/>
+
+<xs:element name="checkAuthLocationConfigResponse" type="tns:checkAuthLocationConfigResponse"/>
+
+<xs:element name="checkAuthPoll" type="tns:checkAuthPoll"/>
+
+<xs:element name="checkAuthPollResponse" type="tns:checkAuthPollResponse"/>
+
+<xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+
+<xs:element name="checkAuthSubmit" type="tns:checkAuthSubmit"/>
+
+<xs:element name="checkAuthSubmitResponse" type="tns:checkAuthSubmitResponse"/>
+
+<xs:element name="closeBatch" type="tns:closeBatch"/>
+
+<xs:element name="closeBatchResponse" type="tns:closeBatchResponse"/>
+
+<xs:element name="enhancedCheckAuthPoll" type="tns:enhancedCheckAuthPoll"/>
+
+<xs:element name="enhancedCheckAuthPollResponse" type="tns:enhancedCheckAuthPollResponse"/>
+
+<xs:element name="forgotPassword" type="tns:forgotPassword"/>
+
+<xs:element name="forgotPasswordResponse" type="tns:forgotPasswordResponse"/>
+
+<xs:element name="getClientAuxDataConfig" type="tns:getClientAuxDataConfig"/>
+
+<xs:element name="getClientAuxDataConfigResponse" type="tns:getClientAuxDataConfigResponse"/>
+
+<xs:element name="getClientData" type="tns:getClientData"/>
+
+<xs:element name="getClientDataResponse" type="tns:getClientDataResponse"/>
+
+<xs:element name="getMessages" type="tns:getMessages"/>
+
+<xs:element name="getMessagesResponse" type="tns:getMessagesResponse"/>
+
+<xs:element name="getRecentDeposits" type="tns:getRecentDeposits"/>
+
+<xs:element name="getRecentDepositsResponse" type="tns:getRecentDepositsResponse"/>
+
+<xs:element name="lookupEntity" type="tns:lookupEntity"/>
+
+<xs:element name="lookupEntityResponse" type="tns:lookupEntityResponse"/>
+
+<xs:element name="makeDepositSlip" type="tns:makeDepositSlip"/>
+
+<xs:element name="makeDepositSlipResponse" type="tns:makeDepositSlipResponse"/>
+
+<xs:element name="sendImage" type="tns:sendImage"/>
+
+<xs:element name="sendImageResponse" type="tns:sendImageResponse"/>
+
+<xs:element name="sendStats" type="tns:sendStats"/>
+
+<xs:element name="sendStatsResponse" type="tns:sendStatsResponse"/>
+
+<xs:complexType name="getClientData">
+<xs:sequence>
+<xs:element name="arg0" type="tns:clientRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="clientRequest">
+<xs:sequence>
+<xs:element name="binaryData" type="xs:boolean"/>
+<xs:element name="entity" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="remitBranding" type="xs:boolean"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getClientDataResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:clientData" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="clientData">
+<xs:sequence>
+<xs:element name="data" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="type" type="xs:string" minOccurs="0"/>
+<xs:element name="value" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthPoll">
+<xs:sequence>
+<xs:element name="arg0" type="tns:checkAuthPollRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthPollRequest">
+<xs:sequence>
+<xs:element name="checkId" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="entityId" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthPollResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CheckAuthPollRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthPollRes">
+<xs:sequence>
+<xs:element name="items" type="tns:checkAuthPollItem" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthPollItem">
+<xs:sequence>
+<xs:element name="additionalInfo" type="xs:string" minOccurs="0"/>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+<xs:element name="payoutAmount" type="xs:string" minOccurs="0"/>
+<xs:element name="response" type="xs:string" minOccurs="0"/>
+<xs:element name="systemAmount" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="changePassword">
+<xs:sequence>
+<xs:element name="arg0" type="tns:changePasswordRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="changePasswordRequest">
+<xs:sequence>
+<xs:element name="newPassword" type="xs:string" minOccurs="0"/>
+<xs:element name="oldPassword" type="xs:string" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="changePasswordResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="enhancedCheckAuthPoll">
+<xs:sequence>
+<xs:element name="arg0" type="tns:enhancedCheckAuthPollRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enhancedCheckAuthPollRequest">
+<xs:sequence>
+<xs:element name="checkId" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="entityId" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enhancedCheckAuthPollResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:EnhancedCheckAuthPollRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="EnhancedCheckAuthPollRes">
+<xs:sequence>
+<xs:element name="items" type="tns:enhancedCheckAuthPollItem" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enhancedCheckAuthPollItem">
+<xs:sequence>
+<xs:element name="additionalInfo" type="xs:string" minOccurs="0"/>
+<xs:element name="addressCurrent" type="xs:string" minOccurs="0"/>
+<xs:element name="cardLoadFee" type="xs:string" minOccurs="0"/>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+<xs:element name="entityId" type="xs:int"/>
+<xs:element name="entityName" type="xs:string" minOccurs="0"/>
+<xs:element name="feeAmount" type="xs:string" minOccurs="0"/>
+<xs:element name="lastFour" type="xs:string" minOccurs="0"/>
+<xs:element name="payoutAmount" type="xs:string" minOccurs="0"/>
+<xs:element name="response" type="xs:string" minOccurs="0"/>
+<xs:element name="systemAmount" type="xs:string" minOccurs="0"/>
+<xs:element name="transactionDate" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="closeBatch">
+<xs:sequence>
+<xs:element name="arg0" type="tns:closeBatchRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="closeBatchRequest">
+<xs:sequence>
+<xs:element name="closeType" type="xs:string" minOccurs="0"/>
+<xs:element name="dollarValue" type="xs:string" minOccurs="0"/>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="imageRef" type="tns:imageRef" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="numberItems" type="xs:int"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="scanUser" type="xs:string" minOccurs="0"/>
+<xs:element name="scannerManufactuer" type="xs:string" minOccurs="0"/>
+<xs:element name="sendUser" type="xs:string" minOccurs="0"/>
+<xs:element name="serial" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="imageRef">
+<xs:sequence>
+<xs:element name="amount" type="xs:string" minOccurs="0"/>
+<xs:element name="crc" type="xs:string" minOccurs="0"/>
+<xs:element name="data" type="tns:draftAuxData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="imageRef" type="tns:imageRef" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="itemType" type="xs:string" minOccurs="0"/>
+<xs:element name="optOut" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="draftAuxData">
+<xs:sequence>
+<xs:element name="amount" type="xs:string" minOccurs="0"/>
+<xs:element name="detail" type="tns:draftAuxDataDetail" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="draftAuxDataDetail">
+<xs:sequence>
+<xs:element name="columnId" type="xs:int"/>
+<xs:element name="value" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="closeBatchResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CloseBatchRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CloseBatchRes">
+<xs:sequence>
+<xs:element name="batchId" type="xs:string" minOccurs="0"/>
+<xs:element name="crc" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="authenticate">
+<xs:sequence>
+<xs:element name="arg0" type="tns:authRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="authRequest">
+<xs:sequence>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="productVersion" type="xs:string" minOccurs="0"/>
+<xs:element name="serial" type="xs:string" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="authenticateResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:AuthRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="AuthRes">
+<xs:sequence>
+<xs:element name="entity" type="tns:entityData" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="fullList" type="xs:boolean"/>
+<xs:element name="numItemsNotInBatch" type="xs:int"/>
+<xs:element name="se" type="tns:serviceError" minOccurs="0"/>
+<xs:element name="sendStats" type="xs:boolean"/>
+<xs:element name="vi" type="tns:versionInfo" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="entityData">
+<xs:sequence>
+<xs:element name="companyName" type="xs:string" minOccurs="0"/>
+<xs:element name="entityId" type="xs:string" minOccurs="0"/>
+<xs:element name="entityType" type="xs:string" minOccurs="0"/>
+<xs:element name="localId" type="xs:string" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="serviceError">
+<xs:sequence>
+<xs:element name="errorString" type="xs:string" minOccurs="0"/>
+<xs:element name="errorValue" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="versionInfo">
+<xs:sequence>
+<xs:element name="file" type="xs:string" minOccurs="0"/>
+<xs:element name="md5" type="xs:string" minOccurs="0"/>
+<xs:element name="upgrade" type="xs:boolean"/>
+<xs:element name="url" type="xs:string" minOccurs="0"/>
+<xs:element name="version" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sendImage">
+<xs:sequence>
+<xs:element name="arg0" type="tns:sendImageRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sendImageRequest">
+<xs:sequence>
+<xs:element name="back" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="crc" type="xs:string" minOccurs="0"/>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="front" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+<xs:element name="micr" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+<xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="sendUser" type="xs:string" minOccurs="0"/>
+<xs:element name="serial" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sendImageResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:SendImageRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="SendImageRes">
+<xs:sequence>
+<xs:element name="checkId" type="xs:long"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthSubmit">
+<xs:sequence>
+<xs:element name="arg0" type="tns:checkAuthSubmitRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthSubmitRequest">
+<xs:sequence>
+<xs:element name="action" type="xs:string" minOccurs="0"/>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthSubmitResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="makeDepositSlip">
+<xs:sequence>
+<xs:element name="arg0" type="tns:depositSlipRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="depositSlipRequest">
+<xs:sequence>
+<xs:element name="baseURL" type="xs:string" minOccurs="0"/>
+<xs:element name="batchId" type="xs:int"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="makeDepositSlipResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:DepositSlipRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DepositSlipRes">
+<xs:sequence>
+<xs:element name="bytes" type="xs:base64Binary" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="forgotPassword">
+<xs:sequence>
+<xs:element name="arg0" type="tns:forgotPasswordRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="forgotPasswordRequest">
+<xs:sequence>
+<xs:element name="baseURL" type="xs:string" minOccurs="0"/>
+<xs:element name="pin" type="xs:string" minOccurs="0"/>
+<xs:element name="username" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="forgotPasswordResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getMessages">
+<xs:sequence>
+<xs:element name="arg0" type="tns:messagesRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="messagesRequest">
+<xs:sequence>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getMessagesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:MessagesRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="MessagesRes">
+<xs:sequence>
+<xs:element name="messages" type="tns:message" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="message">
+<xs:sequence>
+<xs:element name="effDate" type="xs:string" minOccurs="0"/>
+<xs:element name="header" type="xs:string" minOccurs="0"/>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+<xs:element name="messageId" type="xs:string" minOccurs="0"/>
+<xs:element name="type" type="xs:string" minOccurs="0"/>
+<xs:element name="url" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuth">
+<xs:sequence>
+<xs:element name="arg0" type="tns:checkAuthRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthRequest">
+<xs:sequence>
+<xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+<xs:element name="amount" type="xs:string" minOccurs="0"/>
+<xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="batchName" type="xs:string" minOccurs="0"/>
+<xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="crc" type="xs:string" minOccurs="0"/>
+<xs:element name="data" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+<xs:element name="micr" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="phone" type="xs:string" minOccurs="0"/>
+<xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+<xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="sendUser" type="xs:string" minOccurs="0"/>
+<xs:element name="serial" type="xs:string" minOccurs="0"/>
+<xs:element name="ssn" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CheckAuthRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthRes">
+<xs:sequence>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getClientAuxDataConfig">
+<xs:sequence>
+<xs:element name="arg0" type="tns:clientRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getClientAuxDataConfigResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:draftAuxDataConfig" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="draftAuxDataConfig">
+<xs:sequence>
+<xs:element name="columnOptions" type="tns:draftAuxDataColumnOption" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="autoCopy" type="xs:string" minOccurs="0"/>
+<xs:element name="columnId" type="xs:int"/>
+<xs:element name="dataType" type="xs:string" minOccurs="0"/>
+<xs:element name="maxLength" type="xs:int"/>
+<xs:element name="minLength" type="xs:int"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="required" type="xs:string" minOccurs="0"/>
+<xs:element name="sortOrder" type="xs:int"/>
+<xs:element name="valueMask" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="draftAuxDataColumnOption">
+<xs:sequence>
+<xs:element name="code" type="xs:string" minOccurs="0"/>
+<xs:element name="description" type="xs:string" minOccurs="0"/>
+<xs:element name="seq" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sendStats">
+<xs:sequence>
+<xs:element name="arg0" type="tns:sendStatsRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sendStatsRequest">
+<xs:sequence>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="scannerManufactuer" type="xs:string" minOccurs="0"/>
+<xs:element name="serial" type="xs:string" minOccurs="0"/>
+<xs:element name="stat" type="tns:stat" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="stat">
+<xs:sequence>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="value" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sendStatsResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getRecentDeposits">
+<xs:sequence>
+<xs:element name="arg0" type="tns:recentDepositRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="recentDepositRequest">
+<xs:sequence>
+<xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getRecentDepositsResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:RecentDepositRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="RecentDepositRes">
+<xs:sequence>
+<xs:element name="deposits" type="tns:deposit" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="deposit">
+<xs:sequence>
+<xs:element name="batchId" type="xs:string" minOccurs="0"/>
+<xs:element name="draftDate" type="xs:string" minOccurs="0"/>
+<xs:element name="numItems" type="xs:string" minOccurs="0"/>
+<xs:element name="settleAmount" type="xs:string" minOccurs="0"/>
+<xs:element name="userAmount" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthLocationConfig">
+<xs:sequence>
+<xs:element name="arg0" type="tns:checkAuthLocationConfigRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthLocationConfigRequest">
+<xs:sequence>
+<xs:element name="entityId" type="xs:int"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthLocationConfigResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CheckAuthLocationConfigRes" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthLocationConfigRes">
+<xs:sequence>
+<xs:element name="configList" type="tns:code" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="code">
+<xs:sequence>
+<xs:element name="extra" type="xs:string" minOccurs="0"/>
+<xs:element name="extra2" type="xs:string" minOccurs="0"/>
+<xs:element name="label" type="xs:string" minOccurs="0"/>
+<xs:element name="value" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="lookupEntity">
+<xs:sequence>
+<xs:element name="arg0" type="tns:lookupEntityRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="lookupEntityRequest">
+<xs:sequence>
+<xs:element name="internalLookup" type="xs:string" minOccurs="0"/>
+<xs:element name="lookupValue" type="xs:string" minOccurs="0"/>
+<xs:element name="password" type="xs:string" minOccurs="0"/>
+<xs:element name="user" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="lookupEntityResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:code" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

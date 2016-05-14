@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan">
+    <types>
+        <xsd:schema>
+            <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="Scan.xsd"/>
+        </xsd:schema>
+    </types>
+    <message name="personalInfo">
+        <part name="parameters" element="tns:personalInfo"/>
+    </message>
+    <message name="personalInfoResponse">
+        <part name="parameters" element="tns:personalInfoResponse"/>
+    </message>
+    <message name="certegyInfo">
+        <part name="parameters" element="tns:certegyInfo"/>
+    </message>
+    <message name="certegyInfoResponse">
+        <part name="parameters" element="tns:certegyInfoResponse"/>
+    </message>
+   
+    <portType name="Scan">
+        <operation name="personalInfo">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/personalInfoRequest" message="tns:personalInfo"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/personalInfoResponse" message="tns:personalInfoResponse"/>
+        </operation>
+        <operation name="certegyInfo">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/certegyInfoRequest" message="tns:certegyInfo"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/certegyInfoResponse" message="tns:certegyInfoResponse"/>
+        </operation>
+    </portType>
+    <binding name="ScanPortBinding" type="tns:Scan">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="personalInfo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="certegyInfo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+       
+    </binding>
+    <service name="Scan">
+        <port name="ScanPort" binding="tns:ScanPortBinding">
+            <soap:address location=""/>
+        </port>
+    </service>
+</definitions>

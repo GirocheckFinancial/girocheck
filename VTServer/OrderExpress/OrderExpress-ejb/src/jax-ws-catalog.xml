@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://10.10.2.119:8081/stored/" uri="wsdl/10.10.2.119_8081/stored/index"/>
+    <system systemId="http://10.10.2.119:8081/stored/Service1.asmx?op=contrataciones" uri="wsdl/10.10.2.119_8081/stored/Service1.asmx.op_contrataciones"/>
+    <system systemId="http://10.10.2.119:8081/stored/Service1.asmx?WSDL" uri="wsdl/10.10.2.119_8081/stored/Service1.asmx.wsdl"/>
+</catalog>

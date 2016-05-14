@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.3 (tags/2.3-7528; 2013-04-29T19:34:10+0000) JAXWS-RI/2.2.8 JAXWS/2.2 svn-revision#unknown. --><definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan">
+    <types>
+        <xsd:schema>
+            <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="http://mi2dev.warp68.net:45080/MockGirocheckFront/Scan?xsd=1"/>
+        </xsd:schema>
+    </types>
+   
+    <message name="checkAuth">
+        <part name="parameters" element="tns:checkAuth"/>
+    </message>
+    <message name="tecnicardConfirmation">
+        <part name="parameters" element="tns:tecnicardConfirmation"/>
+    </message>
+     <message name="cardReload">
+        <part name="parameters" element="tns:cardReload"/>
+    </message>
+    <message name="checkAuthResponse">
+        <part name="parameters" element="tns:checkAuthResponse"/>
+    </message>
+    <message name="tecnicardConfirmationResponse">
+        <part name="parameters" element="tns:tecnicardConfirmationResponse"/>
+    </message>
+    <message name="cardReloadResponse">
+        <part name="parameters" element="tns:cardReloadResponse"/>
+    </message>
+    <message name="checkAuthSubmit">
+        <part name="parameters" element="tns:checkAuthSubmit"/>
+    </message>
+    <message name="checkAuthSubmitResponse">
+        <part name="parameters" element="tns:checkAuthSubmitResponse"/>
+    </message>
+    <message name="checkAuthLocationConfig">
+        <part name="parameters" element="tns:checkAuthLocationConfig"/>
+    </message>
+    <message name="checkAuthLocationConfigResponse">
+        <part name="parameters" element="tns:checkAuthLocationConfigResponse"/>
+    </message>
+   <message name="balanceInquiry">
+        <part name="parameters" element="tns:balanceInquiry"/>
+    </message>
+	<message name="balanceInquiryResponse">
+        <part name="parameters" element="tns:balanceInquiryResponse"/>
+    </message>
+    <message name="cardToBank">
+        <part name="parameters" element="tns:cardToBank"/>
+    </message>
+	<message name="cardToBankResponse">
+        <part name="parameters" element="tns:cardToBankResponse"/>
+    </message>
+    <portType name="Scan">
+   
+        <operation name="checkAuth">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest" message="tns:checkAuth"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthResponse" message="tns:checkAuthResponse"/>
+        </operation>
+        <operation name="tecnicardConfirmation">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/tecnicardConfirmationRequest" message="tns:tecnicardConfirmation"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/tecnicardConfirmationResponse" message="tns:tecnicardConfirmationResponse"/>
+        </operation>
+        <operation name="cardReload">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest" message="tns:cardReload"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardReloadResponse" message="tns:cardReloadResponse"/>
+        </operation>
+        <operation name="checkAuthSubmit">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest" message="tns:checkAuthSubmit"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitResponse" message="tns:checkAuthSubmitResponse"/>
+        </operation>
+        <operation name="checkAuthLocationConfig">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest" message="tns:checkAuthLocationConfig"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigResponse" message="tns:checkAuthLocationConfigResponse"/>
+        </operation>
+        <operation name="balanceInquiry">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest" message="tns:balanceInquiry"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryResponse" message="tns:balanceInquiryResponse"/>
+        </operation>
+        <operation name="cardToBank">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest" message="tns:cardToBank"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardToBankResponse" message="tns:cardToBankResponse"/>
+        </operation>
+    </portType>
+    <binding name="ScanPortBinding" type="tns:Scan">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+      
+        <operation name="checkAuth">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="tecnicardConfirmation">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+         <operation name="cardReload">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="checkAuthSubmit">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="checkAuthLocationConfig">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="balanceInquiry">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+           <operation name="cardToBank">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="Scan">
+        <port name="ScanPort" binding="tns:ScanPortBinding">
+            <soap:address location="http://mi2dev.warp68.net:45080/MockGirocheckFront/Scan"/>
+        </port>
+    </service>
+</definitions>

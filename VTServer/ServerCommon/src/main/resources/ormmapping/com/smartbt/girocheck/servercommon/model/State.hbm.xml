@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.State" table="State" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="name" column="name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="abbreviation" column="abbreviation" type="string" length="3" not-null="false" lazy="false"/>
+                <property name="code" column="code" type="integer" length="10" not-null="false" lazy="false"/>
+		<set name="address" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="state" not-null="false"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Address"/>
+		</set>
+		<set name="personalIdentification" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="state" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.PersonalIdentification"/>
+		</set>
+	</class>
+</hibernate-mapping>

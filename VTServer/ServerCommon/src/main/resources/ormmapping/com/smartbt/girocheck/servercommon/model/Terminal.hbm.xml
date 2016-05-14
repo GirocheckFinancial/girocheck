@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.Terminal" table="Terminal" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="merchant" cascade="lock" column="merchant" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="true" lazy="proxy">
+		</many-to-one>
+		<property name="serialNumber" column="serial_number" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="description" column="description" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="idPOSOrderExp" column="id_pos_orderexp" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="active" column="active" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="activationDate" column="activation_date" type="date" not-null="false" lazy="false"/>
+		<property name="deactivationDate" column="deactivation_date" type="integer" length="10" not-null="false" lazy="false"/>
+		
+		<property name="girocheckUser" column="girocheck_user" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="girocheckPassword" column="girocheck_password" type="string" length="255" not-null="false" lazy="false"/>
+		
+		<set name="terminal_Parameter_Value" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="terminal" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.TerminalParameterValue"/>
+		</set>
+		<set name="transaction" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="terminal" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Transaction"/>
+		</set>
+	</class>
+</hibernate-mapping>

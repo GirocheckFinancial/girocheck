@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.MerchantParameterValue" table="Merchant_Parameter_Value" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="parameter" cascade="lock" column="parameter" class="com.smartbt.girocheck.servercommon.model.MerchantParameter" not-null="true" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="merchant" cascade="lock" column="merchant" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="true" lazy="proxy">
+		</many-to-one>
+		<property name="value" column="value" type="string" length="255" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

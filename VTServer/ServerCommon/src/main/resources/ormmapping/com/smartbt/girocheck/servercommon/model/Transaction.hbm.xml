@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.Transaction" table="`Transaction`" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="terminal" cascade="lock" column="terminal" class="com.smartbt.girocheck.servercommon.model.Terminal" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="client" cascade="lock" column="client" class="com.smartbt.girocheck.servercommon.model.Client" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="operation" column="operation" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="resultCode" column="result_code" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="resultMessage" column="result_message" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="dateTime" column="date_time" type="timestamp" not-null="false" lazy="false"/>
+		<many-to-one name="data_sc1" cascade="lock" column="creditcard" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="transactionType" column="transaction_type" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="account" column="data_sa" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="requestId" column="request_id" type="string" length="255" not-null="true" lazy="false"/>
+		<property name="istream_id" column="istream_id" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="single" column="single" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="transactionFinished" column="transaction_finished" type="boolean" length="1" not-null="true" lazy="false"/>
+		<property name="errorCode" column="errorCode" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="orderExpressId" column="order_express_id" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="ammount" column="ammount" type="double"  not-null="false" lazy="false"/>
+                <property name="truncatedCheck" column="truncated_check" type="blob" not-null="false" lazy="false"/>
+		<property name="feeAmmount" column="fee_ammount" type="double"  not-null="false" lazy="false"/>
+		<property name="payoutAmmount" column="payout_ammount" type="double"  not-null="false" lazy="false"/>
+		<property name="cardNumber" column="card_number"  length="16" type="string"  not-null="false" lazy="false"/>
+                <property name="cancelated" column="cancelated" type="boolean" length="1" not-null="false" lazy="false"/>
+                <property name="cancelable" column="cancelable" type="boolean" length="1" not-null="false" lazy="false"/>
+		<set name="sub_Transaction" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="`transaction`" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.SubTransaction"/>
+		</set>
+		<one-to-one name="check" class="com.smartbt.girocheck.servercommon.model.Check" cascade="save-update,lock" property-ref="transaction" lazy="proxy"/>
+	</class>
+</hibernate-mapping>

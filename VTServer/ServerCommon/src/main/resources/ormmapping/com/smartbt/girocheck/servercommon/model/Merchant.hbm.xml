@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.Merchant" table="Merchant" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="address" column="address" class="com.smartbt.girocheck.servercommon.model.Address" cascade="save-update,lock" unique="true" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="agrupation" cascade="lock" column="agrupation" class="com.smartbt.girocheck.servercommon.model.Agrupation" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="card_program" cascade="lock" column="card_program" class="com.smartbt.girocheck.servercommon.model.CardProgram" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="legalName" column="legal_name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="description" column="description" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="active" column="active" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="monitor" column="monitor" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="activationDate" column="activation_date" type="date" not-null="false" lazy="false"/>
+		<property name="deactivationDate" column="deactivation_date" type="date" not-null="false" lazy="false"/>
+		<property name="sic" column="sic" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="aliveSessionTime" column="alive_session_time" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="logo" column="logo" type="blob" not-null="false" lazy="false"/>
+		<property name="phone" column="phone" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="agentName" column="agent_name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="distributor" column="distributor" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="cardInventory" column="card_inventory" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="training" column="training" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="documentApproved" column="document_approved" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="documentNotes" column="document_notes" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="distributionChanel" column="distribution_chanel" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="merchantType" column="merchant_type" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="risk" column="risk" type="integer" length="10" not-null="false" lazy="false"/>
+		<property name="independentOwner" column="independent_owner" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="moneyTransmission" column="money_transmission" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="billPayment" column="bill_payment" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="checkCashing" column="check_cashing" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="atm" column="atm" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="otherFinancialProvider" column="other_financial_provider" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="account" column="data_sa" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="routingBankNumber" column="routing_bank_number" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="bankName" column="bank_name" type="string" length="255" not-null="false" lazy="false"/>
+                <property name="authFeeP" column="auth_feep" type="double"  not-null="false" lazy="false"/>
+                <property name="idPosOrderExp" column="id_pos_orderexp" type="string" length="255" not-null="false" lazy="false"/>
+                
+                <property name="idTecnicardCheck" column="id_tecnicard_check" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="idTecnicardCash" column="id_tecnicard_cash" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="idIstreamFuzeCash" column="id_istream_fuze_cash" type="string" length="20" not-null="false" lazy="false"/>
+		<property name="idIstreamFuzeCheck" column="id_istream_fuze_check" type="string" length="20" not-null="false" lazy="false"/>
+		<property name="idIstreamTecnicardCash" column="id_istream_tecnicard_cash" type="string" length="20" not-null="false" lazy="false"/>
+		<property name="idIstreamTecnicardCheck" column="id_istream_tecnicard_check" type="string" length="20" not-null="false" lazy="false"/>
+		<property name="idTellerOrderExp" column="id_teller_orderexp" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="idTellerPagoOrderExp" column="id_teller_pago_orderexp" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="oEAgentNumber" column="oe_agent_number" type="string" length="255" not-null="false" lazy="false"/>
+                <property name="istreamUser" column="istream_user" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="istreamPassword" column="istream_password" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="merchant_Parameter_Value" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="merchant" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.MerchantParameterValue"/>
+		</set>
+		<set name="terminal" lazy="true" cascade="delete" inverse="true">
+			<key column="merchant" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Terminal"/>
+		</set>
+		<set name="data_SC" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="merchant" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.CreditCard"/>
+		</set>
+	</class>
+</hibernate-mapping>

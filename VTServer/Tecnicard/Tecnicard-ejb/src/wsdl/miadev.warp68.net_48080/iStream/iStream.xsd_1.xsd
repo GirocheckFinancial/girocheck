@@ -1,0 +1,293 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.2.0-1 (tags/2.2.0u1-7139; 2012-06-02T10:55:19+0000) JAXWS-RI/2.2.6-2 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:tns="http://istream.smartbt.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://istream.smartbt.com/">
+
+<xs:element name="Exception" type="tns:Exception"/>
+
+<xs:element name="cashAuth" type="tns:cashAuth"/>
+
+<xs:element name="cashAuthRequest" type="tns:CashAuthRequest"/>
+
+<xs:element name="cashAuthResponse" type="tns:cashAuthResponse"/>
+
+<xs:element name="cashAuthResponse1" type="tns:CashAuthResponse1"/>
+
+<xs:element name="cashAuthSubmit" type="tns:cashAuthSubmit"/>
+
+<xs:element name="cashAuthSubmitRequest" type="tns:CashAuthSubmitRequest"/>
+
+<xs:element name="cashAuthSubmitResponse" type="tns:cashAuthSubmitResponse"/>
+
+<xs:element name="checkAuth" type="tns:checkAuth"/>
+
+<xs:element name="checkAuthLocationConfig" type="tns:checkAuthLocationConfig"/>
+
+<xs:element name="checkAuthLocationConfigRequest" type="tns:CheckAuthLocationConfigRequest"/>
+
+<xs:element name="checkAuthLocationConfigResponse" type="tns:checkAuthLocationConfigResponse"/>
+
+<xs:element name="checkAuthLocationConfigResponse1" type="tns:CheckAuthLocationConfigResponse1"/>
+
+<xs:element name="checkAuthRequest" type="tns:CheckAuthRequest"/>
+
+<xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+
+<xs:element name="checkAuthResponse1" type="tns:CheckAuthResponse1"/>
+
+<xs:element name="checkAuthSubmit" type="tns:checkAuthSubmit"/>
+
+<xs:element name="checkAuthSubmitRequest" type="tns:checkAuthSubmitRequest"/>
+
+<xs:element name="checkAuthSubmitResponse" type="tns:checkAuthSubmitResponse"/>
+
+<xs:element name="config" type="tns:Config"/>
+
+<xs:element name="enhancedCashAuthPoll" type="tns:enhancedCashAuthPoll"/>
+
+<xs:element name="enhancedCashAuthPollResponse" type="tns:enhancedCashAuthPollResponse"/>
+
+<xs:element name="enhancedCashAuthPollResponse1" type="tns:EnhancedCashAuthPollResponse1"/>
+
+<xs:element name="enhancedCheckAuthPoll" type="tns:enhancedCheckAuthPoll"/>
+
+<xs:element name="enhancedCheckAuthPollRequest" type="tns:EnhacedCheckAuthPollRequest"/>
+
+<xs:element name="enhancedCheckAuthPollResponse" nillable="true" type="xs:anyType"/>
+
+<xs:element name="itemCash" type="tns:ItemCash"/>
+
+<xs:element name="itemCheck" type="tns:ItemCheck"/>
+
+<xs:complexType name="checkAuthSubmit">
+<xs:sequence>
+<xs:element name="arg0" type="tns:checkAuthSubmitRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthSubmitRequest">
+<xs:sequence>
+<xs:element name="checkId" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+<xs:element name="user" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthSubmitResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="Exception">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cashAuthSubmit">
+<xs:sequence>
+<xs:element name="arg0" type="tns:CashAuthSubmitRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CashAuthSubmitRequest">
+<xs:sequence>
+<xs:element name="cashId" type="xs:string"/>
+<xs:element name="code" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+<xs:element name="user" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cashAuthSubmitResponse">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="enhancedCashAuthPoll">
+<xs:sequence>
+<xs:element name="arg0" type="tns:EnhacedCheckAuthPollRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="EnhacedCheckAuthPollRequest">
+<xs:sequence>
+<xs:element name="checkId" type="xs:string"/>
+<xs:element name="entityId" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+<xs:element name="user" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enhancedCashAuthPollResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:ItemCash" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ItemCash">
+<xs:sequence>
+<xs:element name="items" type="tns:EnhancedCashAuthPollResponse1" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="EnhancedCashAuthPollResponse1">
+<xs:sequence>
+<xs:element name="additionalInfo" type="xs:string" minOccurs="0"/>
+<xs:element name="cardLoadFee" type="xs:double"/>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+<xs:element name="entityId" type="xs:string" minOccurs="0"/>
+<xs:element name="entityName" type="xs:string" minOccurs="0"/>
+<xs:element name="feeAmount" type="xs:double"/>
+<xs:element name="lastFour" type="xs:int"/>
+<xs:element name="payoutAmount" type="xs:double"/>
+<xs:element name="response" type="xs:string" minOccurs="0"/>
+<xs:element name="systemAmount" type="xs:double"/>
+<xs:element name="transactionDate" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthLocationConfig">
+<xs:sequence>
+<xs:element name="arg0" type="tns:CheckAuthLocationConfigRequest"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthLocationConfigRequest">
+<xs:sequence>
+<xs:element name="entityId" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+<xs:element name="user" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthLocationConfigResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CheckAuthLocationConfigResponse1" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthLocationConfigResponse1">
+<xs:sequence>
+<xs:element name="configList" type="tns:Config" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Config">
+<xs:sequence>
+<xs:element name="label" type="xs:string" minOccurs="0"/>
+<xs:element name="value" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cashAuth">
+<xs:sequence>
+<xs:element name="arg0" type="tns:CashAuthRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CashAuthRequest">
+<xs:sequence>
+<xs:element name="addressCorrect" type="xs:string"/>
+<xs:element name="amount" type="xs:string"/>
+<xs:element name="batchName" type="xs:string" minOccurs="0"/>
+<xs:element name="cardNumber" type="xs:string"/>
+<xs:element name="emailAddress" type="xs:string" maxOccurs="unbounded"/>
+<xs:element name="entityNumber" type="xs:string"/>
+<xs:element name="frontTiff" type="xs:string"/>
+<xs:element name="idBack" type="xs:string"/>
+<xs:element name="idFront" type="xs:string"/>
+<xs:element name="phone" type="xs:string"/>
+<xs:element name="scannerManufacturer" type="xs:string"/>
+<xs:element name="serial" type="xs:string"/>
+<xs:element name="ssn" type="xs:string"/>
+<xs:element name="sendUser" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cashAuthResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CashAuthResponse1" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CashAuthResponse1">
+<xs:sequence>
+<xs:element name="cashId" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enhancedCheckAuthPoll">
+<xs:sequence>
+<xs:element name="arg0" type="tns:EnhacedCheckAuthPollRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enhancedCheckAuthPollResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:ItemCheck" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ItemCheck">
+<xs:sequence>
+<xs:element name="items" type="tns:EnhacedCheckAuthPollResponse" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="EnhacedCheckAuthPollResponse">
+<xs:sequence>
+<xs:element name="additionalInfo" type="xs:string" minOccurs="0"/>
+<xs:element name="cardLoadFee" type="xs:double"/>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+<xs:element name="entityId" type="xs:string" minOccurs="0"/>
+<xs:element name="entityName" type="xs:string" minOccurs="0"/>
+<xs:element name="feeAmount" type="xs:double"/>
+<xs:element name="lastFour" type="xs:int"/>
+<xs:element name="payoutAmount" type="xs:double"/>
+<xs:element name="response" type="xs:string" minOccurs="0"/>
+<xs:element name="systemAmount" type="xs:double"/>
+<xs:element name="transactionDate" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuth">
+<xs:sequence>
+<xs:element name="arg0" type="tns:CheckAuthRequest" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthRequest">
+<xs:sequence>
+<xs:element name="addressCorrect" type="xs:string"/>
+<xs:element name="amount" type="xs:string"/>
+<xs:element name="backTiff" type="xs:string"/>
+<xs:element name="batchName" type="xs:string" minOccurs="0"/>
+<xs:element name="cardNumber" type="xs:string"/>
+<xs:element name="checkBack" type="xs:string"/>
+<xs:element name="checkFront" type="xs:string"/>
+<xs:element name="crc" type="xs:string"/>
+<xs:element name="emailAddress" type="xs:string" maxOccurs="unbounded"/>
+<xs:element name="entityNumber" type="xs:string"/>
+<xs:element name="frontTiff" type="xs:string"/>
+<xs:element name="idBack" type="xs:string"/>
+<xs:element name="idFront" type="xs:string"/>
+<xs:element name="micr" type="xs:string"/>
+<xs:element name="phone" type="xs:string"/>
+<xs:element name="scannerManufacturer" type="xs:string"/>
+<xs:element name="serial" type="xs:string"/>
+<xs:element name="ssn" type="xs:string"/>
+<xs:element name="sendUser" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="checkAuthResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:CheckAuthResponse1" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="CheckAuthResponse1">
+<xs:sequence>
+<xs:element name="checkId" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" application="StiReport" type="Flex">
+  <Dictionary isKey="true" Ref="1" type="Dictionary">
+    <BusinessObjects count="0" isList="true"/>
+    <Databases count="1" isList="true">
+      <TransactionFK isKey="true" Ref="2" type="Stimulsoft.Report.Dictionary.StiXmlDatabase">
+        <Alias>TransactionFK</Alias>
+        <Name>TransactionFK</Name>
+        <PathData>TransactionFK.xml</PathData>
+        <PathSchema>TransactionFK.xsd</PathSchema>
+      </TransactionFK>
+    </Databases>
+    <DataSources count="6" isList="true">
+      <Client isKey="true" Ref="4" type="DataTableSource">
+        <Alias>Client</Alias>
+        <Columns count="3" isList="true">
+          <value>id,System.Decimal</value>
+          <value>first,System.String</value>
+          <value>last,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>Client</Name>
+        <NameInSource>TransactionFK.Client</NameInSource>
+      </Client>
+      <General isKey="true" Ref="5" type="DataTableSource">
+        <Alias>General</Alias>
+        <Columns count="4" isList="true">
+          <value>header,System.String</value>
+          <value>footer,System.String</value>
+          <value>fromDate,System.String</value>
+          <value>toDate,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>General</Name>
+        <NameInSource>TransactionFK.General</NameInSource>
+      </General>
+      <Merchant isKey="true" Ref="6" type="DataTableSource">
+        <Alias>Merchant</Alias>
+        <Columns count="14" isList="true">
+          <value>id,System.Decimal</value>
+          <value>number,System.String</value>
+          <value>name,System.String</value>
+          <value>description,System.String</value>
+          <value>active,System.String</value>
+          <value>monitor,System.String</value>
+          <value>parameter,System.String</value>
+          <value>sic,System.String</value>
+          <value>activationDate,System.String</value>
+          <value>deactivationDate,System.String</value>
+          <value>address,System.String</value>
+          <value>telephones,System.String</value>
+          <value>logoImage,System.String</value>
+          <value>customerName,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>Merchant</Name>
+        <NameInSource>TransactionFK.Merchant</NameInSource>
+      </Merchant>
+      <Terminal isKey="true" Ref="7" type="DataTableSource">
+        <Alias>Terminal</Alias>
+        <Columns count="12" isList="true">
+          <value>id,System.Decimal</value>
+          <value>terminalId,System.String</value>
+          <value>serialNumber,System.String</value>
+          <value>description,System.String</value>
+          <value>active,System.String</value>
+          <value>parameter,System.String</value>
+          <value>activationDate,System.String</value>
+          <value>deactivationDate,System.String</value>
+          <value>customerName,System.String</value>
+          <value>merchantName,System.String</value>
+          <value>productType,System.String</value>
+          <value>application,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>Terminal</Name>
+        <NameInSource>TransactionFK.Terminal</NameInSource>
+      </Terminal>
+      <Transaction isKey="true" Ref="8" type="DataTableSource">
+        <Alias>Transaction</Alias>
+        <Columns count="59" isList="true">
+          <value>id,System.Decimal</value>
+          <value>idMerchant,System.Decimal</value>
+          <value>idTerminal,System.Decimal</value>
+          <value>idClerk,System.Decimal</value>
+          <value>idClient,System.Decimal</value>
+          <value>mode,System.String</value>
+          <value>operation,System.String</value>
+          <value>cardBrand,System.String</value>
+          <value>subTotalAmount,System.Single</value>
+          <value>tipAmount,System.Single</value>
+          <value>taxAmount,System.Single</value>
+          <value>totalAmount,System.Single</value>
+          <value>cvv,System.String</value>
+          <value>xxxclient,System.String</value>
+          <value>cardHolderEmail,System.String</value>
+          <value>geoLocation,System.String</value>
+          <value>signature,System.String</value>
+          <value>account,System.String</value>
+          <value>allowPartialAuth,System.String</value>
+          <value>formatID,System.String</value>
+          <value>ksn,System.String</value>
+          <value>encTrack1AndTrack2,System.String</value>
+          <value>track1Length,System.String</value>
+          <value>track2Length,System.String</value>
+          <value>maskedPAN,System.String</value>
+          <value>swipe,System.String</value>
+          <value>pin,System.String</value>
+          <value>authNumber,System.String</value>
+          <value>disposition,System.String</value>
+          <value>sequence,System.String</value>
+          <value>approvalNumber,System.String</value>
+          <value>approvalCode,System.String</value>
+          <value>accountSuffix,System.String</value>
+          <value>voided,System.String</value>
+          <value>poNumber,System.String</value>
+          <value>invoiceNumber,System.String</value>
+          <value>createdAt,System.String</value>
+          <value>finalized,System.String</value>
+          <value>hostCapture,System.String</value>
+          <value>retrievalData,System.String</value>
+          <value>batchNumber,System.Int64</value>
+          <value>cvvResult,System.String</value>
+          <value>entryMethod,System.Decimal</value>
+          <value>debugMessage,System.String</value>
+          <value>amountAuthorized,System.Single</value>
+          <value>originalSequenceNumber,System.String</value>
+          <value>originalApprovalNumber,System.String</value>
+          <value>originalRetrievalData,System.String</value>
+          <value>originalCVVResult,System.String</value>
+          <value>clientStartTime,System.Int64</value>
+          <value>frontStartTime,System.Int64</value>
+          <value>debug,System.String</value>
+          <value>idOriginalTransaction,System.String</value>
+          <value>saveClient,System.String</value>
+          <value>saveAccount,System.String</value>
+          <value>saveAsRecurringPayment,System.String</value>
+          <value>emailReceipt,System.String</value>
+          <value>host,System.String</value>
+          <value>approved,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>Transaction</Name>
+        <NameInSource>TransactionFK.Transaction</NameInSource>
+      </Transaction>
+    </DataSources>
+    <Relations count="4" isList="true">
+      <Merchant isKey="true" Ref="9" type="DataRelation">
+        <Alias>Merchant</Alias>
+        <ChildColumns count="1" isList="true">
+          <value>idMerchant</value>
+        </ChildColumns>
+        <ChildSource isRef="8"/>
+        <Dictionary isRef="1"/>
+        <Name>Merchant</Name>
+        <NameInSource>FK_merchant_transaction</NameInSource>
+        <ParentColumns count="1" isList="true">
+          <value>id</value>
+        </ParentColumns>
+        <ParentSource isRef="6"/>
+      </Merchant>
+      <Terminal isKey="true" Ref="10" type="DataRelation">
+        <Alias>Terminal</Alias>
+        <ChildColumns count="1" isList="true">
+          <value>idTerminal</value>
+        </ChildColumns>
+        <ChildSource isRef="8"/>
+        <Dictionary isRef="1"/>
+        <Name>Terminal</Name>
+        <NameInSource>FK_terminal_transaction</NameInSource>
+        <ParentColumns count="1" isList="true">
+          <value>id</value>
+        </ParentColumns>
+        <ParentSource isRef="7"/>
+      </Terminal>
+      <Clerk isKey="true" Ref="11" type="DataRelation">
+        <Alias>Clerk</Alias>
+        <ChildColumns count="1" isList="true">
+          <value>idClerk</value>
+        </ChildColumns>
+        <ChildSource isRef="8"/>
+        <Dictionary isRef="1"/>
+        <Name>Clerk</Name>
+        <NameInSource>FK_clerk_transaction</NameInSource>
+        <ParentColumns count="1" isList="true">
+          <value>id</value>
+        </ParentColumns>
+        <ParentSource isRef="3"/>
+      </Clerk>
+      <Client isKey="true" Ref="12" type="DataRelation">
+        <Alias>Client</Alias>
+        <ChildColumns count="1" isList="true">
+          <value>idClient</value>
+        </ChildColumns>
+        <ChildSource isRef="8"/>
+        <Dictionary isRef="1"/>
+        <Name>Client</Name>
+        <NameInSource>FK_client_transaction</NameInSource>
+        <ParentColumns count="1" isList="true">
+          <value>id</value>
+        </ParentColumns>
+        <ParentSource isRef="4"/>
+      </Client>
+    </Relations>
+    <Report isRef="0"/>
+    <Variables count="0" isList="true"/>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings count="0" isList="true"/>
+  <MetaTags count="0" isList="true"/>
+  <Pages count="1" isList="true">
+    <Page1 isKey="true" Ref="13" type="Page">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components count="13" isList="true">
+        <PageFooterBand1 isKey="true" Ref="14" type="PageFooterBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,9.92,7.72,0.3</ClientRectangle>
+          <Components count="2" isList="true">
+            <Text28 isKey="true" Ref="15" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.4,-0.02,1.1,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,8</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text28</Name>
+              <Page isRef="13"/>
+              <Parent isRef="14"/>
+              <Text>{PageNofM}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>SystemVariables</Type>
+            </Text28>
+            <Text20 isKey="true" Ref="16" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,-0.02,6,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,8</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text20</Name>
+              <Page isRef="13"/>
+              <Parent isRef="14"/>
+              <Text>{General.footer}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text20>
+          </Components>
+          <Conditions count="0" isList="true"/>
+          <Name>PageFooterBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </PageFooterBand1>
+        <Text17 isKey="true" Ref="17" type="Text">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>10.1,1.9,1.6,0.2</ClientRectangle>
+          <Conditions count="0" isList="true"/>
+          <Font>Arial,10,Bold</Font>
+          <Guid>9ce7202830cebc6b01f607269ba56fdc</Guid>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Text17</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+          <Text>{Sum(Transaction.totalAmount)}</Text>
+          <TextBrush>Black</TextBrush>
+          <TextFormat isKey="true" Ref="18" type="CurrencyFormat">
+            <GroupSeparator>,</GroupSeparator>
+            <NegativePattern>9</NegativePattern>
+            <PositivePattern>2</PositivePattern>
+            <UseLocalSetting>False</UseLocalSetting>
+          </TextFormat>
+          <Type>Expression</Type>
+        </Text17>
+        <ReportTitleBand1 isKey="true" Ref="19" type="ReportTitleBand">
+          <Brush>Teal</Brush>
+          <ClientRectangle>0,0.2,7.72,0.4</ClientRectangle>
+          <Components count="1" isList="true">
+            <Text27 isKey="true" Ref="20" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.1,3.1,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,14,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text27</Name>
+              <Page isRef="13"/>
+              <Parent isRef="19"/>
+              <Text>Card Totals Report</Text>
+              <TextBrush>[255:255:255]</TextBrush>
+              <Type>Expression</Type>
+            </Text27>
+          </Components>
+          <Conditions count="0" isList="true"/>
+          <Name>ReportTitleBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </ReportTitleBand1>
+        <HeaderBand1 isKey="true" Ref="21" type="HeaderBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,1,7.72,0.3</ClientRectangle>
+          <Components count="3" isList="true">
+            <Text29 isKey="true" Ref="22" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.7,0.1,0.4,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text29</Name>
+              <Page isRef="13"/>
+              <Parent isRef="21"/>
+              <Text>Date:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text29>
+            <Text34 isKey="true" Ref="23" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.1,0.1,1.5,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text34</Name>
+              <Page isRef="13"/>
+              <Parent isRef="21"/>
+              <Text>{Today}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text34>
+            <Text26 isKey="true" Ref="24" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.1,5.4,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text26</Name>
+              <Page isRef="13"/>
+              <Parent isRef="21"/>
+              <Text>{General.header}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text26>
+          </Components>
+          <Conditions count="0" isList="true"/>
+          <Name>HeaderBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </HeaderBand1>
+        <GroupHeaderBand1 isKey="true" Ref="25" type="GroupHeaderBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,1.7,7.72,0.8</ClientRectangle>
+          <Components count="14" isList="true">
+            <Text1 isKey="true" Ref="26" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.1,0.3,1.6,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>{Transaction.Merchant.number}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+            </Text1>
+            <Text2 isKey="true" Ref="27" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.3,0.6,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>Number:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text2>
+            <Text3 isKey="true" Ref="28" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.1,0.1,1.6,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>{Transaction.Merchant.name}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text3>
+            <Text4 isKey="true" Ref="29" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.1,0.7,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text4</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>Merchant:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text4>
+            <Text12 isKey="true" Ref="30" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>3.3,0.3,0.6,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text12</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>Address:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text12>
+            <Text13 isKey="true" Ref="31" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4,0.3,1.7,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text13</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>{Transaction.Merchant.address}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text13>
+            <Text14 isKey="true" Ref="32" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.7,0.3,0.9,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text14</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>{Transaction.Merchant.telephones}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text14>
+            <Text16 isKey="true" Ref="33" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.9,0.3,0.8,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text16</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>Telephone:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text16>
+            <Text35 isKey="true" Ref="34" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.5,0.9,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Guid>a2fdc5b6be8d10cb04176ce7868eee12</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text35</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>Date Range:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text35>
+            <Text15 isKey="true" Ref="35" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.1,0.5,0.8,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text15</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>{General.fromDate}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text15>
+            <Text33 isKey="true" Ref="36" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2,0.5,0.2,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text33</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>To</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text33>
+            <Text32 isKey="true" Ref="37" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.3,0.5,0.7,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text32</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <Text>{General.toDate}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text32>
+            <HorizontalLinePrimitive2 isKey="true" Ref="38" type="HorizontalLinePrimitive">
+              <ClientRectangle>0,0.7,7.7,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="39" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive2</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <StartCap isKey="true" Ref="40" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive2>
+            <HorizontalLinePrimitive3 isKey="true" Ref="41" type="HorizontalLinePrimitive">
+              <ClientRectangle>0,0,7.7,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="42" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive3</Name>
+              <Page isRef="13"/>
+              <Parent isRef="25"/>
+              <StartCap isKey="true" Ref="43" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive3>
+          </Components>
+          <Condition>{Transaction.Merchant.id}</Condition>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupHeaderBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </GroupHeaderBand1>
+        <GroupHeaderBand2 isKey="true" Ref="44" type="GroupHeaderBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,2.9,7.72,0.5</ClientRectangle>
+          <Components count="9" isList="true">
+            <Text7 isKey="true" Ref="45" type="Text">
+              <Brush>[230:230:230]</Brush>
+              <ClientRectangle>0.5,0.2,6.6,0.3</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text7</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <Text>Transaction Type</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text7>
+            <Text18 isKey="true" Ref="46" type="Text">
+              <Brush>[230:230:230]</Brush>
+              <ClientRectangle>6.9,0.2,0.8,0.3</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text18</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <Text>Totals</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text18>
+            <Text25 isKey="true" Ref="47" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.3,0,0.8,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text25</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <Text>Terminal:</Text>
+              <TextBrush>Black</TextBrush>
+            </Text25>
+            <Text19 isKey="true" Ref="48" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1,0,1.6,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text19</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <Text>{Transaction.Terminal.terminalId}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text19>
+            <Text5 isKey="true" Ref="49" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.5,0,5.2,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text5</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text5>
+            <Text9 isKey="true" Ref="50" type="Text">
+              <Brush>[230:230:230]</Brush>
+              <ClientRectangle>0,0.2,0.5,0.3</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text9</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text9>
+            <Text11 isKey="true" Ref="51" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0,0.3,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text11</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text11>
+            <HorizontalLinePrimitive4 isKey="true" Ref="52" type="HorizontalLinePrimitive">
+              <ClientRectangle>0,0.2,7.7,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="53" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive4</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <StartCap isKey="true" Ref="54" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive4>
+            <HorizontalLinePrimitive6 isKey="true" Ref="55" type="HorizontalLinePrimitive">
+              <ClientRectangle>0,0.5,7.7,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="56" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive6</Name>
+              <Page isRef="13"/>
+              <Parent isRef="44"/>
+              <StartCap isKey="true" Ref="57" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive6>
+          </Components>
+          <Condition>{Transaction.Terminal.id}</Condition>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupHeaderBand2</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </GroupHeaderBand2>
+        <GroupHeaderBand3 isKey="true" Ref="58" type="GroupHeaderBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,3.8,7.72,0.3</ClientRectangle>
+          <Components count="1" isList="true">
+            <Text6 isKey="true" Ref="59" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.7,0.1,1.5,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text6</Name>
+              <Page isRef="13"/>
+              <Parent isRef="58"/>
+              <Text>{Transaction.mode}</Text>
+              <TextBrush>Black</TextBrush>
+            </Text6>
+          </Components>
+          <Condition>{Transaction.mode}</Condition>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupHeaderBand3</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </GroupHeaderBand3>
+        <GroupHeaderBand4 isKey="true" Ref="60" type="GroupHeaderBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,4.5,7.72,0.2</ClientRectangle>
+          <Components count="2" isList="true">
+            <Text30 isKey="true" Ref="61" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.4,0,1.1,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Guid>c0b59ceb55deb1d91f78c3a513c07ab9</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text30</Name>
+              <Page isRef="13"/>
+              <Parent isRef="60"/>
+              <Text>{Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Sale" || Transaction.operation=="Force"))?  Transaction.totalAmount:0) - Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Refund"))?  Transaction.totalAmount:0) }</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat isKey="true" Ref="62" type="CurrencyFormat">
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>9</NegativePattern>
+                <PositivePattern>2</PositivePattern>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <Type>Expression</Type>
+            </Text30>
+            <Text31 isKey="true" Ref="63" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1,0,1.5,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10</Font>
+              <Guid>80ef8c8e8df36ed8db14c3a563efb6bb</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text31</Name>
+              <Page isRef="13"/>
+              <Parent isRef="60"/>
+              <Text>{Transaction.cardBrand}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>DataColumn</Type>
+            </Text31>
+          </Components>
+          <Condition>{Transaction.cardBrand}</Condition>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupHeaderBand4</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </GroupHeaderBand4>
+        <DataBand1 isKey="true" Ref="64" type="DataBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.1,7.72,0</ClientRectangle>
+          <Components count="0" isList="true"/>
+          <Conditions count="0" isList="true"/>
+          <DataSourceName>Transaction</DataSourceName>
+          <Filters count="0" isList="true"/>
+          <Name>DataBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+          <Sort count="0" isList="true"/>
+        </DataBand1>
+        <GroupFooterBand3 isKey="true" Ref="65" type="GroupFooterBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.5,7.72,0</ClientRectangle>
+          <Components count="0" isList="true"/>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupFooterBand3</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </GroupFooterBand3>
+        <GroupFooterBand2 isKey="true" Ref="66" type="GroupFooterBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,5.9,7.72,0.2</ClientRectangle>
+          <Components count="3" isList="true">
+            <Text24 isKey="true" Ref="67" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.5,0,1.1,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Guid>15f7d77169822d63c35f0692dbe83ff9</Guid>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text24</Name>
+              <Page isRef="13"/>
+              <Parent isRef="66"/>
+              <Text>Subtotal:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text24>
+            <Text22 isKey="true" Ref="68" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.1,0,1.4,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Guid>48918b6dc05da4cec1ea07277dc042b7</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text22</Name>
+              <Page isRef="13"/>
+              <Parent isRef="66"/>
+              <Text>{Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Sale" || Transaction.operation=="Force"))?  Transaction.totalAmount:0) - Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Refund"))?  Transaction.totalAmount:0) }</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat isKey="true" Ref="69" type="CurrencyFormat">
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>9</NegativePattern>
+                <PositivePattern>2</PositivePattern>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text22>
+            <HorizontalLinePrimitive5 isKey="true" Ref="70" type="HorizontalLinePrimitive">
+              <ClientRectangle>5.5,0,2.1,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="71" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>8aba90289fea07bee84f0692b35f1c6e</Guid>
+              <Name>HorizontalLinePrimitive5</Name>
+              <Page isRef="13"/>
+              <Parent isRef="66"/>
+              <StartCap isKey="true" Ref="72" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive5>
+          </Components>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupFooterBand2</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+        </GroupFooterBand2>
+        <GroupFooterBand1 isKey="true" Ref="73" type="GroupFooterBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,6.5,7.72,0.4</ClientRectangle>
+          <Components count="4" isList="true">
+            <Text8 isKey="true" Ref="74" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.2,0.2,1.3,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text8</Name>
+              <Page isRef="13"/>
+              <Parent isRef="73"/>
+              <Text>{Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Sale" || Transaction.operation=="Force"))?  Transaction.totalAmount:0) - Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Refund"))?  Transaction.totalAmount:0) }</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat isKey="true" Ref="75" type="CurrencyFormat">
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>9</NegativePattern>
+                <PositivePattern>2</PositivePattern>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text8>
+            <Text21 isKey="true" Ref="76" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5,0.2,1.1,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text21</Name>
+              <Page isRef="13"/>
+              <Parent isRef="73"/>
+              <Text>Terminal Total:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text21>
+            <HorizontalLinePrimitive1 isKey="true" Ref="77" type="HorizontalLinePrimitive">
+              <ClientRectangle>5,0.2,2.6,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="78" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive1</Name>
+              <Page isRef="13"/>
+              <Parent isRef="73"/>
+              <StartCap isKey="true" Ref="79" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive1>
+            <HorizontalLinePrimitive7 isKey="true" Ref="80" type="HorizontalLinePrimitive">
+              <ClientRectangle>5,0.1,2.6,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions count="0" isList="true"/>
+              <EndCap isKey="true" Ref="81" type="Cap">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive7</Name>
+              <Page isRef="13"/>
+              <Parent isRef="73"/>
+              <StartCap isKey="true" Ref="82" type="Cap">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive7>
+          </Components>
+          <Conditions count="0" isList="true"/>
+          <Name>GroupFooterBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+          <SkipFirst>False</SkipFirst>
+        </GroupFooterBand1>
+        <ReportSummaryBand1 isKey="true" Ref="83" type="ReportSummaryBand">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,7.3,7.72,0.4</ClientRectangle>
+          <Components count="2" isList="true">
+            <Text10 isKey="true" Ref="84" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5,0.1,0.9,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text10</Name>
+              <Page isRef="13"/>
+              <Parent isRef="83"/>
+              <Text>Report Total:</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text10>
+            <Text23 isKey="true" Ref="85" type="Text">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.2,0.1,1.3,0.2</ClientRectangle>
+              <Conditions count="0" isList="true"/>
+              <Font>Arial,10,Bold</Font>
+              <Guid>2e4809b03b5790c667e2c862fc9cc63e</Guid>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text23</Name>
+              <Page isRef="13"/>
+              <Parent isRef="83"/>
+              <Text>{Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Sale" || Transaction.operation=="Force"))?  Transaction.totalAmount:0) - Sum((Left(Transaction.disposition,8) == "APPROVED" &amp; ( Transaction.operation=="Refund"))?  Transaction.totalAmount:0) }</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat isKey="true" Ref="86" type="CurrencyFormat">
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>9</NegativePattern>
+                <PositivePattern>2</PositivePattern>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text23>
+          </Components>
+          <Conditions count="0" isList="true"/>
+          <Name>ReportSummaryBand1</Name>
+          <Page isRef="13"/>
+          <Parent isRef="13"/>
+          <PrintAtBottom>True</PrintAtBottom>
+          <SkipFirst>False</SkipFirst>
+        </ReportSummaryBand1>
+      </Components>
+      <Conditions count="0" isList="true"/>
+      <Guid>4a8499c09e2e46b2b91482eb504c6994</Guid>
+      <Margins>0.39,0.39,0.39,0.39</Margins>
+      <Name>Page1</Name>
+      <PageHeight>11</PageHeight>
+      <PageWidth>8.5</PageWidth>
+      <PaperSize>Letter</PaperSize>
+      <Report isRef="0"/>
+      <Watermark isKey="true" Ref="87" type="Stimulsoft.Report.Components.StiWatermark">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings isKey="true" Ref="88" type="Stimulsoft.Report.Print.StiPrinterSettings"/>
+  <ReferencedAssemblies count="8" isList="true">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>08/31/2014 10:00:32 PM</ReportChanged>
+  <ReportCreated>11/01/2013 08:51:26 AM</ReportCreated>
+  <ReportFile>C:\Projects\VTSuite-3.0\VTReporting\src\main\resources\TotalsReport.mrt</ReportFile>
+  <ReportGuid>8ff367f42bf3a66f28e32ef135af397a</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Inches</ReportUnit>
+  <ReportVersion>2013.3.1800</ReportVersion>
+  <Script>using System;
+        using System.Drawing;
+        using System.Windows.Forms;
+        using System.Data;
+        using Stimulsoft.Controls;
+        using Stimulsoft.Base.Drawing;
+        using Stimulsoft.Report;
+        using Stimulsoft.Report.Dialogs;
+        using Stimulsoft.Report.Components;
+
+        namespace Reports
+        {
+        public class Report : Stimulsoft.Report.StiReport
+        {
+        public Report()        {
+        this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+        #endregion StiReport Designer generated code - do not modify
+        }
+        }</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles count="0" isList="true"/>
+</StiSerializer>

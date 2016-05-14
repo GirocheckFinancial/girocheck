@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>VTSuite - VTAMS</title>
+
+        <!-- CSS for loading message at application Startup -->
+        <style type="text/css">            
+            #loading {
+                position: fixed;
+                left: 50%;
+                top: 45%;
+                width: 120px;
+                height: 125px;
+                margin-top: -57.5px;
+                margin-left: -55px;
+                z-index: 20001;
+            }
+
+            #loading .loadingIndicator {
+                margin: 0 auto; 
+                height: auto;
+            }
+
+            #loading .spinner {
+                margin: 0 auto; 
+                height: auto;
+                width: 40px;
+            }        
+        </style>
+
+        <link type="text/css" rel="stylesheet" href="VTAMS.css">
+
+        <script type="text/javascript" language="javascript" src="js/utils.js"></script>
+        <script>isc_css3Mode = "on";</script>         
+    </head>
+
+    <body>
+
+        <!-- OPTIONAL: include this if you want history support -->
+        <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+
+        <!--add loading indicator while the app is being loaded-->
+        <div id="loadingWrapper">
+            <div id="loading" style="text-align: center; width: 200px">
+                <div class="loadingIndicator">
+                    <img src="images/logo.png" width="120" height="125" />            
+                </div>
+                <div class="spinner">
+                    <img src="images/spinner.gif" width="40" height="40"/>
+                </div>
+            </div>
+        </div>
+        <script>var isomorphicDir = "VTAMS/sc/";</script>
+
+        <script src="VTAMS/sc/modules/ISC_Core.js"></script>
+
+        <script src='VTAMS/sc/modules/ISC_Foundation.js'></script>
+        <script src='VTAMS/sc/modules/ISC_Containers.js'></script>
+        <script src='VTAMS/sc/modules/ISC_Grids.js'></script>
+        <script src='VTAMS/sc/modules/ISC_Forms.js'></script>
+        <script src='VTAMS/sc/modules/ISC_DataBinding.js'></script>
+
+        <noscript>
+        <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+            Your web browser must have JavaScript enabled
+            in order for this application to display correctly.
+        </div>
+        </noscript>
+
+        <script type="text/javascript" language="javascript" src="VTAMS/VTAMS.nocache.js"></script>
+        
+        <iframe onload="utils.handleCallBack();" style="width:0;height:0;border:0" name="frame"> </iframe>
+    </body>
+</html>

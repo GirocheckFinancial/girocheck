@@ -1,0 +1,190 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:complexType name="TransactionType">
+		<xsd:sequence>
+			<xsd:element type="xsd:decimal" name="id"/>
+			<xsd:element type="xsd:decimal" name="idMerchant" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:decimal" name="idTerminal" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:decimal" name="idClerk" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:decimal" name="idClient" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="mode" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="operation" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="cardBrand" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:float" name="subTotalAmount" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:float" name="tipAmount" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:float" name="taxAmount" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:float" name="totalAmount" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="cvv" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="xxxclient" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="cardHolderEmail" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="geoLocation" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="signature" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="account" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="allowPartialAuth" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="formatID" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="ksn" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="encTrack1AndTrack2" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="track1Length" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="track2Length" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="maskedPAN" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="swipe" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="pin" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="authNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="disposition" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="sequence" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="approvalNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="approvalCode" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="accountSuffix" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="voided" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="poNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="invoiceNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="createdAt" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="finalized" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="hostCapture" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="retrievalData" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:long" name="batchNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="cvvResult" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:decimal" name="entryMethod" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="debugMessage" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:float" name="amountAuthorized" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="originalSequenceNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="originalApprovalNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="originalRetrievalData" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="originalCVVResult" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:long" name="clientStartTime" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:long" name="frontStartTime" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="debug" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="idOriginalTransaction" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="saveClient" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="saveAccount" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="saveAsRecurringPayment" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="emailReceipt" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="host" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="approved" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="Report">
+		<xsd:complexType>
+			<xsd:sequence>
+			    <xsd:element name="General" type="GeneralType" maxOccurs="unbounded"/>
+				<xsd:element name="Transaction" type="TransactionType" maxOccurs="unbounded"/>
+				<xsd:element name="Merchant" type="MerchantType" maxOccurs="unbounded"/>
+				<xsd:element name="Terminal" type="TerminalType" maxOccurs="unbounded"/>
+				<xsd:element name="Clerk" type="ClerkType" maxOccurs="unbounded"/>
+				<xsd:element name="Client" type="ClientType" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+
+		<xsd:key name="PK_transaction_id">
+			<xsd:selector xpath=".//Transaction"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+
+		<xsd:key name="PK_merchant_id">
+			<xsd:selector xpath=".//Merchant"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+
+		<xsd:key name="PK_terminal_id">
+			<xsd:selector xpath=".//Terminal"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+
+		<xsd:key name="PK_clerk_id">
+			<xsd:selector xpath=".//Clerk"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+
+		<xsd:key name="PK_client_id">
+			<xsd:selector xpath=".//Client"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+
+		<xsd:keyref name="FK_merchant_transaction" refer="PK_merchant_id">
+			<xsd:selector xpath=".//Transaction"/>
+			<xsd:field xpath="idMerchant"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="FK_terminal_transaction" refer="PK_terminal_id">
+			<xsd:selector xpath=".//Transaction"/>
+			<xsd:field xpath="idTerminal"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="FK_clerk_transaction" refer="PK_clerk_id">
+			<xsd:selector xpath=".//Transaction"/>
+			<xsd:field xpath="idClerk"/>
+		</xsd:keyref>
+
+		<xsd:keyref name="FK_client_transaction" refer="PK_client_id">
+			<xsd:selector xpath=".//Transaction"/>
+			<xsd:field xpath="idClient"/>
+		</xsd:keyref>
+
+	</xsd:element>
+
+	<xsd:complexType name="MerchantType">
+		<xsd:sequence>
+			<xsd:element type="xsd:decimal" name="id" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="number" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="name" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="description" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="active" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="monitor" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="parameter" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="sic" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="activationDate" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="deactivationDate" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="address" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="telephones" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="logoImage" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="customerName" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="TerminalType">
+		<xsd:sequence>
+			<xsd:element type="xsd:decimal" name="id" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="terminalId" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="serialNumber" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="description" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="active" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="parameter" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="activationDate" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="deactivationDate" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="customerName" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="merchantName" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="productType" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="application" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ClerkType" >
+		<xsd:sequence>
+			<xsd:element type="xsd:decimal" name="id" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="username" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="role" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="lastName" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="firstName" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="active" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="password" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ClientType" >
+		<xsd:sequence>
+			<xsd:element type="xsd:decimal" name="id" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="first" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="last" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="GeneralType" >
+		<xsd:sequence>
+			<xsd:element type="xsd:string" name="header" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="footer" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

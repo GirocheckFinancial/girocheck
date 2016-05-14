@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.CardType" table="CardType" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="name" column="name" type="string" length="255" not-null="true" lazy="false"/>
+		<set name="data_SC" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="card_type" not-null="false"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.CreditCard"/>
+		</set>
+	</class>
+</hibernate-mapping>

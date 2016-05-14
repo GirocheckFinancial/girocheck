@@ -1,0 +1,177 @@
+/*
+ ** File: VTAMS.css
+ **
+ ** Date Created: April 2013
+ **
+ ** Copyright @ 2004-2013 Smart Business Technology, Inc.
+ **
+ ** All rights reserved. No part of this software may be 
+ ** reproduced, transmitted, transcribed, stored in a retrieval 
+ ** system, or translated into any language or computer language, 
+ ** in any form or by any means, electronic, mechanical, magnetic, 
+ ** optical, chemical, manual or otherwise, without the prior 
+ ** written permission of Smart Business Technology, Inc.
+ **
+ */
+
+/**
+ *
+ * @author Ariamnet Lopez
+ */
+
+body {   
+    -webkit-font-smoothing: antialiased !important; 
+    -moz-font-smoothing: antialiased !important; 
+    font-smoothing: antialiased !important; 
+}
+
+.menuButton {
+    margin: 0px 5px;
+}
+
+.main-menu {   
+    margin: 5px;
+}
+
+.base-entity-window {
+    border: none;
+}
+
+.detail-title {
+    font-weight: bold;
+}
+
+.detail-text {
+
+}
+
+.login_logo  {
+    width: 300px;
+    height: 108px;
+}
+.login_logo img {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.tree-list {
+    border: none !important;
+}
+
+/* SMARTGWT COMPONENTS */
+
+.tabSetContainer {
+
+}
+
+.tabBarTop {
+
+}
+
+.tabButtonTop, .tabButtonTopSelected, .tabButtonTopOver, .tabButtonTopSelectedOver, .tabButtonTopSelectedDisabled,
+.tabButtonTopDown, .tabButtonTopDisabled, .toolStripButton, .toolStripButtonOver, .toolStripButtonFocused, 
+.toolStripButtonFocusedOver, .toolStripButtonDown, .toolStripButtonFocusedDown, 
+.toolStripButtonSelected, .toolStripButtonSelectedFocused, .toolStripButtonSelectedDown, 
+.toolStripButtonSelectedFocusedDown, .toolStripButtonSelectedOver, 
+.toolStripButtonSelectedFocusedOver, .toolStripButtonDisabled, .toolStripButtonSelectedDisabled {
+    -moz-border-radius-topright: 0px !important;
+    -webkit-border-top-right-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    -moz-border-radius-topleft: 0px !important;
+    -webkit-border-top-left-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-radius: 0px !important;
+}
+
+.toolStripButtonDisabled {
+    background: none !important;
+}
+
+.windowBackground {
+    background: #f0f8ff;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyYWQpIiAvPjwvc3ZnPiA=');
+    background-size: 100%;
+    background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f0f8ff), color-stop(1%, #f0f8ff), color-stop(1%, #e7f0fe), color-stop(15%, #c4ddfd), color-stop(100%, #c4ddfd));
+    background-image: -webkit-linear-gradient(top, #f0f8ff 0%, #f0f8ff 1%, #e7f0fe 1%, #c4ddfd 15%, #c4ddfd 100%);
+    background-image: -moz-linear-gradient(top, #f0f8ff 0%, #f0f8ff 1%, #e7f0fe 1%, #c4ddfd 15%, #c4ddfd 100%);
+    background-image: -o-linear-gradient(top, #f0f8ff 0%, #f0f8ff 1%, #e7f0fe 1%, #c4ddfd 15%, #c4ddfd 100%);
+    background-image: linear-gradient(top, #f0f8ff 0%, #f0f8ff 1%, #e7f0fe 1%, #c4ddfd 15%, #c4ddfd 100%);
+    border: 1px solid #9cb2ce;
+    -moz-border-radius-bottomleft: 0px !important;
+    -webkit-border-bottom-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    -moz-border-radius-bottomright: 0px !important;
+    -webkit-border-bottom-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    -moz-border-radius-topleft: 0px !important;
+    -webkit-border-top-left-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    -moz-border-radius-topright: 0px !important;
+    -webkit-border-top-right-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+.inner-tabset {
+    border: 1px solid #bfbfbf !important;
+}
+
+.comboBoxItemPendingText {    
+    color: black !important;
+    font-family: Arial,Verdana,sans-serif;
+    font-size: 11px;
+    background: none repeat scroll 0 0 white;
+    border: 1px solid #ABABAB;
+    padding: 4px 2px;
+}
+
+.header-link a, .header-linkFocused a, .header-linkDisabled a, .header-text {
+    color: #4D4D4D;
+    font-family: Arial,Verdana,sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: right !important;
+}
+
+.header-linkDisabled a {
+    color: #BFBFBF; 
+}
+
+/* RECEIPT */
+.receipt-content{
+    background-color: #ece8e8;
+    margin: 9px !important;
+    padding: 7px 5px 5px 5px;
+}
+
+/* DETAILS */
+.detail-space{
+    border-top: #c1d8f1 solid 1px;
+}
+
+.filterFormTopLineLog{
+    border-top: 1px solid gray;
+}
+
+.monitoringDetails{
+    color: black;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 11px;
+    background-color: #fdfdd3;
+    border: 1px solid gray;     
+    padding: 5px;
+    margin: 0 10px 10px 0;
+}
+
+.monitoringDetailsFirstRow{
+    padding: 0 5px 5px 5px;
+}
+
+.monitoringDetailsRow{
+    border-top: 1px solid gray;
+    padding: 5px;
+}
+
+.treeNodeUpdated{
+    color: #3098eb;
+}

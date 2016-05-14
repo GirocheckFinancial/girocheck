@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="https://stable-1.istreamdeposit.com/Scan?wsdl" uri="wsdl/stable-1.istreamdeposit.com/Scan.wsdl"/>
+    <system systemId="http://stable-1.istreamdeposit.com:80/Scan?xsd=1" uri="wsdl/stable-1.istreamdeposit.com/Scan.xsd_1.xsd"/>
+    <system systemId="https://giro-1.istreamdeposit.com/Scan?wsdl" uri="wsdl/giro-1.istreamdeposit.com/Scan.wsdl"/>
+    <system systemId="http://giro-1.istreamdeposit.com:80/Scan?xsd=1" uri="wsdl/giro-1.istreamdeposit.com/Scan.xsd_1.xsd"/>
+</catalog>

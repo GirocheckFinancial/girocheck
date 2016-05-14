@@ -1,0 +1,1 @@
+i18nCreator -createMessages main.java.com.smartbt.vtsuite.vtams.client.classes.i18n.Messages

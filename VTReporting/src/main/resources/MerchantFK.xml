@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MerchanFK.xsd">
+	<Merchant>
+		<id>0</id>
+		<legalName></legalName>
+		<description/>
+		<sic/>
+		<address/>
+		<zipcode/>
+		<state/>
+		<city/>
+		<phone/>
+		<idPosOrderExp/>
+		<idTellerOrderExp/>
+        <oEAgentNumber/>
+		<customerName/>
+	</Merchant>
+        <General>
+                <header></header>
+                <footer></footer>
+                <fromDate></fromDate>
+                <toDate></toDate>
+        </General>
+</Report>

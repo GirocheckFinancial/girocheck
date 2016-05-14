@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='VTAMS'>
+    <!-- Inherit the core Web Toolkit stuff.                        -->
+    <inherits name='com.google.gwt.user.User' />
+    <!--<inherits name="com.google.gwt.i18n.I18N"/>-->
+     
+     <!-- English language, independent of country -->
+    <!--<extend-property name="locale" values="en"/>-->
+         
+    <!-- Inherit the SmartGWT stuff.                                -->
+    <inherits name="com.smartgwtpro.SmartGwtProNoScript"/>
+    <inherits name="com.smartclient.theme.enterpriseblue.EnterpriseBlue" />
+  
+    <!-- We need the JUnit module in the main module,               -->
+    <!-- otherwise eclipse complains (Google plugin bug?)           -->
+    <inherits name='com.google.gwt.junit.JUnit' />
+  
+    <!-- Inherit the VTModel stuff.                                -->
+    <inherits name="com.smartbt.vtsuite.VTCommon" />
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='com.smartbt.vtsuite.vtams.client.VTAMS' />
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client' />
+
+</module>

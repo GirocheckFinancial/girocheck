@@ -1,0 +1,698 @@
+<?xml version="1.0"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TransactionFK.xsd">
+
+	<Transaction>
+		<id>1</id>
+		<idMerchant>11</idMerchant>
+		<idTerminal>111</idTerminal>
+		<idClerk>1111</idClerk>
+		<idClient>11111</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>111.22</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>733.77</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>APPROVED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+	<Transaction>
+		<id>2</id>
+		<idMerchant>22</idMerchant>
+		<idTerminal>222</idTerminal>
+		<idClerk>2222</idClerk>
+		<idClient>22222</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>222.22</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>222.22</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>APPROVED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+	<Transaction>
+		<id>3</id>
+		<idMerchant>33</idMerchant>
+		<idTerminal>333</idTerminal>
+		<idClerk>3333</idClerk>
+		<idClient>33333</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>333.33</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>333.33</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+
+	<Transaction>
+		<id>1</id>
+		<idMerchant>11</idMerchant>
+		<idTerminal>111</idTerminal>
+		<idClerk>1111</idClerk>
+		<idClient>11111</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>1111.11</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>1111.11</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+	<Transaction>
+		<id>2</id>
+		<idMerchant>22</idMerchant>
+		<idTerminal>222</idTerminal>
+		<idClerk>2222</idClerk>
+		<idClient>22222</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>2222.22</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>222.22</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+	<Transaction>
+		<id>3</id>
+		<idMerchant>33</idMerchant>
+		<idTerminal>333</idTerminal>
+		<idClerk>3333</idClerk>
+		<idClient>33333</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>3333.33</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>3333.33</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+
+	<Transaction>
+		<id>1</id>
+		<idMerchant>11</idMerchant>
+		<idTerminal>111</idTerminal>
+		<idClerk>1111</idClerk>
+		<idClient>11111</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>11111.11</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>11111.11</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+	<Transaction>
+		<id>2</id>
+		<idMerchant>22</idMerchant>
+		<idTerminal>222</idTerminal>
+		<idClerk>2222</idClerk>
+		<idClient>22222</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>22222.22</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>22222.22</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+	<Transaction>
+		<id>3</id>
+		<idMerchant>33</idMerchant>
+		<idTerminal>333</idTerminal>
+		<idClerk>3333</idClerk>
+		<idClient>33333</idClient>
+		<mode>Credit</mode>
+		<operation>Sale</operation>
+		<cardBrand>Visa</cardBrand>
+		<subTotalAmount>33333.33</subTotalAmount>
+		<tipAmount>0</tipAmount>
+		<taxAmount>0</taxAmount>
+		<totalAmount>33333.33</totalAmount>
+		<cvv />
+		<xxxclient />
+		<cardHolderEmail />
+		<geoLocation/>
+		<signature />
+		<account />
+		<allowPartialAuth>false</allowPartialAuth>
+		<formatID />
+		<ksn />
+		<encTrack1AndTrack2 />
+		<track1Length />
+		<track2Length />
+		<maskedPAN />
+		<swipe />
+		<pin />
+		<authNumber />
+		<disposition>DENIED 0091</disposition>
+		<sequence>17</sequence>
+		<approvalNumber/>
+		<approvalCode>91</approvalCode>
+		<accountSuffix>4242</accountSuffix>
+		<voided>false</voided>
+		<poNumber />
+		<invoiceNumber />
+		<createdAt>1383176096000</createdAt>
+		<finalized>false</finalized>
+		<hostCapture>true</hostCapture>
+		<retrievalData>131030193503000000000000000</retrievalData>
+		<batchNumber>131030999</batchNumber>
+		<cvvResult />
+		<entryMethod>0</entryMethod>
+		<debugMessage />
+		<amountAuthorized>0</amountAuthorized>
+		<originalSequenceNumber />
+		<originalApprovalNumber />
+		<originalRetrievalData />
+		<originalCVVResult />
+		<clientStartTime>0</clientStartTime>
+		<frontStartTime>0</frontStartTime>
+		<debug />
+		<idOriginalTransaction />
+		<saveClient />
+		<saveAccount />
+		<saveAsRecurringPayment />
+		<emailReceipt />
+		<host />
+		<approved>false</approved>
+	</Transaction>
+
+	<Merchant>
+		<id>11</id>
+		<number>111111111111111</number>
+		<name>MerchantC1</name>
+		<description />
+		<active />
+		<monitor />
+		<parameter />
+		<sic />
+		<activationDate />
+		<deactivationDate />
+		<address />
+		<telephones />
+		<logoImage />
+		<customerName />
+	</Merchant>
+	<Merchant>
+		<id>22</id>
+		<number>222222222222222</number>
+		<name>MerchantC2</name>
+		<description />
+		<active />
+		<monitor />
+		<parameter />
+		<sic />
+		<activationDate />
+		<deactivationDate />
+		<address />
+		<telephones />
+		<logoImage />
+		<customerName />
+	</Merchant>
+	<Merchant>
+		<id>33</id>
+		<number>333333333333333</number>
+		<name>MerchantC3</name>
+		<description />
+		<active />
+		<monitor />
+		<parameter />
+		<sic />
+		<activationDate />
+		<deactivationDate />
+		<address />
+		<telephones />
+		<logoImage />
+		<customerName />
+	</Merchant>
+
+	<Terminal>
+		<id>111</id>
+		<terminalId>LK111111</terminalId>
+		<serialNumber />
+		<description />
+		<active />
+		<parameter />
+		<activationDate />
+		<deactivationDate />
+		<customerName />
+		<merchantName />
+		<productType />
+		<application />
+	</Terminal>
+	<Terminal>
+		<id>222</id>
+		<terminalId>LK222222</terminalId>
+		<serialNumber />
+		<description />
+		<active />
+		<parameter />
+		<activationDate />
+		<deactivationDate />
+		<customerName />
+		<merchantName />
+		<productType />
+		<application />
+	</Terminal>
+	<Terminal>
+		<id>333</id>
+		<terminalId>LK333333</terminalId>
+		<serialNumber />
+		<description />
+		<active />
+		<parameter />
+		<activationDate />
+		<deactivationDate />
+		<customerName />
+		<merchantName />
+		<productType />
+		<application />
+	</Terminal>
+
+	<Clerk>
+		<id>1111</id>
+		<username>userC1@worldpay.us</username>
+		<role />
+		<lastName>last3</lastName>
+		<firstName>first3</firstName>
+		<active />
+		<password />
+	</Clerk>
+	<Clerk>
+		<id>2222</id>
+		<username>userC2@worldpay.us</username>
+		<role />
+		<lastName>last2</lastName>
+		<firstName>first2</firstName>
+		<active />
+		<password />
+	</Clerk>
+	<Clerk>
+		<id>3333</id>
+		<username>userC3@worldpay.us</username>
+		<role />
+		<lastName>last1</lastName>
+		<firstName>first1</firstName>
+		<active />
+		<password />
+	</Clerk>
+
+	<Client>
+		<id>11111</id>
+		<first>first1</first>
+		<last>last1</last>
+	</Client>
+	<Client>
+		<id>22222</id>
+		<first>first2</first>
+		<last>last2</last>
+	</Client>
+	<Client>
+		<id>33333</id>
+		<first>first3</first>
+		<last>last3</last>
+	</Client>
+	<General>
+                <header>sgfdsdfg</header>
+                <footer>sdfgsdg</footer>
+                <fromDate>05/15/2014</fromDate>
+                <toDate>05/19/2014</toDate>
+        </General>
+
+</Report>

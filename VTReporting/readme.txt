@@ -1,0 +1,1 @@
+Please ensure that you have the default mrt, xml, and xsd in your C:\VTReporting directory.

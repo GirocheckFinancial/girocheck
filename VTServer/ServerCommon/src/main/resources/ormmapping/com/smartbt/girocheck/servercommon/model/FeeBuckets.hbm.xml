@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.smartbt.girocheck.servercommon.model.FeeBuckets" table="Fee_Buckets" lazy="false">
+        <id name="id" column="id" type="integer" unsaved-value="0">
+            <generator class="native">
+            </generator>
+        </id>
+        <property name="minimum" column="minimum" type="float" not-null="false" lazy="false"/>
+        <property name="fixed" column="fixed" type="float" not-null="false" lazy="false"/>
+        <property name="percentage" column="percentage" type="float" not-null="false" lazy="false"/>
+        <many-to-one name="feeSchedule" cascade="all" column="fee_schedule_id" class="com.smartbt.girocheck.servercommon.model.FeeSchedules" not-null="false" lazy="proxy"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.smartbt.girocheck.servercommon.model.FeeSchedules" table="Fee_Schedules" lazy="false">
+        <id name="id" column="id" type="integer" unsaved-value="0">
+            <generator class="native">
+            </generator>
+        </id>
+        <many-to-one name="method" cascade="all" column="method_id" class="com.smartbt.girocheck.servercommon.model.TransactionMethod" not-null="false" lazy="proxy"/>
+        <many-to-one name="merchant" cascade="all" column="merchant_id" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="false" lazy="proxy"/>
+    </class>
+</hibernate-mapping>

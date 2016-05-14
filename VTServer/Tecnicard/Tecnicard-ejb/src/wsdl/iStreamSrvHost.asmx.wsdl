@@ -1,0 +1,1176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://SistemasGalileo.com/Services/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="https://SistemasGalileo.com/Services/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://SistemasGalileo.com/Services/">
+      <s:element name="WMCardActivation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTerminalCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCardActivationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCardActivationResult" type="tns:CardActivationResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CardActivationResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="MainResponseContainer" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="SessionTag" type="tns:SessionTag" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SessionTag">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SucessfullProcessing" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="RequestID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SystemName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OperationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Time" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="GMTTimeZone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OperationID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="WMCardPersonalization">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCard" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pIdType" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pIdExpiration" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pIdCountry" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pIdState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pPersonTitle" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pFirstName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pMiddleName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pLastName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pMaidenName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pDateOfBirth" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCountry" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pState" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCity" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pAddress" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pZipCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pEmail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTelephoneAreaCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTelephone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCellphoneAreaCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCellphone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pWorkphoneAreaCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pWorkphone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pFaxAreaCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pFaxphone" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pRBService" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCurrentAddress" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCardPersonalizationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCardPersonalizationResult" type="tns:CardCreationResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CardCreationResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ActualCardNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="EmbossedName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="ExpirationDate" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="VerificationCode" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMCardLoad">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTerminalCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTransAmount" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCheckFee" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCardLoadResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCardLoadResult" type="tns:CardLoadResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CardLoadResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Date" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMBalanceInquiry">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMBalanceInquiryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMBalanceInquiryResult" type="tns:BalanceInquiryResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="BalanceInquiryResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Balance" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="InTransitFunds" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMCardToBank">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pAccountNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pRoutingBankNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pAmount" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCardToBankResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCardToBankResult" type="tns:CardToBankResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CardToBankResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Date" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMCardValidation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pAmount" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCardValidationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCardValidationResult" type="tns:CardValidationResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CardValidationResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer" />
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMCardHolderValidation">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pId" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pIdType" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCardHolderValidationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCardHolderValidationResult" type="tns:CardHolderValidationResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CardHolderValidationResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer" />
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMEcho">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMEchoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMEchoResult" type="tns:EchoResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="EchoResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer" />
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="WMLastTransactions">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pStartDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pEndDate" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTransactionQuantity" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMLastTransactionsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMLastTransactionsResult" type="tns:LastTransactionsResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="LastTransactionsResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="CurrencyCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CurrencySymbol" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="CurrencyName" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="InitialBalance" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="FinalBalance" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="TransactionsList" type="tns:ArrayOfTransaction" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfTransaction">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Transaction" nillable="true" type="tns:Transaction" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Transaction">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BasicExternalInfoObject">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Date" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="TypeCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Type" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OperationType" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="StatusCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="StatusDescription" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RejectionCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="RejectionReason" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Device" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Country" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Fee" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="OriginalAmount" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BasicExternalInfoObject" abstract="true">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:BasicInfoObject" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BasicInfoObject" abstract="true" />
+      <s:element name="WMCashToCard">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pRequestID" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTerminalCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pCardNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="pTransAmount" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="WMCashToCardResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="WMCashToCardResult" type="tns:CashToCardResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CashToCardResponse">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:MainResponseContainer">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="TransactionNumber" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Date" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="Amount" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="CardActivationResponse" nillable="true" type="tns:CardActivationResponse" />
+      <s:element name="CardCreationResponse" nillable="true" type="tns:CardCreationResponse" />
+      <s:element name="CardLoadResponse" nillable="true" type="tns:CardLoadResponse" />
+      <s:element name="BalanceInquiryResponse" nillable="true" type="tns:BalanceInquiryResponse" />
+      <s:element name="CardToBankResponse" nillable="true" type="tns:CardToBankResponse" />
+      <s:element name="CardValidationResponse" nillable="true" type="tns:CardValidationResponse" />
+      <s:element name="CardHolderValidationResponse" nillable="true" type="tns:CardHolderValidationResponse" />
+      <s:element name="EchoResponse" nillable="true" type="tns:EchoResponse" />
+      <s:element name="LastTransactionsResponse" nillable="true" type="tns:LastTransactionsResponse" />
+      <s:element name="CashToCardResponse" nillable="true" type="tns:CashToCardResponse" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="WMCardActivationSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCardActivation" />
+  </wsdl:message>
+  <wsdl:message name="WMCardActivationSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCardActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardPersonalizationSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCardPersonalization" />
+  </wsdl:message>
+  <wsdl:message name="WMCardPersonalizationSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCardPersonalizationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardLoadSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCardLoad" />
+  </wsdl:message>
+  <wsdl:message name="WMCardLoadSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCardLoadResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMBalanceInquirySoapIn">
+    <wsdl:part name="parameters" element="tns:WMBalanceInquiry" />
+  </wsdl:message>
+  <wsdl:message name="WMBalanceInquirySoapOut">
+    <wsdl:part name="parameters" element="tns:WMBalanceInquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardToBankSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCardToBank" />
+  </wsdl:message>
+  <wsdl:message name="WMCardToBankSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCardToBankResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardValidationSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCardValidation" />
+  </wsdl:message>
+  <wsdl:message name="WMCardValidationSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCardValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardHolderValidationSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCardHolderValidation" />
+  </wsdl:message>
+  <wsdl:message name="WMCardHolderValidationSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCardHolderValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMEchoSoapIn">
+    <wsdl:part name="parameters" element="tns:WMEcho" />
+  </wsdl:message>
+  <wsdl:message name="WMEchoSoapOut">
+    <wsdl:part name="parameters" element="tns:WMEchoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMLastTransactionsSoapIn">
+    <wsdl:part name="parameters" element="tns:WMLastTransactions" />
+  </wsdl:message>
+  <wsdl:message name="WMLastTransactionsSoapOut">
+    <wsdl:part name="parameters" element="tns:WMLastTransactionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCashToCardSoapIn">
+    <wsdl:part name="parameters" element="tns:WMCashToCard" />
+  </wsdl:message>
+  <wsdl:message name="WMCashToCardSoapOut">
+    <wsdl:part name="parameters" element="tns:WMCashToCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardActivationHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pTerminalCode" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardActivationHttpGetOut">
+    <wsdl:part name="Body" element="tns:CardActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardPersonalizationHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCard" type="s:string" />
+    <wsdl:part name="pId" type="s:string" />
+    <wsdl:part name="pIdType" type="s:string" />
+    <wsdl:part name="pIdExpiration" type="s:string" />
+    <wsdl:part name="pIdCountry" type="s:string" />
+    <wsdl:part name="pIdState" type="s:string" />
+    <wsdl:part name="pPersonTitle" type="s:string" />
+    <wsdl:part name="pFirstName" type="s:string" />
+    <wsdl:part name="pMiddleName" type="s:string" />
+    <wsdl:part name="pLastName" type="s:string" />
+    <wsdl:part name="pMaidenName" type="s:string" />
+    <wsdl:part name="pDateOfBirth" type="s:string" />
+    <wsdl:part name="pCountry" type="s:string" />
+    <wsdl:part name="pState" type="s:string" />
+    <wsdl:part name="pCity" type="s:string" />
+    <wsdl:part name="pAddress" type="s:string" />
+    <wsdl:part name="pZipCode" type="s:string" />
+    <wsdl:part name="pEmail" type="s:string" />
+    <wsdl:part name="pTelephoneAreaCode" type="s:string" />
+    <wsdl:part name="pTelephone" type="s:string" />
+    <wsdl:part name="pCellphoneAreaCode" type="s:string" />
+    <wsdl:part name="pCellphone" type="s:string" />
+    <wsdl:part name="pWorkphoneAreaCode" type="s:string" />
+    <wsdl:part name="pWorkphone" type="s:string" />
+    <wsdl:part name="pFaxAreaCode" type="s:string" />
+    <wsdl:part name="pFaxphone" type="s:string" />
+    <wsdl:part name="pRBService" type="s:string" />
+    <wsdl:part name="pCurrentAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardPersonalizationHttpGetOut">
+    <wsdl:part name="Body" element="tns:CardCreationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardLoadHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pTerminalCode" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pTransAmount" type="s:string" />
+    <wsdl:part name="pCheckFee" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardLoadHttpGetOut">
+    <wsdl:part name="Body" element="tns:CardLoadResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMBalanceInquiryHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMBalanceInquiryHttpGetOut">
+    <wsdl:part name="Body" element="tns:BalanceInquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardToBankHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pAccountNumber" type="s:string" />
+    <wsdl:part name="pRoutingBankNumber" type="s:string" />
+    <wsdl:part name="pAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardToBankHttpGetOut">
+    <wsdl:part name="Body" element="tns:CardToBankResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardValidationHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardValidationHttpGetOut">
+    <wsdl:part name="Body" element="tns:CardValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardHolderValidationHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pId" type="s:string" />
+    <wsdl:part name="pIdType" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardHolderValidationHttpGetOut">
+    <wsdl:part name="Body" element="tns:CardHolderValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMEchoHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMEchoHttpGetOut">
+    <wsdl:part name="Body" element="tns:EchoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMLastTransactionsHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pStartDate" type="s:string" />
+    <wsdl:part name="pEndDate" type="s:string" />
+    <wsdl:part name="pTransactionQuantity" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMLastTransactionsHttpGetOut">
+    <wsdl:part name="Body" element="tns:LastTransactionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCashToCardHttpGetIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pTerminalCode" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pTransAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCashToCardHttpGetOut">
+    <wsdl:part name="Body" element="tns:CashToCardResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardActivationHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pTerminalCode" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardActivationHttpPostOut">
+    <wsdl:part name="Body" element="tns:CardActivationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardPersonalizationHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCard" type="s:string" />
+    <wsdl:part name="pId" type="s:string" />
+    <wsdl:part name="pIdType" type="s:string" />
+    <wsdl:part name="pIdExpiration" type="s:string" />
+    <wsdl:part name="pIdCountry" type="s:string" />
+    <wsdl:part name="pIdState" type="s:string" />
+    <wsdl:part name="pPersonTitle" type="s:string" />
+    <wsdl:part name="pFirstName" type="s:string" />
+    <wsdl:part name="pMiddleName" type="s:string" />
+    <wsdl:part name="pLastName" type="s:string" />
+    <wsdl:part name="pMaidenName" type="s:string" />
+    <wsdl:part name="pDateOfBirth" type="s:string" />
+    <wsdl:part name="pCountry" type="s:string" />
+    <wsdl:part name="pState" type="s:string" />
+    <wsdl:part name="pCity" type="s:string" />
+    <wsdl:part name="pAddress" type="s:string" />
+    <wsdl:part name="pZipCode" type="s:string" />
+    <wsdl:part name="pEmail" type="s:string" />
+    <wsdl:part name="pTelephoneAreaCode" type="s:string" />
+    <wsdl:part name="pTelephone" type="s:string" />
+    <wsdl:part name="pCellphoneAreaCode" type="s:string" />
+    <wsdl:part name="pCellphone" type="s:string" />
+    <wsdl:part name="pWorkphoneAreaCode" type="s:string" />
+    <wsdl:part name="pWorkphone" type="s:string" />
+    <wsdl:part name="pFaxAreaCode" type="s:string" />
+    <wsdl:part name="pFaxphone" type="s:string" />
+    <wsdl:part name="pRBService" type="s:string" />
+    <wsdl:part name="pCurrentAddress" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardPersonalizationHttpPostOut">
+    <wsdl:part name="Body" element="tns:CardCreationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardLoadHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pTerminalCode" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pTransAmount" type="s:string" />
+    <wsdl:part name="pCheckFee" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardLoadHttpPostOut">
+    <wsdl:part name="Body" element="tns:CardLoadResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMBalanceInquiryHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMBalanceInquiryHttpPostOut">
+    <wsdl:part name="Body" element="tns:BalanceInquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardToBankHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pAccountNumber" type="s:string" />
+    <wsdl:part name="pRoutingBankNumber" type="s:string" />
+    <wsdl:part name="pAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardToBankHttpPostOut">
+    <wsdl:part name="Body" element="tns:CardToBankResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardValidationHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardValidationHttpPostOut">
+    <wsdl:part name="Body" element="tns:CardValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCardHolderValidationHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pId" type="s:string" />
+    <wsdl:part name="pIdType" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCardHolderValidationHttpPostOut">
+    <wsdl:part name="Body" element="tns:CardHolderValidationResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMEchoHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMEchoHttpPostOut">
+    <wsdl:part name="Body" element="tns:EchoResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMLastTransactionsHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pStartDate" type="s:string" />
+    <wsdl:part name="pEndDate" type="s:string" />
+    <wsdl:part name="pTransactionQuantity" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMLastTransactionsHttpPostOut">
+    <wsdl:part name="Body" element="tns:LastTransactionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="WMCashToCardHttpPostIn">
+    <wsdl:part name="pRequestID" type="s:string" />
+    <wsdl:part name="pTerminalCode" type="s:string" />
+    <wsdl:part name="pCardNumber" type="s:string" />
+    <wsdl:part name="pTransAmount" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="WMCashToCardHttpPostOut">
+    <wsdl:part name="Body" element="tns:CashToCardResponse" />
+  </wsdl:message>
+  <wsdl:portType name="iStreamSrvHostWSSoap">
+    <wsdl:operation name="WMCardActivation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to activate a given card whose activation is pending.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardActivationSoapIn" />
+      <wsdl:output message="tns:WMCardActivationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows customized a card.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardPersonalizationSoapIn" />
+      <wsdl:output message="tns:WMCardPersonalizationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to load funds into a given card from a virtual terminal.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardLoadSoapIn" />
+      <wsdl:output message="tns:WMCardLoadSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to obtain the current balance for a given card.</wsdl:documentation>
+      <wsdl:input message="tns:WMBalanceInquirySoapIn" />
+      <wsdl:output message="tns:WMBalanceInquirySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to transfer funds from a card to a bank account.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardToBankSoapIn" />
+      <wsdl:output message="tns:WMCardToBankSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to validate the status for a given card.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardValidationSoapIn" />
+      <wsdl:output message="tns:WMCardValidationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to validate if the id given is correct for the card holder.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardHolderValidationSoapIn" />
+      <wsdl:output message="tns:WMCardHolderValidationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to test the conectivity.</wsdl:documentation>
+      <wsdl:input message="tns:WMEchoSoapIn" />
+      <wsdl:output message="tns:WMEchoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to obtain the last transactions for a given card. The number of transactions can be specified. Additionally, it provides the starting and final balance (before and after the listed transactions).</wsdl:documentation>
+      <wsdl:input message="tns:WMLastTransactionsSoapIn" />
+      <wsdl:output message="tns:WMLastTransactionsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to load funds into a given card from a virtual terminal.</wsdl:documentation>
+      <wsdl:input message="tns:WMCashToCardSoapIn" />
+      <wsdl:output message="tns:WMCashToCardSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="iStreamSrvHostWSHttpGet">
+    <wsdl:operation name="WMCardActivation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to activate a given card whose activation is pending.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardActivationHttpGetIn" />
+      <wsdl:output message="tns:WMCardActivationHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows customized a card.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardPersonalizationHttpGetIn" />
+      <wsdl:output message="tns:WMCardPersonalizationHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to load funds into a given card from a virtual terminal.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardLoadHttpGetIn" />
+      <wsdl:output message="tns:WMCardLoadHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to obtain the current balance for a given card.</wsdl:documentation>
+      <wsdl:input message="tns:WMBalanceInquiryHttpGetIn" />
+      <wsdl:output message="tns:WMBalanceInquiryHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to transfer funds from a card to a bank account.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardToBankHttpGetIn" />
+      <wsdl:output message="tns:WMCardToBankHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to validate the status for a given card.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardValidationHttpGetIn" />
+      <wsdl:output message="tns:WMCardValidationHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to validate if the id given is correct for the card holder.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardHolderValidationHttpGetIn" />
+      <wsdl:output message="tns:WMCardHolderValidationHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to test the conectivity.</wsdl:documentation>
+      <wsdl:input message="tns:WMEchoHttpGetIn" />
+      <wsdl:output message="tns:WMEchoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to obtain the last transactions for a given card. The number of transactions can be specified. Additionally, it provides the starting and final balance (before and after the listed transactions).</wsdl:documentation>
+      <wsdl:input message="tns:WMLastTransactionsHttpGetIn" />
+      <wsdl:output message="tns:WMLastTransactionsHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to load funds into a given card from a virtual terminal.</wsdl:documentation>
+      <wsdl:input message="tns:WMCashToCardHttpGetIn" />
+      <wsdl:output message="tns:WMCashToCardHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="iStreamSrvHostWSHttpPost">
+    <wsdl:operation name="WMCardActivation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to activate a given card whose activation is pending.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardActivationHttpPostIn" />
+      <wsdl:output message="tns:WMCardActivationHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows customized a card.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardPersonalizationHttpPostIn" />
+      <wsdl:output message="tns:WMCardPersonalizationHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to load funds into a given card from a virtual terminal.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardLoadHttpPostIn" />
+      <wsdl:output message="tns:WMCardLoadHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to obtain the current balance for a given card.</wsdl:documentation>
+      <wsdl:input message="tns:WMBalanceInquiryHttpPostIn" />
+      <wsdl:output message="tns:WMBalanceInquiryHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to transfer funds from a card to a bank account.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardToBankHttpPostIn" />
+      <wsdl:output message="tns:WMCardToBankHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to validate the status for a given card.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardValidationHttpPostIn" />
+      <wsdl:output message="tns:WMCardValidationHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to validate if the id given is correct for the card holder.</wsdl:documentation>
+      <wsdl:input message="tns:WMCardHolderValidationHttpPostIn" />
+      <wsdl:output message="tns:WMCardHolderValidationHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to test the conectivity.</wsdl:documentation>
+      <wsdl:input message="tns:WMEchoHttpPostIn" />
+      <wsdl:output message="tns:WMEchoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to obtain the last transactions for a given card. The number of transactions can be specified. Additionally, it provides the starting and final balance (before and after the listed transactions).</wsdl:documentation>
+      <wsdl:input message="tns:WMLastTransactionsHttpPostIn" />
+      <wsdl:output message="tns:WMLastTransactionsHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">This method allows to load funds into a given card from a virtual terminal.</wsdl:documentation>
+      <wsdl:input message="tns:WMCashToCardHttpPostIn" />
+      <wsdl:output message="tns:WMCashToCardHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="iStreamSrvHostWSSoap" type="tns:iStreamSrvHostWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WMCardActivation">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCardActivation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCardPersonalization" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCardLoad" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMBalanceInquiry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCardToBank" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCardValidation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCardHolderValidation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMEcho" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMLastTransactions" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <soap:operation soapAction="https://SistemasGalileo.com/Services/WMCashToCard" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="iStreamSrvHostWSSoap12" type="tns:iStreamSrvHostWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="WMCardActivation">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCardActivation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCardPersonalization" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCardLoad" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMBalanceInquiry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCardToBank" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCardValidation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCardHolderValidation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMEcho" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMLastTransactions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <soap12:operation soapAction="https://SistemasGalileo.com/Services/WMCashToCard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="iStreamSrvHostWSHttpGet" type="tns:iStreamSrvHostWSHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="WMCardActivation">
+      <http:operation location="/WMCardActivation" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <http:operation location="/WMCardPersonalization" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <http:operation location="/WMCardLoad" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <http:operation location="/WMBalanceInquiry" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <http:operation location="/WMCardToBank" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <http:operation location="/WMCardValidation" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <http:operation location="/WMCardHolderValidation" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <http:operation location="/WMEcho" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <http:operation location="/WMLastTransactions" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <http:operation location="/WMCashToCard" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="iStreamSrvHostWSHttpPost" type="tns:iStreamSrvHostWSHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="WMCardActivation">
+      <http:operation location="/WMCardActivation" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardPersonalization">
+      <http:operation location="/WMCardPersonalization" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardLoad">
+      <http:operation location="/WMCardLoad" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMBalanceInquiry">
+      <http:operation location="/WMBalanceInquiry" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardToBank">
+      <http:operation location="/WMCardToBank" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardValidation">
+      <http:operation location="/WMCardValidation" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCardHolderValidation">
+      <http:operation location="/WMCardHolderValidation" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMEcho">
+      <http:operation location="/WMEcho" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMLastTransactions">
+      <http:operation location="/WMLastTransactions" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WMCashToCard">
+      <http:operation location="/WMCashToCard" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="iStreamSrvHostWS">
+    <wsdl:port name="iStreamSrvHostWSSoap" binding="tns:iStreamSrvHostWSSoap">
+      <soap:address location="http://74.255.192.104/Galileo.TCMS.ExtSRV.Web/iStreamSrvHost.asmx" />
+    </wsdl:port>
+    <wsdl:port name="iStreamSrvHostWSSoap12" binding="tns:iStreamSrvHostWSSoap12">
+      <soap12:address location="http://74.255.192.104/Galileo.TCMS.ExtSRV.Web/iStreamSrvHost.asmx" />
+    </wsdl:port>
+    <wsdl:port name="iStreamSrvHostWSHttpGet" binding="tns:iStreamSrvHostWSHttpGet">
+      <http:address location="http://74.255.192.104/Galileo.TCMS.ExtSRV.Web/iStreamSrvHost.asmx" />
+    </wsdl:port>
+    <wsdl:port name="iStreamSrvHostWSHttpPost" binding="tns:iStreamSrvHostWSHttpPost">
+      <http:address location="http://74.255.192.104/Galileo.TCMS.ExtSRV.Web/iStreamSrvHost.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

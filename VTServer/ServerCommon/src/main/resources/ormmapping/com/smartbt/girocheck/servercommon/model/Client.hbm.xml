@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.Client" table="Client" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="address" column="address" class="com.smartbt.girocheck.servercommon.model.Address" cascade="save-update,lock" unique="true" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="firstName" column="first_name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="lastName" column="last_name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="telephone" column="telephone" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="email" column="email" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="active" column="active" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="createdAt" column="created_at" type="timestamp" not-null="false" lazy="false"/>
+		<property name="addressForm" column="address_form" type="blob" not-null="false" lazy="false"/>
+		
+		<property name="bornDate" column="born_date" type="date" not-null="false" lazy="false"/>
+                <property name="ssn"  type="string" length="255" not-null="true" lazy="false">
+                    <column name="ssn"
+                    read="AES_DECRYPT(FROM_BASE64(ssn), SHA2(SHA2(CONCAT((SELECT concat(c.reference, c.sessions, c.types, c.mode) FROM configs c), 'SELECT * FROM configs'), 512), 512))"
+                    write="TO_BASE64(AES_ENCRYPT(?, SHA2(SHA2(CONCAT((SELECT concat(c.reference, c.sessions, c.types, c.mode) FROM configs c), 'SELECT * FROM configs'), 512), 512)))"
+                    />   
+                </property>
+                
+		<property name="maskSSN" column="mask_ssn" type="string" length="15" not-null="true" lazy="false"/>
+                <property name="hashSSN" column="hash_ssn" type="string" length="255" not-null="false" lazy="false">
+                    
+                </property>
+		<property name="idBeneficiary" column="id_beneficiary" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="data_SC" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="client" not-null="false"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.CreditCard"/>
+		</set>
+		<set name="data_SD" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="client" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.PersonalIdentification"/>
+		</set>
+		<set name="transaction" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="client" not-null="false"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Transaction"/>
+		</set>
+		<set name="check" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="client" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Check"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,29 @@
+/*
+ * Copyright @ 2004-2014 Smart Business Technology, Inc.
+ *
+ * All rights reserved. No part of this software may be 
+ * reproduced, transmitted, transcribed, stored in a retrieval
+ * system, or translated into any language or computer language, 
+ * in any form or by any means, electronic, mechanical, magnetic,  
+ * optical, chemical, manual or otherwise, without the prior  
+ * written permission of Smart Business Technology, Inc.  
+ *
+ *
+ */
+package com.smartbt.girocheck.servercommon.manager;
+
+import com.smartbt.girocheck.servercommon.dao.AddressDAO;
+import com.smartbt.girocheck.servercommon.model.Address;
+
+/**
+ *
+ * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
+ */
+public class AddressManager {
+
+    private AddressDAO addressDAO = AddressDAO.get();
+
+    public Address getByClient( int idClient ) {
+        return addressDAO.getByClient( idClient );
+    }
+}

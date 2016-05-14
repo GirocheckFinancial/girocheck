@@ -1,0 +1,329 @@
+package com.smartbt.girocheck.servercommon.dao;
+
+import com.smartbt.girocheck.servercommon.display.AddressImageFormDisplay;
+import com.smartbt.girocheck.servercommon.display.SubTransactionImageDisplay;
+import com.smartbt.girocheck.servercommon.display.TransactionDisplay;
+import com.smartbt.girocheck.servercommon.model.Client;
+import com.smartbt.girocheck.servercommon.model.Transaction;
+import com.smartbt.girocheck.servercommon.utils.ImgConvTiffToPng;
+import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
+import com.smartbt.girocheck.servercommon.utils.bd.TransformerComplexBeans;
+import com.smartbt.vtsuite.servercommon.utils.DateUtils;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.DatatypeConverter;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
+
+/**
+ *
+ * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
+ */
+public class TransactionDAO extends BaseDAO<Transaction> {
+
+//    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(TransactionDAO.class);
+    protected static TransactionDAO dao;
+
+    public TransactionDAO() {
+    }
+
+    public static TransactionDAO get() {
+        if (dao == null) {
+            dao = new TransactionDAO();
+        }
+        return dao;
+    }
+
+    public boolean cancelTransaction(String requestId) {
+        Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class).add(Restrictions.eq("requestId", requestId));
+
+        cri.setMaxResults(1);
+
+        Transaction transaction = (Transaction) cri.uniqueResult();
+
+        if (transaction == null) {
+            return false;
+        }
+
+        if (transaction.isCancelable()) {
+            transaction.setCancelated(true);
+            saveOrUpdate(transaction);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean isCanceled(String requestId, boolean cancelable) {
+        Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class).add(Restrictions.eq("requestId", requestId));
+
+        cri.setMaxResults(1);
+
+        Transaction transaction = (Transaction) cri.uniqueResult();
+
+        if (transaction == null) {
+            return false;
+        }
+
+        if (!cancelable) {
+            transaction.setCancelable(cancelable);
+            saveOrUpdate(transaction);
+        }
+        return transaction.isCancelated() == null ? false : transaction.isCancelated();
+    }
+
+    public AddressImageFormDisplay getAddressImageFromClientByTerminalSerialNumber(String serialNumber, boolean rotate) throws Exception {
+        AddressImageFormDisplay addressImage = new AddressImageFormDisplay();
+
+        try {
+            System.out.println("[TransactionDAO] getAddressImageFromClientByTerminalSerialNumber() terminal serial number: " + serialNumber);
+            Date datelow = new Date();
+
+            datelow.setTime(datelow.getTime() - 180000);// 3 minutes less
+            Date dateHigh = new Date();
+
+            if (serialNumber != null) {
+
+                Criteria criteria = HibernateUtil.getSession().createCriteria(Transaction.class).
+                        createAlias("terminal", "terminal").
+                        createAlias("client", "client").
+                        add(Restrictions.eq("terminal.serialNumber", serialNumber)).
+                        add(Restrictions.between("dateTime", datelow, dateHigh)).
+                        add(Restrictions.isNotNull("client.addressForm")).
+                        addOrder(Order.desc("id"));
+
+                List<Transaction> transactions = criteria.list();
+                Client client;
+
+                if (transactions != null && !transactions.isEmpty()) {
+
+                    System.out.println("[TransactionDAO] getAddressImageFromClientByTerminalSerialNumber() transaction id value: " + transactions.get(0).getId());
+
+                    client = transactions.get(0).getClient();
+
+                } else {
+                    System.out.println("[TransactionDAO] getAddressImageFromClientByTerminalSerialNumber() There is not transactions with the require specifications. ");
+                    client = null;
+                    throw new Exception("EmptyException");
+                }
+
+                if (client != null) {
+                    if (client.getAddressForm() != null) {
+                        byte[] bdata = client.getAddressForm().getBytes(1, (int) client.getAddressForm().length());
+
+                        ImgConvTiffToPng convTiffToPng = new ImgConvTiffToPng();
+                        byte[] addressF;
+                        String base64bytes;
+
+                        try {
+                            addressF = convTiffToPng.convert(bdata);
+                            if (rotate) {
+                                base64bytes = DatatypeConverter.printBase64Binary(convTiffToPng.rotate180(addressF));
+                            } else {
+                                base64bytes = DatatypeConverter.printBase64Binary(addressF);
+                            }
+                        } catch (Exception ex) {
+                            Logger.getLogger(TransactionDAO.class.getName()).log(Level.SEVERE, null, ex);
+                            if (rotate) {
+                                base64bytes = DatatypeConverter.printBase64Binary(convTiffToPng.rotate180(bdata));
+                            } else {
+                                base64bytes = DatatypeConverter.printBase64Binary(bdata);
+                            }
+                        }
+
+                        addressImage.setAddressImage("data:image/png;base64," + base64bytes);
+
+                    }
+                }
+            }
+
+            return addressImage;
+        } catch (Exception e) {
+            System.out.println("[TransactionDAO] getAddressImageFromClientByTerminalSerialNumber() Error during the method execution");
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<TransactionDisplay> searchTransactions(String searchFilter, Date startRangeDate, Date endRangeDate, int firstResult, int maxResult, int transactionType, String operation,
+            boolean filterAmmount, int ammountType, int opType, String ammountString, boolean pending) {
+        Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class)
+                .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN)
+                // .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
+                .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
+                .addOrder(Order.desc("dateTime"));
+
+        if (firstResult >= 0) {
+            cri.setFirstResult(firstResult);
+            cri.setMaxResults(maxResult);
+        }
+
+        if (startRangeDate != null) {
+            cri.add(Restrictions.ge("dateTime", startRangeDate));
+        }
+        if (endRangeDate != null) {
+            endRangeDate.setHours(24);
+            cri.add(Restrictions.le("dateTime", endRangeDate));
+        }
+
+        if (operation != null && (operation.contains("01") || operation.contains("02"))) {
+            cri.add(Restrictions.like("operation", operation, MatchMode.ANYWHERE).ignoreCase());
+        }
+
+        if (transactionType != 0) {
+            cri.add(Restrictions.eq("transactionType", transactionType));
+        }
+
+        if (pending) {
+            //if pending is checked gonna bring unfinished transactions
+            cri.add(Restrictions.eq("transactionFinished", false));
+        }
+
+        try {
+            if (filterAmmount) {
+                Double ammount = Double.parseDouble(ammountString);
+
+                String field;
+
+                switch (ammountType) {
+                    case 1:
+                        field = "ammount";
+                        break;
+                    case 2:
+                        field = "feeAmmount";
+                        break;
+                    case 3:
+                        field = "payoutAmmount";
+                        break;
+                    default:
+                        field = "ammount";
+                }
+
+                switch (opType) {
+                    case 1:
+                        cri.add(Restrictions.gt(field, ammount));
+                        break;
+                    case 2:
+                        cri.add(Restrictions.eq(field, ammount));
+                        break;
+                    case 3:
+                        cri.add(Restrictions.lt(field, ammount));
+                        break;
+                    default:
+                        field = "ammount";
+                }
+            }
+        } catch (NumberFormatException e) {
+//            log.debug( "[TransactionDAO] NumberFormatException" );
+            e.printStackTrace();
+        }
+
+        if (searchFilter != null && !searchFilter.isEmpty()) {
+            Disjunction disjunction = (Disjunction) Restrictions.disjunction()
+                    //  .add( Restrictions.like( "resultCode", searchFilter, MatchMode.ANYWHERE ).ignoreCase() )
+                    .add(Restrictions.like("resultMessage", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("account", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("cardNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.legalName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.idTecnicardCheck", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.idTecnicardCash", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.idIstreamTecnicardCash", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.idIstreamTecnicardCheck", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.idIstreamFuzeCash", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("merchant.idIstreamFuzeCheck", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("terminal.serialNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("client.firstName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("client.ssn", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                    .add(Restrictions.like("client.lastName", searchFilter, MatchMode.ANYWHERE).ignoreCase());
+
+            Criterion dateRestriction = DateUtils.getRestrictionForDateFilter(searchFilter, "dateTime");
+            if (dateRestriction != null) {
+//                log.debug( "[TransactionDAO] ( dateRestriction != null )" );
+                disjunction.add(dateRestriction);
+            }
+            cri.add(disjunction);
+
+        }
+
+        ProjectionList projectionList = Projections.projectionList()
+                .add(Projections.property("id").as("id"))
+                .add(Projections.property("transactionType").as("transactionType"))
+                .add(Projections.property("dateTime").as("createdAt"))
+                .add(Projections.property("operation").as("operation"))
+                .add(Projections.property("cardNumber").as("accountSuffix"))
+                .add(Projections.property("ammount").as("ammount"))
+                .add(Projections.property("feeAmmount").as("feeAmmount"))
+                .add(Projections.property("payoutAmmount").as("payoutAmmount"))
+                .add(Projections.property("single").as("single"))
+                .add(Projections.property("resultCode").as("resultCode"))
+                .add(Projections.property("resultMessage").as("resultMessage"))
+                .add(Projections.property("merchant.legalName").as("merchant"))
+                .add(Projections.property("terminal.serialNumber").as("terminal"))
+                .add(Projections.property("client.firstName").as("clientFirstName"))
+                .add(Projections.property("client.lastName").as("clientLastName"))
+                .add(Projections.property("transactionFinished").as("transactionFinished"));
+        cri.setProjection(projectionList);
+        cri.setResultTransformer(new TransformerComplexBeans(TransactionDisplay.class));
+
+        return cri.list();
+    }
+
+    public SubTransactionImageDisplay getTransactionImage(int idTransaction) throws SQLException {
+
+        SubTransactionImageDisplay subTransactionImage = new SubTransactionImageDisplay();
+//        System.out.println("getTransactionImage() > id transaction to find: " + idTransaction);
+//            Transaction transaction = findById(idTransaction);
+//            System.out.println("getTransactionImage() > Transaction from db date_time value: "+ transaction.getDateTime().toString());
+//            subTransactionImage.setId(idTransaction);
+//
+//            if ( transaction != null ) {
+//                if ( transaction.getAchForm() != null ) {
+//                    System.out.println("IN THE TRANSACTION IMAGE CONVERTOR TO BASE64");
+//                    byte[] bdata = transaction.getAchForm().getBytes( 1, (int) transaction.getAchForm().length() );
+//                    String base64bytes = DatatypeConverter.printBase64Binary( bdata );
+//                    if(base64bytes.startsWith("data:image/png;base64,")){
+//                        subTransactionImage.setImage(base64bytes);
+//                    }else{
+//                        subTransactionImage.setImage("data:image/png;base64," + base64bytes );
+//                    }
+//                }else
+//                    System.out.println("Transaction.getAchForm() is null");
+//                    
+//            }
+//        System.out.println("getTransactionImage() > result image " + subTransactionImage.getImage());
+        return subTransactionImage;
+
+    }
+
+    public List<Transaction> getAll() {
+        Criteria criteria =  HibernateUtil.getSession().createCriteria(Transaction.class)
+                .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN)
+                // .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
+                .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
+                .addOrder(Order.desc("dateTime"));
+        
+        return criteria.list();
+    }
+
+}

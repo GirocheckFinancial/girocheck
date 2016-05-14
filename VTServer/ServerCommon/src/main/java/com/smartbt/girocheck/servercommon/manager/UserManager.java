@@ -1,0 +1,110 @@
+/*
+ ** File: UserManager.java
+ **
+ ** Date Created: March 2013
+ **
+ ** Copyright @ 2004-2013 Smart Business Technology, Inc.
+ **
+ ** All rights reserved. No part of this software may be 
+ ** reproduced, transmitted, transcribed, stored in a retrieval 
+ ** system, or translated into any language or computer language, 
+ ** in any form or by any means, electronic, mechanical, magnetic, 
+ ** optical, chemical, manual or otherwise, without the prior 
+ ** written permission of Smart Business Technology, Inc.
+ **
+ */
+package com.smartbt.girocheck.servercommon.manager;
+
+import com.smartbt.girocheck.common.VTSuiteMessages;
+import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
+import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
+import com.smartbt.girocheck.servercommon.display.UserDisplay;
+import com.smartbt.girocheck.servercommon.dao.UserDAO;
+import com.smartbt.girocheck.servercommon.validators.UserValidator;
+import com.smartbt.vtsuite.vtcommon.Constants;
+import java.security.NoSuchAlgorithmException;
+import javax.xml.bind.ValidationException;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author Ariel Saavedra
+ */
+public class UserManager {
+
+    private static final Logger log = Logger.getLogger(UserManager.class);
+    private UserDAO userDAO = UserDAO.get();
+
+    /**
+     * Search all the Users by a given filter
+     *
+     * @param search
+     * @param pageNumber
+     * @param rowsPerPage
+     * @return
+     * @throws java.lang.Exception
+     */
+    public ResponseDataList searchUsers(String search, int pageNumber, int rowsPerPage) throws Exception {
+        UserValidator.searchUsers(search, pageNumber, rowsPerPage);
+        ResponseDataList response = new ResponseDataList();
+        response.setData(userDAO.searchUsers(search, pageNumber * rowsPerPage, rowsPerPage));
+        int total = userDAO.searchUsers(search, -1, -1).size();
+        response.setTotalPages((int) Math.ceil((float) total / (float) rowsPerPage));
+
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(VTSuiteMessages.SUCCESS);
+        return response;
+    }
+
+    /**
+     * Update a User
+     *
+     * @param user
+     * @return
+     * @throws java.lang.Exception
+     */
+    public BaseResponse updateUser(UserDisplay user) throws Exception {
+        UserValidator.updateUser(user);
+        BaseResponse response = new BaseResponse();
+        userDAO.updateUser(user);
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(VTSuiteMessages.SUCCESS);
+        return response;
+    }
+    
+    public BaseResponse deleteUser(int idUser) throws Exception {
+        UserValidator.deleteUser(idUser);
+        BaseResponse response = new BaseResponse();
+//            if (!frontFacade.existObject(ClerkRole.class, role.getId())) {
+//                response.setStatus(Constants.CODE_ERROR_GENERAL);
+//                response.setStatusMessage(VTSuiteMessages.CLERK_ROLE_DOES_NOT_EXIST);
+//                log.info("----->  updateClerkRole: This ClerkRole does not exist <-----");
+//            } else {
+
+        userDAO.deleteUser(idUser);
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.SUCCESS);
+//            }
+        return response;
+    }
+
+    public BaseResponse addUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException, Exception {
+        UserValidator.addUser(user);
+        BaseResponse response = new BaseResponse();
+        
+        userDAO.addUser(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getActive(), user.getEmail(), user.getRole().getId());
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.SUCCESS);
+        return response;
+    }
+    
+    public BaseResponse changePassword(int userId, String password){
+        BaseResponse response = new BaseResponse();
+        
+        userDAO.changePassword(userId,password);
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.SUCCESS);
+        return response;
+    }
+    
+}

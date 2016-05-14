@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://warp68.net/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://warp68.net/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://warp68.net/">
+      <s:element name="decodeB64Ex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="decodeB64ExResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="decodeB64ExResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="parseB64Ex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="parseB64ExResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parseB64ExResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="decodeB64">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="decodeB64Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="decodeB64Result" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="parseB64">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="parseB64Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="parseB64Result" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAssemblyNameAndVersion">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetAssemblyNameAndVersionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAssemblyNameAndVersionResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="decodeB64ExSoapIn">
+    <wsdl:part name="parameters" element="tns:decodeB64Ex" />
+  </wsdl:message>
+  <wsdl:message name="decodeB64ExSoapOut">
+    <wsdl:part name="parameters" element="tns:decodeB64ExResponse" />
+  </wsdl:message>
+  <wsdl:message name="parseB64ExSoapIn">
+    <wsdl:part name="parameters" element="tns:parseB64Ex" />
+  </wsdl:message>
+  <wsdl:message name="parseB64ExSoapOut">
+    <wsdl:part name="parameters" element="tns:parseB64ExResponse" />
+  </wsdl:message>
+  <wsdl:message name="decodeB64SoapIn">
+    <wsdl:part name="parameters" element="tns:decodeB64" />
+  </wsdl:message>
+  <wsdl:message name="decodeB64SoapOut">
+    <wsdl:part name="parameters" element="tns:decodeB64Response" />
+  </wsdl:message>
+  <wsdl:message name="parseB64SoapIn">
+    <wsdl:part name="parameters" element="tns:parseB64" />
+  </wsdl:message>
+  <wsdl:message name="parseB64SoapOut">
+    <wsdl:part name="parameters" element="tns:parseB64Response" />
+  </wsdl:message>
+  <wsdl:message name="GetAssemblyNameAndVersionSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAssemblyNameAndVersion" />
+  </wsdl:message>
+  <wsdl:message name="GetAssemblyNameAndVersionSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAssemblyNameAndVersionResponse" />
+  </wsdl:message>
+  <wsdl:portType name="LicensesSoap">
+    <wsdl:operation name="decodeB64Ex">
+      <wsdl:input message="tns:decodeB64ExSoapIn" />
+      <wsdl:output message="tns:decodeB64ExSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="parseB64Ex">
+      <wsdl:input message="tns:parseB64ExSoapIn" />
+      <wsdl:output message="tns:parseB64ExSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="decodeB64">
+      <wsdl:input message="tns:decodeB64SoapIn" />
+      <wsdl:output message="tns:decodeB64SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="parseB64">
+      <wsdl:input message="tns:parseB64SoapIn" />
+      <wsdl:output message="tns:parseB64SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAssemblyNameAndVersion">
+      <wsdl:input message="tns:GetAssemblyNameAndVersionSoapIn" />
+      <wsdl:output message="tns:GetAssemblyNameAndVersionSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LicensesSoap" type="tns:LicensesSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="decodeB64Ex">
+      <soap:operation soapAction="http://warp68.net/decodeB64Ex" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="parseB64Ex">
+      <soap:operation soapAction="http://warp68.net/parseB64Ex" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="decodeB64">
+      <soap:operation soapAction="http://warp68.net/decodeB64" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="parseB64">
+      <soap:operation soapAction="http://warp68.net/parseB64" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAssemblyNameAndVersion">
+      <soap:operation soapAction="http://warp68.net/GetAssemblyNameAndVersion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="LicensesSoap12" type="tns:LicensesSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="decodeB64Ex">
+      <soap12:operation soapAction="http://warp68.net/decodeB64Ex" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="parseB64Ex">
+      <soap12:operation soapAction="http://warp68.net/parseB64Ex" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="decodeB64">
+      <soap12:operation soapAction="http://warp68.net/decodeB64" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="parseB64">
+      <soap12:operation soapAction="http://warp68.net/parseB64" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAssemblyNameAndVersion">
+      <soap12:operation soapAction="http://warp68.net/GetAssemblyNameAndVersion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Licenses">
+    <wsdl:port name="LicensesSoap" binding="tns:LicensesSoap">
+      <soap:address location="http://miadev.warp68.net/Parsers/Licenses.asmx" />
+    </wsdl:port>
+    <wsdl:port name="LicensesSoap12" binding="tns:LicensesSoap12">
+      <soap12:address location="http://miadev.warp68.net/Parsers/Licenses.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,300 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:tns="http://scan.girocheck.smartbt.com/" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" 
+           targetNamespace="http://scan.girocheck.smartbt.com/">
+
+  
+    <xs:element name="checkAuth" type="tns:checkAuth"/>
+  
+    <xs:element name="tecnicardConfirmation" type="tns:tecnicardConfirmation"/>
+    
+    <xs:element name="cardReload" type="tns:cardReload"/>
+
+    <xs:element name="checkAuthLocationConfig" type="tns:checkAuthLocationConfig"/>
+
+    <xs:element name="checkAuthLocationConfigResponse" type="tns:checkAuthLocationConfigResponse"/>
+
+    <xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+
+    <xs:element name="tecnicardConfirmationResponse" type="tns:tecnicardConfirmationResponse"/>
+    
+    <xs:element name="cardReloadResponse" type="tns:cardReloadResponse"/>
+
+    <xs:element name="checkAuthSubmit" type="tns:checkAuthSubmit"/>
+
+    <xs:element name="checkAuthSubmitResponse" type="tns:checkAuthSubmitResponse"/>
+
+    <xs:element name="balanceInquiry" type="tns:balanceInquiry"/>
+    
+    <xs:element name="balanceInquiryResponse" type="tns:balanceInquiryResponse"/>
+    
+    <xs:element name="cardToBank" type="tns:cardToBank"/>
+    
+    <xs:element name="cardToBankResponse" type="tns:cardToBankResponse"/>
+
+
+    <xs:complexType name="checkAuthSubmit">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:checkAuthSubmitRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuthSubmitRequest">
+        <xs:sequence>
+             <xs:element name="user" type="xs:string" minOccurs="1" />
+            <xs:element name="password" type="xs:string" minOccurs="1"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="1"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+            <xs:element name="action" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuthSubmitResponse">
+         <xs:sequence>
+            <xs:element name="return" type="tns:CheckAuthSubmitRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="CheckAuthSubmitRes">
+        <xs:sequence>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuth">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:checkAuthRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tecnicardConfirmation">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:tecnicardConfirmationRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuthRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+        
+            <xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+            <xs:element name="addressForm" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="amount" type="xs:string" minOccurs="0"/>
+            <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+            <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="crc" type="xs:string" minOccurs="0"/>
+            <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+            <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="micr" type="xs:string" minOccurs="0"/>
+            <xs:element name="phone" type="xs:string" minOccurs="0"/>
+            <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+            <xs:element name="serial" type="xs:string" minOccurs="0"/>
+            <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+            <xs:element name="operation" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="tecnicardConfirmationRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+        
+            <xs:element name="truncatedCheck" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="achForm" type="xs:base64Binary" minOccurs="0"/>
+            
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuthResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:CheckAuthRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CheckAuthRes">
+        <xs:sequence>
+            <!--<xs:element name="checkId" type="xs:string" minOccurs="0"/>-->
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tecnicardConfirmationResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:TecnicardConfirmationRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TecnicardConfirmationRes">
+        <xs:sequence>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+<!-- ****************************************RELOAD **************************************** -->
+
+    <xs:complexType name="cardReload">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:cardReloadRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cardReloadRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+        
+            <xs:element name="amount" type="xs:string" minOccurs="0"/>
+            <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+            <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="crc" type="xs:string" minOccurs="0"/>
+            <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+            <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="micr" type="xs:string" minOccurs="0"/>
+            <xs:element name="phone" type="xs:string" minOccurs="0"/>
+            <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+            <xs:element name="serial" type="xs:string" minOccurs="0"/>
+            <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+            <xs:element name="operation" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cardReloadResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:CardReloadRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CardReloadRes">
+        <xs:sequence>
+            <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+<!-- ****************************************RELOAD **************************************** -->
+
+    <xs:complexType name="checkAuthLocationConfig">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:checkAuthLocationConfigRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuthLocationConfigRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkAuthLocationConfigResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:CheckAuthLocationConfigRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CheckAuthLocationConfigRes">
+        <xs:sequence>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+            <xs:element name="authFeem" type="xs:string" minOccurs="0"/>
+            <xs:element name="authFeep" type="xs:string" minOccurs="0"/>
+            <xs:element name="crdldf" type="xs:string" minOccurs="0"/>
+            <xs:element name="param1" type="xs:string" minOccurs="0"/>
+            <xs:element name="param2" type="xs:string" minOccurs="0"/>
+            <xs:element name="param3" type="xs:string" minOccurs="0"/>
+            <xs:element name="param4" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="balanceInquiry">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:balanceInquiryRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="balanceInquiryRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+            <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="balanceInquiryResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:BalanceInquiryRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="BalanceInquiryRes">
+        <xs:sequence>
+            <xs:element name="balance" type="xs:string" minOccurs="0"/>
+            <xs:element name="inTransitFunds" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cardToBank">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:cardToBankRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cardToBankRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+            
+            <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="amount" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="cardToBankResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:CardToBankRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CardToBankRes">
+        <xs:sequence>
+            <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="amount" type="xs:string" minOccurs="0"/>
+            <xs:element name="date" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>

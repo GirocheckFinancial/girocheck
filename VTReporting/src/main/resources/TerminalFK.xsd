@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xsd:complexType name="TerminalType">
+		<xsd:sequence>
+			<xsd:element type="xsd:decimal" name="id"/>
+			<xsd:element type="xsd:string" name="serialNumber"/>
+			<xsd:element type="xsd:string" name="description" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="merchantName" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element name="Report">
+		<xsd:complexType>
+			<xsd:sequence>
+			    <xsd:element name="General" type="GeneralType" maxOccurs="unbounded"/>
+				<xsd:element name="Terminal" type="TerminalType" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+
+		<xsd:key name="PK_terminal_id">
+			<xsd:selector xpath=".//Terminal"/>
+			<xsd:field xpath="id"/>
+		</xsd:key>
+
+	</xsd:element>
+	
+	<xsd:complexType name="GeneralType" >
+		<xsd:sequence>
+			<xsd:element type="xsd:string" name="header" nillable="true" minOccurs="0"/>
+			<xsd:element type="xsd:string" name="footer" nillable="true" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+</xsd:schema>

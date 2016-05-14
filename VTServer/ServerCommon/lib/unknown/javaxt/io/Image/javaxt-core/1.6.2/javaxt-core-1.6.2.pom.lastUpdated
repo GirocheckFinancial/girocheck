@@ -1,0 +1,22 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Tue May 26 14:44:42 EDT 2015
+http\://archiva.fdvs.com.ar/repository/public1/.error=Could not transfer artifact javaxt.io.Image\:javaxt-core\:pom\:1.6.2 from/to fdvsolution.public (http\://archiva.fdvs.com.ar/repository/public1/)\: Not authorized , ReasonPhrase\:Unauthorized.
+default-https\://repository.jboss.org/nexus/content/repositories/glassfish/.lastUpdated=1412626925202
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\ServerCommon/lib/.error=
+file\:F\:/Work/SVNGIROCHECK/VTServer/VTReporting/libs/.error=
+file\:${project.basedir}/lib/.error=
+file\:${project.basedir}/lib/.lastUpdated=1432665882591
+default-http\://archiva.fdvs.com.ar/repository/public1/.lastUpdated=1413928809977
+http\://repo.maven.apache.org/maven2/.lastUpdated=1432665789541
+https\://repository.jboss.org/nexus/content/repositories/glassfish/.error=Could not transfer artifact javaxt.io.Image\:javaxt-core\:pom\:1.6.2 from/to glassfish (https\://repository.jboss.org/nexus/content/repositories/glassfish)\: Not authorized , ReasonPhrase\:Unauthorized.
+http\://repo.maven.apache.org/maven2/.error=
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\ServerCommon/lib/.lastUpdated=1432665788682
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\VTReporting\\VTReporting\\libs/.error=
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\VTReporting\\libs/.lastUpdated=1421730291976
+file\:F\:/Work/SVNGIROCHECK/VTServer/VTReporting/libs/.lastUpdated=1421766815841
+file\:F\:\\Work\\SVNGIROCHECK\\VTReporting\\libs/.lastUpdated=1431014573736
+file\:F\:\\Work\\SVNGIROCHECK\\VTReporting\\libs/.error=
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\VTReporting/libs/.lastUpdated=1421766179003
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\VTReporting\\VTReporting\\libs/.lastUpdated=1421709530109
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\VTReporting/libs/.error=
+file\:F\:\\Work\\SVNGIROCHECK\\VTServer\\VTReporting\\libs/.error=

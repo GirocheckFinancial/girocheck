@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="IStreamFront(1.5)" resourceRoot="" soapui-version="4.6.4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="ScanPortBinding" type="wsdl" bindingName="{http://scan.girocheck.smartbt.com/}ScanPortBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/SVN/GiroCheck/VTServer/IStreamFront/src/main/webapp/WEB-INF/wsdl/Scan.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\SVN\GiroCheck\VTServer\IStreamFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl"><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\IStreamFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="Scan.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="personalInfo">
+    <part name="parameters" element="tns:personalInfo"/>
+  </message>
+  <message name="personalInfoResponse">
+    <part name="parameters" element="tns:personalInfoResponse"/>
+  </message>
+  <message name="certegyInfo">
+    <part name="parameters" element="tns:certegyInfo"/>
+  </message>
+  <message name="certegyInfoResponse">
+    <part name="parameters" element="tns:certegyInfoResponse"/>
+  </message>
+  <portType name="Scan">
+    <operation name="personalInfo">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/personalInfoRequest" message="tns:personalInfo"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/personalInfoResponse" message="tns:personalInfoResponse"/>
+    </operation>
+    <operation name="certegyInfo">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/certegyInfoRequest" message="tns:certegyInfo"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/certegyInfoResponse" message="tns:certegyInfoResponse"/>
+    </operation>
+  </portType>
+  <binding name="ScanPortBinding" type="tns:Scan">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="personalInfo">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="certegyInfo">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="Scan">
+    <port name="ScanPort" binding="tns:ScanPortBinding">
+      <soap:address location=""/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\IStreamFront\src\main\webapp\WEB-INF\wsdl\Scan.xsd</con:url><con:content><![CDATA[<xs:schema version="1.0" targetNamespace="http://scan.girocheck.smartbt.com/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="personalInfo" type="tns:personalInfo"/>
+  <xs:element name="personalInfoResponse" type="tns:personalInfoResponse"/>
+  <xs:complexType name="personalInfo">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:personalInfoRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personalInfoRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="idType" type="xs:integer" minOccurs="0"/>
+      <xs:element name="id" type="xs:string" minOccurs="0"/>
+      <xs:element name="telephone" type="xs:string" minOccurs="0"/>
+      <xs:element name="email" type="xs:string" minOccurs="0"/>
+      <xs:element name="address" type="xs:string" minOccurs="0"/>
+      <xs:element name="city" type="xs:string" minOccurs="0"/>
+      <xs:element name="state" type="xs:string" minOccurs="0"/>
+      <xs:element name="idState" type="xs:string" minOccurs="0"/>
+      <xs:element name="zipCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="country" type="xs:string" minOccurs="0"/>
+      <xs:element name="idCountry" type="xs:string" minOccurs="0"/>
+      <xs:element name="firstName" type="xs:string" minOccurs="0"/>
+      <xs:element name="lastName" type="xs:string" minOccurs="0"/>
+      <xs:element name="bornDate" type="xs:string" minOccurs="0"/>
+      <xs:element name="expirationDate" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="personalInfoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:PersonalInfoRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PersonalInfoRes">
+    <xs:sequence>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="certegyInfo" type="tns:certegyInfo"/>
+  <xs:element name="certegyInfoResponse" type="tns:certegyInfoResponse"/>
+  <xs:complexType name="certegyInfo">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:certegyInfoRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="certegyInfoRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="additionalInfo" type="xs:string" minOccurs="0"/>
+      <xs:element name="addressCurrent" type="xs:string" minOccurs="0"/>
+      <xs:element name="cardLoadFee" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityId" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityName" type="xs:string" minOccurs="0"/>
+      <xs:element name="feeAmount" type="xs:string" minOccurs="0"/>
+      <xs:element name="lastFour" type="xs:string" minOccurs="0"/>
+      <xs:element name="payoutAmount" type="xs:string" minOccurs="0"/>
+      <xs:element name="response" type="xs:string" minOccurs="0"/>
+      <xs:element name="systemAmount" type="xs:string" minOccurs="0"/>
+      <xs:element name="transactionDate" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="certegyInfoResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CertegyInfoRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CertegyInfoRes">
+    <xs:sequence>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints/><con:operation isOneWay="false" action="" name="certegyInfo" bindingOperationName="certegyInfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/IStreamFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:certegyInfo>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>EEE</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <checkId>?</checkId>
+            <!--Optional:-->
+            <additionalInfo>?</additionalInfo>
+            <!--Optional:-->
+            <addressCurrent>?</addressCurrent>
+            <!--Optional:-->
+            <cardLoadFee>?</cardLoadFee>
+            <!--Optional:-->
+            <entityId>?</entityId>
+            <!--Optional:-->
+            <entityName>?</entityName>
+            <!--Optional:-->
+            <feeAmount>?</feeAmount>
+            <!--Optional:-->
+            <lastFour>?</lastFour>
+            <!--Optional:-->
+            <payoutAmount>?</payoutAmount>
+            <!--Optional:-->
+            <response>?</response>
+            <!--Optional:-->
+            <systemAmount>?</systemAmount>
+            <!--Optional:-->
+            <transactionDate>?</transactionDate>
+         </arg0>
+      </scan:certegyInfo>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/certegyInfoRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="personalInfo" bindingOperationName="personalInfo" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:personalInfo>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <checkId>?</checkId>
+            <!--Optional:-->
+            <idType>?</idType>
+            <!--Optional:-->
+            <id>?</id>
+            <!--Optional:-->
+            <telephone>?</telephone>
+            <!--Optional:-->
+            <email>?</email>
+            <!--Optional:-->
+            <address>?</address>
+            <!--Optional:-->
+            <city>?</city>
+            <!--Optional:-->
+            <state>?</state>
+            <!--Optional:-->
+            <idState>?</idState>
+            <!--Optional:-->
+            <zipCode>?</zipCode>
+            <!--Optional:-->
+            <country>?</country>
+            <!--Optional:-->
+            <idCountry>?</idCountry>
+            <!--Optional:-->
+            <firstName>?</firstName>
+            <!--Optional:-->
+            <lastName>?</lastName>
+            <!--Optional:-->
+            <bornDate>?</bornDate>
+            <!--Optional:-->
+            <expirationDate>?</expirationDate>
+         </arg0>
+      </scan:personalInfo>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/personalInfoRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

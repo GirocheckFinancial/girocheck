@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: SMART BUSINESS TECHNOLOGY
+License Type: Purchased
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.vtsuite.servercommon.model.VTSystemProperty" table="VTSystem_Property" lazy="true">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="propertyName" column="property_name" type="string" length="40" not-null="false" lazy="false"/>
+		<property name="propertyValue" column="property_value" type="string" length="100" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

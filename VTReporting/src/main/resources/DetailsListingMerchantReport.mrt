@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer application="StiReport" type="Flex" version="1.02">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0"/>
+    <Databases isList="true" count="1">
+      <MerchantFK Ref="2" type="Stimulsoft.Report.Dictionary.StiXmlDatabase" isKey="true">
+        <Alias>MerchantFK</Alias>
+        <Name>MerchantFK</Name>
+        <PathData>${project.basedir}\src\main\resources\MerchantFK.xml</PathData>
+        <PathSchema/>
+      </MerchantFK>
+    </Databases>
+    <DataSources isList="true" count="2">
+      <General Ref="3" type="DataTableSource" isKey="true">
+        <Alias>General</Alias>
+        <Columns isList="true" count="4">
+          <value>header,System.String</value>
+          <value>footer,System.String</value>
+          <value>fromDate,System.String</value>
+          <value>toDate,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>General</Name>
+        <NameInSource>MerchantFK.General</NameInSource>
+      </General>
+      <Merchant Ref="4" type="DataTableSource" isKey="true">
+        <Alias>Merchant</Alias>
+        <Columns isList="true" count="13">
+          <value>id,System.Decimal</value>
+          <value>legalName,System.String</value>
+          <value>description,System.String</value>
+          <value>sic,System.String</value>
+          <value>address,System.String</value>
+          <value>zipcode,System.String</value>
+          <value>state,System.String</value>
+          <value>city,System.String</value>
+          <value>phone,System.String</value>
+          <value>idPosOrderExp,System.String</value>
+          <value>idTellerOrderExp,System.String</value>
+          <value>customerName,System.String</value>
+          <value>oEAgentNumber,System.String</value>
+        </Columns>
+        <Dictionary isRef="1"/>
+        <Name>Merchant</Name>
+        <NameInSource>MerchantFK.Merchant</NameInSource>
+      </Merchant>
+    </DataSources>
+    <Relations isList="true" count="0"/>
+    <Report isRef="0"/>
+    <Variables isList="true" count="0"/>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0"/>
+  <MetaTags isList="true" count="0"/>
+  <Pages isList="true" count="1">
+    <Page1 Ref="5" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="5">
+        <Date Ref="6" type="Text" isKey="true">
+          <Brush>[230:230:230]</Brush>
+          <ClientRectangle>17.2,1.1,1.4,0.2</ClientRectangle>
+          <Conditions isList="true" count="0"/>
+          <Font>Arial,9</Font>
+          <HorAlignment>Center</HorAlignment>
+          <Margins>0,0,0,0</Margins>
+          <Name>Date</Name>
+          <Page isRef="5"/>
+          <Parent isRef="5"/>
+          <Text>Date</Text>
+          <TextBrush>Black</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Date>
+        <ReportTitleBand1 Ref="7" type="ReportTitleBand" isKey="true">
+          <Brush>Teal</Brush>
+          <ClientRectangle>0,0.2,13.6,0.4</ClientRectangle>
+          <Components isList="true" count="1">
+            <Text27 Ref="8" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.1,3.3,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,14,Bold</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text27</Name>
+              <Page isRef="5"/>
+              <Parent isRef="7"/>
+              <Text>Merchant Listing Report</Text>
+              <TextBrush>[255:255:255]</TextBrush>
+              <Type>Expression</Type>
+            </Text27>
+          </Components>
+          <Conditions isList="true" count="0"/>
+          <Name>ReportTitleBand1</Name>
+          <Page isRef="5"/>
+          <Parent isRef="5"/>
+        </ReportTitleBand1>
+        <HeaderBand1 Ref="9" type="HeaderBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,1,13.6,0.3</ClientRectangle>
+          <Components isList="true" count="16">
+            <LegalName Ref="10" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>0.7,0.1,1.2,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>37d24adbad316c6fb67a7a5bbc9701d1</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>LegalName</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Legal Name</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </LegalName>
+            <IdMerchant Ref="11" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>0,0.1,0.7,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>0782bf1466e5a64a8afc5661ba6c9822</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>IdMerchant</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>IdMerchant</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </IdMerchant>
+            <Sic Ref="12" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>1.9,0.1,0.5,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>04ed71cff79a6f3f8fa64f34f2a98058</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Sic</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Sic</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Sic>
+            <Address Ref="13" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>2.4,0.1,2.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>3a3a6b0810aa20273adf4f34fe78ad4f</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Address</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Address</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Address>
+            <ZipCode Ref="14" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>4.5,0.1,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>09a248e2ff66d4d3b5024f3505a68f49</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>ZipCode</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Zip Code</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </ZipCode>
+            <City Ref="15" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>5.3,0.1,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>848beb8e9da35b69b6a14f3511978d2a</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>City</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>City</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </City>
+            <Phone Ref="16" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>7.5,0.1,1.4,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>f6fd0ec377bcb42440df4f35178f3cae</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Phone</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Phone</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Phone>
+            <IDPosOE Ref="17" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>8.9,0.1,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>aae4ece55b9e09993c2f4f351d8e66c4</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>IDPosOE</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>ID Pos OE</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </IDPosOE>
+            <IDTellerOE Ref="18" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>9.7,0.1,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>ffeb7e93705c618232164f35244a316a</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>IDTellerOE</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>ID Teller OE</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </IDTellerOE>
+            <AgentNumberOE Ref="19" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>10.5,0.1,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>6e7813d44a0639c570f34f35385da396</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>AgentNumberOE</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Agent Number OE</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </AgentNumberOE>
+            <CustomerName Ref="20" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>11.6,0.1,2,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>d0dd9b47baeee96b4d2a4f353ec5fd79</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>CustomerName</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Customer Name</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </CustomerName>
+            <today Ref="21" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>12.1,-0.2,1.5,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>today</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>{Today}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>SystemVariables</Type>
+            </today>
+            <Text16 Ref="22" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11.3,-0.2,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text16</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>Date</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+            </Text16>
+            <State Ref="23" type="Text" isKey="true">
+              <Brush>[218:231:241]</Brush>
+              <ClientRectangle>6.4,0.1,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,9</Font>
+              <Guid>6d4f05b55062c5986d774f350b68c260</Guid>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>State</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <Text>State</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </State>
+            <HorizontalLinePrimitive5 Ref="24" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,0.1,13.6,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions isList="true" count="0"/>
+              <EndCap Ref="25" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive5</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <StartCap Ref="26" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive5>
+            <HorizontalLinePrimitive2 Ref="27" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,0.3,13.6,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions isList="true" count="0"/>
+              <EndCap Ref="28" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Guid>3c5923f131ca336825fc21f74abf86dc</Guid>
+              <Name>HorizontalLinePrimitive2</Name>
+              <Page isRef="5"/>
+              <Parent isRef="9"/>
+              <StartCap Ref="29" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive2>
+          </Components>
+          <Conditions isList="true" count="0"/>
+          <Name>HeaderBand1</Name>
+          <Page isRef="5"/>
+          <Parent isRef="5"/>
+        </HeaderBand1>
+        <DataBand1 Ref="30" type="DataBand" isKey="true">
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,1.7,13.6,0.5</ClientRectangle>
+          <Components isList="true" count="13">
+            <IdMerchant Ref="31" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0,0.1,0.7,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>IdMerchant</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.id}</Text>
+              <TextBrush>Black</TextBrush>
+            </IdMerchant>
+            <LegalName Ref="32" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.7,0.1,1.2,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>LegalName</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.legalName}</Text>
+              <TextBrush>Black</TextBrush>
+            </LegalName>
+            <Sic Ref="33" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>1.9,0.1,0.5,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Sic</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.sic}</Text>
+              <TextBrush>Black</TextBrush>
+            </Sic>
+            <Address Ref="34" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>2.4,0.1,2.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Address</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.address}</Text>
+              <TextBrush>Black</TextBrush>
+            </Address>
+            <ZipCode Ref="35" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.5,0.1,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>ZipCode</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.zipcode}</Text>
+              <TextBrush>Black</TextBrush>
+            </ZipCode>
+            <Phone Ref="36" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>7.5,0.1,1.4,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Phone</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.phone}</Text>
+              <TextBrush>Black</TextBrush>
+            </Phone>
+            <IDPosOE Ref="37" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>8.9,0.1,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>IDPosOE</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.idPosOrderExp}</Text>
+              <TextBrush>Black</TextBrush>
+            </IDPosOE>
+            <IDTellerOE Ref="38" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>9.7,0.1,0.8,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>IDTellerOE</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.idTellerOrderExp}</Text>
+              <TextBrush>Black</TextBrush>
+            </IDTellerOE>
+            <CustomerName Ref="39" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>11.6,0.1,2,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>CustomerName</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.customerName}</Text>
+              <TextBrush>Black</TextBrush>
+            </CustomerName>
+            <AgentNumberOE Ref="40" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>10.5,0.1,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>AgentNumberOE</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.oEAgentNumber}</Text>
+              <TextBrush>Black</TextBrush>
+            </AgentNumberOE>
+            <City Ref="41" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>5.3,0.1,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>City</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.city}</Text>
+              <TextBrush>Black</TextBrush>
+            </City>
+            <State Ref="42" type="Text" isKey="true">
+              <Brush>Transparent</Brush>
+              <ClientRectangle>6.4,0.1,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0"/>
+              <Font>Arial,10</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>State</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <Text>{Merchant.state}</Text>
+              <TextBrush>Black</TextBrush>
+            </State>
+            <HorizontalLinePrimitive6 Ref="43" type="HorizontalLinePrimitive" isKey="true">
+              <ClientRectangle>0,-0.2,13.6,0.01</ClientRectangle>
+              <Color>Black</Color>
+              <Conditions isList="true" count="0"/>
+              <EndCap Ref="44" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </EndCap>
+              <Name>HorizontalLinePrimitive6</Name>
+              <Page isRef="5"/>
+              <Parent isRef="30"/>
+              <StartCap Ref="45" type="Cap" isKey="true">
+                <Color>Black</Color>
+              </StartCap>
+            </HorizontalLinePrimitive6>
+          </Components>
+          <Conditions isList="true" count="0"/>
+          <DataSourceName>Merchant</DataSourceName>
+          <Filters isList="true" count="0"/>
+          <Name>DataBand1</Name>
+          <Page isRef="5"/>
+          <Parent isRef="5"/>
+          <Sort isList="true" count="0"/>
+        </DataBand1>
+        <HorizontalLinePrimitive8 Ref="46" type="HorizontalLinePrimitive" isKey="true">
+          <ClientRectangle>-1,-2,10.6,0.01</ClientRectangle>
+          <Color>Black</Color>
+          <Conditions isList="true" count="0"/>
+          <EndCap Ref="47" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </EndCap>
+          <Guid>d739677900bfa165aaa012083b03365b</Guid>
+          <Name>HorizontalLinePrimitive8</Name>
+          <Page isRef="5"/>
+          <Parent isRef="5"/>
+          <StartCap Ref="48" type="Cap" isKey="true">
+            <Color>Black</Color>
+          </StartCap>
+        </HorizontalLinePrimitive8>
+      </Components>
+      <Conditions isList="true" count="0"/>
+      <Guid>4a8499c09e2e46b2b91482eb504c6994</Guid>
+      <Margins>0.2,0.2,0.2,0.2</Margins>
+      <Name>Page1</Name>
+      <Orientation>Landscape</Orientation>
+      <PageHeight>8.5</PageHeight>
+      <PageWidth>14</PageWidth>
+      <PaperSize>Letter</PaperSize>
+      <Report isRef="0"/>
+      <Watermark Ref="49" type="Stimulsoft.Report.Components.StiWatermark" isKey="true">
+        <Font>Arial,100</Font>
+        <TextBrush>[50:0:0:0]</TextBrush>
+      </Watermark>
+    </Page1>
+  </Pages>
+  <PrinterSettings Ref="50" type="Stimulsoft.Report.Print.StiPrinterSettings" isKey="true"/>
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>07/17/2015 11:16:36 AM</ReportChanged>
+  <ReportCreated>11/01/2013 08:51:26 AM</ReportCreated>
+  <ReportFile>F:\Work\SVNGIROCHECK\VTReporting\src\main\resources\DetailsListingMerchantReport.mrt</ReportFile>
+  <ReportGuid>6e19e697eeb9ff3ecff39c9533147ec7</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Inches</ReportUnit>
+  <ReportVersion>2014.3</ReportVersion>
+  <Script>using System;
+        using System.Drawing;
+        using System.Windows.Forms;
+        using System.Data;
+        using Stimulsoft.Controls;
+        using Stimulsoft.Base.Drawing;
+        using Stimulsoft.Report;
+        using Stimulsoft.Report.Dialogs;
+        using Stimulsoft.Report.Components;
+
+        namespace Reports
+        {
+        public class Report : Stimulsoft.Report.StiReport
+        {
+        public Report()        {
+        this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+        #endregion StiReport Designer generated code - do not modify
+        }
+        }</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0"/>
+</StiSerializer>

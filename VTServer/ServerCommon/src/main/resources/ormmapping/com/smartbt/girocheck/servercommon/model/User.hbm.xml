@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.User" table="`User`" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="username" column="username" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="password" column="password" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="firstName" column="firstname" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="lastName" column="lastname" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="active" column="active" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="email" column="email" type="string" length="255" not-null="false" lazy="false"/>
+		<many-to-one name="role" cascade="lock" column="role" class="com.smartbt.girocheck.servercommon.model.Role" not-null="true" lazy="proxy">
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.Address" table="Address" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="country" cascade="lock" column="country" class="com.smartbt.girocheck.servercommon.model.Country" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="state" cascade="lock" column="state" class="com.smartbt.girocheck.servercommon.model.State" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="address" column="address" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="city" column="city" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="zipcode" column="zipcode" type="string" length="255" not-null="false" lazy="false"/>
+		<one-to-one name="merchant" class="com.smartbt.girocheck.servercommon.model.Merchant" cascade="save-update,lock" property-ref="address" lazy="proxy"/>
+		<one-to-one name="client" class="com.smartbt.girocheck.servercommon.model.Client" cascade="save-update,lock" property-ref="address" lazy="proxy"/>
+	</class>
+</hibernate-mapping>

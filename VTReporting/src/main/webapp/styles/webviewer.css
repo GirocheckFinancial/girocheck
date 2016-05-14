@@ -1,0 +1,98 @@
+﻿html, body {
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  background-color: #e8e8e8;
+  overflow-y: hidden;
+}
+
+div.table-side {
+  width: 10px;
+  height: 2px;
+}
+
+a.link {
+  color: Blue;
+  font-family: Verdana;
+  font-size: 11px;
+}
+
+.ShadowLeftPanel 
+{	
+	-moz-box-shadow: 0px 0px 4px rgba(0,0,0,0.5); /* Для Firefox */
+    -webkit-box-shadow: 0px 0px 5px rgba(0,0,0,0.6); /* Для Safari и Chrome */
+    box-shadow: 0 0 5px rgba(0,0,0,0.6); /* Параметры тени */
+}
+
+.DemoHeader
+{
+	background: #fff9b4;    
+    background: -moz-linear-gradient(top, #ffffff, #fff9b4); /* Firefox 3.6+ */    
+    background: -webkit-gradient(linear, top, bottom, 
+                color-stop(0%,#ffffff), color-stop(100%,#fff9b4));  /* Chrome 10+, Safari 5.1+ */	
+	background: -webkit-linear-gradient(top, #ffffff, #fff9b4);
+    background: -o-linear-gradient(top, #ffffff, #fff9b4); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff, #fff9b4); /* IE10 */
+    background: linear-gradient(top, #ffffff, #fff9b4); /* CSS3 */
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr='#ffffff', endColorStr='#fff9b4', gradientType='0');	
+}
+
+.HideButton
+{
+	border: 0px;
+	width: 25px;
+	height: 60px;
+	position: absolute;
+	left: 110px;
+	top: 45%;
+	z-index: 100;
+	-moz-box-shadow: 4px 0px 7px rgba(0,0,0,0.1); /* Для Firefox */
+    -webkit-box-shadow: 4px 0px 7px rgba(0,0,0,0.1); /* Для Safari и Chrome */
+    box-shadow: 4px 0px 7px rgba(0,0,0,0.1); /* Параметры тени */
+    -moz-border-radius: 0px 10px 10px 0;
+	-webkit-border-radius: 0px 10px 10px 0;
+	border-radius: 0px 10px 10px 0;
+	background: url(HideButton.png);	
+}
+
+.ShowButton
+{
+	width: 25px;
+	height: 60px;
+	background: url(ShowButton.png);
+	position: absolute;
+	left: 0px;
+	top: 45%;
+	z-index: 100;
+	-moz-box-shadow: 0px 0px 6px rgba(0,0,0,0.4); /* Для Firefox */
+    -webkit-box-shadow: 0px 0px 6px rgba(0,0,0,0.4); /* Для Safari и Chrome */
+    box-shadow: 0 0 6px rgba(0,0,0,0.4); /* Параметры тени */
+    -moz-border-radius: 0px 10px 10px 0;
+	-webkit-border-radius: 0px 10px 10px 0;
+	border-radius: 0px 10px 10px 0;	
+}
+
+.ReportButton img 
+{
+	text-align: center;
+	border: 1px solid gray;
+	margin : 1px;	
+}
+
+.ReportButtonOver img 
+{
+	text-align: center;
+	border: 1px solid #a3bde3;
+	margin : 1px;	
+}
+
+.ReportButtonSelected img 
+{
+	text-align: center;
+	border: 2px solid #a3bde3;
+	margin : 0px;	
+}
+
+
+
+

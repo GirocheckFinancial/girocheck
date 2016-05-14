@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.CreditCard" table="Card" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="card_program" cascade="lock" column="program" class="com.smartbt.girocheck.servercommon.model.CardProgram" not-null="false" lazy="proxy">
+		</many-to-one>
+                <property name="cardNumber" type="string" length="255" not-null="true" lazy="false" unique="true">
+                    <column name="data_s"
+                    read="AES_DECRYPT(FROM_BASE64(data_s), SHA2(SHA2(CONCAT((SELECT concat(c.mode, c.reference, c.sessions, c.types) FROM configs c), 'SELECT * FROM configs'), 512), 512))"
+                    write="TO_BASE64(AES_ENCRYPT(?, SHA2(SHA2(CONCAT((SELECT concat(c.mode, c.reference, c.sessions, c.types) FROM configs c), 'SELECT * FROM configs'), 512), 512)))"
+                    />
+                </property>
+		<property name="maskCardNumber" column="mask_card_number" type="string" length="16" not-null="true" lazy="true" unique="true"/>
+                
+                <property name="pan" column="pan" type="string" length="255" not-null="true" lazy="true" unique="true"/>
+                
+		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>
+		<many-to-one name="card_type" cascade="lock" column="card_type" class="com.smartbt.girocheck.servercommon.model.CardType" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="client" cascade="lock" column="client" class="com.smartbt.girocheck.servercommon.model.Client" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="merchant" cascade="lock" column="merchant" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="true" lazy="proxy">
+		</many-to-one>
+		<set name="transaction1" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="creditcard" not-null="false"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Transaction"/>
+		</set>
+	</class>
+</hibernate-mapping>

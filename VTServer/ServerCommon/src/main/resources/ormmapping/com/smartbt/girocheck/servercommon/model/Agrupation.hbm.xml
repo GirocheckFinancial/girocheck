@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.Agrupation" table="Agrupation" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<property name="name" column="name" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="description" column="description" type="string" length="255" not-null="false" lazy="false"/>
+		<set name="merchant" lazy="true" cascade="delete" inverse="true">
+			<key column="agrupation" not-null="false"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.Merchant"/>
+		</set>
+		<set name="agrupation_Parameter_Value" lazy="true" cascade="save-update,lock" inverse="true">
+			<key column="agrupation" not-null="true"/>
+			<one-to-many class="com.smartbt.girocheck.servercommon.model.AgrupationParameterValue"/>
+		</set>
+	</class>
+</hibernate-mapping>

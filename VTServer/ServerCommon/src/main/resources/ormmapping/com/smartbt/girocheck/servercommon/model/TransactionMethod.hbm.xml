@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.smartbt.girocheck.servercommon.model.TransactionMethod" table="Transaction_Method" lazy="false">
+        <id name="id" column="id" type="integer" unsaved-value="0">
+            <generator class="native">
+            </generator>
+        </id>
+        <property name="operation" column="operation" type="string" length="20" not-null="false" lazy="false"/>
+        <property name="description" column="description" type="string" length="255" not-null="false" lazy="false"/>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: 
+License Type: Evaluation
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.girocheck.servercommon.model.PersonalIdentification" table="Identification" lazy="false">
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="client" cascade="lock" column="client" class="com.smartbt.girocheck.servercommon.model.Client" not-null="true" >
+		</many-to-one>
+		<property name="idType" column="id_type" type="integer" length="10" not-null="false" lazy="false"/>
+		<many-to-one name="state" cascade="lock" column="state" class="com.smartbt.girocheck.servercommon.model.State" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="expirationDate" column="expiration_date" type="date" not-null="false" lazy="false"/>
+		<property name="idFront" column="id_front" type="blob" not-null="false" lazy="false"/>
+		<property name="idBack" column="id_back" type="blob" not-null="false" lazy="false"/>
+		<property name="identification" column="data_s" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>
+	</class>
+</hibernate-mapping>

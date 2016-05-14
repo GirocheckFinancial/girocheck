@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="GiroFront(2.6)" resourceRoot="" soapui-version="4.6.4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="ScanPortBinding" type="wsdl" bindingName="{http://scan.girocheck.smartbt.com/}ScanPortBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/SVN/GiroCheck/VTServer/GirocheckFront/src/main/webapp/WEB-INF/wsdl/Scan.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl"><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="Scan.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="checkAuth">
+    <part name="parameters" element="tns:checkAuth"/>
+  </message>
+  <message name="cardReload">
+    <part name="parameters" element="tns:cardReload"/>
+  </message>
+  <message name="checkAuthResponse">
+    <part name="parameters" element="tns:checkAuthResponse"/>
+  </message>
+  <message name="cardReloadResponse">
+    <part name="parameters" element="tns:cardReloadResponse"/>
+  </message>
+  <message name="checkAuthSubmit">
+    <part name="parameters" element="tns:checkAuthSubmit"/>
+  </message>
+  <message name="checkAuthSubmitResponse">
+    <part name="parameters" element="tns:checkAuthSubmitResponse"/>
+  </message>
+  <message name="checkAuthLocationConfig">
+    <part name="parameters" element="tns:checkAuthLocationConfig"/>
+  </message>
+  <message name="checkAuthLocationConfigResponse">
+    <part name="parameters" element="tns:checkAuthLocationConfigResponse"/>
+  </message>
+  <message name="balanceInquiry">
+    <part name="parameters" element="tns:balanceInquiry"/>
+  </message>
+  <message name="balanceInquiryResponse">
+    <part name="parameters" element="tns:balanceInquiryResponse"/>
+  </message>
+  <message name="cardToBank">
+    <part name="parameters" element="tns:cardToBank"/>
+  </message>
+  <message name="cardToBankResponse">
+    <part name="parameters" element="tns:cardToBankResponse"/>
+  </message>
+  <portType name="Scan">
+    <operation name="checkAuth">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest" message="tns:checkAuth"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthResponse" message="tns:checkAuthResponse"/>
+    </operation>
+    <operation name="cardReload">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest" message="tns:cardReload"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardReloadResponse" message="tns:cardReloadResponse"/>
+    </operation>
+    <operation name="checkAuthSubmit">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest" message="tns:checkAuthSubmit"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitResponse" message="tns:checkAuthSubmitResponse"/>
+    </operation>
+    <operation name="checkAuthLocationConfig">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest" message="tns:checkAuthLocationConfig"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigResponse" message="tns:checkAuthLocationConfigResponse"/>
+    </operation>
+    <operation name="balanceInquiry">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest" message="tns:balanceInquiry"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryResponse" message="tns:balanceInquiryResponse"/>
+    </operation>
+    <operation name="cardToBank">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest" message="tns:cardToBank"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardToBankResponse" message="tns:cardToBankResponse"/>
+    </operation>
+  </portType>
+  <binding name="ScanPortBinding" type="tns:Scan">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="checkAuth">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="cardReload">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="checkAuthSubmit">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="checkAuthLocationConfig">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="balanceInquiry">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="cardToBank">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="Scan">
+    <port name="ScanPort" binding="tns:ScanPortBinding">
+      <soap:address location=""/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.xsd</con:url><con:content><![CDATA[<xs:schema version="1.0" targetNamespace="http://scan.girocheck.smartbt.com/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="checkAuth" type="tns:checkAuth"/>
+  <xs:element name="cardReload" type="tns:cardReload"/>
+  <xs:element name="checkAuthLocationConfig" type="tns:checkAuthLocationConfig"/>
+  <xs:element name="checkAuthLocationConfigResponse" type="tns:checkAuthLocationConfigResponse"/>
+  <xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+  <xs:element name="cardReloadResponse" type="tns:cardReloadResponse"/>
+  <xs:element name="checkAuthSubmit" type="tns:checkAuthSubmit"/>
+  <xs:element name="checkAuthSubmitResponse" type="tns:checkAuthSubmitResponse"/>
+  <xs:element name="balanceInquiry" type="tns:balanceInquiry"/>
+  <xs:element name="balanceInquiryResponse" type="tns:balanceInquiryResponse"/>
+  <xs:element name="cardToBank" type="tns:cardToBank"/>
+  <xs:element name="cardToBankResponse" type="tns:cardToBankResponse"/>
+  <xs:complexType name="checkAuthSubmit">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthSubmitRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthSubmitRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="1"/>
+      <xs:element name="password" type="xs:string" minOccurs="1"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="1"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="action" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthSubmitResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthSubmitRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthSubmitRes">
+    <xs:sequence>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuth">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="crc" type="xs:string" minOccurs="0"/>
+      <xs:element name="data" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+      <xs:element name="micr" type="xs:string" minOccurs="0"/>
+      <xs:element name="phone" type="xs:string" minOccurs="0"/>
+      <xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+      <xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+      \
+      <xs:element name="serial" type="xs:string" minOccurs="0"/>
+      <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+      <xs:element name="operation" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthRes">
+    <xs:sequence>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--****************************************RELOAD ****************************************-->
+  <xs:complexType name="cardReload">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:cardReloadRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardReloadRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="crc" type="xs:string" minOccurs="0"/>
+      <xs:element name="data" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+      <xs:element name="micr" type="xs:string" minOccurs="0"/>
+      <xs:element name="phone" type="xs:string" minOccurs="0"/>
+      <xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+      <xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+      \
+      <xs:element name="serial" type="xs:string" minOccurs="0"/>
+      <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+      <xs:element name="operation" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardReloadResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CardReloadRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CardReloadRes">
+    <xs:sequence>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--****************************************RELOAD ****************************************-->
+  <xs:complexType name="checkAuthLocationConfig">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthLocationConfigRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthLocationConfigRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthLocationConfigResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthLocationConfigRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthLocationConfigRes">
+    <xs:sequence>
+      <xs:element name="configList" type="tns:code" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="code">
+    <xs:sequence>
+      <xs:element name="extra" type="xs:string" minOccurs="0"/>
+      <xs:element name="extra2" type="xs:string" minOccurs="0"/>
+      <xs:element name="label" type="xs:string" minOccurs="0"/>
+      <xs:element name="value" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInquiry">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:balanceInquiryRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInquiryRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInquiryResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:BalanceInquiryRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BalanceInquiryRes">
+    <xs:sequence>
+      <xs:element name="balance" type="xs:string" minOccurs="0"/>
+      <xs:element name="inTransitFunds" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardToBank">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:cardToBankRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardToBankRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardToBankResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CardToBankRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CardToBankRes">
+    <xs:sequence>
+      <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="date" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints/><con:operation isOneWay="false" action="" name="balanceInquiry" bindingOperationName="balanceInquiry" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/GirocheckFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:balanceInquiry>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+         </arg0>
+      </scan:balanceInquiry>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardReload" bindingOperationName="cardReload" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:cardReload>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <addressCorrect>?</addressCorrect>
+            <!--Optional:-->
+            <amount>?</amount>
+            <!--Optional:-->
+            <backTiff>cid:245045839653</backTiff>
+            <!--Optional:-->
+            <batchName>?</batchName>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <checkBack>cid:479931938830</checkBack>
+            <!--Optional:-->
+            <checkFront>cid:274282123227</checkFront>
+            <!--Optional:-->
+            <crc>?</crc>
+            <!--Zero or more repetitions:-->
+            <data>?</data>
+            <!--Optional:-->
+            <emailAddress>?</emailAddress>
+            <!--Optional:-->
+            <entityNumber>?</entityNumber>
+            <!--Optional:-->
+            <frontTiff>cid:97821503443</frontTiff>
+            <!--Optional:-->
+            <idBack>cid:373592497878</idBack>
+            <!--Optional:-->
+            <idFront>cid:246513855947</idFront>
+            <!--Optional:-->
+            <iqaRawData>?</iqaRawData>
+            <!--Optional:-->
+            <micr>?</micr>
+            <!--Optional:-->
+            <phone>?</phone>
+            <!--Optional:-->
+            <scanTime>?</scanTime>
+            <!--Optional:-->
+            <scannerManufacturer>?</scannerManufacturer>
+            <!--Optional:-->
+            <sendTime>?</sendTime>
+            <!--Optional:-->
+            <serial>?</serial>
+            <!--Optional:-->
+            <ssn>?</ssn>
+            <!--Optional:-->
+            <operation>?</operation>
+         </arg0>
+      </scan:cardReload>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardToBank" bindingOperationName="cardToBank" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:cardToBank>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <accountNumber>?</accountNumber>
+            <!--Optional:-->
+            <routingBankNumber>?</routingBankNumber>
+            <!--Optional:-->
+            <amount>?</amount>
+         </arg0>
+      </scan:cardToBank>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuth" bindingOperationName="checkAuth" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/GirocheckFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuth>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <addressCorrect>?</addressCorrect>
+            <!--Optional:-->
+            <amount>?</amount>
+            <!--Optional:-->
+            <backTiff>cid:1051172977045</backTiff>
+            <!--Optional:-->
+            <batchName>?</batchName>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <checkBack>cid:1151489938032</checkBack>
+            <!--Optional:-->
+            <checkFront>cid:1081423707452</checkFront>
+            <!--Optional:-->
+            <crc>?</crc>
+            <!--Zero or more repetitions:-->
+            <data>?</data>
+            <!--Optional:-->
+            <emailAddress>?</emailAddress>
+            <!--Optional:-->
+            <entityNumber>?</entityNumber>
+            <!--Optional:-->
+            <frontTiff>cid:1021171570878</frontTiff>
+            <!--Optional:-->
+            <idBack>cid:988721596549</idBack>
+            <!--Optional:-->
+            <idFront>cid:1195690326171</idFront>
+            <!--Optional:-->
+            <iqaRawData>?</iqaRawData>
+            <!--Optional:-->
+            <micr>?</micr>
+            <!--Optional:-->
+            <phone>?</phone>
+            <!--Optional:-->
+            <scanTime>?</scanTime>
+            <!--Optional:-->
+            <scannerManufacturer>?</scannerManufacturer>
+            <!--Optional:-->
+            <sendTime>?</sendTime>
+            <!--Optional:-->
+            <serial>?</serial>
+            <!--Optional:-->
+            <ssn>?</ssn>
+            <!--Optional:-->
+            <operation>01</operation>
+         </arg0>
+      </scan:checkAuth>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthLocationConfig" bindingOperationName="checkAuthLocationConfig" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuthLocationConfig>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+         </arg0>
+      </scan:checkAuthLocationConfig>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthSubmit" bindingOperationName="checkAuthSubmit" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuthSubmit>
+         <!--Optional:-->
+         <arg0>
+            <user>?</user>
+            <password>?</password>
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <action>?</action>
+         </arg0>
+      </scan:checkAuthSubmit>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

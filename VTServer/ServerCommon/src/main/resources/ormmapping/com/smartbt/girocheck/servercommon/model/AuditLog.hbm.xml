@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Licensee: SMART BUSINESS TECHNOLOGY
+License Type: Purchased
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.smartbt.vtsuite.servercommon.model.AuditLog" table="Audit_Log" lazy="true">
+		<meta attribute="class-description">
+			Stores the audit log information.
+		</meta>
+		<id name="id" column="id" type="integer" unsaved-value="0">
+			<generator class="native">
+			</generator>
+		</id>
+		<many-to-one name="clerk" cascade="lock" column="id_clerk" class="com.smartbt.vtsuite.servercommon.model.Clerk" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="terminal" cascade="lock" column="id_terminal" class="com.smartbt.vtsuite.servercommon.model.Terminal" not-null="false" lazy="proxy">
+		</many-to-one>
+		<many-to-one name="user" cascade="lock" column="id_user" class="com.smartbt.vtsuite.servercommon.model.User" not-null="false" lazy="proxy">
+		</many-to-one>
+		<property name="details" column="details" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="category" column="category" type="integer" length="2" not-null="false" lazy="false">
+			<meta attribute="field-description">
+				Operation category. Eg: "400:error".
+			</meta>
+		</property>
+		<property name="createdAt" column="created_at" type="timestamp" not-null="true" lazy="false"/>
+	</class>
+</hibernate-mapping>

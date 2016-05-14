@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TerminalFK.xsd">
+	<Terminal>
+		<id>0</id>
+		<serialNumber>123<serialNumber/>
+		<description>qwe<description/>
+		<merchantName>asd<merchantName/>
+	</Terminal>
+        <General>
+                <header>qqq</header>
+                <footer>www</footer>
+                <fromDate></fromDate>
+                <toDate></toDate>
+        </General>
+</Report>

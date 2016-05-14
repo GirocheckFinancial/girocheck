@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="GiroFront(2.7)" resourceRoot="" soapui-version="4.6.4" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="ScanPortBinding" type="wsdl" bindingName="{http://scan.girocheck.smartbt.com/}ScanPortBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/SVN/GiroCheck/VTServer/GirocheckFront/src/main/webapp/WEB-INF/wsdl/Scan.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl"><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="Scan.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="checkAuth">
+    <part name="parameters" element="tns:checkAuth"/>
+  </message>
+  <message name="cardReload">
+    <part name="parameters" element="tns:cardReload"/>
+  </message>
+  <message name="checkAuthResponse">
+    <part name="parameters" element="tns:checkAuthResponse"/>
+  </message>
+  <message name="cardReloadResponse">
+    <part name="parameters" element="tns:cardReloadResponse"/>
+  </message>
+  <message name="checkAuthSubmit">
+    <part name="parameters" element="tns:checkAuthSubmit"/>
+  </message>
+  <message name="checkAuthSubmitResponse">
+    <part name="parameters" element="tns:checkAuthSubmitResponse"/>
+  </message>
+  <message name="checkAuthLocationConfig">
+    <part name="parameters" element="tns:checkAuthLocationConfig"/>
+  </message>
+  <message name="checkAuthLocationConfigResponse">
+    <part name="parameters" element="tns:checkAuthLocationConfigResponse"/>
+  </message>
+  <message name="balanceInquiry">
+    <part name="parameters" element="tns:balanceInquiry"/>
+  </message>
+  <message name="balanceInquiryResponse">
+    <part name="parameters" element="tns:balanceInquiryResponse"/>
+  </message>
+  <message name="cardToBank">
+    <part name="parameters" element="tns:cardToBank"/>
+  </message>
+  <message name="cardToBankResponse">
+    <part name="parameters" element="tns:cardToBankResponse"/>
+  </message>
+  <portType name="Scan">
+    <operation name="checkAuth">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest" message="tns:checkAuth"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthResponse" message="tns:checkAuthResponse"/>
+    </operation>
+    <operation name="cardReload">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest" message="tns:cardReload"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardReloadResponse" message="tns:cardReloadResponse"/>
+    </operation>
+    <operation name="checkAuthSubmit">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest" message="tns:checkAuthSubmit"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitResponse" message="tns:checkAuthSubmitResponse"/>
+    </operation>
+    <operation name="checkAuthLocationConfig">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest" message="tns:checkAuthLocationConfig"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigResponse" message="tns:checkAuthLocationConfigResponse"/>
+    </operation>
+    <operation name="balanceInquiry">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest" message="tns:balanceInquiry"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryResponse" message="tns:balanceInquiryResponse"/>
+    </operation>
+    <operation name="cardToBank">
+      <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest" message="tns:cardToBank"/>
+      <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/cardToBankResponse" message="tns:cardToBankResponse"/>
+    </operation>
+  </portType>
+  <binding name="ScanPortBinding" type="tns:Scan">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="checkAuth">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="cardReload">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="checkAuthSubmit">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="checkAuthLocationConfig">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="balanceInquiry">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="cardToBank">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="Scan">
+    <port name="ScanPort" binding="tns:ScanPortBinding">
+      <soap:address location=""/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.xsd</con:url><con:content><![CDATA[<xs:schema version="1.0" targetNamespace="http://scan.girocheck.smartbt.com/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="checkAuth" type="tns:checkAuth"/>
+  <xs:element name="cardReload" type="tns:cardReload"/>
+  <xs:element name="checkAuthLocationConfig" type="tns:checkAuthLocationConfig"/>
+  <xs:element name="checkAuthLocationConfigResponse" type="tns:checkAuthLocationConfigResponse"/>
+  <xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+  <xs:element name="cardReloadResponse" type="tns:cardReloadResponse"/>
+  <xs:element name="checkAuthSubmit" type="tns:checkAuthSubmit"/>
+  <xs:element name="checkAuthSubmitResponse" type="tns:checkAuthSubmitResponse"/>
+  <xs:element name="balanceInquiry" type="tns:balanceInquiry"/>
+  <xs:element name="balanceInquiryResponse" type="tns:balanceInquiryResponse"/>
+  <xs:element name="cardToBank" type="tns:cardToBank"/>
+  <xs:element name="cardToBankResponse" type="tns:cardToBankResponse"/>
+  <xs:complexType name="checkAuthSubmit">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthSubmitRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthSubmitRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="1"/>
+      <xs:element name="password" type="xs:string" minOccurs="1"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="1"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="action" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthSubmitResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthSubmitRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthSubmitRes">
+    <xs:sequence>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuth">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="crc" type="xs:string" minOccurs="0"/>
+      <xs:element name="data" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+      <xs:element name="micr" type="xs:string" minOccurs="0"/>
+      <xs:element name="phone" type="xs:string" minOccurs="0"/>
+      <xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+      <xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+      \
+      <xs:element name="serial" type="xs:string" minOccurs="0"/>
+      <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+      <xs:element name="operation" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthRes">
+    <xs:sequence>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--****************************************RELOAD ****************************************-->
+  <xs:complexType name="cardReload">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:cardReloadRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardReloadRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="addressCorrect" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="backTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="batchName" type="xs:string" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="checkBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="checkFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="crc" type="xs:string" minOccurs="0"/>
+      <xs:element name="data" type="xs:anyType" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="emailAddress" type="xs:string" minOccurs="0"/>
+      <xs:element name="entityNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="frontTiff" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idBack" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="idFront" type="xs:base64Binary" minOccurs="0"/>
+      <xs:element name="iqaRawData" type="xs:string" minOccurs="0"/>
+      <xs:element name="micr" type="xs:string" minOccurs="0"/>
+      <xs:element name="phone" type="xs:string" minOccurs="0"/>
+      <xs:element name="scanTime" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="scannerManufacturer" type="xs:string" minOccurs="0"/>
+      <xs:element name="sendTime" type="xs:dateTime" minOccurs="0"/>
+      \
+      <xs:element name="serial" type="xs:string" minOccurs="0"/>
+      <xs:element name="ssn" type="xs:string" minOccurs="0"/>
+      <xs:element name="operation" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardReloadResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CardReloadRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CardReloadRes">
+    <xs:sequence>
+      <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--****************************************RELOAD ****************************************-->
+  <xs:complexType name="checkAuthLocationConfig">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:checkAuthLocationConfigRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthLocationConfigRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="checkAuthLocationConfigResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CheckAuthLocationConfigRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckAuthLocationConfigRes">
+    <xs:sequence>
+      <xs:element name="configList" type="tns:code" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="code">
+    <xs:sequence>
+      <xs:element name="extra" type="xs:string" minOccurs="0"/>
+      <xs:element name="extra2" type="xs:string" minOccurs="0"/>
+      <xs:element name="label" type="xs:string" minOccurs="0"/>
+      <xs:element name="value" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInquiry">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:balanceInquiryRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInquiryRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="balanceInquiryResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:BalanceInquiryRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="BalanceInquiryRes">
+    <xs:sequence>
+      <xs:element name="balance" type="xs:string" minOccurs="0"/>
+      <xs:element name="inTransitFunds" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardToBank">
+    <xs:sequence>
+      <xs:element name="arg0" type="tns:cardToBankRequest" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardToBankRequest">
+    <xs:sequence>
+      <xs:element name="user" type="xs:string" minOccurs="0"/>
+      <xs:element name="password" type="xs:string" minOccurs="0"/>
+      <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+      <xs:element name="terminalId" type="xs:integer" minOccurs="0"/>
+      <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="cardToBankResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:CardToBankRes" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CardToBankRes">
+    <xs:sequence>
+      <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
+      <xs:element name="amount" type="xs:string" minOccurs="0"/>
+      <xs:element name="date" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints/><con:operation isOneWay="false" action="" name="balanceInquiry" bindingOperationName="balanceInquiry" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/GirocheckFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:balanceInquiry>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+         </arg0>
+      </scan:balanceInquiry>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardReload" bindingOperationName="cardReload" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:cardReload>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <addressCorrect>?</addressCorrect>
+            <!--Optional:-->
+            <amount>?</amount>
+            <!--Optional:-->
+            <backTiff>cid:1328553950682</backTiff>
+            <!--Optional:-->
+            <batchName>?</batchName>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <checkBack>cid:683256382439</checkBack>
+            <!--Optional:-->
+            <checkFront>cid:454476995028</checkFront>
+            <!--Optional:-->
+            <crc>?</crc>
+            <!--Zero or more repetitions:-->
+            <data>?</data>
+            <!--Optional:-->
+            <emailAddress>?</emailAddress>
+            <!--Optional:-->
+            <entityNumber>?</entityNumber>
+            <!--Optional:-->
+            <frontTiff>cid:852113133406</frontTiff>
+            <!--Optional:-->
+            <idBack>cid:325405477598</idBack>
+            <!--Optional:-->
+            <idFront>cid:1095270892799</idFront>
+            <!--Optional:-->
+            <iqaRawData>?</iqaRawData>
+            <!--Optional:-->
+            <micr>?</micr>
+            <!--Optional:-->
+            <phone>?</phone>
+            <!--Optional:-->
+            <scanTime>?</scanTime>
+            <!--Optional:-->
+            <scannerManufacturer>?</scannerManufacturer>
+            <!--Optional:-->
+            <sendTime>?</sendTime>
+            <!--Optional:-->
+            <serial>?</serial>
+            <!--Optional:-->
+            <ssn>?</ssn>
+            <!--Optional:-->
+            <operation>?</operation>
+         </arg0>
+      </scan:cardReload>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardToBank" bindingOperationName="cardToBank" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:cardToBank>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <accountNumber>?</accountNumber>
+            <!--Optional:-->
+            <routingBankNumber>?</routingBankNumber>
+            <!--Optional:-->
+            <amount>?</amount>
+         </arg0>
+      </scan:cardToBank>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuth" bindingOperationName="checkAuth" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/GirocheckFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuth>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <addressCorrect>?</addressCorrect>
+            <!--Optional:-->
+            <amount>?</amount>
+            <!--Optional:-->
+            <backTiff>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
+YbTOuW3iywft18G7rS3FAoFB/9k=</backTiff>
+            <!--Optional:-->
+            <batchName>?</batchName>
+            <!--Optional:-->
+            <cardNumber>?</cardNumber>
+            <!--Optional:-->
+            <checkBack>cid:1263035157071</checkBack>
+            <!--Optional:-->
+            <checkFront>cid:652443275914</checkFront>
+            <!--Optional:-->
+            <crc>?</crc>
+            <!--Zero or more repetitions:-->
+            <data>?</data>
+            <!--Optional:-->
+            <emailAddress>?</emailAddress>
+            <!--Optional:-->
+            <entityNumber>?</entityNumber>
+            <!--Optional:-->
+            <frontTiff>cid:574379298705</frontTiff>
+            <!--Optional:-->
+            <idBack>cid:296926727105</idBack>
+            <!--Optional:-->
+            <idFront>cid:551069912938</idFront>
+            <!--Optional:-->
+            <iqaRawData>?</iqaRawData>
+            <!--Optional:-->
+            <micr>?</micr>
+            <!--Optional:-->
+            <phone>?</phone>
+            <!--Optional:-->
+            <scanTime>?</scanTime>
+            <!--Optional:-->
+            <scannerManufacturer>?</scannerManufacturer>
+            <!--Optional:-->
+            <sendTime>?</sendTime>
+            <!--Optional:-->
+            <serial>?</serial>
+            <!--Optional:-->
+            <ssn>?</ssn>
+            <!--Optional:-->
+            <operation>01</operation>
+         </arg0>
+      </scan:checkAuth>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthLocationConfig" bindingOperationName="checkAuthLocationConfig" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuthLocationConfig>
+         <!--Optional:-->
+         <arg0>
+            <!--Optional:-->
+            <user>?</user>
+            <!--Optional:-->
+            <password>?</password>
+            <!--Optional:-->
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+         </arg0>
+      </scan:checkAuthLocationConfig>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthSubmit" bindingOperationName="checkAuthSubmit" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <scan:checkAuthSubmit>
+         <!--Optional:-->
+         <arg0>
+            <user>?</user>
+            <password>?</password>
+            <requestId>?</requestId>
+            <!--Optional:-->
+            <terminalId>?</terminalId>
+            <!--Optional:-->
+            <action>?</action>
+         </arg0>
+      </scan:checkAuthSubmit>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

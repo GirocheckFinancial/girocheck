@@ -36,6 +36,7 @@ public class TerminalDisplay implements Serializable {
     
     private Integer idMerchant;
     private Boolean hasTransaction;
+    private Boolean validate = true;
     
     public void print() {
 //        log.debug( "Printing terminal..." );
@@ -147,6 +148,20 @@ public class TerminalDisplay implements Serializable {
      */
     public void setIdPOSOrderExp(String idPOSOrderExp) {
         this.idPOSOrderExp = idPOSOrderExp;
+    }
+
+    /**
+     * @return the validate
+     */
+    public Boolean getValidate() {
+        return validate;
+    }
+
+    /**
+     * @param validate the validate to set
+     */
+    public void setValidate(Boolean validate) {
+        this.validate = validate;
     }
 
 

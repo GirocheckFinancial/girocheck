@@ -17,6 +17,7 @@ package com.smartbt.girocheck.servercommon.jms;
 
 import com.smartbt.girocheck.common.ServerJNDI;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
+import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Enumeration;
@@ -133,7 +134,13 @@ public class JMSManager {
         try {
             InitialContext ctx = new InitialContext();
             //      watchdogQueue = (javax.jms.Queue) ctx.lookup(ServerJNDI.WATCHDOG_QUEUE_JNDI);
-            coreInQueue = (javax.jms.Queue) ctx.lookup(ServerJNDI.CORE_IN_QUEUE_JNDI);
+            coreInQueue = (javax.jms.Queue) ctx.lookup(ServerJNDI.CORE_IN_QUEUE_JNDI);	
+            
+            if(coreInQueue == null){
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[JMSManager]  coreInQueue == null",null );
+            }else{
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[JMSManager]  coreInQueue has Value",null );
+            }
             coreOutQueue = (javax.jms.Queue) ctx.lookup(ServerJNDI.CORE_OUT_QUEUE_JNDI);
             core2InQueue = (javax.jms.Queue) ctx.lookup(ServerJNDI.CORE2_IN_QUEUE_JNDI);
             core2OutQueue = (javax.jms.Queue) ctx.lookup(ServerJNDI.CORE2_OUT_QUEUE_JNDI);

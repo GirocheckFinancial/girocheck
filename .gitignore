@@ -1,0 +1,17 @@
+/VTAMS/target/
+/VTCommon/target/
+/VTReporting/target/
+/VTServer/iStream/iStream-ear/target/
+/VTServer/iStream/iStream-ejb/target/
+/VTServer/Tecnicard/Tecnicard-ear/target/
+/VTServer/Tecnicard/Tecnicard-ejb/target/
+/VTServer/Core/Core-ear/target/
+/VTServer/Core/Core-ejb/target/
+/VTServer/Fuze/Fuze-ear/target/
+/VTServer/Fuze/Fuze-ejb/target/
+/VTServer/OrderExpress/OrderExpress-ear/target/
+/VTServer/OrderExpress/OrderExpress-ejb/target/
+/VTServer/ServerCommon/target/
+/VTServer/FrontAMS/target/
+/VTServer/IStreamFront/target/
+/VTServer/GirocheckFront/target/

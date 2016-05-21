@@ -86,6 +86,7 @@ public class ClientListGrid extends BaseListGrid {
         setDataSource(new ClientDS());
         setFields(firstNameField,
                 lastField,
+                telephoneField,
 //                companyField,
                 addressField,
 //                address2Field,

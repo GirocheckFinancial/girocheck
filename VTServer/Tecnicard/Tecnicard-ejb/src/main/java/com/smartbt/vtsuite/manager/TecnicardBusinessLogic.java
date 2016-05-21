@@ -221,6 +221,11 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pTelephone = MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false );
         String pFaxAreaCode =MapUtil.getStringValueFromMap( map, ParameterName.FAX_AREA_CODE, false );
         String pLastName = MapUtil.getStringValueFromMap( map, ParameterName.LAST_NAME, false );
+        
+        if(pLastName != null && pLastName.contains(" ")){
+            pLastName = pLastName.split(" ")[0];
+        }
+        
         String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, true );
         String pWorkphoneAreaCode = MapUtil.getStringValueFromMap( map, ParameterName.WORKPHONE_AREA_CODE, false );
 

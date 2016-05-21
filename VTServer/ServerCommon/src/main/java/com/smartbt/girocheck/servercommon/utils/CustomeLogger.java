@@ -31,12 +31,12 @@ public class CustomeLogger {
         // log rbs transactions to debug table when debug and tracing is enabled
         String flagDebug = System.getProperty("debug.mode");
         String flagTrace = System.getProperty("debug.trace");
-        boolean traceEnabled = (flagDebug != null && flagTrace != null && flagDebug.equalsIgnoreCase("true") && flagTrace.isEmpty() == false);
+        boolean traceEnabled = true; //= (flagDebug != null && flagTrace != null && flagDebug.equalsIgnoreCase("true") && flagTrace.isEmpty() == false);
 
         if (traceEnabled) {
             boolean output = false;
-            boolean traceDebug = flagTrace.equalsIgnoreCase("debug");
-            boolean traceInfo = flagTrace.equalsIgnoreCase("info");
+            boolean traceDebug = true;//flagTrace.equalsIgnoreCase("debug");
+            boolean traceInfo = true; //flagTrace.equalsIgnoreCase("info");
 
 //            System.out.println("state = " + state.toString());
 //            System.out.println("flagDebug = " + flagDebug);

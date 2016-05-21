@@ -12,12 +12,15 @@ REM * 	- domainPassPath: The local path to the XPASS.txt file							*
 REM *************************************************************************************
 
 SET domainPortNumber=4848
-SET domainName=girocheck
+SET domainName=girocheck1
 SET domainAppPath="C:\glassfish4\glassfish\domains\GiroCheck\applications"
 SET domainPassPath="C:\REPO\Development\GiroCheck\etc\WebServer Command Files\XPASS.txt"
 
 
-REM *******************************************************************MySQLConnectionPool
+REM *******************************************************************MySQLConnectionPool DB connection will not be created, so edit jdbc/__default whith these values.
+
+
+
 
 SET dbConnPoolName=MySQLConnectionPool	
 SET dbConnPoolDSClassname=com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource

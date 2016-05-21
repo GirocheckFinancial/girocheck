@@ -479,7 +479,7 @@ public class CoreTransactionManager {
         if (transactionData.containsKey(ParameterName.CARD_NUMBER)) {
 
             String cardNumber = (String) transactionData.get(ParameterName.CARD_NUMBER);
-
+           
             String binNumber = "";
             try{
                 binNumber = cardNumber.substring(0, 6);
@@ -490,13 +490,13 @@ public class CoreTransactionManager {
             if(!binNumber.isEmpty())
             try {
                 HibernateUtil.beginTransaction();
-
                 host = hostManager.getHostByBinNumber(binNumber);
 
                 HibernateUtil.commitTransaction();
 
             } catch (Exception e) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting the host by bin number. ",e.getMessage());
+                e.printStackTrace();
             }
 
         }

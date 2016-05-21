@@ -32,7 +32,7 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 public class OrderExpressHostManager {
 
 
-    public DirexTransactionResponse processTransaction( DirexTransactionRequest direxTransactionRequest ) throws Exception {
+    public DirexTransactionResponse processTransaction( DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts ) throws Exception {
 
   MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
 //       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
@@ -56,8 +56,16 @@ public class OrderExpressHostManager {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] opCode: " + opCode, null);
 
             if (!opCode.equals("001")) {
-                response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
-                response.setErrorCode((String) response.getTransactionData().get(ParameterName.OP_CODE2));
+                String opCode2 = (String) response.getTransactionData().get(ParameterName.OP_CODE2);
+                
+                if(opCode2 != null && opCode2.equals("025") && numberOfAttempts > 1){
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 == '025', Re-Submitting request... " , null);
+                    return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
+                }else{
+                  response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
+                  response.setErrorCode(opCode2);
+                }
+               
             }
         }else{
 
@@ -66,9 +74,16 @@ public class OrderExpressHostManager {
                 return DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " OrderExpress LogMethod did not return an op_code value.");
             } else if (response.getTransactionData().containsKey(ParameterName.OP_CODE)) {
                 String opCode = (String) response.getTransactionData().get(ParameterName.OP_CODE);
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] LogMethod opCode: " + opCode, null);
-                response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express LogMethod return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
-                response.setErrorCode((String) response.getTransactionData().get(ParameterName.OP_CODE2));
+                String opCode2 = (String) response.getTransactionData().get(ParameterName.OP_CODE2);
+                
+                if(opCode2 != null && opCode2.equals("025") && numberOfAttempts > 1){
+                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 == '025', Re-Submitting request... " , null);
+                     return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
+                }else{
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] LogMethod opCode: " + opCode, null);
+                    response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express LogMethod return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
+                    response.setErrorCode(opCode2);
+                }
             } else {
                 //LOG Method behavior
                 String status = (String) response.getTransactionData().get(ParameterName.OESTATUS);

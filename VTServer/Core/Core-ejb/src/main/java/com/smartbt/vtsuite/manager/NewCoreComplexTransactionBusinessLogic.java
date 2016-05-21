@@ -922,10 +922,16 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             transaction.getClient().setLastName((String) transactionMap.get(ParameterName.LAST_NAME));
         }
         if (transactionMap.containsKey(ParameterName.MIDDLE_NAME)) {
-            transaction.getClient().setLastName((String) transactionMap.get(ParameterName.MIDDLE_NAME));
+            if(transaction.getClient().getFirstName() == null){
+                transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.MIDDLE_NAME));
+            }else{
+                transaction.getClient().setFirstName(transaction.getClient().getFirstName() + " " + ((String) transactionMap.get(ParameterName.MIDDLE_NAME)));
+            }
         }
-        if (transactionMap.containsKey(ParameterName.MAIDEN_NAME)) {
-            transaction.getClient().setLastName((String) transactionMap.get(ParameterName.MAIDEN_NAME));
+        if (transactionMap.containsKey(ParameterName.MAIDEN_NAME)) { //in case the last name comes in the maiden name
+            if(transaction.getClient().getLastName() == null || transaction.getClient().getLastName().isEmpty()){
+                transaction.getClient().setLastName((String) transactionMap.get(ParameterName.MAIDEN_NAME));
+            }
         }
         if (transactionMap.containsKey(ParameterName.TELEPHONE)) {
             transaction.getClient().setTelephone((String) transactionMap.get(ParameterName.TELEPHONE));

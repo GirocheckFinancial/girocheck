@@ -102,9 +102,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
     public NewCoreComplexTransactionBusinessLogic(CoreLogger coreLogger) {
         super(coreLogger);
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Constructor().",null);
                 try {
             String urlbcr = System.getProperty("WS_VERIFYBARCODE_URL") + "/VerifyBarcode/VerifyBarcodeService.asmx?wsdl";
-
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] WS_VERIFYBARCODE_URL = " + urlbcr,null);
+            
             service = new VerifyBarcodeService();
             port = service.getVerifyBarcodeServiceSoap();
             BindingProvider bindingProvider = (BindingProvider) port;
@@ -148,6 +151,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         Map responseMap;
         TransactionType originalTransaction = request.getTransactionType();
 
+          //COMMENT FOR TESTING
         if(!originalTransaction.equals(TransactionType.CARD_RELOAD_WITH_DATA)){
         
             Map transactioDataWITHDL = getPersonalInfoFromIDReader(request).getTransactionData();

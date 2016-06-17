@@ -105,7 +105,7 @@ public class CoreTransactionManager {
                         return;
                     }
                 }
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] SWITCH: " + transactionType,null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[CoreTransactionManager] SWITCH: " + transactionType,null);
                 
                 switch ( transactionType ) {
                     case TECNICARD_BALANCE_INQUIRY:
@@ -116,8 +116,10 @@ public class CoreTransactionManager {
                     case NEW_CARD_LOAD:
 //                        direxTransactionRequest.getTransactionData().put(ParameterName.CARDLOADTYPE, 1);
                         if(transaction.getOperation().contains( "02" )){
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new CoreComplexCashTransactionBusinessLogic(logger);",null);
                             businessLogic = new CoreComplexCashTransactionBusinessLogic(logger);
                         }else{
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);",null);
                             businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);
                         }
                         break;
@@ -196,6 +198,7 @@ public class CoreTransactionManager {
         
         */
             if(transactionType == TransactionType.CARD_RELOAD_WITH_DATA){
+                System.out.println("[CoreTransactionManager] transactionType == TransactionType.CARD_RELOAD_WITH_DATA");
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
                 CreditCard creditCardCR = creditCardManager.getByNumber(cardNumberCR);
                 
@@ -288,6 +291,7 @@ public class CoreTransactionManager {
                         && direxTransactionRequest.getTransactionData().containsKey( ParameterName.ADDRESS_FORM ) && direxTransactionRequest.getTransactionData().get( ParameterName.ADDRESS_FORM ) != null) {
                     addressForm = (byte[]) direxTransactionRequest.getTransactionData().get( ParameterName.ADDRESS_FORM );
                 }
+                System.out.println("[CoreTransactionManager] client = clientManager.createOrGet( ssn, addressForm );");
                 client = clientManager.createOrGet( ssn, addressForm );
 
                 if ( client.getEmail() != null && !client.getEmail().isEmpty() ) {
@@ -321,6 +325,7 @@ public class CoreTransactionManager {
             }
             
             transaction.setTerminal( terminal );
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager]transaction.setClient( client ) client has value = " + (client != null) ,null);
             transaction.setClient( client );
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] ASKING FOR PARAMETER.PHONE. " ,null);
@@ -343,10 +348,14 @@ public class CoreTransactionManager {
             }
 
             // ---------------------  CREDIT CARD LOGIC --------   ( not used in this verssion )   ----------------
-            if(transactionType != TransactionType.TECNICARD_BALANCE_INQUIRY || transactionType != TransactionType.TECNICARD_CARD_TO_BANK){
+             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] transactionType = " + transactionType.toString() ,null);CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] transactionType = " + transactionType ,null);
+            
+            if(transactionType != TransactionType.TECNICARD_BALANCE_INQUIRY
+                    && transactionType != TransactionType.TECNICARD_CARD_TO_BANK
+                    && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG){
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                 String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Getting creditCard with cardNumber: [" + cardNumber+"]" ,null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Getting creditCard with cardNumber: [" + cardNumber+"]" ,null);
                 if (!cardNumber.equals("")) {
                     transaction.setCardNumber(cardNumber);
                     CreditCard creditCard = null;

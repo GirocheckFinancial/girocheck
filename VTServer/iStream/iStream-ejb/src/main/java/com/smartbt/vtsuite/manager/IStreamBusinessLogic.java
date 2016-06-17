@@ -73,8 +73,9 @@ public class IStreamBusinessLogic extends AbstractBusinessLogicModule{
 //        String url = "https://istreamdeposit.com/Scan?wsdl";
         
         String url = System.getProperty("WS_ISTREAM_PRODUCTION_URL");
-
+CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] WS_ISTREAM_PRODUCTION_URL: " + url,null);
         if (url == null) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] url == null" ,null);
             url = "https://istreamdeposit.com/Scan?wsdl";
         }
         

@@ -15,6 +15,7 @@ package com.smartbt.girocheck.servercommon.dao;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.utils.CryptoUtils;
+import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.utils.bd.TransformerComplexBeans;
@@ -64,13 +65,14 @@ public class ClientDAO extends BaseDAO<Client> {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet getting client with encryptedSSN = " + encryptedSSN ,null);
         Criteria criteria = HibernateUtil.getSession().createCriteria( Client.class ).add( Restrictions.eq( "hashSSN", encryptedSSN ) );
 //        Criteria criteria = HibernateUtil.getSession().createCriteria( Client.class ).add( Restrictions.eq( "ssn", encryptedSSN ) );
         client = (Client) criteria.uniqueResult();
 
         boolean newClient = client == null;
-
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet newClient = " + newClient ,null);
+   
         if ( newClient ) {
             client = new Client();
             client.setHashSSN(encryptedSSN );
@@ -88,6 +90,7 @@ public class ClientDAO extends BaseDAO<Client> {
 
         if ( newClient || addressForm != null ) {
             saveOrUpdate( client );
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet -> after saveOrUpdate client.id = " + client.getId() ,null);
         }       
         return client;
     }

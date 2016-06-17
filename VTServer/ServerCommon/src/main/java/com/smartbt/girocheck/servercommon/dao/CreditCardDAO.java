@@ -220,58 +220,64 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
     
         public CreditCard createOrGet( String cardNumber, Client client, Merchant merchant) throws Exception {
         CreditCard creditCard = null;
-        String maskCardNumber;
-//        
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet(...) with cardnumber value: ["+cardNumber+"] "
-//                + "is client != null: ["+(client!=null)+"] and Merchant != null: "+(merchant!=null),null);
+        String maskCardNumber, encryptedCCardNumber;
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet(...) with cardnumber value: ["+cardNumber+"] "
+                + "is client != null: ["+(client!=null)+"] and Merchant != null: "+(merchant!=null),null);
         
         if(!cardNumber.equals("") && client != null && merchant != null && cardNumber.length() == 16){
-//        try {
-//            //encrypting cardNumber
-//            encryptedCCardNumber = CryptoUtils.encrypt(cardNumber);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+        try {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet Encrypting cardNumber",null);
+            encryptedCCardNumber = CryptoUtils.encrypt(cardNumber);
+            
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet encryptedCCardNumber = " + encryptedCCardNumber,null);
+        
+        } catch (Exception ex) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet EXCEPTION encrypting card.",null);
+            ex.printStackTrace();
+            throw ex;
+        }
         
         maskCardNumber = cardNumber.substring(0,4)+"********"+cardNumber.substring(12,16);
         
-        DetachedCriteria maxId = DetachedCriteria.forClass(CreditCard.class)
-                .setProjection(Projections.max("id"));
+    //    DetachedCriteria maxId = DetachedCriteria.forClass(CreditCard.class)
+    //            .setProjection(Projections.max("id"));
         
-        Criteria criteria = HibernateUtil.getSession().createCriteria( CreditCard.class )
+       /* Criteria criteria = HibernateUtil.getSession().createCriteria( CreditCard.class )
                 .add(Property.forName("id").eq(maxId))
 //                .add( Restrictions.eq( "pan", encryptedCCardNumber ) );
-                .add( Restrictions.eq( "pan", cardNumber ) );
-//        Criteria criteria = HibernateUtil.getSession().createCriteria( CreditCard.class ).add( Restrictions.eq( "cardNumber", cardNumber ) );
+                .add( Restrictions.eq( "pan", cardNumber ) ); */
+        Criteria criteria = HibernateUtil.getSession().createCriteria( CreditCard.class )
+                .add( Restrictions.eq( "cardNumber", encryptedCCardNumber ))
+                .setMaxResults(1);
         try{
-            creditCard = (CreditCard) criteria.list().get(0);
-        }catch(Exception e){}
+            creditCard = (CreditCard) criteria.uniqueResult();
+        }catch(Exception e){
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet EXCEPTION loading card.",null);
+            e.printStackTrace();
+        }
 
-                if (creditCard == null) {
-                    if (client.getFirstName() != null && client.getFirstName().equals("BIQorCTB")) {
-                        creditCard = new CreditCard();
-//                        creditCard.setPan(encryptedCCardNumber);
-                        creditCard.setPan(cardNumber);
-                        creditCard.setCardNumber(cardNumber);
-                        creditCard.setMaskCardNumber(maskCardNumber);
-                        creditCard.setMerchant(merchant);
-                        saveOrUpdate(creditCard);
-                    } else {
-                        creditCard = new CreditCard();
-//                        creditCard.setPan(encryptedCCardNumber);
-                        creditCard.setPan(cardNumber);
-                        creditCard.setCardNumber(cardNumber);
-                        creditCard.setMaskCardNumber(maskCardNumber);
-                        creditCard.setClient(client);
-                        creditCard.setMerchant(merchant);
-                        saveOrUpdate(creditCard);
-                    }
-                }
+        if (creditCard == null) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet creditCard == null",null);
+                creditCard = new CreditCard();
+               // creditCard.setPan(cardNumber);
+                creditCard.setCardNumber(encryptedCCardNumber);
+                creditCard.setMaskCardNumber(maskCardNumber);
+                creditCard.setClient(client);
+                creditCard.setMerchant(merchant);
+                saveOrUpdate(creditCard);                  
+        }else{
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet creditCard already exist.",null);
+        }
                 return creditCard;
-            } else
-                return null;
+            } else{
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet return null;",null);
+            return null;
+        }
+                
     }
     public CreditCard get(String cardNumber) {
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] GET -> DEPRECATED!!!!!!",null);
 //        String encryptedCCardNumber = "";
 //        try {
 //            //encrypting cardNumber

@@ -9,7 +9,7 @@
     <modules>
         <module>VTCommon</module>
         <module>VTServer</module>
-        <module>VTAMS</module>
+        <!--<module>VTAMS</module>-->
     </modules>
         
     <properties>

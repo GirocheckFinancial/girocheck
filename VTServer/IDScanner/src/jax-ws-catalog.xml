@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://app1.idware.net/DriverLicenseParser.svc" uri="wsdl/app1.idware.net/DriverLicenseParser.svc.wsdl"/>
+    <system systemId="http://app1.idware.net/DriverLicenseParser.svc?xsd=xsd0" uri="wsdl/app1.idware.net/DriverLicenseParser.svc.xsd_xsd0.xsd"/>
+    <system systemId="http://app1.idware.net/DriverLicenseParser.svc?xsd=xsd1" uri="wsdl/app1.idware.net/DriverLicenseParser.svc.xsd_xsd1.xsd"/>
+</catalog>

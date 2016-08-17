@@ -89,12 +89,7 @@ public class CertegyInfoRequest implements IMap {
   //  private String transactionDate;  // innecessary ??
     private String depositId;
     private String certegyCode;
-
-    
-      public void print(){
-//        log.debug("[CertegyInfoRequest ]:: \n" + ReflectionToStringBuilder.reflectionToString( this ));
-          CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CertegyInfoRequest ]:: \n" + ReflectionToStringBuilder.reflectionToString( this ),null);
-    }
+ 
     
     @Override
     public Map toMap() {

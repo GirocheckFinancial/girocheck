@@ -27,8 +27,8 @@ import com.smartbt.girocheck.servercommon.model.State;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.girocheck.servercommon.utils.IDScanner;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
-import com.smartbt.vtsuite.util.CoreLogger;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomState;
 import java.io.IOException;
@@ -41,9 +41,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
@@ -71,7 +73,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
     private String checkId;
     private Transaction transaction;
     private String correlationId;
-    
+
     // WAITING TIMES
     private static final long TECNICARD_CONFIRMATION_WAIT_TIME = 180000;
     private static final long ORDER_EXPRESS_WAIT_TIME = 30000;
@@ -84,38 +86,22 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
     private static StateManager stateManager = new StateManager();
     private PersonalIdentificationManager personalIdentificationManager = new PersonalIdentificationManager();
 
-    public CoreComplexCashTransactionBusinessLogic(CoreLogger coreLogger) {
-        super(coreLogger);
-
-        try {
-            String url = System.getProperty("WS_LICENSES_URL") + "/Parsers/Licenses.asmx?wsdl";
-
-            licenseService = new Licenses();
-            licensePort = licenseService.getLicensesSoap();
-            BindingProvider bindingProvider = (BindingProvider) licensePort;
-            bindingProvider.getRequestContext().put(
-                    BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                    url);
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] URL OF LICENSESREADER WS" + url,null);
-
-        } catch (Exception ex) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] URL OF LICENSESREADER WS CONECTION ERROR",ex.getMessage());
-        }
+    public CoreComplexCashTransactionBusinessLogic() {
+        super();
 
     }
 
     @Override
     public void process(DirexTransactionRequest request, Transaction transaction) throws Exception {
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Send answer to TERMINAL",null);
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Send answer to TERMINAL", null);
 
         if (request.getTransactionData().containsKey(ParameterName.DLDATASCAN) || request.getTransactionData().containsKey(ParameterName.DLDATASWIPE)) {
             if (request.getTransactionData().get(ParameterName.DLDATASCAN) != null || request.getTransactionData().get(ParameterName.DLDATASWIPE) != null) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] data ParameterName.DLDATASCAN received value: "+request.getTransactionData().get(ParameterName.DLDATASCAN),null);
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] data ParameterName.DLDATASWIPE received value: "+request.getTransactionData().get(ParameterName.DLDATASWIPE),null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] data ParameterName.DLDATASCAN received value: " + request.getTransactionData().get(ParameterName.DLDATASCAN), null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] data ParameterName.DLDATASWIPE received value: " + request.getTransactionData().get(ParameterName.DLDATASWIPE), null);
             } else {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] data from DLDATASCAN or DLDATASWIPE is null",null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] data from DLDATASCAN or DLDATASWIPE is null", null);
             }
         }
 
@@ -134,24 +120,31 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
         try {
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Calculating fee for cash from amount",null);
-            feeCalculator(request, transaction);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Calculating fee for cash from amount", null);
 
-            Map personalInfoRequestMap;
-            if(!originalTransaction.equals(TransactionType.CARD_RELOAD_WITH_DATA)){
-                
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Getting personal info from PersonalInfoFromIDReader()",null);
-            DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
-
-            if (!personalInfoResponse.wasApproved()) {
-                personalInfoResponse.setTransactionType(request.getTransactionType());
-                CoreTransactionUtil.subTransactionFailed(transaction, personalInfoResponse, jmsManager.getCoreOutQueue(), correlationId);
+            try {
+                feeCalculator(request, transaction);
+            } catch (Exception e) {
+                e.printStackTrace();
+                CoreTransactionUtil.subTransactionFailed(transaction, DirexTransactionResponse.forException(ResultCode.CORE_FEE_CALCULATION_ERROR, e), jmsManager.getCoreOutQueue(), correlationId);
                 return;
             }
 
-            personalInfoRequestMap = personalInfoResponse.getTransactionData();
-            
-            }else{
+            Map personalInfoRequestMap;
+            if (!originalTransaction.equals(TransactionType.CARD_RELOAD_WITH_DATA)) {
+
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Getting personal info from PersonalInfoFromIDReader()", null);
+                DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
+
+                if (!personalInfoResponse.wasApproved()) {
+                    personalInfoResponse.setTransactionType(TransactionType.PERSONAL_INFO);
+                    CoreTransactionUtil.subTransactionFailed(transaction, personalInfoResponse, jmsManager.getCoreOutQueue(), correlationId);
+                    return;
+                }
+
+                personalInfoRequestMap = personalInfoResponse.getTransactionData();
+
+            } else {
                 personalInfoRequestMap = request.getTransactionData();
                 personalInfoRequestMap.put(ParameterName.CHECK_ID, request.getTransactionData().get(ParameterName.ID));
             }
@@ -159,18 +152,18 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             //-----  WAIT PERSONAL INFO MESSAGE -------------- 
             checkId = (String) personalInfoRequestMap.get(ParameterName.CHECK_ID);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Personal info from PersonalInfoFromIDReader() done",null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Personal info from PersonalInfoFromIDReader() done with check id: "+checkId,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Personal info from PersonalInfoFromIDReader() done", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Personal info from PersonalInfoFromIDReader() done with check id: " + checkId, null);
 
             if (personalInfoRequestMap.containsKey(ParameterName.FEE_AMMOUNT)) {
                 try {
-                    String feeAmmountString = personalInfoRequestMap.get(ParameterName.FEE_AMMOUNT)+"";
+                    String feeAmmountString = personalInfoRequestMap.get(ParameterName.FEE_AMMOUNT) + "";
                     double feeAmmount = Double.parseDouble(feeAmmountString);
                     transaction.setFeeAmmount(feeAmmount);
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-                transaction.setPayoutAmmount((Double)personalInfoRequestMap.get(ParameterName.PAYOUT_AMMOUNT));
+                transaction.setPayoutAmmount((Double) personalInfoRequestMap.get(ParameterName.PAYOUT_AMMOUNT));
 
             }
 
@@ -192,7 +185,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             }
 
             //-------------------------
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Persist personal Info",null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Persist personal Info", null);
             //PERSIST PERSONAL INFO
 
             fillOutClient(request.getTransactionData());
@@ -222,7 +215,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                     if (personalInfoRequestMap.containsKey(ParameterName.IDSTATE)) {
                         String idStateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDSTATE);
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] For IDSTATE StateAbbreviation >>> = "+idStateAbbreviation,null);
+                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] For IDSTATE StateAbbreviation >>> = " + idStateAbbreviation, null);
                         State statee = stateManager.getByAbbreviation(idStateAbbreviation);
 
                         if (statee != null) {
@@ -247,7 +240,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                     if (personalInfoRequestMap.containsKey(ParameterName.STATE)) {
                         String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] For IDSTATE StateAbbreviation >>> = "+stateAbbreviation,null);
+                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] For IDSTATE StateAbbreviation >>> = " + stateAbbreviation, null);
                         State statee = stateManager.getByAbbreviation(stateAbbreviation);
 
                         if (statee != null) {
@@ -261,32 +254,31 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                     HibernateUtil.commitTransaction();
                 } catch (Exception e) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error",e.getMessage());
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error", e.getMessage());
                     HibernateUtil.rollbackTransaction();
                 }
             }
-            
-            if(personalInfoRequestMap.containsKey(ParameterName.BORNDATE) || personalInfoRequestMap.containsKey(ParameterName.EXPIRATION_DATE)){
-                
-                if(personalInfoRequestMap.get(ParameterName.BORNDATE) != null){
-                    String dob = (String)personalInfoRequestMap.get(ParameterName.BORNDATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value after convert it to a DATE: "+dob,null);
+
+            if (personalInfoRequestMap.containsKey(ParameterName.BORNDATE) || personalInfoRequestMap.containsKey(ParameterName.EXPIRATION_DATE)) {
+
+                if (personalInfoRequestMap.get(ParameterName.BORNDATE) != null) {
+                    String dob = (String) personalInfoRequestMap.get(ParameterName.BORNDATE);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value after convert it to a DATE: " + dob, null);
                     Date dobb = new SimpleDateFormat("MMddyyyy").parse(dob);
                     request.getTransactionData().put(ParameterName.BORNDATE, dobb);
 
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value : "+dobb,null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value : " + dobb, null);
                 }
-                
-                if(personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE) != null){
-                    
-                    String expDate = (String) personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE);                   
-                    Date expiDate = new SimpleDateFormat("yyyyMMdd").parse(expDate);                    
-                    request.getTransactionData().put(ParameterName.EXPIRATION_DATE, expiDate);                    
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] EXPIRATIONDATE value: "+expiDate,null);
-                    
+
+                if (personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE) != null) {
+
+                    String expDate = (String) personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE);
+                    Date expiDate = new SimpleDateFormat("yyyyMMdd").parse(expDate);
+                    request.getTransactionData().put(ParameterName.EXPIRATION_DATE, expiDate);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] EXPIRATIONDATE value: " + expiDate, null);
+
                 }
-                
-                
+
             }
 
             identification.setClient(transaction.getClient());
@@ -318,7 +310,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 return;
             }
             //---- if ORDER_EXPRESS Success --------    opCode:: 01
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] ORDER_EXPRESS Success",null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] ORDER_EXPRESS Success", null);
 
             transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
@@ -340,25 +332,28 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
                 return;
             }
-            
-             if ( request.getTransactionData().containsKey( ParameterName.PHONE ) ) {
-                String cell_area_code = (String)request.getTransactionData().get( ParameterName.PHONE );
-                request.getTransactionData().put( ParameterName.CELL_PHONE_AREA, cell_area_code.substring(0, 3));
-                
-                String cell_phone = (String)request.getTransactionData().get( ParameterName.PHONE );
-                request.getTransactionData().put( ParameterName.CELL_PHONE, cell_phone.substring(3));
-                
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] CELL AREA CODE: "+cell_phone.substring(0,3)+ " CELL NUMBER "+cell_phone.substring(3),null);
-            }
-            state = 2; 
-             /************************* OE LOG METHOD commented for tests only****************/
 
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL]  Sending from core to OE host call LOGS: : ",null);
-             DirexTransactionRequest req002 = request;
-             req002.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
-             req002.getTransactionData().put(ParameterName.AUTHO_NUMBER, responseMap.get(ParameterName.AUTHO_NUMBER));
-             DirexTransactionResponse responseeeee2; 
-             
+            if (request.getTransactionData().containsKey(ParameterName.PHONE)) {
+                String cell_area_code = (String) request.getTransactionData().get(ParameterName.PHONE);
+                request.getTransactionData().put(ParameterName.CELL_PHONE_AREA, cell_area_code.substring(0, 3));
+
+                String cell_phone = (String) request.getTransactionData().get(ParameterName.PHONE);
+                request.getTransactionData().put(ParameterName.CELL_PHONE, cell_phone.substring(3));
+
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] CELL AREA CODE: " + cell_phone.substring(0, 3) + " CELL NUMBER " + cell_phone.substring(3), null);
+            }
+            state = 2;
+            /**
+             * *********************** OE LOG METHOD commented for tests
+             * only***************
+             */
+
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL]  Sending from core to OE host call LOGS: : ", null);
+            DirexTransactionRequest req002 = request;
+            req002.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
+            req002.getTransactionData().put(ParameterName.AUTHO_NUMBER, responseMap.get(ParameterName.AUTHO_NUMBER));
+            DirexTransactionResponse responseeeee2;
+
             try {
                 responseeeee2 = sendMessageToHost(req002, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_LOG_WAIT_TIME);
             } catch (Exception e) {
@@ -374,22 +369,24 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 return;
             }
 
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OP_CODE : "+ responseeeee2.getTransactionData().get(ParameterName.OP_CODE),null);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OESTATUS : "+ responseeeee2.getTransactionData().get(ParameterName.OESTATUS),null);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE IDTELLER : "+ responseeeee2.getTransactionData().get(ParameterName.IDTELLER),null);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OEDATE_TIME : "+ responseeeee2.getTransactionData().get(ParameterName.OEDATE_TIME),null);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OENOTES : "+ responseeeee2.getTransactionData().get(ParameterName.OENOTES),null);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE AUTHO_NUMBER : "+ responseeeee2.getTransactionData().get(ParameterName.AUTHO_NUMBER),null);
-             
-             if (!responseeeee2.wasApproved()) {
-               CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE wasn't approved ",null);  
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OP_CODE : " + responseeeee2.getTransactionData().get(ParameterName.OP_CODE), null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OESTATUS : " + responseeeee2.getTransactionData().get(ParameterName.OESTATUS), null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE IDTELLER : " + responseeeee2.getTransactionData().get(ParameterName.IDTELLER), null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OEDATE_TIME : " + responseeeee2.getTransactionData().get(ParameterName.OEDATE_TIME), null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE OENOTES : " + responseeeee2.getTransactionData().get(ParameterName.OENOTES), null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE AUTHO_NUMBER : " + responseeeee2.getTransactionData().get(ParameterName.AUTHO_NUMBER), null);
+
+            if (!responseeeee2.wasApproved()) {
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method log OE wasn't approved ", null);
                 response.setTransactionType(req002.getTransactionType());
                 CoreTransactionUtil.subTransactionFailed(transaction, responseeeee2, jmsManager.getCoreOutQueue(), correlationId);
                 return;
-             }  
-            
-             /*********************************LOG OE method *************************/
-             
+            }
+
+            /**
+             * *******************************LOG OE method
+             * ************************
+             */
             //----------  TECNICARD VALIDATON ------------------
             //ask for host and if is Fuze put in the request the needed fuze data.
             String hostName = (String) request.getTransactionData().get(ParameterName.HOSTNAME);
@@ -411,8 +408,8 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 generateNotificationEmail(buffer2, null);
                 return;
             }
-            
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Recived message from " +hostName+ " Validation",null);
+
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Recived message from " + hostName + " Validation", null);
 
             transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
@@ -426,7 +423,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             String estimatedPostingTime = response.getResultMessage();
 
             //Send response to the terminal of reload or new cardload
-            sendAnswerToTerminal(originalTransaction, response.getResultCode(),estimatedPostingTime, hostName);
+            sendAnswerToTerminal(originalTransaction, response.getResultCode(), estimatedPostingTime, hostName);
 
             state = 3;
 
@@ -464,7 +461,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                     request.getTransactionData().put(ParameterName.BILLER_ID, response.getTransactionData().get(ParameterName.BILLER_ID));
                     request.getTransactionData().put(ParameterName.TRANSACTION_ID, transaction.getId());
                 }
-                
+
                 try {
                     response = sendMessageToHost(request, hostName, GENERIC_CARD_LOAD_WAIT_TIME);
                 } catch (Exception e) {
@@ -489,24 +486,23 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                     buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
 
                     buffer.append("There were a problem trying to load a card ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
- 
-                    
+
                     if (hostName.equals(NomHost.TECNICARD.toString())) {
                         response.setResultCode(ResultCode.FAILED);
                         response.setResultMessage(ResultMessage.TECNICARD_FAILED.getMessage());
-                        
+
                         transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
                         CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
                         sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), ResultMessage.TECNICARD_FAILED.getTerminalMessage(), hostName);
                     } else if (hostName.equals(NomHost.FUZE.toString())) {
-                        
+
                         transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
                         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending FUZE_LOOKUP_TRANSACTION ", null);
                         request.setTransactionType(TransactionType.FUZE_LOOKUP_TRANSACTION);
                         DirexTransactionResponse response2;
-                        
+
                         try {
                             response2 = sendMessageToHost(request, hostName, GENERIC_CARD_LOAD_WAIT_TIME);
                         } catch (Exception e) {
@@ -527,7 +523,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                         response2.setResultMessage(ResultMessage.FUZE_HOST_FAILED.getMessage() + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
                         response2.setErrorCode("FAILED CARD LOADING" + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
-                        
+
                         transaction.addSubTransactionList(response2.getTransaction().getSub_Transaction());
                         CoreTransactionUtil.persistTransaction(transaction);
                         buffer.append(" The transaction status from Fuze is: ").append(response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
@@ -537,58 +533,57 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                     buffer.append("</body></html>");
                     generateNotificationEmail(buffer, null);
                     return;
-                }else{
-                    sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(),estimatedPostingTime, hostName); 
-                    
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Before consuming OEPagowith OE AUTHO_NUMBER : "+ responseMap.get(ParameterName.AUTHO_NUMBER),null);
+                } else {
+                    sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), estimatedPostingTime, hostName);
+
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Before consuming OEPagowith OE AUTHO_NUMBER : " + responseMap.get(ParameterName.AUTHO_NUMBER), null);
                     OEPago(request);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Reporta Pago sent. Transaction done. Success.",null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Reporta Pago sent. Transaction done. Success.", null);
                 }
             } catch (Exception be) {
-                
-               OEDevolucion(request);
-                
+
+                OEDevolucion(request);
+
                 StringBuffer buffer = new StringBuffer();
-                    buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
+                buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
 
-                    buffer.append("There were a problem trying to load a card ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
+                buffer.append("There were a problem trying to load a card ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
 
-                    if (hostName.equals(NomHost.FUZE.toString())) {
-                        transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
+                if (hostName.equals(NomHost.FUZE.toString())) {
+                    transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending FUZE_LOOKUP_TRANSACTION ", null);
-                        request.setTransactionType(TransactionType.FUZE_LOOKUP_TRANSACTION);
-                        DirexTransactionResponse response2;
-                        
-                        try {
-                            response2 = sendMessageToHost(request, hostName, GENERIC_CARD_LOAD_WAIT_TIME);
-                        } catch (Exception e) {
-                            //sendEmail
-                            StringBuffer buffer2 = new StringBuffer();
-                            buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending FUZE_LOOKUP_TRANSACTION ", null);
+                    request.setTransactionType(TransactionType.FUZE_LOOKUP_TRANSACTION);
+                    DirexTransactionResponse response2;
 
-                            buffer2.append("There were a problem receiving fuze lookup transaction response ************").append(" at ").append((new Date()).toString());
-                            buffer2.append("</body></html>");
+                    try {
+                        response2 = sendMessageToHost(request, hostName, GENERIC_CARD_LOAD_WAIT_TIME);
+                    } catch (Exception e) {
+                        //sendEmail
+                        StringBuffer buffer2 = new StringBuffer();
+                        buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
 
-                            generateNotificationEmail(buffer2, null);
-                            sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.FUZE_HOST_ERROR, ResultMessage.FUZE_HOST_FAILED.getTerminalMessage(), hostName);
-                            return;
-                        }
+                        buffer2.append("There were a problem receiving fuze lookup transaction response ************").append(" at ").append((new Date()).toString());
+                        buffer2.append("</body></html>");
 
-                        response2.setResultMessage(ResultMessage.FUZE_HOST_FAILED.getMessage() + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
-                        response2.setErrorCode("FAILED CARD LOADING" + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
-
-                        transaction.addSubTransactionList(response2.getTransaction().getSub_Transaction());
-                        sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response2.getResultCode(), estimatedPostingTime, hostName);
-                        CoreTransactionUtil.persistTransaction(transaction);
-                        buffer.append(" The transaction status from Fuze is: ").append(response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
+                        generateNotificationEmail(buffer2, null);
+                        sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.FUZE_HOST_ERROR, ResultMessage.FUZE_HOST_FAILED.getTerminalMessage(), hostName);
+                        return;
                     }
 
-                    
-                    buffer.append("</body></html>");
+                    response2.setResultMessage(ResultMessage.FUZE_HOST_FAILED.getMessage() + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
+                    response2.setErrorCode("FAILED CARD LOADING" + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
 
-                    generateNotificationEmail(buffer, null);
-                
+                    transaction.addSubTransactionList(response2.getTransaction().getSub_Transaction());
+                    sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response2.getResultCode(), estimatedPostingTime, hostName);
+                    CoreTransactionUtil.persistTransaction(transaction);
+                    buffer.append(" The transaction status from Fuze is: ").append(response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
+                }
+
+                buffer.append("</body></html>");
+
+                generateNotificationEmail(buffer, null);
+
                 throw be;
             }
 
@@ -599,15 +594,15 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             CoreTransactionUtil.persistTransaction(transaction);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Transaction finished successfully. ",null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Transaction finished successfully. ", null);
 
         } catch (Exception e) {
-        
+            e.printStackTrace();
             response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, e);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Exception in state :: " + state,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Exception in state :: " + state, null);
             // SI OCURRE UNA EXCEPCION, SE LE NOTIFICA A LOS FRONTS QUE ESTEN ESPERANDO MSG.
-           
+
             switch (state) {
                 case 2:
                     OEDevolucion(request);
@@ -616,21 +611,21 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 default:
                     transaction.setResultCode(ResultCode.CORE_ERROR.getCode());
                     String msg = e.getMessage();
-                    if(msg != null){
+                    if (msg != null) {
                         transaction.setResultMessage((msg.length() > 254) ? msg.substring(0, 254) : msg);
-                    }else{
+                    } else {
                         transaction.setResultMessage("Message Error was printed, Please check the server logs. ");
                     }
 
                     CoreTransactionUtil.persistTransaction(transaction);
             }
-            
+
         }
     }
 
     private void sendAnswerToTerminal(TransactionType transactionType, ResultCode resultCode, String estimated_posting_time, String host) throws JMSException {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Send answer to TERMINAL. ",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Send answer to TERMINAL. ", null);
 
         DirexTransactionResponse provissionalResponse = new DirexTransactionResponse();
         provissionalResponse.setResultCode(resultCode);
@@ -639,41 +634,41 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         Queue queue;
 
         if (transactionType == TransactionType.TECNICARD_CONFIRMATION) {
-            if(host.equals("FUZE")){
-            provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "02");
-            }else{
+            if (host.equals("FUZE")) {
+                provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "02");
+            } else {
                 provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "01");
             }
             queue = jmsManager.getCore2OutQueue();
         } else {
             queue = jmsManager.getCoreOutQueue();
         }
-        
+
         provissionalResponse.getTransactionData().put("host", host);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending message to TERMINAL. ",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending message to TERMINAL. ", null);
         JMSManager.get().send(provissionalResponse, queue, correlationId);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sent message to TERMINAL. ",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sent message to TERMINAL. ", null);
     }
 
     private DirexTransactionResponse sendMessageToHost(DirexTransactionRequest request, String hostName, long waitTime) throws Exception, Exception {
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Send message to host " + hostName,null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Send message to host " + hostName, null);
 
         Properties props = new Properties();
         props.setProperty("hostName", hostName);
         DirexTransactionResponse direxTransactionResponse = null;
-        
+
         jmsManager.sendWithProps(request, jmsManager.getHostInQueue(), correlationId, props);
 
-        if(request.getTransactionType() != TransactionType.ISTREAM_CHECK_AUTH_SUBMIT){
+        if (request.getTransactionType() != TransactionType.ISTREAM_CHECK_AUTH_SUBMIT) {
             direxTransactionResponse = receiveMessageFromHost(request.getTransactionType(), hostName, waitTime);
         }
-        
+
         return direxTransactionResponse;
     }
 
     private DirexTransactionResponse receiveMessageFromHost(TransactionType transactionType, String hostName, long waitTime) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Receiving message from host " + hostName,null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Receiving message from host " + hostName, null);
 
         Message message = null;
         DirexTransactionResponse response;
@@ -699,16 +694,16 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         Serializable s = objectMessage.getObject();
         response = (DirexTransactionResponse) s;
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Message received. ",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Message received. ", null);
         return response;
     }
 
     private DirexTransactionRequest receiveMessageFromFront(TransactionType transactionType) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Waiting " + transactionType + " from FRONT. ",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Waiting " + transactionType + " from FRONT. ", null);
 
         DirexTransactionResponse response;
-        Message message=null;
+        Message message = null;
 
         // in error case
         ResultCode errorCode = null;
@@ -727,10 +722,10 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         }
 
         try {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Receiving... ",null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Receiving... ", null);
             message = jmsManager.receive(queue, correlation, waitTime);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Received " + transactionType,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Received " + transactionType, null);
         } catch (Exception e) {
             response = DirexTransactionResponse.forException(errorCode, ResultMessage.FAILED, transactionType + " not received. ", "");
             response.setTransactionType(transactionType);
@@ -750,11 +745,12 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         Serializable s = objectMessage.getObject();
         DirexTransactionRequest request = (DirexTransactionRequest) s;
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Message received. ",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Message received. ", null);
         return request;
     }
 
-    public void postprocess(DirexTransactionRequest direxTransactionRequest, DirexTransactionResponse direxTransactionResponse) throws Exception {}
+    public void postprocess(DirexTransactionRequest direxTransactionRequest, DirexTransactionResponse direxTransactionResponse) throws Exception {
+    }
 
     private String getFromMap(Map map, ParameterName parameterName) {
         if (map.containsKey(parameterName)) {
@@ -783,50 +779,50 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             try {
                 date = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH).parse((String) transactionMap.get(ParameterName.BORNDATE));
             } catch (ParseException ex) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() error parsing the date ",null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() error parsing the date ", null);
                 ex.printStackTrace();
                 throw new Exception();
             }
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() with date value: " +date,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() with date value: " + date, null);
             transaction.getClient().setBornDate(date);
         }
 
         try {
             if (transactionMap.containsKey(ParameterName.ADDRESS_CORRECT)) {
 
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Transaction contains address correct",null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Transaction contains address correct", null);
 
                 if (transactionMap.get(ParameterName.ADDRESS_CORRECT) != null) {
 
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] transactionMap.get(ParameterName.ADDRESS_CORRECT) != null)",null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] transactionMap.get(ParameterName.ADDRESS_CORRECT) != null)", null);
 
-                      CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] transactionMap.get(ParameterName.ADDRESS_CORRECT) = " + transactionMap.get(ParameterName.ADDRESS_CORRECT),null);
-                    
-                      CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] " + ((((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("n")) || ((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("N")),null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] transactionMap.get(ParameterName.ADDRESS_CORRECT) = " + transactionMap.get(ParameterName.ADDRESS_CORRECT), null);
+
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] " + ((((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("n")) || ((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("N")), null);
 
                     if (transactionMap.containsKey(ParameterName.ADDRESS_FORM) && transactionMap.get(ParameterName.ADDRESS_FORM) != null) {
                         byte[] addressForm = (byte[]) transactionMap.get(ParameterName.ADDRESS_FORM);
                         if (addressForm != null) {
 
-                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm != null",null);
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm != null", null);
                             if (addressForm.length > 0) {
-                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm.length > 0",null);
+                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm.length > 0", null);
                                 java.sql.Blob addressFormBlob = new SerialBlob(addressForm);
                                 transaction.getClient().setAddressForm(addressFormBlob);
                             } else {
-                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm.length = 0",null);
+                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm.length = 0", null);
                             }
 
                         } else {
-                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm is null",null);
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] addressForm is null", null);
                         }
                     }
                 } else {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Address correct param is null)",null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Address correct param is null)", null);
                 }
             } else {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Address correct param not content",null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Address correct param not content", null);
             }
         } catch (Exception e) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Exception in ADDRESS_FORM", e.getMessage());
@@ -873,7 +869,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             } catch (ParseException ex) {
                 Logger.getLogger(CoreComplexCashTransactionBusinessLogic.class.getName()).log(Level.SEVERE, null, ex);
             }
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fillOutPersonalIdentification() with EXPIRATION_DATE value: " +date,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fillOutPersonalIdentification() with EXPIRATION_DATE value: " + date, null);
 
             identidication.setExpirationDate(date);
         }
@@ -939,67 +935,55 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         transaction.setCheck(check);
     }
 
-    /**
-     * ******************************
-     */
-    private Licenses licenseService;
-    private LicensesSoap licensePort;
-
     public DirexTransactionResponse getPersonalInfoFromIDReader(DirexTransactionRequest request) {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Into the method getPersonalInfoFromIDReader(...)",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Into the method getPersonalInfoFromIDReader(...)", null);
 
         DirexTransactionResponse dtr = new DirexTransactionResponse();
+        dtr.getTransactionData().putAll(request.getTransactionData());
         try {
             if (request.getTransactionData().containsKey(ParameterName.DLDATASCAN) || request.getTransactionData().containsKey(ParameterName.DLDATASWIPE)) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] getPersonalInfoFromIDReader() contains datascan or dataswipe",null);
-                PersonInfo personInfo = null;
-                
-                String xmlString;
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] getPersonalInfoFromIDReader() contains datascan or dataswipe", null);
+
+                Map personalInfoMap = null;
                 String dlData;
 
                 if (request.getTransactionData().get(ParameterName.DLDATASCAN) != null && !request.getTransactionData().get(ParameterName.DLDATASCAN).equals("")) {
-                    
+
                     dlData = (String) request.getTransactionData().get(ParameterName.DLDATASCAN);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] getPersonalInfoFromIDReader(...) with xmlStringfrom DLDATASCAN: [" + dlData + "]",null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] getPersonalInfoFromIDReader(...) with xmlStringfrom DLDATASCAN: [" + dlData + "]", null);
 
                 } else {
 
                     dlData = (String) request.getTransactionData().get(ParameterName.DLDATASWIPE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] getPersonalInfoFromIDReader(...) with xmlString from DLDATASWIPE: [" + dlData + "]",null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] getPersonalInfoFromIDReader(...) with xmlString from DLDATASWIPE: [" + dlData + "]", null);
 
                 }
 
                 if (!dlData.equals("")) {
-
-                    xmlString = licensePort.parseB64Ex(dlData);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] getPersonalInfoFromIDReader(...) ws result [" + xmlString + "]", null);
-                    //Parsing the xml to a personInfo obj
-                    if (!xmlString.contains("personInfo")) {
-                        throw new Exception("Wrong XML format");
-                    }
-                    JAXBContext jc;
                     try {
-                        jc = JAXBContext.newInstance(PersonInfo.class);
-                        personInfo = unMarshallResponse(jc, xmlString);
-                    } catch (JAXBException ex) {
-                        ex.printStackTrace();
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error parsing dl dataScan.", ex.getMessage());
+                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
+                    } catch (Exception e) {
+                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);
+                        return DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, " Null personInfo from DLicense WS ", "");
                     }
+
                 }
-                
-                dtr.getTransactionData().putAll(request.getTransactionData());
-                if (personInfo != null) {
-                    dtr.getTransactionData().put(ParameterName.CHECK_ID, personInfo.getIdentification().getSensitiveData().getNumber());
-                    dtr.getTransactionData().put(ParameterName.IDTYPE, IdType.DRIVER_LICENSE);
-                    dtr.getTransactionData().put(ParameterName.ID, personInfo.getIdentification().getSensitiveData().getNumber());
-                    fixPersonalInfoName(personInfo);
-                    dtr.getTransactionData().putAll(personInfo.toMap());
+
+                if (personalInfoMap != null) {
+
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] ----------------- Printing PersonInfo map  -----------------  ", null);
+                    String ssn = (String)request.getTransactionData().get(ParameterName.SSN);
+                    dtr.getTransactionData().put(ParameterName.IDTYPE, CoreTransactionUtil.getIdTypeFromId(ssn));
+                    
+                    dtr.getTransactionData().put(ParameterName.ID, personalInfoMap.get(ParameterName.ID));
+                    NewCoreComplexTransactionBusinessLogic.fixPersonInfoName(personalInfoMap);
+                    dtr.getTransactionData().putAll(personalInfoMap);
                     dtr.setResultCode(ResultCode.SUCCESS);
                     dtr.setResultMessage(ResultMessage.SUCCESS.getMessage());
                     dtr.setTerminalResultMessage(ResultMessage.SUCCESS.getMessage());
                 } else {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Null personInfo from DLicense WS.",null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);
                     dtr = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, " Null personInfo from DLicense WS ", "");
                 }
 
@@ -1007,59 +991,12 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 dtr = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, " The request doesn't contain DLDATASCAN or DLDATASWIPE ", "");
             }
         } catch (Exception e) {
-            dtr = DirexTransactionResponse.forException(ResultCode.FAILED, e);
+            dtr = null;
             e.printStackTrace();
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error",e.getMessage());
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Error", e.getMessage());
         }
 
         return dtr;
-    }
-
-    public void fixPersonalInfoName(PersonInfo personInfo){
-        
-        String name = personInfo.getFirstName().trim();
-        String middleName = "";
-        if(personInfo.getMiddleName() != null){
-            middleName = personInfo.getMiddleName().trim();
-        }
-        String lastName = personInfo.getLastName().trim();
-        String[] aux; 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fixPersonalInfoName with name: "+name,null);
-        if(name != null && name.contains(" ")){
-            aux = name.split(" ");
-            name = aux[0];
-            middleName = aux[1];
-        }
-        if(name != null && name.length() > 15){
-            name = name.substring(0, 15);
-        }
-        if(middleName != null && middleName.length() > 15){
-            middleName = middleName.substring(0, 15);
-        }
-        if(lastName != null && lastName.length() > 15){
-            lastName = lastName.substring(0, 15);
-        }
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fixPersonalInfoName fixed with name: "+name,null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fixPersonalInfoName fixed with Middle name: "+middleName,null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fixPersonalInfoName fixed with last name: "+lastName,null);
-        
-        if (name != null) {
-            personInfo.setFirstName(name);
-        }
-        if (name != null) {
-            personInfo.setMiddleName(middleName);
-        }
-        if (name != null) {
-            personInfo.setLastName(lastName);
-        }
-    }
-    
-    public static PersonInfo unMarshallResponse(JAXBContext ctx, String xmlString) throws JAXBException {
-        //convert XML String to Object (FuzeResponse)
-        Unmarshaller unmarshaller = ctx.createUnmarshaller();
-        PersonInfo personInfo = (PersonInfo) unmarshaller.unmarshal(new StreamSource(new StringReader(xmlString)));
-        return personInfo;
     }
 
     public boolean isCancelated(boolean cancelable) {
@@ -1072,7 +1009,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             HibernateUtil.commitTransaction();
 
         } catch (Exception e) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error",e.getMessage());
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error", e.getMessage());
             isCancelated = false;
         }
         return isCancelated;
@@ -1080,7 +1017,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
     public static void generateNotificationEmail(StringBuffer buffer, Map<ParameterName, ImagePart> images) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending email(...)",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Sending email(...)", null);
         String receiptTitle = "SBT Middleware Warning Message";
 
         List<String> emailList = new ArrayList<>();
@@ -1143,9 +1080,10 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 //        transaction.setPayoutAmmount(payOut);
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() done with payout: "+payOut,null);
 //    }
-    private void feeCalculator(DirexTransactionRequest request, Transaction transaction) {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() start ...",null);
+    private void feeCalculator(DirexTransactionRequest request, Transaction transaction) throws Exception {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() start ...", null);
         Double amount = (Double) request.getTransactionData().get(ParameterName.AMMOUNT);
         Double payOut;
 
@@ -1155,19 +1093,15 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             HibernateUtil.beginTransaction();
 
             FeeBucketsManager feeBucketsManager = new FeeBucketsManager();
-            map = (Map)feeBucketsManager.getFees(request.getTransactionData().get(ParameterName.IDMERCHANT)+"", 
-                    request.getTransactionData().get(ParameterName.OPERATION)+"",
-                    request.getTransactionData().get(ParameterName.AMMOUNT)+"");
+            map = (Map) feeBucketsManager.getFees(request.getTransactionData().get(ParameterName.IDMERCHANT) + "",
+                    request.getTransactionData().get(ParameterName.OPERATION) + "",
+                    request.getTransactionData().get(ParameterName.AMMOUNT) + "");
 
             HibernateUtil.commitTransaction();
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            HibernateUtil.rollbackTransaction();
-        }
-        
-        String finalFee = map.get("FINALFEE")+"";
-        Double feeAmount = Double.parseDouble(finalFee);
-        
+
+            String finalFee = map.get("FINALFEE") + "";
+            Double feeAmount = Double.parseDouble(finalFee);
+
 //        if (request.getTransactionData().containsKey(ParameterName.HOSTNAME)) {
 //
 //            if (request.getTransactionData().get(ParameterName.HOSTNAME).equals("FUZE")) {
@@ -1175,28 +1109,37 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 //                payOut = amount - 4.95;
 //                feeAmount = "4.95";
 //            } else {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FEE_AMOUNT applied: " + feeAmount,null);
-                payOut = amount-feeAmount;//No se le resta ese fee a peticion de carlos aparicio dic/04/2014
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FEE_AMOUNT applied: " + feeAmount, null);
+            payOut = amount - feeAmount;//No se le resta ese fee a peticion de carlos aparicio dic/04/2014
 //            }
 //
 //        }
 
-        request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, payOut);
-        request.getTransactionData().put(ParameterName.FEE_AMMOUNT, feeAmount);
+            request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, payOut);
+            request.getTransactionData().put(ParameterName.FEE_AMMOUNT, feeAmount);
 
-        transaction.setPayoutAmmount(payOut);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() done with PAYOUT_AMOUNT: "+payOut,null);
+            transaction.setPayoutAmmount(payOut);
+
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FEE Calculation error.", null);
+            e.printStackTrace();
+            HibernateUtil.rollbackTransaction();
+            throw new Exception("Fee calculation error.");
+        }
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() done with PAYOUT_AMOUNT: " + payOut, null);
     }
-    
-/***************************** commented for tests only******************************/
-    
-    private void OEPago(DirexTransactionRequest request) throws Exception{
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Sending from core to OE host call REPORTAPAGO: ",null);
-             DirexTransactionRequest req00 = request;
-             req00.setTransactionType(TransactionType.ORDER_EXPRESS_REPORTAPAGO);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Sending from core to OE host call REPORTAPAGO with authonumber: "+transaction.getOrderExpressId(),null);
-             req00.getTransactionData().put(ParameterName.AUTHO_NUMBER, transaction.getOrderExpressId());
+
+    /**
+     * *************************** commented for tests
+     * only*****************************
+     */
+    private void OEPago(DirexTransactionRequest request) throws Exception {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Sending from core to OE host call REPORTAPAGO: ", null);
+        DirexTransactionRequest req00 = request;
+        req00.setTransactionType(TransactionType.ORDER_EXPRESS_REPORTAPAGO);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Sending from core to OE host call REPORTAPAGO with authonumber: " + transaction.getOrderExpressId(), null);
+        req00.getTransactionData().put(ParameterName.AUTHO_NUMBER, transaction.getOrderExpressId());
         DirexTransactionResponse responseeeee;
 
         try {
@@ -1212,18 +1155,18 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             generateNotificationEmail(buffer2, null);
             return;
         }
-             
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method reporta pago OE OP_CODE : "+ responseeeee.getTransactionData().get(ParameterName.OP_CODE),null);
-        
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method reporta pago OE OP_CODE : " + responseeeee.getTransactionData().get(ParameterName.OP_CODE), null);
+
     }
-    
-    private void OEDevolucion(DirexTransactionRequest request) throws Exception{
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL]  Sending from core to OE host call DEVOLUCION: : ",null);
-             DirexTransactionRequest req001 = request;
-             req001.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL]  Sending from core to OE host call DEVOLUCION with authonumber: "+transaction.getOrderExpressId(),null);
-             req001.getTransactionData().put(ParameterName.AUTHO_NUMBER, transaction.getOrderExpressId());
+
+    private void OEDevolucion(DirexTransactionRequest request) throws Exception {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL]  Sending from core to OE host call DEVOLUCION: : ", null);
+        DirexTransactionRequest req001 = request;
+        req001.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL]  Sending from core to OE host call DEVOLUCION with authonumber: " + transaction.getOrderExpressId(), null);
+        req001.getTransactionData().put(ParameterName.AUTHO_NUMBER, transaction.getOrderExpressId());
         DirexTransactionResponse responseeeee1;
         try {
             responseeeee1 = sendMessageToHost(req001, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME);
@@ -1238,10 +1181,10 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             generateNotificationEmail(buffer2, null);
             return;
         }
-             
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method devolucion OE OP_CODE : "+ responseeeee1.getTransactionData().get(ParameterName.OP_CODE),null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method devolucion, TRANSACTION FINISHED. ",null);
-        
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method devolucion OE OP_CODE : " + responseeeee1.getTransactionData().get(ParameterName.OP_CODE), null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Response from method devolucion, TRANSACTION FINISHED. ", null);
+
     }
 
 }

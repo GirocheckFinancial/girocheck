@@ -9,17 +9,14 @@ package com.smartbt.vtsuite.manager;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.model.Transaction;
-import com.smartbt.vtsuite.util.CoreLogger;
 
 /**
  *
  * @author Roberto Rodriguez   :: <roberto.rodriguez@smartbt.com>
  */
 public abstract class CoreAbstractTransactionBusinessLogic {
-    protected CoreLogger coreLogger;
 
-    public CoreAbstractTransactionBusinessLogic( CoreLogger coreLogger ) {
-        this.coreLogger = coreLogger;
+    public CoreAbstractTransactionBusinessLogic() {
     }
     
     public abstract   void process( DirexTransactionRequest direxTransactionRequest, Transaction transaction ) throws Exception;

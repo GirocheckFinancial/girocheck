@@ -24,7 +24,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>ServerCommon</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency> 
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>

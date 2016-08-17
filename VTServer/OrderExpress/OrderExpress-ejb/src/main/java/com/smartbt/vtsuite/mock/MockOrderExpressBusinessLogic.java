@@ -123,7 +123,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         responseMap.put(ParameterName.AUTHO_NUMBER, "OE: AUTHO_NUMBER");
         responseMap.put(ParameterName.OP_CODE, "001");
-        responseMap.put(ParameterName.OP_CODE2, "OE OP_CODE2");
+        responseMap.put(ParameterName.OP_CODE2, "025");
         responseMap.put(ParameterName.IDCONSIGNOR, "OE IDCONSIGNOR");
         responseMap.put(ParameterName.IDBENEFICIARY, "IDBENEFICIARY");
         responseMap.put(ParameterName.BANK_AUTHO, "BANK_AUTHO");
@@ -144,12 +144,12 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
     }
     
     private Map devolucion() throws JAXBException, Exception {
-
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[MOCK_OrderExpressBusinessLogic] processing -> devolucion" ,null);
         Map responseMap = new HashMap();
 
         responseMap.put( ParameterName.AUTHO_NUMBER,  "OE: AUTHO_NUMBER" );
-        responseMap.put( ParameterName.OP_CODE, "001");
-        responseMap.put( ParameterName.OP_CODE2, "OE OP_CODE2" );
+        responseMap.put( ParameterName.OP_CODE, "002");
+        responseMap.put( ParameterName.OP_CODE2, "025" );
 
         return responseMap;
 

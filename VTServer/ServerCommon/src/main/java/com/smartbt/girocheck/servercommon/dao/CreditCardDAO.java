@@ -175,14 +175,17 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
 
         Criteria criteria = HibernateUtil.getSession().createCriteria( CreditCard.class )
                 .add(Property.forName("id").eq(maxId))
-                .add( Restrictions.eq( "pan", creditCardNumber ) );
+                .add( Restrictions.eq( "pan", creditCardNumber ) )
+                .setMaxResults(1);
         
-        List<CreditCard> list = criteria.list();
+        return (Client)criteria.uniqueResult();
         
-        if(list != null){
-            return list.get(0).getClient();
-        }else
-            return null;
+//        List<CreditCard> list = criteria.list();
+//        
+//        if(list != null){
+//            return list.get(0).getClient();
+//        }else
+//            return null;
         
     }
     

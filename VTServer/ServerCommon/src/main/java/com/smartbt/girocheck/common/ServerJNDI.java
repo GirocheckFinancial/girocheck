@@ -34,3 +34,4 @@ public class ServerJNDI {
     public final static String LDAP_CREDENTIAL = "jdbc/LdapCredential";
     public final static String LDAP_KEY = "jdbc/LdapKey";    
 }
+

@@ -22,6 +22,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
+import com.smartbt.vtsuite.mock.MockIStreamBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 
 /**
@@ -29,8 +30,8 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
  */
 public class IStreamHostManager {
     
-  private IStreamBusinessLogic businessLogic = new IStreamBusinessLogic();
-//   private MockIStreamBusinessLogic businessLogic = new MockIStreamBusinessLogic();
+//  private IStreamBusinessLogic businessLogic = new IStreamBusinessLogic();
+   private MockIStreamBusinessLogic businessLogic = new MockIStreamBusinessLogic();
 
     /**
      * Process Direx Transaction Request.

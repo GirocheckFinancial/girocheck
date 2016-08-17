@@ -15,7 +15,6 @@
  */
 package com.smartbt.vtsuite.MDB;
 
-import com.smartbt.vtsuite.common.VTSuiteMessages;
 import com.smartbt.vtsuite.manager.CoreTransactionManager;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
@@ -26,11 +25,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.DirexException;
-import com.smartbt.vtsuite.vtcommon.Constants;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionManagement;
@@ -38,7 +33,6 @@ import javax.ejb.TransactionManagementType;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
-import org.apache.log4j.Logger;
 
 /**
  * The Core Message Driven Bean class
@@ -111,8 +105,6 @@ public class CoreMDB implements MessageListener {
                     jmsManager.send(direxTransactionResponse, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
                 }
             } catch (Exception ex) {
-//                LogUtil.logAndStore("CoreMDB", "Core Bean an exception has occurred: " + e.getMessage());
-//                log.debug("[CoreMDB] Core Bean an exception has occurred: " + e.getMessage(),ex);
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreMDB] Core Bean an exception has occurred: "+ e.getMessage(),ex.getMessage());
             }
         }

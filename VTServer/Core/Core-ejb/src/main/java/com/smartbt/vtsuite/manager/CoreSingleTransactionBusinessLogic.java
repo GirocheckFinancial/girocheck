@@ -26,7 +26,6 @@ import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
-import com.smartbt.vtsuite.util.CoreLogger;
 import java.io.Serializable;
 import java.util.Properties;
 import javax.jms.Message;
@@ -43,8 +42,8 @@ public class CoreSingleTransactionBusinessLogic extends CoreAbstractTransactionB
 
     private JMSManager jmsManager = JMSManager.get();
 
-    public CoreSingleTransactionBusinessLogic(CoreLogger coreLogger) {
-        super(coreLogger);
+    public CoreSingleTransactionBusinessLogic() {
+        super();
     }
 
     @Override

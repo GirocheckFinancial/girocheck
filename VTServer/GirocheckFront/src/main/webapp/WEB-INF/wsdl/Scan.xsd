@@ -110,6 +110,8 @@
             <xs:element name="track2" type="xs:string" minOccurs="0"/>
             <xs:element name="dlDataScan" type="xs:string" minOccurs="0"/>
             <xs:element name="dlDataSwipe" type="xs:string" minOccurs="0"/>
+            
+            <xs:element name="tecnicardValidationResponse" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     
@@ -272,6 +274,7 @@
             <xs:element name="amount" type="xs:string" minOccurs="0"/>
             <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
             <xs:element name="operation" type="xs:string" minOccurs="0"/>
+            <xs:element name="tecnicardValidationResponse" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

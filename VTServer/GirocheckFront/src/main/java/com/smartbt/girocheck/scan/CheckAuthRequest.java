@@ -88,7 +88,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "track1",
     "track2",
     "dlDataScan",//new field driver license data
-    "dlDataSwipe"//new field driver license data
+    "dlDataSwipe",//new field driver license data
+    
+    "tecnicardValidationResponse"
 })
 public class CheckAuthRequest implements IMap{
 
@@ -123,6 +125,8 @@ public class CheckAuthRequest implements IMap{
     private String track2;
     private String dlDataScan;
     private String dlDataSwipe;
+
+    private String tecnicardValidationResponse;
     
      @Override
    public Map toMap() {
@@ -159,6 +163,10 @@ public class CheckAuthRequest implements IMap{
         map.put(ParameterName.TRACK2, track2);
         map.put(ParameterName.DLDATASCAN, dlDataScan);
         map.put(ParameterName.DLDATASWIPE, dlDataSwipe);
+        
+        if(tecnicardValidationResponse != null && !tecnicardValidationResponse.isEmpty()){ //for dev and test
+            map.put(ParameterName.TECNICARD_VALIDATION_RESPONSE, tecnicardValidationResponse);
+        }
        
     return map;
     }
@@ -723,6 +731,20 @@ public class CheckAuthRequest implements IMap{
      */
     public void setDlDataSwipe(String dlDataSwipe) {
         this.dlDataSwipe = dlDataSwipe;
+    }
+
+    /**
+     * @return the tecnicardValidationResponse
+     */
+    public String getTecnicardValidationResponse() {
+        return tecnicardValidationResponse;
+    }
+
+    /**
+     * @param tecnicardValidationResponse the tecnicardValidationResponse to set
+     */
+    public void setTecnicardValidationResponse(String tecnicardValidationResponse) {
+        this.tecnicardValidationResponse = tecnicardValidationResponse;
     }
 
 }

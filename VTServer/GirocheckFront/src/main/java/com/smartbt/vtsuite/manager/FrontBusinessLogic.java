@@ -90,14 +90,19 @@ public class FrontBusinessLogic {
             direxTransactionRequest.setCorrelation( (String) transactionData.get( ParameterName.REQUEST_ID ) );
             direxTransactionRequest.setRequestId( (String) transactionData.get( ParameterName.REQUEST_ID ) );
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[FrontBusinessLogic]  RequestId :: " + ((String) transactionData.get( ParameterName.REQUEST_ID )), null );
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[FrontBusinessLogic]  Sending RequestId :: " + ((String) transactionData.get( ParameterName.REQUEST_ID )), null );
             
             if ( transactionType == TransactionType.TECNICARD_CONFIRMATION || transactionType == TransactionType.TECNICARD_CARD_TO_BANK_CONFIRMATION) {
                 queueIn = jmsManager.getCore2InQueue();
                 queueOut = jmsManager.getCore2OutQueue();
+                
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[FrontBusinessLogic]  Sending queueIn = jmsManager.getCore2InQueue();" , null );
+                
             } else {
                 queueIn = jmsManager.getCoreInQueue();
                 queueOut = jmsManager.getCoreOutQueue();
+                
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[FrontBusinessLogic]  Sending queueIn = jmsManager.getCoreInQueue();" , null );
             }
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[FrontBusinessLogic]  Sent to core " + direxTransactionRequest.getCorrelation() ,null);

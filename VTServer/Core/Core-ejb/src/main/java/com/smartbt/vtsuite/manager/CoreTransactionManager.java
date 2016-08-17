@@ -39,7 +39,6 @@ import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.DirexException;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
-import com.smartbt.vtsuite.util.CoreLogger;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -52,9 +51,6 @@ import java.util.Map;
  * The Core Manager Class
  */
 public class CoreTransactionManager {
-
-    private CoreLogger logger = new CoreLogger();
-
     private static CoreAbstractTransactionBusinessLogic businessLogic;
     public static List SINGLE_TRANSACTION_LIST;
     public static List COMPLEX_TRANSACTION_LIST;
@@ -62,6 +58,9 @@ public class CoreTransactionManager {
     public static List CARD_TO_BANK_BL_LIST;
     private Host cardHost;
     private static HostManager hostManager = new HostManager();
+    
+    //TODO move this to System Properties
+    public static final String ID_SCAN_AUTH_KEY = "48fa49a3-8ca4-4fc5-9a60-93271739969d";
 
     static {
         SINGLE_TRANSACTION_LIST = Arrays.asList( TransactionType.ISTREAM_CHECK_AUTH, TransactionType.TECNICARD_BALANCE_INQUIRY, TransactionType.ORDER_EXPRESS_CONTRATACIONES );
@@ -109,7 +108,7 @@ public class CoreTransactionManager {
                 
                 switch ( transactionType ) {
                     case TECNICARD_BALANCE_INQUIRY:
-                        businessLogic = new CoreSingleTransactionBusinessLogic( logger );
+                        businessLogic = new CoreSingleTransactionBusinessLogic( );
                         break;
                     case CARD_RELOAD:
                     case CARD_RELOAD_WITH_DATA:
@@ -117,10 +116,10 @@ public class CoreTransactionManager {
 //                        direxTransactionRequest.getTransactionData().put(ParameterName.CARDLOADTYPE, 1);
                         if(transaction.getOperation().contains( "02" )){
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new CoreComplexCashTransactionBusinessLogic(logger);",null);
-                            businessLogic = new CoreComplexCashTransactionBusinessLogic(logger);
+                            businessLogic = new CoreComplexCashTransactionBusinessLogic();
                         }else{
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);",null);
-                            businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);
+                            businessLogic = new NewCoreComplexTransactionBusinessLogic();
                         }
                         break;
 //                    case NEW_CARD_LOAD:
@@ -132,10 +131,10 @@ public class CoreTransactionManager {
 //                        }
 //                        break;
                     case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
-                        businessLogic = new CoreLocalTransactionBusinessLogic( logger );
+                        businessLogic = new CoreLocalTransactionBusinessLogic( );
                         break;
                     case TECNICARD_CARD_TO_BANK:
-                        businessLogic = new CoreCardToBankBusinessLogic( logger );
+                        businessLogic = new CoreCardToBankBusinessLogic( );
                         break;
                     default:
                         String msg = "Transaction " + transactionType + " not supported.";

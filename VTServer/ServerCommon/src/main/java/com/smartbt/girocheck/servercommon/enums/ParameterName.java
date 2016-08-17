@@ -6,6 +6,7 @@ package com.smartbt.girocheck.servercommon.enums;
  */
 public enum ParameterName {
 
+TECNICARD_VALIDATION_RESPONSE,
 
 ACCOUNT_NUMBER,
 ACCOUNTNUM,

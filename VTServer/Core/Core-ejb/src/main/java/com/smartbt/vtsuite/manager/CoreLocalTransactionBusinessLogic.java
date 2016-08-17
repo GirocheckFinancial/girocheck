@@ -20,7 +20,6 @@ import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import static com.smartbt.vtsuite.manager.CoreComplexCashTransactionBusinessLogic.generateNotificationEmail;
-import com.smartbt.vtsuite.util.CoreLogger;
 import com.smartbt.vtsuite.util.CoreTransactionUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.io.IOException;
@@ -50,8 +49,8 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
     private JMSManager jmsManager = JMSManager.get();
     private String finalFee;
 
-    public CoreLocalTransactionBusinessLogic( CoreLogger coreLogger ) {
-        super( coreLogger );
+    public CoreLocalTransactionBusinessLogic(   ) {
+        super(  );
     }
 
     @Override

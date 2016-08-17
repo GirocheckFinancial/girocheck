@@ -29,7 +29,7 @@ public class Scan {
          CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStreamFront Scan] payoutAmount: "+arg0.getPayoutAmount(),null);
          
          CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] personalInfo arg value: ",null);
-         arg0.print();
+  
          
 //       return new PersonalInfoRes().mock(user, pass);
        return new PersonalInfoRes().build(FrontManager.processTransaction(arg0));
@@ -39,8 +39,7 @@ public class Scan {
          
          CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] certegyInfo",null);
          CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStreamFront Scan] certegyInfo argument: ",null);
-         
-         arg0.print();
+          
          
        return new CertegyInfoRes().build(FrontManager.processTransaction(arg0));
     }

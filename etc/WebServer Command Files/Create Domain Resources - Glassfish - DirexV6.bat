@@ -12,7 +12,7 @@ REM * 	- domainPassPath: The local path to the XPASS.txt file							*
 REM *************************************************************************************
 
 SET domainPortNumber=4848
-SET domainName=girocheck1
+SET domainName=test_domain_creation
 SET domainAppPath="C:\glassfish4\glassfish\domains\GiroCheck\applications"
 SET domainPassPath="C:\REPO\Development\GiroCheck\etc\WebServer Command Files\XPASS.txt"
 

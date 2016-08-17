@@ -45,48 +45,7 @@ public class TecnicardHostManager {
 
     private Transaction transaction;
 
-//    private static void sequence(int type){
-//        
-//        if (type == 0) {
-//            //New card load
-//            CODE_000000 = "000000";
-//            CODE_100011 = "100011";
-//            CODE_100012 = "100012"; //RELOAD
-//            CODE_100015 = "100015";
-//
-//            TRANSACTION_SEQUENCE = new HashMap();
-//
-//            TransactionType[] resp_000000 = new TransactionType[]{TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//            TransactionType[] resp_100011 = new TransactionType[]{TransactionType.TECNICARD_CARD_ACTIVATION, TransactionType.TECNICARD_CARD_PERSONALIZATION, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//            TransactionType[] resp_100012 = new TransactionType[]{TransactionType.TECNICARD_CARD_ACTIVATION, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//            TransactionType[] resp_100015 = new TransactionType[]{TransactionType.TECNICARD_CARD_PERSONALIZATION, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//
-//            TRANSACTION_SEQUENCE.put(CODE_000000, resp_000000);
-//            TRANSACTION_SEQUENCE.put(CODE_100011, resp_100011);
-//            TRANSACTION_SEQUENCE.put(CODE_100012, resp_100012); //reload
-//            TRANSACTION_SEQUENCE.put(CODE_100015, resp_100015);            
-//        } else {
-//            //Card reload
-//            CODE_000000 = "000000";
-//            CODE_100011 = "100011";
-//            CODE_100012 = "100012"; //RELOAD
-//            CODE_100015 = "100015";
-//
-//            TRANSACTION_SEQUENCE = new HashMap();
-//
-//            TransactionType[] resp_000000 = new TransactionType[]{TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//            TransactionType[] resp_100011 = new TransactionType[]{TransactionType.TECNICARD_CARD_ACTIVATION, TransactionType.TECNICARD_CARD_PERSONALIZATION, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//            TransactionType[] resp_100012 = new TransactionType[]{TransactionType.TECNICARD_CARD_ACTIVATION, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//            TransactionType[] resp_100015 = new TransactionType[]{TransactionType.TECNICARD_CARD_PERSONALIZATION, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION};
-//
-//            TRANSACTION_SEQUENCE.put(CODE_000000, resp_000000);
-//            TRANSACTION_SEQUENCE.put(CODE_100011, resp_100011);
-//            TRANSACTION_SEQUENCE.put(CODE_100012, resp_100012); //reload
-//            TRANSACTION_SEQUENCE.put(CODE_100015, resp_100015);            
-//        }
-//        
-//    }
-//    
+    
     static {
         CODE_000000 = "000000";
         CODE_100011 = "100011";
@@ -234,9 +193,9 @@ public class TecnicardHostManager {
 
                 String resultCodee = (String) sessionTagMapp.get(ParameterName.RESULT_CODE);
 
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] TECNICARD_CARD_VALIDATION resultCode = " + resultCodee, null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] ISTREAM_CHECK_AUTH_LOCATION_CONFIG resultCode = " + resultCodee, null);
 
-//                if (TRANSACTION_SEQUENCE.containsKey(resultCodee)) {
+                if (TRANSACTION_SEQUENCE.containsKey(resultCodee)) {
 
                     addSubTransaction(TransactionType.TECNICARD_CARD_VALIDATION, ResultCode.SUCCESS, ResultMessage.SUCCESS.getMessage(), resultCodee);
 
@@ -246,9 +205,9 @@ public class TecnicardHostManager {
                     response.setResultCode(ResultCode.SUCCESS);
                     response.setResultMessage(ResultMessage.SUCCESS.getMessage());
                     return response;
-//                } else {
-//                    return manageUnexpectedAnswer(sessionTagMapp, TransactionType.TECNICARD_CARD_VALIDATION);
-//                }
+                } else {
+                    return manageUnexpectedAnswer(sessionTagMapp, TransactionType.TECNICARD_CARD_VALIDATION);
+                }
                   
             case GENERIC_HOST_CARD_LOAD:
                 if ( !request.getTransactionData().containsKey( ParameterName.OPERATION ) ) {

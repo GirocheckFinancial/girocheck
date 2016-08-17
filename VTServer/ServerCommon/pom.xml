@@ -14,7 +14,7 @@
 
     <name>ServerCommon</name>
     <url>http://maven.apache.org</url>
-<!--    <repositories>
+    <!--    <repositories>
         <repository>
             <id>unknown-jars-temp-repo</id>
             <name>A temporary repository created by NetBeans for libraries and jars it could not identify. Please replace the dependencies in this repository with correct ones and delete this repository.</name>
@@ -144,7 +144,17 @@
           <artifactId>DynamicJasper</artifactId>
           <version>5.0.2</version>
         </dependency>-->
-
-        
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160212</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 </project>

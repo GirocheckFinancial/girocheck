@@ -1,4 +1,3 @@
-
 package com.smartbt.girocheck.scan;
 
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
@@ -11,12 +10,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for checkAuthLocationConfigRequest complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
+ * Java class for checkAuthLocationConfigRequest complex type.
+ *
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
+ *
  * <pre>
  * &lt;complexType name="checkAuthLocationConfigRequest">
  *   &lt;complexContent>
@@ -30,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "checkAuthLocationConfigRequest", propOrder = {
@@ -41,26 +42,28 @@ import javax.xml.bind.annotation.XmlType;
     "terminalId",
     "amount",
     "cardNumber",
-    "operation"
-    
+    "operation",
+    "tecnicardValidationResponse"
 })
-public class CheckAuthLocationConfigRequest implements IMap{
-    private  String user;
-    private  String password;
-    private  String requestId;
-    private  String terminalId;
-    private  String amount;
+public class CheckAuthLocationConfigRequest implements IMap {
+
+    private String user;
+    private String password;
+    private String requestId;
+    private String terminalId;
+    private String amount;
     private String cardNumber;
     private String operation;
-    
-   @Override
-   public Map toMap() {
-      Map map = new HashMap();
-      
-      String errors = "";
-      
-      
-      map.put(TransactionType.TRANSACTION_TYPE, TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG);
+
+    private String tecnicardValidationResponse;
+
+    @Override
+    public Map toMap() {
+        Map map = new HashMap();
+
+        String errors = "";
+
+        map.put(TransactionType.TRANSACTION_TYPE, TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG);
         map.put(ParameterName.USER, getUser());
         map.put(ParameterName.PASSWORD, getPassword());
         map.put(ParameterName.REQUEST_ID, getRequestId());
@@ -68,15 +71,19 @@ public class CheckAuthLocationConfigRequest implements IMap{
         map.put(ParameterName.AMMOUNT, getAmount());
         map.put(ParameterName.CARD_NUMBER, getCardNumber());
         map.put(ParameterName.OPERATION, getOperation());
-        
-       errors += validateRequiredFields(map);
 
-       if (!errors.isEmpty()) {
-           map.put(ParameterName.VALIDATION_ERROR, errors);
-       }
-    return map;
+        errors += validateRequiredFields(map);
+
+        if (!errors.isEmpty()) {
+            map.put(ParameterName.VALIDATION_ERROR, errors);
+        }
+
+        if (tecnicardValidationResponse != null && !tecnicardValidationResponse.isEmpty()) { //for dev and test
+            map.put(ParameterName.TECNICARD_VALIDATION_RESPONSE, tecnicardValidationResponse);
+        }
+        return map;
     }
-   
+
     public String validateRequiredFields(Map map) {
 
         StringBuilder buffer = new StringBuilder();
@@ -89,7 +96,7 @@ public class CheckAuthLocationConfigRequest implements IMap{
             if (value == null || value.toString().isEmpty()) {
                 buffer.append("Field ").append(key).append(" required. " + '\n');
             }
-          
+
         }
         return buffer.toString();
     }
@@ -191,6 +198,19 @@ public class CheckAuthLocationConfigRequest implements IMap{
     public void setOperation(String operation) {
         this.operation = operation;
     }
-  
-   
+
+    /**
+     * @return the tecnicardValidationResponse
+     */
+    public String getTecnicardValidationResponse() {
+        return tecnicardValidationResponse;
+    }
+
+    /**
+     * @param tecnicardValidationResponse the tecnicardValidationResponse to set
+     */
+    public void setTecnicardValidationResponse(String tecnicardValidationResponse) {
+        this.tecnicardValidationResponse = tecnicardValidationResponse;
+    }
+
 }

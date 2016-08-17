@@ -24,7 +24,6 @@ import com.smartbt.girocheck.servercommon.model.Terminal;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
-import com.smartbt.vtsuite.util.CoreLogger;
 import com.smartbt.vtsuite.util.CoreTransactionUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.io.Serializable;
@@ -63,8 +62,8 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
 
     private static ApplicationParameterManager parameterManager = new ApplicationParameterManager();
 
-    public CoreCardToBankBusinessLogic(CoreLogger coreLogger) {
-        super(coreLogger);
+    public CoreCardToBankBusinessLogic() {
+        super();
     }
 
     @Override
@@ -114,6 +113,9 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             }
             Terminal terminal = terminalManager.findBySerialNumber( terminalId );
             merchant = terminal.getMerchant();
+            
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Merchant = " + (merchant == null ? "NULL" : "NOT NULL"), null);
+            
             if(merchant != null){
                 merchantAccountNumber = merchant.getAccount();
                 merchantRoutingNumber = merchant.getRoutingBankNumber();
@@ -124,9 +126,12 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             HibernateUtil.commitTransaction();
 
         } catch (Exception e) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Error getting data from DataBase method process() first WS", e.getMessage());
+            e.printStackTrace();
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::]>> Error getting data from DataBase method process() first WS", e.getMessage());
             HibernateUtil.rollbackTransaction();
         }
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] hasAch = " + hasAch, null);
 
         if (hasAch) {
 
@@ -340,10 +345,6 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreCardToBankBL::] Transaction finished successfully", null);
 
         } catch (TecnicardNotRespondException tnre) {
-            //******************************************************************************************************
-            //this is in case of Tecnicard don't respond.
-            coreLogger.logAndStore("CoreCardToBankBL", " [CoreCardToBankBL::]       TecnicardNotRespondException...");
-//            log.debug("[CoreCardToBankBL::] TecnicardNotRespondException...",tnre);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] TecnicardNotRespondException...",tnre.getMessage());
 
             direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.TECNICARD_RESPONSE_TIME_EXCEEDED, ResultMessage.RESPONSE_TIME_EXCEEDED," Tecnicard","");

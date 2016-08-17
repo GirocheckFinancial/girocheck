@@ -142,12 +142,7 @@ public class PersonalInfoRequest implements IMap {
     private String locationId;
     private String paymentCheck;
     
-    
-    public void print(){
-//      log.debug("PersonalInfoRequest:: \n" + ReflectionToStringBuilder.reflectionToString( this ));
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "PersonalInfoRequest:: \n" + ReflectionToStringBuilder.reflectionToString( this ),null);
-    }
-    
+     
     
     @Override
     public Map toMap() {
@@ -155,12 +150,6 @@ public class PersonalInfoRequest implements IMap {
         String errors = "";
 
         if(getId() != null && !getId().equals("0")){
-
-            map.put(ParameterName.FEE_AMMOUNT, getFeeAmount());
-            map.put(ParameterName.PAYOUT_AMMOUNT, getPayoutAmount());
-
-            errors += validateAmmountFields(map);
-
             map.put(ParameterName.USER, getUser());
             map.put(ParameterName.PASSWORD, getPassword());
             map.put(ParameterName.CHECK_ID, getCheckId());
@@ -486,6 +475,7 @@ public class PersonalInfoRequest implements IMap {
      */
     //@JsonDeserialize(using=CustomDateDeserializer.class)
     public void setBornDate(Date bornDate) throws ParseException {
+        System.out.println("setBornDate = " + bornDate);
         this.bornDate = bornDate;
     }
 

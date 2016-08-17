@@ -142,7 +142,7 @@ public class EmailManager {
 //
 //    }
     public static void sendTheEmail( String methodName, Map values ) throws Exception {
-        sendTheEmail( null, methodName, values );
+//        sendTheEmail( null, methodName, values );
     }
 
     public static void sendTheEmail( Map<ParameterName, ImagePart> images, String methodName, Map values ) throws Exception {
@@ -198,7 +198,7 @@ public class EmailManager {
         }
 
         email.setMessage( buffer.toString(), "text/html" );
-        email.sendEmail( recipients, server_from_address, receiptTitle, email_debug );
+//        email.sendEmail( recipients, server_from_address, receiptTitle, email_debug );
     }
 
 }

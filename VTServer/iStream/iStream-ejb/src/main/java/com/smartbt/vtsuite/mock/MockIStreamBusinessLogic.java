@@ -20,9 +20,7 @@ import com.smartbt.vtsuite.boundary.ws.CheckAuthLocationConfigRes;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthPollItem;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthPollRequest;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthPollRes;
-import com.smartbt.vtsuite.boundary.ws.CheckAuthRequest;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthRes;
-import com.smartbt.vtsuite.boundary.ws.CheckAuthSubmitRequest;
 import com.smartbt.vtsuite.boundary.ws.Code;
 import com.smartbt.vtsuite.boundary.ws.EnhancedCheckAuthPollItem;
 import com.smartbt.vtsuite.boundary.ws.EnhancedCheckAuthPollRequest;
@@ -30,9 +28,8 @@ import com.smartbt.vtsuite.boundary.ws.EnhancedCheckAuthPollRes;
 import com.smartbt.vtsuite.boundary.ws.Scan;
 import com.smartbt.vtsuite.boundary.ws.Scan_Service;
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
-import com.smartbt.vtsuite.dao.HostTransactionDAO;
+
 import com.smartbt.girocheck.servercommon.log.LogUtil;
-import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
@@ -54,7 +51,7 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
     private Scan port = service.getScanPort();
 
 //    private static MpowaCommunicator mpowaComms = new MpowaCommunicator();
-    private HostTransactionDAO hostDAO = new HostTransactionDAO();
+
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MockIStreamBusinessLogic.class);
 
     /**

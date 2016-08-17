@@ -45,7 +45,7 @@ public class HostTransactionDAO {
      * @return terminal parameters.
      * @throws Exception
      */
-    public Map getTerminalHostParameters(Integer terminalId) throws Exception {
+    public Map getTerminalHostParametersX(Integer terminalId) throws Exception {
         Map<String, String> params = new HashMap<String, String>();
         Criteria criteria = HibernateUtil.getSession().createCriteria(TerminalHostParameterValue.class, "TerminalHostParameterValue").
                 createAlias("TerminalHostParameterValue.terminalHost", "TerminalHost").
@@ -72,7 +72,7 @@ public class HostTransactionDAO {
      * @return Sequence number.
      * @throws Exception
      */
-    public int getIncrementSeqNum(Integer terminalId) throws Exception {
+    public int getIncrementSeqNumX(Integer terminalId) throws Exception {
         int seqNumInc = 0000;
             Criteria criteria = HibernateUtil.getSession().createCriteria(TerminalHostParameterValue.class, "TerminalHostParameterValue").
                     createAlias("TerminalHostParameterValue.terminalHost", "TerminalHost").
@@ -101,7 +101,7 @@ public class HostTransactionDAO {
      * @return Merchant parameters.
      * @throws Exception
      */
-    public Map getMerchantHostParameters(Integer terminalId) throws Exception {
+    public Map getMerchantHostParametersX(Integer terminalId) throws Exception {
         Map<String, String> params = new HashMap<String, String>();
             Criteria criteria = HibernateUtil.getSession().createCriteria(MerchantHostParameterValue.class, "MerchantHostParameterValue").
                     createAlias("MerchantHostParameterValue.merchantHost", "MerchantHost").
@@ -128,7 +128,7 @@ public class HostTransactionDAO {
      * @return Host parameters.
      * @throws Exception
      */
-    public Map getHostParameters() throws Exception {
+    public Map getHostParametersX() throws Exception {
         Map<String, String> params = new HashMap<String, String>();
             Criteria criteria = HibernateUtil.getSession().createCriteria(HostParameterValue.class, "HostParameterValue").
                     createAlias("HostParameterValue.host", "Host").

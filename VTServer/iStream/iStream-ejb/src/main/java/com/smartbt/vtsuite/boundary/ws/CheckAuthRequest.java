@@ -202,34 +202,34 @@ public class CheckAuthRequest {
             //catch exception 
         }
     }
-//    public void printAsXML() {
-//        System.out.println( "<CheckAuthRequest>" );
-//        System.out.println( "      <sendUser> " + sendUser + " </sendUser>" );
-//        System.out.println( "      <password> " + password + " </password>" );
-//        System.out.println( "      <addressCorrect> " + addressCorrect + " </addressCorrect>" );
-//        System.out.println( "      <amount> " + amount + " </amount>" );
-//        System.out.println( "      <backTiff> " + ( backTiff != null && backTiff.length > 0 ? "an image" : " null" ) + " </backTiff>" );
-//        System.out.println( "      <frontTiff> " + ( frontTiff != null && frontTiff.length > 0 ? "an image" : " null" ) + " </frontTiff>" );
-//        System.out.println( "      <checkBack> " + ( checkBack != null && checkBack.length > 0 ? "an image" : " null" ) + " </checkBack>" );
-//        System.out.println( "      <checkFront> " + ( checkFront != null && checkFront.length > 0 ? "an image" : " null" ) + " </checkFront>" );
-//        System.out.println( "      <idBack> " + ( idBack != null && idBack.length > 0 ? "an image" : " null" ) + " </idBack>" );
-//        System.out.println( "      <idFront> " + ( idFront != null && idFront.length > 0 ? "an image" : " null" ) + " </idFront>" );
-//        System.out.println( "      <batchName> " + batchName + " </batchName>" );
-//        System.out.println( "      <cardNumber> " + cardNumber + " </cardNumber>" );
-//        System.out.println( "      <crc> " + crc + " </crc>" );
-//        System.out.println( "      <data> " + ( data != null ? "an Object" : "null" ) + " </data>" );
-//        System.out.println( "      <emailAddress> " + emailAddress + " </emailAddress>" );
-//        System.out.println( "      <entityNumber> " + entityNumber + " </entityNumber>" );
-//        System.out.println( "      <iqaRawData> " + iqaRawData + " </iqaRawData>" );
-//        System.out.println( "      <micr> " + micr + " </micr>" );
-//        System.out.println( "      <phone> " + phone + " </phone>" );
-//        System.out.println( "      <scanTime> " + scanTime + " </scanTime>" );
-//        System.out.println( "      <scannerManufacturer> " + scannerManufacturer + " </scannerManufacturer>" );
-//        System.out.println( "      <sendTime> " + sendTime + " </sendTime>" );
-//        System.out.println( "      <serial> " + serial + " </serial>" );
-//        System.out.println( "      <ssn> " + ssn + " </ssn>" );
-//        System.out.println( "</CheckAuthRequest>" );
-//    }
+    public void printAsXML() {
+        System.out.println( "<CheckAuthRequest>" );
+        System.out.println( "      <sendUser> " + sendUser + " </sendUser>" );
+        System.out.println( "      <password> " + password + " </password>" );
+        System.out.println( "      <addressCorrect> " + addressCorrect + " </addressCorrect>" );
+        System.out.println( "      <amount> " + amount + " </amount>" );
+        System.out.println( "      <backTiff> " + ( backTiff != null && backTiff.length > 0 ? "an image" : " null" ) + " </backTiff>" );
+        System.out.println( "      <frontTiff> " + ( frontTiff != null && frontTiff.length > 0 ? "an image" : " null" ) + " </frontTiff>" );
+        System.out.println( "      <checkBack> " + ( checkBack != null && checkBack.length > 0 ? "an image" : " null" ) + " </checkBack>" );
+        System.out.println( "      <checkFront> " + ( checkFront != null && checkFront.length > 0 ? "an image" : " null" ) + " </checkFront>" );
+        System.out.println( "      <idBack> " + ( idBack != null && idBack.length > 0 ? "an image" : " null" ) + " </idBack>" );
+        System.out.println( "      <idFront> " + ( idFront != null && idFront.length > 0 ? "an image" : " null" ) + " </idFront>" );
+        System.out.println( "      <batchName> " + batchName + " </batchName>" );
+        System.out.println( "      <cardNumber></cardNumber>" );
+        System.out.println( "      <crc> " + crc + " </crc>" );
+        System.out.println( "      <data> " + ( data != null ? "an Object" : "null" ) + " </data>" );
+        System.out.println( "      <emailAddress> " + emailAddress + " </emailAddress>" );
+        System.out.println( "      <entityNumber> " + entityNumber + " </entityNumber>" );
+        System.out.println( "      <iqaRawData> " + iqaRawData + " </iqaRawData>" );
+        System.out.println( "      <micr> " + micr + " </micr>" );
+        System.out.println( "      <phone> " + phone + " </phone>" );
+        System.out.println( "      <scanTime> " + scanTime + " </scanTime>" );
+        System.out.println( "      <scannerManufacturer> " + scannerManufacturer + " </scannerManufacturer>" );
+        System.out.println( "      <sendTime> " + sendTime + " </sendTime>" );
+        System.out.println( "      <serial> " + serial + " </serial>" );
+        System.out.println( "      <ssn> " + ssn + " </ssn>" );
+        System.out.println( "</CheckAuthRequest>" );
+    }
 
     /**
      * Gets the value of the addressCorrect property.

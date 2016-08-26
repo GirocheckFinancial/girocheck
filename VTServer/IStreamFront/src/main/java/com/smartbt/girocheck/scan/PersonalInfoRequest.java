@@ -154,7 +154,7 @@ public class PersonalInfoRequest implements IMap {
             map.put(ParameterName.PASSWORD, getPassword());
             map.put(ParameterName.CHECK_ID, getCheckId());
             map.put(ParameterName.ID, getId());
-            map.put(ParameterName.IDTYPE, IdType.getIdType(getIdType()));
+//            map.put(ParameterName.IDTYPE, IdType.getIdType(getIdType()));  // Don't take the ID Type from here
             map.put(ParameterName.TELEPHONE, getTelephone());
             map.put(ParameterName.EMAIL, getEmail());
             map.put(ParameterName.ADDRESS, getAddress());

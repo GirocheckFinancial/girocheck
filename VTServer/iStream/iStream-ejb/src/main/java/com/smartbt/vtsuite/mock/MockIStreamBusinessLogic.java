@@ -36,6 +36,7 @@ import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.utils.IMap;
+import com.smartbt.vtsuite.boundary.ws.CheckAuthRequest;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthSubmitRes;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,7 +85,7 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
                 response = checkAuthLocationConfig(new CheckAuthLocationConfigRequest().build(transactionData));
                 break;
             case ISTREAM_CHECK_AUTH:
-               response = checkAuth();
+               response = checkAuth(transactionData);
                 break;
             case ISTREAM_CHECK_AUTH_POLL:
                 response = checkAuthPoll(new CheckAuthPollRequest().build(transactionData));
@@ -137,9 +138,10 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
         return response;
     }
 
-     public CheckAuthRes checkAuth(){
-        // arg0.printAsXML();
-         
+     public CheckAuthRes checkAuth(Map transactionData) throws Exception{
+         CheckAuthRequest request = new CheckAuthRequest();
+         request.build(transactionData);
+         request.printAsXML();
          CheckAuthRes response = new CheckAuthRes();
             
         response.setCheckId("151258878");

@@ -21,7 +21,6 @@ import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.model.Address;
 import com.smartbt.girocheck.servercommon.model.Check;
 import com.smartbt.girocheck.servercommon.model.Country;
-import com.smartbt.girocheck.servercommon.model.PersonInfo;
 import com.smartbt.girocheck.servercommon.model.PersonalIdentification;
 import com.smartbt.girocheck.servercommon.model.State;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
@@ -33,7 +32,6 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomState;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringReader;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,11 +39,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
@@ -57,13 +53,6 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.sql.rowset.serial.SerialBlob;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.ws.BindingProvider;
-import net.warp68.Licenses;
-import net.warp68.LicensesSoap;
 
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransactionBusinessLogic {
@@ -946,7 +935,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] getPersonalInfoFromIDReader() contains datascan or dataswipe", null);
 
                 Map personalInfoMap = null;
-                String dlData;
+                String dlData = "";
 
                 if (request.getTransactionData().get(ParameterName.DLDATASCAN) != null && !request.getTransactionData().get(ParameterName.DLDATASCAN).equals("")) {
 
@@ -960,7 +949,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                 }
 
-                if (!dlData.equals("")) {
+               if (dlData != null && !dlData.isEmpty()) {
                     try {
                         personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
                     } catch (Exception e) {

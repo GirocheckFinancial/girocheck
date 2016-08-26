@@ -137,7 +137,7 @@ public class CoreTransactionUtil {
             }
         }
 
-        return isITIN(ssn) ? IdType.OTHERS : IdType.DRIVER_LICENSE;
+        return isITIN(ssn) ? IdType.OTHERS : IdType.SSN;
     }
 
     private static boolean isITIN(String ssn) {

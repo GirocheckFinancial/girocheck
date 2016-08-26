@@ -22,6 +22,7 @@ import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.log.LogUtil;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
+import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.IMap;
 import com.smartbt.vtsuite.boundary.client.BalanceInquiryResponse;
@@ -151,7 +152,14 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
     private IMap wmCardPersonalization(Map map) throws Exception {
 
-        String pIdType = MapUtil.getStringValueFromMap(map, ParameterName.IDTYPE, false);
+        Integer idType = 0;
+        
+        if(map.containsKey(ParameterName.IDTYPE)){
+            IdType type = (IdType)map.get(ParameterName.IDTYPE);
+            idType = type.getId();
+        }
+        
+//        String pIdType = MapUtil.getStringValueFromMap(map, ParameterName.IDTYPE, false);
         String pState = MapUtil.getStringValueFromMap(map, ParameterName.STATE, false);
         String pDateOfBirth = MapUtil.getStringValueFromMap(map, ParameterName.DATEOF_BIRTH, false);
         String pAddress = MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false);
@@ -188,7 +196,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> Processing CardPersonalization...", null);
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID "
-                + pRequestID + ",  pCard " + pCard + ",  pId " + pId + ",  pIdType " + pIdType + ",  pIdExpiration " + pIdExpiration + ",  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
+                + pRequestID + ",  pCard " + pCard + ",  pId " + pId + ",  pIdType " + idType + ",  pIdExpiration " + pIdExpiration + ",  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
                 + pState + ", pCity " + pCity + ", pAddress  " + pAddress + ", pZipCode " + pZipCode + ", pEmail " + pEmail + ", pTelephoneAreaCode " + pTelephoneAreaCode + ", pTelephone " + pTelephone + ", pCellphoneAreaCode " + pCellphoneAreaCode + ", pCellphone " + pCellphone + ", pWorkphoneAreaCode " + pWorkphoneAreaCode + ", pWorkphone " + pWorkphone + ", pFaxAreaCode " + pFaxAreaCode + ", pFaxphone " + pFaxphone + ", pRBService " + pRBService + ", pCurrentAddress " + pCurrentAddress + ")", null);
 
         CardCreationResponse cardCreationResponse = new CardCreationResponse();

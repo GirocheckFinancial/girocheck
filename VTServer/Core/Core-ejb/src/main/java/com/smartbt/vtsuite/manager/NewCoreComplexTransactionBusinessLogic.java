@@ -65,11 +65,7 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.sql.rowset.serial.SerialBlob;
-import net.warp68.Licenses;
-import net.warp68.LicensesSoap;
 import org.apache.xerces.impl.dv.util.Base64;
-import org.tempuri.VerifyBarcodeService;
-import org.tempuri.VerifyBarcodeServiceSoap;
 
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransactionBusinessLogic {
@@ -1075,8 +1071,6 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] extractTecnicardConfirmationInformation(...) DONE", null);
     }
 
-    private VerifyBarcodeService service;
-    private VerifyBarcodeServiceSoap port;
 
     private void validateCheckTruncation(DirexTransactionRequest request) throws Exception {
 
@@ -1347,7 +1341,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] getPersonalInfoFromIDReader() contains datascan or dataswipe", null);
 
                 Map personalInfoMap = null;
-                String dlData;
+                String dlData = "";
 
                 if (request.getTransactionData().get(ParameterName.DLDATASCAN) != null && !request.getTransactionData().get(ParameterName.DLDATASCAN).equals("")) {
 
@@ -1361,7 +1355,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                 }
 
-                if (!dlData.equals("")) {
+                if (dlData != null && !dlData.isEmpty()) {
                     try {
                         personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
                     } catch (Exception e) {

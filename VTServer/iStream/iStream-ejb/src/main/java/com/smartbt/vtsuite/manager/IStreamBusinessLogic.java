@@ -23,8 +23,6 @@ import com.smartbt.vtsuite.boundary.ws.EnhancedCheckAuthPollRequest;
 import com.smartbt.vtsuite.boundary.ws.Scan;
 import com.smartbt.vtsuite.boundary.ws.Scan_Service;
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
-import com.smartbt.girocheck.servercommon.log.LogUtil;
-import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 
@@ -34,7 +32,6 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthRes;
-import java.net.URL;
 
 import java.util.HashMap;
 import java.util.Map;

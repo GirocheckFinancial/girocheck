@@ -62,7 +62,18 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
 
         switch ( transactionType ) {
             case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
-                    response = checkAuthLocationConfig( direxTransactionRequest, transaction );                    
+                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] processing ISTREAM_CHECK_AUTH_LOCATION_CONFIG",null);
+           
+                 boolean isNewLocationConfig = isNewLocationConfig( direxTransactionRequest);
+                    
+                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] isNewLocationConfig = " + isNewLocationConfig,null);
+                 
+                 if(isNewLocationConfig){
+                        response = checkAuthLocationConfig( direxTransactionRequest, transaction );                    
+                    }else{
+                        response = oldCheckAuthLocationConfig( direxTransactionRequest, transaction );                    
+                    }
+                    
                     break;
 
         }
@@ -80,106 +91,114 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
         transactionManager.saveOrUpdate( transaction );
         HibernateUtil.commitTransaction();
     }
+    
+    private boolean isNewLocationConfig(DirexTransactionRequest direxTransactionRequest){
+       Map data = direxTransactionRequest.getTransactionData();
+       
+       return data.containsKey(ParameterName.AMMOUNT)
+               && data.containsKey(ParameterName.CARD_NUMBER)
+               && data.containsKey(ParameterName.OPERATION);
+    }
+
+    public DirexTransactionResponse oldCheckAuthLocationConfig( DirexTransactionRequest direxTransactionRequest, Transaction transaction ) throws Exception {
+//        coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "checkAuthLocationConfig");
+//        log.info( "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...)");
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] oldCheckAuthLocationConfig(...)",null);
+       // Map requestMap = direxTransactionRequest.getTransactionData();
+        Map responseMap;
+        DirexTransactionResponse response;
+//        Map applicationParameterMap = new HashMap();
+        
+        //Go to make checkAuthLocationConfig to Istream and update fees.
+        
+            direxTransactionRequest.setTransactionType(TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG);
+            response = sendMessageToHost(direxTransactionRequest, NomHost.ISTREAM.toString(), ISTREAM_HOST_WAIT_TIME,   transaction); 
+            if (!response.wasApproved()) {
+                response.setTransactionType(direxTransactionRequest.getTransactionType());
+                CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
+                return null;
+            } else {
+                transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
+            }
+
+            responseMap = response.getTransactionData();
+            
+            List list = (List)responseMap.get(ParameterName.CONFIG_LIST);
+            
+            responseMap = new HashMap();
+            
+        for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+            Map next = (Map)iterator.next();
+            
+            String parameter = (String) next.get(ParameterName.LABEL);
+//            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic","ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter);
+//            log.debug("[CoreLocalTransactionBusinessLogic] ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] ISTREAM oldCheckAuthLocationConfig() printing incoming label: "+parameter,null);
+            switch ( parameter ) {
+                case "AUTHFEEM":
+                        responseMap.put(ParameterName.AUTH_FEEM, next.get(ParameterName.VALUE));                    
+                        break;
+                case "AUTHFEEP":
+                        responseMap.put(ParameterName.AUTH_FEEP, next.get(ParameterName.VALUE));                 
+                        break;
+                case "CRDLDF":
+//                        responseMap.put(ParameterName.CRDLDF, next.get(ParameterName.VALUE));        
+                        responseMap.put(ParameterName.CRDLDF, "3.95");        
+                        break;
+
+            }
+            
+        }
+        //por ahora ponerlo fijo
+        responseMap.put(ParameterName.CRDLDF, "3.95"); 
+
+//        try {
+//            HibernateUtil.beginTransaction();
+//            ApplicationParameterManager applicationParameterManager = new ApplicationParameterManager();
 //
-//    public DirexTransactionResponse checkAuthLocationConfig( DirexTransactionRequest direxTransactionRequest, Transaction transaction ) throws Exception {
-////        coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "checkAuthLocationConfig");
-////        log.info( "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...)");
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...)",null);
-//       // Map requestMap = direxTransactionRequest.getTransactionData();
-//        Map responseMap;
-//        DirexTransactionResponse response;
-////        Map applicationParameterMap = new HashMap();
+//             applicationParameterList = applicationParameterManager.listParameterValue();
+//             
+//             
+//             
+////             coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "applicationParameterMap.keySet().size() :: " + applicationParameterMap.keySet().size());
+//             coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "applicationParameterList.size() :: " + applicationParameterList.size());
 //        
-//        //Go to make checkAuthLocationConfig to Istream and update fees.
-//        
-//            direxTransactionRequest.setTransactionType(TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG);
-//            response = sendMessageToHost(direxTransactionRequest, NomHost.ISTREAM.toString(), ISTREAM_HOST_WAIT_TIME, false, transaction);
-//
-//            if (!response.wasApproved()) {
-//                response.setTransactionType(direxTransactionRequest.getTransactionType());
-//                CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
-//                return null;
-//            } else {
-//                transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
-//            }
-//
-//            responseMap = response.getTransactionData();
-//            
-//            List list = (List)responseMap.get(ParameterName.CONFIG_LIST);
-//            
-//            responseMap = new HashMap();
-//            
-//        for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-//            Map next = (Map)iterator.next();
-//            
-//            String parameter = (String) next.get(ParameterName.LABEL);
-////            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic","ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter);
-////            log.debug("[CoreLocalTransactionBusinessLogic] ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter);
-//            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter,null);
-//            switch ( parameter ) {
-//                case "AUTHFEEM":
-//                        responseMap.put(ParameterName.AUTH_FEEM, next.get(ParameterName.VALUE));                    
-//                        break;
-//                case "AUTHFEEP":
-//                        responseMap.put(ParameterName.AUTH_FEEP, next.get(ParameterName.VALUE));                 
-//                        break;
-//                case "CRDLDF":
-////                        responseMap.put(ParameterName.CRDLDF, next.get(ParameterName.VALUE));        
-//                        responseMap.put(ParameterName.CRDLDF, "3.95");        
-//                        break;
-//
-//            }
-//            
+//            HibernateUtil.commitTransaction();
+//        } catch ( Exception e ) {
+//            e.printStackTrace();
+//            HibernateUtil.rollbackTransaction();
 //        }
-//
-////        try {
-////            HibernateUtil.beginTransaction();
-////            ApplicationParameterManager applicationParameterManager = new ApplicationParameterManager();
-////
-////             applicationParameterList = applicationParameterManager.listParameterValue();
-////             
-////             
-////             
-//////             coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "applicationParameterMap.keySet().size() :: " + applicationParameterMap.keySet().size());
-////             coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "applicationParameterList.size() :: " + applicationParameterList.size());
-////        
-////            HibernateUtil.commitTransaction();
-////        } catch ( Exception e ) {
-////            e.printStackTrace();
-////            HibernateUtil.rollbackTransaction();
-////        }
-//       
-////        for ( Object key : applicationParameterMap.keySet() ) {
-////           coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", (String) key + ":: " + (String)applicationParameterMap.get( key ));
-////        }
-//
-////        if ( applicationParameterMap.containsKey( EnumApplicationParameter.AUTH_FEEM.toString() ) ) {
-////            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "AUTH_FEEM :: " + (String) applicationParameterMap.get( EnumApplicationParameter.AUTH_FEEM.toString() ));
-////            responseMap.put( ParameterName.AUTH_FEEM, (String) applicationParameterMap.get( EnumApplicationParameter.AUTH_FEEM.toString() ) );
-////        }
-////        if ( direxTransactionRequest.getTransactionData().containsKey( ParameterName.AUTH_FEEP ) ) {
-////             coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "AUTH_FEEP :: " + (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AUTH_FEEP));
-////            responseMap.put( ParameterName.AUTH_FEEP, (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AUTH_FEEP));
-////        }
-////        if ( applicationParameterMap.containsKey( EnumApplicationParameter.CRDLDF.toString() ) ) {
-////            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "CRDLDF :: " + (String) applicationParameterMap.get( EnumApplicationParameter.CRDLDF.toString() ));
-////            responseMap.put( ParameterName.CRDLDF, (String) applicationParameterMap.get( EnumApplicationParameter.CRDLDF.toString() ) );
-////        }   
-//        
-//        response.setResultCode(ResultCode.SUCCESS);
-//        response.setResultMessage(ResultMessage.SUCCESS.getMessage());
-//        
-//        if(!responseMap.containsKey(ParameterName.AUTH_FEEM) || responseMap.get(ParameterName.AUTH_FEEM) == null ||
-//                !responseMap.containsKey(ParameterName.AUTH_FEEP) || responseMap.get(ParameterName.AUTH_FEEP) == null ||
-//                !responseMap.containsKey(ParameterName.CRDLDF) || responseMap.get(ParameterName.CRDLDF) == null){
-//            response.setResultCode(ResultCode.ISTREAM_HOST_ERROR);
-//            response.setResultMessage(ResultMessage.ISTREAM_FAILED.getMessage() +" Error: Missing field.");
+       
+//        for ( Object key : applicationParameterMap.keySet() ) {
+//           coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", (String) key + ":: " + (String)applicationParameterMap.get( key ));
 //        }
-//        
-//        response.setTransactionData(responseMap);
-//        
-//        return response;//ajustar el transaction data con los campos q se le van a enviar a la terminal.
-//    }
+
+//        if ( applicationParameterMap.containsKey( EnumApplicationParameter.AUTH_FEEM.toString() ) ) {
+//            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "AUTH_FEEM :: " + (String) applicationParameterMap.get( EnumApplicationParameter.AUTH_FEEM.toString() ));
+//            responseMap.put( ParameterName.AUTH_FEEM, (String) applicationParameterMap.get( EnumApplicationParameter.AUTH_FEEM.toString() ) );
+//        }
+//        if ( direxTransactionRequest.getTransactionData().containsKey( ParameterName.AUTH_FEEP ) ) {
+//             coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "AUTH_FEEP :: " + (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AUTH_FEEP));
+//            responseMap.put( ParameterName.AUTH_FEEP, (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AUTH_FEEP));
+//        }
+//        if ( applicationParameterMap.containsKey( EnumApplicationParameter.CRDLDF.toString() ) ) {
+//            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic", "CRDLDF :: " + (String) applicationParameterMap.get( EnumApplicationParameter.CRDLDF.toString() ));
+//            responseMap.put( ParameterName.CRDLDF, (String) applicationParameterMap.get( EnumApplicationParameter.CRDLDF.toString() ) );
+//        }   
+        
+        response.setResultCode(ResultCode.SUCCESS);
+        response.setResultMessage(ResultMessage.SUCCESS.getMessage());
+        
+        if(!responseMap.containsKey(ParameterName.AUTH_FEEM) || responseMap.get(ParameterName.AUTH_FEEM) == null ||
+                !responseMap.containsKey(ParameterName.AUTH_FEEP) || responseMap.get(ParameterName.AUTH_FEEP) == null){
+            response.setResultCode(ResultCode.ISTREAM_HOST_ERROR);
+            response.setResultMessage(ResultMessage.ISTREAM_FAILED.getMessage() +" Error: Missing field.");
+        }
+        
+        response.setTransactionData(responseMap);
+        
+        return response;//ajustar el transaction data con los campos q se le van a enviar a la terminal.
+    }
     
     public DirexTransactionResponse checkAuthLocationConfig( DirexTransactionRequest direxTransactionRequest, Transaction transaction ) throws Exception {
         

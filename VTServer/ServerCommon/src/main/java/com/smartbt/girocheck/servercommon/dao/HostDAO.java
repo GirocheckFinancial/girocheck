@@ -60,7 +60,15 @@ public class HostDAO extends BaseDAO<Host> {
         }
 
         if (host == null) {
-            try {
+            return getDefaultHost();
+        }
+
+        return host;
+    }
+    
+     public Host getDefaultHost() {
+         Host host = null;
+         try {
                 Criteria criteria1 = HibernateUtil.getSession().createCriteria(Host.class).
                         add(Restrictions.eq("defaultHost", true));
 
@@ -69,15 +77,13 @@ public class HostDAO extends BaseDAO<Host> {
                 if (host == null) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[HostDAO] Never found host", null);
                 } else {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[HostDAO] Found default host", null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[HostDAO] Found default host :: " + host.getHostName(), null);
                 }
             } catch (Exception e2) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[HostDAO] Exception #3 in getHostByBinNumber and the exception was: ", e2.getMessage());
                 e2.printStackTrace();
             }
-        }
-
-        return host;
-    }
+         return host;
+     }
 
 }

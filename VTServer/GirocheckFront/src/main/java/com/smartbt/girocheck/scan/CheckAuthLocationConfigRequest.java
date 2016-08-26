@@ -68,11 +68,20 @@ public class CheckAuthLocationConfigRequest implements IMap {
         map.put(ParameterName.PASSWORD, getPassword());
         map.put(ParameterName.REQUEST_ID, getRequestId());
         map.put(ParameterName.TERMINAL_ID, getTerminalId());
-        map.put(ParameterName.AMMOUNT, getAmount());
-        map.put(ParameterName.CARD_NUMBER, getCardNumber());
-        map.put(ParameterName.OPERATION, getOperation());
-
+        
         errors += validateRequiredFields(map);
+        
+        if(amount != null && !amount.isEmpty()){
+             map.put(ParameterName.AMMOUNT, getAmount());
+        }
+       
+        if(cardNumber != null && !cardNumber.isEmpty()){
+              map.put(ParameterName.CARD_NUMBER, getCardNumber());
+        }
+        
+        if(operation != null && !operation.isEmpty()){
+               map.put(ParameterName.OPERATION, getOperation());   
+        }
 
         if (!errors.isEmpty()) {
             map.put(ParameterName.VALIDATION_ERROR, errors);

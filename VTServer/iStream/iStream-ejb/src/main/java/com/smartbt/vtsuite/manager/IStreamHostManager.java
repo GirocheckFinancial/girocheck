@@ -22,6 +22,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
+import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.mock.MockIStreamBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 
@@ -47,6 +48,8 @@ public class IStreamHostManager {
         try {
               response = (DirexTransactionResponse) businessLogic.handle( request );
         } catch ( Exception e ) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamHostManager] Istream-failed" ,null);
+            e.printStackTrace();
             return DirexTransactionResponse.forException( ResultCode.ISTREAM_HOST_ERROR, ResultMessage.ISTREAM_FAILED ," Description: " + e.getMessage(),"" );
         }
         

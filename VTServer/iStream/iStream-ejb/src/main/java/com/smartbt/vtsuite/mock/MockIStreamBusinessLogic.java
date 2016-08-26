@@ -175,14 +175,21 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
      public CheckAuthLocationConfigRes checkAuthLocationConfig(  CheckAuthLocationConfigRequest arg0){
          CheckAuthLocationConfigRes response = new CheckAuthLocationConfigRes();
          
-         Code code = new Code();
-         code.setExtra("Config: extra");
-         code.setExtra2("Config: extra2");
-         code.setLabel("Config: label");
-         code.setValue("Config: value");
+         Code code1 = new Code();
+         code1.setExtra("Config: extra");
+         code1.setExtra2("Config: extra2");
+         code1.setLabel("AUTHFEEM");
+         code1.setValue("1");
+         
+         Code code2 = new Code();
+         code2.setExtra("");
+         code2.setExtra2("");
+         code2.setLabel("AUTHFEEP");
+         code2.setValue("2");
          
          List codeList = new ArrayList();
-         codeList.add(code);
+         codeList.add(code1);
+         codeList.add(code2);
          
          response.setConfigList(codeList);
          

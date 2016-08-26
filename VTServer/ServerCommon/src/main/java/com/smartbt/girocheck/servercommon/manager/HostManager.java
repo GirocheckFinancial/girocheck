@@ -17,4 +17,8 @@ public class HostManager {
         return dao.getHostByBinNumber(binNumber);
     }
     
+    public Host getDefaultHost(){
+        return dao.getDefaultHost();
+    }
+    
 }

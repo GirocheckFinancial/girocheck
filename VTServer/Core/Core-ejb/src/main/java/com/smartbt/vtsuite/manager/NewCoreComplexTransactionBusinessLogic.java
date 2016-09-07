@@ -549,7 +549,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             }
 
             //-------------Validate whether the check was truncated successfully.
-            validateCheckTruncation(confirmationRequest);
+//            validateCheckTruncation(confirmationRequest);
 
             extractTecnicardConfirmationInformation(confirmationRequest);
 

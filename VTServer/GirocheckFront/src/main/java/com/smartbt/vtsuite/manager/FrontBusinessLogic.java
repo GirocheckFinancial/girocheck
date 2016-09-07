@@ -139,15 +139,15 @@ public class FrontBusinessLogic {
             e.printStackTrace();
         }
         
-        if(direxTransactionResponse.getTransactionData().containsKey("host")){
-            if(direxTransactionResponse.getResultCode().equals(ResultCode.SUCCESS)){
-                if(direxTransactionResponse.getTransactionData().get("host").equals("FUZE")){}
-            }else{
-                direxTransactionResponse.setResultMessage(direxTransactionResponse.getTerminalResultMessage());
-            }
-        }else{
+//        if(direxTransactionResponse.getTransactionData().containsKey("host")){
+//            if(direxTransactionResponse.getResultCode().equals(ResultCode.SUCCESS)){
+//                if(direxTransactionResponse.getTransactionData().get("host").equals("FUZE")){}
+//            }else{
+//                direxTransactionResponse.setResultMessage(direxTransactionResponse.getTerminalResultMessage());
+//            }
+//        }else{
             direxTransactionResponse.setResultMessage(direxTransactionResponse.getTerminalResultMessage());
-        }            
+//        }            
         
         
         return direxTransactionResponse;

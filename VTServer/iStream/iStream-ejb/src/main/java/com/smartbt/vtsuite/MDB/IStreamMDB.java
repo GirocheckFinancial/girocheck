@@ -45,7 +45,7 @@ import javax.jms.*;
 })
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class IStreamMDB implements MessageListener {
-
+//private IStreamHostManager hostManager = new IStreamHostManager();
 //    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(IStreamMDB.class);
     
     /**
@@ -67,7 +67,7 @@ public class IStreamMDB implements MessageListener {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamMDB] Recived a Mesage",null);
 
         JMSManager jmsManager = JMSManager.get();
-        IStreamHostManager hostManager = new IStreamHostManager();
+        
 
         DirexTransactionRequest direxTransactionRequest = null;
         DirexTransactionResponse direxTransactionResponse = null;
@@ -79,7 +79,7 @@ public class IStreamMDB implements MessageListener {
                 Serializable s = obj.getObject();
                 direxTransactionRequest = (DirexTransactionRequest) s;
 
-                direxTransactionResponse = hostManager.processTransaction(direxTransactionRequest);
+                direxTransactionResponse = IStreamHostManager.getInstance().processTransaction(direxTransactionRequest);
 
             } else {
                 direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.ISTREAM_HOST_RECEIVED_NULL, ResultMessage.HOST_RECEIVED_NULL);

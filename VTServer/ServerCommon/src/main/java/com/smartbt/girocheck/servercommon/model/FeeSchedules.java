@@ -13,7 +13,8 @@ public class FeeSchedules implements Serializable{
     private int id;
     private TransactionMethod method;
     private Merchant merchant;
-
+    private Boolean isdefault;
+    
     public FeeSchedules() {
     }
 
@@ -57,6 +58,20 @@ public class FeeSchedules implements Serializable{
      */
     public void setMethod(TransactionMethod method) {
         this.method = method;
+    }
+
+    /**
+     * @return the isdefault
+     */
+    public Boolean getIsdefault() {
+        return isdefault;
+    }
+
+    /**
+     * @param isdefault the isdefault to set
+     */
+    public void setIsdefault(Boolean isdefault) {
+        this.isdefault = isdefault;
     }
     
 }

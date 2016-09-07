@@ -74,6 +74,7 @@ public class MerchantDisplay implements Serializable {
     private Boolean documentApproved;
     private Boolean atm;
     private Boolean training;
+    private Boolean validate;
     private Boolean otherFinancialProvider;
 
     private String documentNotes;
@@ -691,6 +692,20 @@ public class MerchantDisplay implements Serializable {
      */
     public void setIdTellerPagoOrderExp(String idTellerPagoOrderExp) {
         this.idTellerPagoOrderExp = idTellerPagoOrderExp;
+    }
+
+    /**
+     * @return the validate
+     */
+    public Boolean getValidate() {
+        return validate;
+    }
+
+    /**
+     * @param validate the validate to set
+     */
+    public void setValidate(Boolean validate) {
+        this.validate = validate;
     }
 
 }

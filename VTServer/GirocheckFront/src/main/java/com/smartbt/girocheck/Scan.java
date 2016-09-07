@@ -25,6 +25,8 @@ import com.smartbt.girocheck.scan.TecnicardConfirmationRequest;
 import com.smartbt.girocheck.scan.TecnicardConfirmationRes;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.manager.FrontManager;
+import java.util.Iterator;
+import java.util.Map;
 import javax.jws.WebService;
 
 /**
@@ -70,7 +72,18 @@ public class Scan {
     public CheckAuthLocationConfigRes checkAuthLocationConfig( final CheckAuthLocationConfigRequest arg0 ) throws Exception {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] FRONT CHECK AUTH LOCATION CONFIG",null );
          
-        return new CheckAuthLocationConfigRes().build( FrontManager.processTransaction( arg0 ) );
+        Map map = FrontManager.processTransaction( arg0 );
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] Response got to Scan",null );
+        
+        Iterator it = map.keySet().iterator();
+        
+        while (it.hasNext()) {
+            Object key = it.next();
+             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] " + key + " -> " + map.get(key),null );
+        }
+        
+        return new CheckAuthLocationConfigRes().build( map );
  
     }
 

@@ -31,9 +31,18 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
  */
 public class IStreamHostManager {
     
-//  private IStreamBusinessLogic businessLogic = new IStreamBusinessLogic();
+  //private IStreamBusinessLogic businessLogic = new IStreamBusinessLogic();
    private MockIStreamBusinessLogic businessLogic = new MockIStreamBusinessLogic();
 
+   private static IStreamHostManager INSTANCE;
+    
+    public static IStreamHostManager getInstance(){
+        if(INSTANCE == null) {
+            INSTANCE = new IStreamHostManager();
+        }
+        return INSTANCE;
+    }
+    
     /**
      * Process Direx Transaction Request.
      *
@@ -47,8 +56,9 @@ public class IStreamHostManager {
         
         try {
               response = (DirexTransactionResponse) businessLogic.handle( request );
+       //       response = (DirexTransactionResponse) IStreamBusinessLogic.getInstance().handle( request );
         } catch ( Exception e ) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamHostManager] Istream-failed" ,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug,"[IStreamHostManager]:: Istream failed" ,null);
             e.printStackTrace();
             return DirexTransactionResponse.forException( ResultCode.ISTREAM_HOST_ERROR, ResultMessage.ISTREAM_FAILED ," Description: " + e.getMessage(),"" );
         }

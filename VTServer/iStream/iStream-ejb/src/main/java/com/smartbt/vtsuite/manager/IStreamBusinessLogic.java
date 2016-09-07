@@ -40,14 +40,38 @@ import javax.xml.ws.BindingProvider;
 
 public class IStreamBusinessLogic extends AbstractBusinessLogicModule{
     
+    private static IStreamBusinessLogic INSTANCE;
+    
+    public static IStreamBusinessLogic getInstance(){
+        if(INSTANCE == null) {
+            INSTANCE = new IStreamBusinessLogic();
+        }
+        return INSTANCE;
+    }
+    
 //    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(IStreamBusinessLogic.class);
 
-    private Scan_Service service = new Scan_Service();
-    private Scan port = service.getScanPort();
+    private Scan_Service service;
+    private Scan port;
     
      
     public IStreamBusinessLogic() {
-            }
+        try{
+            service = new Scan_Service();
+            port = service.getScanPort();
+        }catch(Exception e){
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] Istream failed to create the Connection Port." ,null);
+            
+            try{
+                    service = new Scan_Service();
+                    port = service.getScanPort();
+                }catch(Exception e2){
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] Istream failed to create the Connection Port by second time." ,null);
+                    e2.printStackTrace();
+                }
+        }
+        
+      }
             
 
     public void preprocess(DirexTransactionRequest tr) throws Exception {
@@ -69,7 +93,8 @@ public class IStreamBusinessLogic extends AbstractBusinessLogicModule{
 //        String url = "https://giro-1.istreamdeposit.com/Scan?wsdl";
 //        String url = "https://istreamdeposit.com/Scan?wsdl";
         
-        String url = System.getProperty("WS_ISTREAM_PRODUCTION_URL");
+//        String url = System.getProperty("WS_ISTREAM_PRODUCTION_URL");
+        String url = "https://giro-1.istreamdeposit.com/Scan?WSDL";
 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] WS_ISTREAM_PRODUCTION_URL: " + url,null);
         if (url == null) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] url == null" ,null);
@@ -82,19 +107,24 @@ CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] 
             bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
 
         } catch (Exception ex) {
-//            System.out.println(ex.getMessage());
-//            log.debug("[IStreamBusinessLogic] ",ex);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStreamBusinessLogic] Error ",ex.getMessage());
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStreamBusinessLogic] IStream Conection Error. Error calling "+ url,null);
+            ex.printStackTrace();
         }
         
 //        log.info("[IStreamBusinessLogic] After BindingProvider modification ");
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] After BindingProvider modification.",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] procesing " + transactionType ,null);
         switch (transactionType) {
             case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
                 response = port.checkAuthLocationConfig(new CheckAuthLocationConfigRequest().build(transactionData));
                 break;
             case ISTREAM_CHECK_AUTH:
-               response = port.checkAuth(new CheckAuthRequest().build(transactionData));
+                CheckAuthRequest checkAuthRequest = new CheckAuthRequest().build(transactionData);
+               
+                String checkAuthRequestAsString = checkAuthRequest.getAsXML();
+                
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, checkAuthRequestAsString,null);
+                
+                response = port.checkAuth(checkAuthRequest);
                
                if(((CheckAuthRes)response).getCheckId() == null || ((CheckAuthRes)response).getCheckId().isEmpty())
                    return  DirexTransactionResponse.forException( ResultCode.ISTREAM_RETURN_CHECK_ID_NULL, ResultMessage.ISTREAM_RETURN_CHECK_ID_NULL );

@@ -1,6 +1,9 @@
 package com.smartbt.girocheck.servercommon.model;
 
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -23,6 +26,13 @@ public class FeeBuckets implements Serializable{
     private FeeSchedules feeSchedule;
 
     public FeeBuckets() {
+    }
+    
+    public Map toMap(){
+        Map map = new HashMap();
+        map.put(ParameterName.AUTH_FEEM, minimum);  
+        map.put(ParameterName.AUTH_FEEP, percentage);     
+        return map;
     }
 
     /**

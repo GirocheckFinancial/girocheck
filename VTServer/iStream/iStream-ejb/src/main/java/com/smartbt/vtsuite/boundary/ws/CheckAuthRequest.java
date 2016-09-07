@@ -202,6 +202,39 @@ public class CheckAuthRequest {
             //catch exception 
         }
     }
+    public String getAsXML() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<CheckAuthRequest>" );
+        sb.append( "      <sendUser> " + sendUser + " </sendUser>" );
+        sb.append( "      <password> " + password + " </password>" );
+        sb.append( "      <addressCorrect> " + addressCorrect + " </addressCorrect>" );
+        sb.append( "      <amount> " + amount + " </amount>" );
+        sb.append( "      <backTiff> " + ( backTiff != null && backTiff.length > 0 ? "an image" : " null" ) + " </backTiff>" );
+        sb.append( "      <frontTiff> " + ( frontTiff != null && frontTiff.length > 0 ? "an image" : " null" ) + " </frontTiff>" );
+        sb.append( "      <checkBack> " + ( checkBack != null && checkBack.length > 0 ? "an image" : " null" ) + " </checkBack>" );
+        sb.append( "      <checkFront> " + ( checkFront != null && checkFront.length > 0 ? "an image" : " null" ) + " </checkFront>" );
+        sb.append( "      <idBack> " + ( idBack != null && idBack.length > 0 ? "an image" : " null" ) + " </idBack>" );
+        sb.append( "      <idFront> " + ( idFront != null && idFront.length > 0 ? "an image" : " null" ) + " </idFront>" );
+        sb.append( "      <batchName> " + batchName + " </batchName>" );
+        sb.append( "      <cardNumber></cardNumber>" );
+        sb.append( "      <crc> " + crc + " </crc>" );
+        sb.append( "      <data> " + ( data != null ? "an Object" : "null" ) + " </data>" );
+        sb.append( "      <emailAddress> " + emailAddress + " </emailAddress>" );
+        sb.append( "      <entityNumber> " + entityNumber + " </entityNumber>" );
+        sb.append( "      <iqaRawData> " + iqaRawData + " </iqaRawData>" );
+        sb.append( "      <micr> " + micr + " </micr>" );
+        sb.append( "      <phone> " + phone + " </phone>" );
+        sb.append( "      <scanTime> " + scanTime + " </scanTime>" );
+        sb.append( "      <scannerManufacturer> " + scannerManufacturer + " </scannerManufacturer>" );
+        sb.append( "      <sendTime> " + sendTime + " </sendTime>" );
+        sb.append( "      <serial> " + serial + " </serial>" );
+        sb.append( "      <ssn> " + ssn + " </ssn>" );
+        sb.append( "</CheckAuthRequest>" );
+        
+        return sb.toString();
+    }
+    
+    
     public void printAsXML() {
         System.out.println( "<CheckAuthRequest>" );
         System.out.println( "      <sendUser> " + sendUser + " </sendUser>" );

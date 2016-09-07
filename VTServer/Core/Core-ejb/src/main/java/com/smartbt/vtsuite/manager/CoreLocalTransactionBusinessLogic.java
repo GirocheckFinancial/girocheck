@@ -47,7 +47,7 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
     TransactionManager transactionManager = new TransactionManager();
     private static final long ISTREAM_HOST_WAIT_TIME = 30000;
     private JMSManager jmsManager = JMSManager.get();
-    private String finalFee;
+   // private String finalFee;
 
     public CoreLocalTransactionBusinessLogic(   ) {
         super(  );
@@ -116,7 +116,7 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
             if (!response.wasApproved()) {
                 response.setTransactionType(direxTransactionRequest.getTransactionType());
                 CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
-                return null;
+                return response.forException(ResultCode.ISTREAM_LOGIN_FAILED, "iStream Host Failed.");
             } else {
                 transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
             }
@@ -133,9 +133,11 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
             String parameter = (String) next.get(ParameterName.LABEL);
 //            coreLogger.logAndStore( "CoreLocalTransactionBusinessLogic","ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter);
 //            log.debug("[CoreLocalTransactionBusinessLogic] ISTREAM checkAuthLocationConfig() printing incoming label: "+parameter);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] ISTREAM oldCheckAuthLocationConfig() printing incoming label: "+parameter,null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] oldCheckAuthLocationConfig() label: "+parameter,null);
+                  CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] oldCheckAuthLocationConfig() value = "+next.get(ParameterName.VALUE),null);
             switch ( parameter ) {
                 case "AUTHFEEM":
+               
                         responseMap.put(ParameterName.AUTH_FEEM, next.get(ParameterName.VALUE));                    
                         break;
                 case "AUTHFEEP":
@@ -212,6 +214,8 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
         if(!response.wasApproved()){
             return response;
         }
+        
+        direxTransactionRequest.getTransactionData().putAll(response.getTransactionData());
         
         auxResponse = tCValidation(direxTransactionRequest, transaction); 
         
@@ -375,21 +379,20 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
     }
 
     private DirexTransactionResponse calculateFees(DirexTransactionRequest direxTransactionRequest, Transaction transaction) throws Exception {
-
-        Map responseMap;
+ 
         DirexTransactionResponse response = new DirexTransactionResponse();
-
-        Map map;
-        FeeBuckets bucket;
-        responseMap = new HashMap();
+ 
+        Map responseMap = new HashMap();
         try {
             HibernateUtil.beginTransaction();
 
             FeeBucketsManager feeBucketsManager = new FeeBucketsManager();
-            map = (Map) feeBucketsManager.getFees((direxTransactionRequest.getTransactionData().get(ParameterName.IDMERCHANT)) + "",
+            responseMap = (Map) feeBucketsManager.getFees((direxTransactionRequest.getTransactionData().get(ParameterName.IDMERCHANT)) + "",
                     (direxTransactionRequest.getTransactionData().get(ParameterName.OPERATION)) + "",
                     (direxTransactionRequest.getTransactionData().get(ParameterName.AMMOUNT)) + "");
 
+            
+            response.setTransactionData(responseMap);
             HibernateUtil.commitTransaction();
         } catch (Exception e) {
             e.printStackTrace();
@@ -400,40 +403,7 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
             CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
             return response;
         }
-
-        bucket = (FeeBuckets) map.get("BUCKET");
-
-        finalFee = map.get("FINALFEE")+"";
-
-        if (bucket != null) {
-            responseMap.put(ParameterName.AUTH_FEEM, bucket.getMinimum());
-
-            responseMap.put(ParameterName.AUTH_FEEP, bucket.getPercentage());
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...) AUTH_FEEM: "
-                    + bucket.getMinimum() + " AUTH_FEEP: " + bucket.getPercentage() + " CRDLDF: " + finalFee, null);
-        } else {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...) ERROR, NOT MATCH FOR FEES FOUND, AUTH_FEEM and AUTH_FEEP are NULL", null);
-            
-            response = DirexTransactionResponse.forException(direxTransactionRequest.getTransactionType(), ResultCode.CORE_ERROR, ResultMessage.FAILED, "NOT MATCH FOR FEES FOUND, AUTH_FEEM and AUTH_FEEP are NULL.");
-            response.setTransactionType(direxTransactionRequest.getTransactionType());
-            CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
-            return response;
-        }
-
-        if (finalFee != null) {
-            responseMap.put(ParameterName.CRDLDF, finalFee);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...) CRDLDF: " + finalFee, null);
-        } else {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] checkAuthLocationConfig(...) ERROR, NOT FINAL FEE FOUND, CRDLDF is NULL", null);
-            
-            response = DirexTransactionResponse.forException(direxTransactionRequest.getTransactionType(), ResultCode.CORE_ERROR, ResultMessage.FAILED, "NOT MATCH FOR FEES FOUND, CRDLDF is NULL.");
-            response.setTransactionType(direxTransactionRequest.getTransactionType());
-            CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
-            return response;
-        }
         
-        response.setTransactionData(responseMap);
-
         return response;
     }
         
@@ -481,10 +451,10 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
         Double amount = (Double) request.getTransactionData().get(ParameterName.AMMOUNT);
         Double payOut;
 
-        Double feeAmount = Double.parseDouble(finalFee);
+        Float feeAmount = (Float)request.getTransactionData().get(ParameterName.CRDLDF);
         
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] FEE_AMOUNT applied: " + feeAmount,null);
-                payOut = amount-feeAmount;
+                payOut = amount - feeAmount;
 
         request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, payOut);
         request.getTransactionData().put(ParameterName.FEE_AMMOUNT, feeAmount);

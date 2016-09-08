@@ -8,6 +8,7 @@ import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.model.ApplicationParameter;
 import com.smartbt.vtsuite.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
+import com.smartbt.girocheck.servercommon.enums.EnumApplicationParameter;
 import com.smartbt.vtsuite.servercommon.validators.ApplicationParameterValidator;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import com.smartbt.vtsuite.vtcommon.enums.ApplicationType;
@@ -91,5 +92,27 @@ public class ApplicationParameterManager {
      
      public ApplicationParameter getAplicationParameterByName(String name){
          return applicationParameterDAO.getAplicationParameterByName(name);
+     }
+     
+     public Map<EnumApplicationParameter, Double> getAmountAplicationParameters(){
+          Map<EnumApplicationParameter, Double> map = new HashMap();
+         
+          getAmountParameter( map, EnumApplicationParameter.AMOUNT_MIN_CHECK, 10D);
+          getAmountParameter( map, EnumApplicationParameter.AMOUNT_MAX_CHECK, 5000D);
+          getAmountParameter( map, EnumApplicationParameter.AMOUNT_MIN_CASH, 10D);
+          getAmountParameter( map, EnumApplicationParameter.AMOUNT_MAX_CASH, 1000D);
+          
+         return map;
+     }
+     
+     private void getAmountParameter(Map<EnumApplicationParameter, Double> map, EnumApplicationParameter parameterName, Double defaultValue){
+         ApplicationParameter applicationParameter = getAplicationParameterByName(parameterName.toString());
+         Double value = defaultValue;
+         if(applicationParameter != null){
+             try{
+                 value = Double.parseDouble(applicationParameter.getValue());
+             }catch(Exception e){}
+         }
+         map.put(parameterName, value);
      }
 }

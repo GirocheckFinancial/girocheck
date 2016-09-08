@@ -14,6 +14,7 @@ public enum ResultCode {
      RESPONSE_TIME_EXCEEDED(2),
      CARD_RELOAD_DATA_CANCELED(3),
      MISSING_FIELDS(4),
+     INVALID_AMOUNT(5),
     
      CORE_ERROR(100),
      CORE_RECEIVED_NULL(101),

@@ -2,16 +2,11 @@
 
 package com.smartbt.girocheck.servercommon.dao;
 
-import com.smartbt.girocheck.servercommon.display.AgrupationDisplay;
 import com.smartbt.girocheck.servercommon.display.ApplicationParameterDisplay;
 import com.smartbt.girocheck.servercommon.model.ApplicationParameter;
-import com.smartbt.girocheck.servercommon.model.Merchant;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
-import com.smartbt.vtsuite.servercommon.model.DataType;
 import com.smartbt.vtsuite.vtcommon.enums.ApplicationType;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;

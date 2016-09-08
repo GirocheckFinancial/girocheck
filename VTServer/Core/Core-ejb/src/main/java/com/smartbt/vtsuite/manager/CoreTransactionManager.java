@@ -15,11 +15,13 @@
  */
 package com.smartbt.vtsuite.manager;
 
+import com.smartbt.girocheck.servercommon.enums.EnumApplicationParameter;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
+import com.smartbt.girocheck.servercommon.manager.ApplicationParameterManager;
 import com.smartbt.girocheck.servercommon.manager.ClientManager;
 import com.smartbt.girocheck.servercommon.manager.CreditCardManager;
 import com.smartbt.girocheck.servercommon.manager.HostManager;
@@ -59,7 +61,9 @@ public class CoreTransactionManager {
     public static List CARD_TO_BANK_BL_LIST;
     private Host cardHost;
     private static HostManager hostManager = new HostManager();
-
+    private   ApplicationParameterManager applicationParameterManager = new ApplicationParameterManager();
+    private Map<EnumApplicationParameter, Double> amountAplicationParameters;
+    
     //TODO move this to System Properties
     public static final String ID_SCAN_AUTH_KEY = "48fa49a3-8ca4-4fc5-9a60-93271739969d";
 
@@ -194,7 +198,7 @@ public class CoreTransactionManager {
 
             /*
         
-            new card reload stuff
+             new card reload stuff
         
              */
             if (transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {
@@ -225,7 +229,7 @@ public class CoreTransactionManager {
                 System.out.println("[CoreTransactionManager] createTransaction() ... personalIdentificationId: " + identification.getId());
 
                 /*
-                * Personal Identification
+                 * Personal Identification
                  */
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, identification.getIdFront());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, identification.getIdBack());
@@ -245,13 +249,13 @@ public class CoreTransactionManager {
             }
             /*
         
-            end 
+             end 
             
              */
 
             if (client != null && client.hasITIN()) {
                 /*
-                * ITIN value 100
+                 * ITIN value 100
                  */
                 direxTransactionRequest.getTransactionData().put(ParameterName.SENSITIVEIDTYPE, IdType.OTHERS);
             } else {
@@ -276,7 +280,16 @@ public class CoreTransactionManager {
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.AMMOUNT)) {
                 double ammount = (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AMMOUNT);
+                 
                 transaction.setAmmount(ammount);
+                
+                String operation = (String) direxTransactionRequest.getTransactionData().get(ParameterName.OPERATION);
+               
+                if(amountAplicationParameters == null){
+                    amountAplicationParameters = applicationParameterManager.getAmountAplicationParameters();
+                }
+                
+                validateAmount( ammount,  operation,  transaction, amountAplicationParameters);
             }
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.SSN)) {
@@ -301,7 +314,7 @@ public class CoreTransactionManager {
 
             if (client != null && client.hasITIN()) {
                 /*
-                * ITIN value 100
+                 * ITIN value 100
                  */
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.OTHERS);
             } else {
@@ -458,6 +471,11 @@ public class CoreTransactionManager {
 
             transactionManager.saveOrUpdate(transaction);
             HibernateUtil.commitTransaction();
+        } catch (AmountException amountException) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) amountException " + amountException.getMessage(), null);
+            transactionManager.saveOrUpdate(amountException.getTransaction());
+            HibernateUtil.commitTransaction();
+            throw amountException;
         } catch (LoggingValidationException loggingValidationException) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) LoggingValidationException " + loggingValidationException.getMessage(), null);
             transactionManager.saveOrUpdate(loggingValidationException.getTransaction());
@@ -527,39 +545,72 @@ public class CoreTransactionManager {
         return host;
 
     }
+    
+    public void validateAmount(Double amount, String operation, Transaction transaction,Map<EnumApplicationParameter, Double> amountParameters) throws AmountException{
+       Double minCheck = amountParameters.get(EnumApplicationParameter.AMOUNT_MIN_CHECK);
+       Double maxCheck = amountParameters.get(EnumApplicationParameter.AMOUNT_MAX_CHECK);
+       Double minCash = amountParameters.get(EnumApplicationParameter.AMOUNT_MIN_CASH);
+       Double maxCash= amountParameters.get(EnumApplicationParameter.AMOUNT_MAX_CASH);
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MIN_CHECK = " + minCheck,null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MAX_CHECK = " + maxCheck,null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MIN_CASH = " + minCash,null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MAX_CASH = " + maxCash,null);
+       
+        boolean isValid;
+        if (operation != null && operation.contains("01")) {// check
+            isValid = amount >= minCheck && amount <= maxCheck;
+        }else{
+            isValid = amount >= minCash && amount <= maxCash;
+        }
+        if(!isValid){
+             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Exception => INVALID AMOUNT",null);
+            
+            throw new AmountException("Amount " + amount + " is out of the allowed range.",transaction);
+        }
+    }
 
 }
 
-class LoggingValidationException extends DirexException {
+class TransactionException extends DirexException {
 
     private Transaction transaction;
+
+    public TransactionException(ResultCode resultCode, String message, Transaction transaction) {
+        super(resultCode, message);
+        this.transaction = transaction;
+        this.transaction.setResultCode(resultCode.getCode());
+        this.transaction.setResultMessage(message);
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+    
+    
+}
+
+class LoggingValidationException extends TransactionException {
 
     public LoggingValidationException(ResultCode resultCode, String message, Transaction transaction) {
-        super(resultCode, message);
-        this.transaction = transaction;
-        this.transaction.setResultCode(resultCode.getCode());
-        this.transaction.setResultMessage(message);
+        super(resultCode, message, transaction);
     }
-
-    public Transaction getTransaction() {
-        return transaction;
-    }
-
 }
 
-class CreditCardException extends DirexException {
-
-    private Transaction transaction;
+class CreditCardException extends TransactionException {
 
     public CreditCardException(ResultCode resultCode, String message, Transaction transaction) {
-        super(resultCode, message);
-        this.transaction = transaction;
-        this.transaction.setResultCode(resultCode.getCode());
-        this.transaction.setResultMessage(message);
+        super(resultCode, message, transaction);
     }
+}
 
-    public Transaction getTransaction() {
-        return transaction;
+class AmountException extends TransactionException {
+
+    public AmountException(String message, Transaction transaction) {
+        super(ResultCode.INVALID_AMOUNT, message, transaction);
     }
-
 }

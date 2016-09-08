@@ -25,7 +25,11 @@ public enum EnumApplicationParameter {
     ORDER_EXPRESS_PASSWORD("OrderExpressPassword"),
     AUTH_FEEM("AuthFeem"),
     AUTH_FEEP("AuthFeep"),
-    CRDLDF("CRDLDF");
+    CRDLDF("CRDLDF"),
+    AMOUNT_MIN_CHECK("amountMinCheck"),
+    AMOUNT_MAX_CHECK("amountMaxCheck"),
+    AMOUNT_MIN_CASH("amountMinCash"),
+    AMOUNT_MAX_CASH("amountMaxCash");
     
     private String parameter;
 

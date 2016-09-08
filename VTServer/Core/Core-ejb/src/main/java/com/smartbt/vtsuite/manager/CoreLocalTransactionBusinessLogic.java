@@ -447,14 +447,13 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
     
     private void payOutAmountCalculator(DirexTransactionRequest request, Transaction transaction) {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() start ...",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] feeCalculator() start ... amount = " + request.getTransactionData().get(ParameterName.AMMOUNT),null);
         Double amount = (Double) request.getTransactionData().get(ParameterName.AMMOUNT);
-        Double payOut;
-
+        
         Float feeAmount = (Float)request.getTransactionData().get(ParameterName.CRDLDF);
         
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] FEE_AMOUNT applied: " + feeAmount,null);
-                payOut = amount - feeAmount;
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreLocalTransactionBusinessLogic] amount =" + amount+ " ,FEE_AMOUNT applied: " + feeAmount,null);
+             Double payOut = amount - feeAmount;
 
         request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, payOut);
         request.getTransactionData().put(ParameterName.FEE_AMMOUNT, feeAmount);

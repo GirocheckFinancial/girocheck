@@ -19,13 +19,11 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseListGrid;
 import com.smartbt.vtsuite.vtams.client.gui.component.CurrencyListGridField;
-import com.smartbt.vtsuite.vtams.client.gui.component.DateListGridField;
 import com.smartbt.vtsuite.vtams.client.gui.component.TextListGridField;
 import com.smartbt.vtsuite.vtams.client.gui.component.TimeListGridField;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.TransactionsDS;
 import com.smartbt.vtsuite.vtams.client.helpers.DateHelper;
 import com.smartbt.vtsuite.vtcommon.enums.ClientTransactionType;
-import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import com.smartgwt.client.data.SortSpecifier;
 import com.smartgwt.client.types.SortDirection;
 import com.smartgwt.client.widgets.grid.CellFormatter;
@@ -40,7 +38,7 @@ import com.smartgwt.client.widgets.grid.SortNormalizer;
 public class TransactionListGrid extends BaseListGrid {
 
     private TextListGridField typeField = new TextListGridField("transactionType", "Transaction Type", false);
-    private DateListGridField dateField = new DateListGridField("date", I18N.GET.LIST_FIELD_DATE_TITLE(), false);
+    private TextListGridField datexField = new TextListGridField("createdAt", I18N.GET.LIST_FIELD_DATE_TITLE(), false);
     private TimeListGridField timeField = new TimeListGridField("time", I18N.GET.LIST_FIELD_TIME_TITLE(), false);
     
     private TextListGridField operationField = new TextListGridField("operation", "Operation", false);
@@ -64,6 +62,7 @@ public class TransactionListGrid extends BaseListGrid {
      */
     public TransactionListGrid() {
         super();
+
 //        clerkField.setDataPath("clerk/username");
 //        merchantField.setDataPath("merchant/name");
 //        terminalField.setDataPath("terminal/terminalId");
@@ -111,21 +110,21 @@ public class TransactionListGrid extends BaseListGrid {
             @Override
             public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
                 String formatted = NumberFormat.getFormat("0000").format(record.getAttributeAsInt("accountSuffix"));
-               return "************" + formatted;
+               return "***********" + formatted;
             }
         });
 
-        dateField.setSortNormalizer(new SortNormalizer() {
-            @Override
-            public Object normalize(ListGridRecord record, String fieldName) {
-                return record.getAttributeAsDate("createdAt");
-            }
-        });
+//        dateField.setSortNormalizer(new SortNormalizer() {
+//            @Override
+//            public Object normalize(ListGridRecord record, String fieldName) {
+//                return record.getAttributeAsDate("createdAt");
+//            }
+//        });
 
-        dateField.setCellFormatter(new CellFormatter() {
+        datexField.setCellFormatter(new CellFormatter() {
             @Override
             public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
-                return DateHelper.toUSShortDate(record.getAttributeAsDate("createdAt"));
+                return DateHelper.toUSShortDate(record.getAttribute("createdAt"));
             }
         });
 
@@ -139,7 +138,7 @@ public class TransactionListGrid extends BaseListGrid {
         timeField.setCellFormatter(new CellFormatter() {
             @Override
             public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
-                return DateHelper.toUSShortTime(record.getAttributeAsDate("createdAt"));
+                return DateHelper.toUSShortTime(record.getAttribute("createdAt"));
             }
         });
 
@@ -152,7 +151,7 @@ public class TransactionListGrid extends BaseListGrid {
         
         
         setFields(typeField,
-                dateField,
+                datexField,
                 timeField,
                 merchantNameField,
                 terminalSerialNumberField,

@@ -16,6 +16,7 @@
 package com.smartbt.vtsuite.vtams.client.helpers;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.smartbt.vtsuite.vtams.client.utils.Utils;
 import com.smartgwt.client.util.DateDisplayFormatter;
 import com.smartgwt.client.util.DateUtil;
 import java.util.Date;
@@ -80,9 +81,33 @@ public class DateHelper {
        return usDateFormater.format(date);
     }
     
+     public static String toUSShortDate(String dateStr) {
+         if(dateStr != null){
+             try{
+                 Long dateLong = Long.parseLong(dateStr); 
+                 Date date = new Date(dateLong);
+                 return usDateFormater.format(date);
+             }catch(Exception e){
+                 Utils.debug( "Exception parsing " + dateStr);
+             }
+          
+         }
+       return "";
+    }
+    
     public static String toUSShortTime(Date date) {
         if(date == null)return "";
         return usTimeFormater.format(date);
+    }
+    
+    public static String toUSShortTime(String dateStr) {
+        if(dateStr != null){
+            Long dateLong = Long.parseLong(dateStr);
+            Date date = new Date(dateLong);
+            return usTimeFormater.format(date);
+        }
+        
+        return "";
     }
 
     /**

@@ -33,8 +33,8 @@ public class Scan_Service
         try {
 //            url = new URL("https://stable-1.istreamdeposit.com/Scan?wsdl");
 //            url = new URL("https://giro-1.istreamdeposit.com/Scan?wsdl");
-//            url = new URL("https://istreamdeposit.com/Scan?wsdl");
-            url = new URL("https://giro-1.istreamdeposit.com/Scan?WSDL");
+            url = new URL("https://istreamdeposit.com/Scan?wsdl");
+//            url = new URL("https://giro-1.istreamdeposit.com/Scan?WSDL");
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
             e = new WebServiceException(ex);

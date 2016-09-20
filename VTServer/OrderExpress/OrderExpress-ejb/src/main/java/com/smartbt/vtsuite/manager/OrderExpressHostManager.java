@@ -14,7 +14,7 @@
  **
  */
 package com.smartbt.vtsuite.manager;
-
+ 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -25,17 +25,19 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * The Host Manager class
  */
 public class OrderExpressHostManager {
-
+    //If OE returns any of these codes the transaction needs to be re-submitted.
+    private static final String[] codesToRepeat = new String[]{"025","14", "506"};
 
     public DirexTransactionResponse processTransaction( DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts ) throws Exception {
 
-//  MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
-       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
+  MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+//       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
         
         
@@ -58,8 +60,8 @@ public class OrderExpressHostManager {
             if (!opCode.equals("001")) {
                 String opCode2 = (String) response.getTransactionData().get(ParameterName.OP_CODE2);
                 
-                if(opCode2 != null && opCode2.equals("025") && numberOfAttempts > 1){
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 == '025', Re-Submitting request... " , null);
+                if(opCode2 != null && ArrayUtils.contains(codesToRepeat, opCode2) && numberOfAttempts > 1){
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 = " + opCode2 + ", Re-Submitting request... " , null);
                     return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
                 }else{
                   response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
@@ -117,7 +119,7 @@ public class OrderExpressHostManager {
 
         return response;
     }
-    
+     
     public ResultMessage selectResultMessage(String code){
         
         switch(code){

@@ -30,6 +30,10 @@ public class CryptoUtils {
             System.out.println("[CryptoUtils] NoSuchPaddingException: " + t.getMessage());
         }
     }
+    
+    public static void main(String[] args){
+        System.out.println( encrypt("501929181"));
+    }
 
     public static String encrypt(String plainText, String key) {
         try {

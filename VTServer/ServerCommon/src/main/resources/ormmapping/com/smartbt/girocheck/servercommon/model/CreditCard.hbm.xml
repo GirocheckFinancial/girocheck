@@ -19,9 +19,7 @@ License Type: Evaluation
                     />
                 </property>
 		<property name="maskCardNumber" column="mask_card_number" type="string" length="16" not-null="true" lazy="true" unique="true"/>
-                
-                <property name="pan" column="pan" type="string" length="255" not-null="true" lazy="true" unique="true"/>
-                
+                 
 		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>
 		<many-to-one name="card_type" cascade="lock" column="card_type" class="com.smartbt.girocheck.servercommon.model.CardType" not-null="false" lazy="proxy">
 		</many-to-one>

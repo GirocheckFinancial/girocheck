@@ -11,14 +11,18 @@ import com.smartbt.girocheck.servercommon.log.LogUtil;
 import com.smartbt.girocheck.servercommon.manager.ClientManager;
 import com.smartbt.girocheck.servercommon.manager.TerminalManager;
 import com.smartbt.girocheck.servercommon.manager.TransactionManager;
+import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.model.Terminal;
 import com.smartbt.girocheck.servercommon.model.Transaction;
+import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 import javax.jms.Queue;
 
 /**
@@ -52,8 +56,8 @@ public class CoreTransactionUtil {
         transaction.setResultCode(response.getResultCode().getCode());
         String msg = (response.getResultMessage() != null && response.getResultMessage().length() > 254) ? response.getResultMessage().substring(0, 254) : response.getResultMessage();
         transaction.setResultMessage(msg);
-        // transactionManager.saveOrUpdate( transaction );
 
+        
         persistTransaction(transaction);
 
     }
@@ -115,14 +119,14 @@ public class CoreTransactionUtil {
 //This method determines if the given ID is an ITIN, 
 //-If it is an ITIN, it returns 100 otherwise it is SSN and the method returns 2
 /*
-1.	it is an ITIN if it starts with 9
-        and has a range of 70 - 88 in the fourth and fifth digit 
+     1.	it is an ITIN if it starts with 9
+     and has a range of 70 - 88 in the fourth and fifth digit 
 
-        or if it is included in one of the following ranges:
+     or if it is included in one of the following ranges:
 
-•	900-70-0000 through 999-88-9999.
-•	900-90-0000 through 999-92-9999.
-•	900-94-0000 through 999-99-9999.
+     •	900-70-0000 through 999-88-9999.
+     •	900-90-0000 through 999-92-9999.
+     •	900-94-0000 through 999-99-9999.
 
      */
     public static IdType getIdTypeFromId(String ssn) {
@@ -159,32 +163,15 @@ public class CoreTransactionUtil {
         return b1 || b2 || b3;
     }
 
+//    public static void printMap(DirexTransactionRequest request) {
+//        Map map = request.getTransactionData();
+//
+//        Iterator it = map.keySet().iterator();
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Printing map", null);
+//        while (it.hasNext()) {
+//            Object key = it.next();
+//            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] " + key + " -> " + map.get(key), null);
+//        }
+//    }
+
 }
-/*
- METHODS OF TRANSACTION CLASS
-
- ** Add this tu Transaction and subTransaction class
- public void setResultMessage( String value ) {
- if(value != null && value.length() > 254)value = value.substring( 0, 254 );
- this.resultMessage = value;
- }
-
-
- public void addSubTransaction( SubTransaction subTransaction ) {
- subTransaction.setOrder( sub_Transaction.size() );
- subTransaction.setTransaction( this );
- sub_Transaction.add( subTransaction );
-         
- }
-
- public void addSubTransactionList( Set<SubTransaction> list ) {
- int begin = sub_Transaction.size();
-
- for ( Iterator<SubTransaction> it = list.iterator(); it.hasNext(); ) {
- SubTransaction subTransaction = it.next();
- subTransaction.setOrder( begin + subTransaction.getOrder() );
- subTransaction.setTransaction( this );
- sub_Transaction.add( subTransaction );
- }
- }
- */

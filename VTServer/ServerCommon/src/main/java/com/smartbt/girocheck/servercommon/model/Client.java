@@ -42,9 +42,7 @@ public class Client implements Serializable {
 	
 	private String ssn;
         
-	private String maskSSN;
-        
-        private String hashSSN;
+	private String maskSSN; 
 	
 	private String idBeneficiary;
 	
@@ -215,23 +213,9 @@ public class Client implements Serializable {
     public void setMaskSSN(String maskSSN) {
         this.maskSSN = maskSSN;
     }
-
-    /**
-     * @return the hashSSN
-     */
-    public String getHashSSN() {
-        return hashSSN;
-    }
-
-    /**
-     * @param hashSSN the hashSSN to set
-     */
-    public void setHashSSN(String hashSSN) {
-        this.hashSSN = hashSSN;
-    }
-    
+ 
     public boolean hasITIN(){
-
+        if(this.ssn == null) return false;
         long auxSsn = Long.parseLong(this.ssn);
         int aux = Integer.parseInt(this.ssn.substring(3, 5));
         

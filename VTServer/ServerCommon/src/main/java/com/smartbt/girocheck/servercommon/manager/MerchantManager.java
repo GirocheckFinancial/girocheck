@@ -180,9 +180,9 @@ public class MerchantManager {
         return response;
     }
          
-     public Merchant getMerchantByCreditCard(String CreditCard){
-         return creditCardDAO.getMerchantByCreditCardNumber(CreditCard);
-     }
+//     public Merchant getMerchantByCreditCard(String CreditCard){
+//         return creditCardDAO.getMerchantByCreditCardNumber(CreditCard);
+//     }
      
      public Merchant getMerchantByTerminalID(String terminalId){         
          return merchantDAO.getMerchantByTerminalID(terminalId);

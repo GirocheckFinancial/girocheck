@@ -204,15 +204,18 @@ public class CoreTransactionManager {
             if (transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {
                 System.out.println("[CoreTransactionManager] transactionType == TransactionType.CARD_RELOAD_WITH_DATA");
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
-                CreditCard creditCardCR = creditCardManager.getByNumber(cardNumberCR);
+                 client = creditCardManager.getClient(cardNumberCR);
 
-                if (creditCardCR == null || creditCardCR.getClient() == null || creditCardCR.getClient().getFirstName().equals("BIQorCTB")) {
+                if (client == null || client.getFirstName().equals("BIQorCTB")) {
+                  System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
                     transaction.setResultCode(3);
                     return transaction;
+                }else{
+                  System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card exist");  
                 }
-
-                //put in the direxTransactionRequest data all the data needed for the transaction.
-                client = creditCardCR.getClient();
+ 
+                System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> client.ssn = " + client.getSsn());
+                
                 Address address = new Address();
                 State state = new State();
                 try {
@@ -231,8 +234,8 @@ public class CoreTransactionManager {
                 /*
                  * Personal Identification
                  */
-                direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, identification.getIdFront());
-                direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, identification.getIdBack());
+                direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, identification.getIdFrontAsByteArray());
+                direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, identification.getIdBackAsByteArray());
                 direxTransactionRequest.getTransactionData().put(ParameterName.PHONE, client.getTelephone());
                 direxTransactionRequest.getTransactionData().put(ParameterName.SSN, client.getSsn());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));

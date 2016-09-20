@@ -27,33 +27,22 @@ public class CreditCardManager {
 
     private CreditCardDAO dao = CreditCardDAO.get();
 
-    public CreditCard getByNumber( String number ) throws DirexException {
-        return dao.getByCardNumber( number );
+    public CreditCard getCardByNumber( String number ) throws Exception {
+        return dao.getCard( number );
     }
 
-    public CreditCard getCardWaitingOfficialNumber( String ssn ) throws DirexException {
-        return dao.getCardWaitingOfficialNumber( ssn );
-    }
+//    public CreditCard getCardWaitingOfficialNumber( String ssn ) throws DirexException {
+//        return dao.getCardWaitingOfficialNumber( ssn );
+//    }
     
     public CreditCard createOrGet( String cardNumber, Client client, Merchant merchant ) throws Exception {
         return dao.createOrGet( cardNumber, client, merchant );
     }
-    public CreditCard get( String cardNumber ) throws SQLException {
-        return dao.get( cardNumber );
-    }
-    public Client getClient( String cardNumber ) throws SQLException {
+
+    
+    public Client getClient( String cardNumber ) throws Exception {
         return dao.getClient( cardNumber );
     }
 
-//    public boolean validateNewCard(String cardNumber){
-//       return dao.validateNewCard( cardNumber );
-//    }
-//    
-//    public boolean validateExistentCard(String cardNumber, String ssn){
-//        return dao.validateExistentCard( cardNumber, ssn );
-//    }
-//    
-//    public CreditCard getByCardNumber(String cardNumber){
-//        return dao.getByCardNumber( cardNumber );
-//    }
+    
 }

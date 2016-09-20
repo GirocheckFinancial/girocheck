@@ -1088,7 +1088,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             HibernateUtil.commitTransaction();
 
-            String finalFee = map.get("FINALFEE") + "";
+            String finalFee = map.get(ParameterName.CRDLDF) + "";
             Double feeAmount = Double.parseDouble(finalFee);
 
 //        if (request.getTransactionData().containsKey(ParameterName.HOSTNAME)) {

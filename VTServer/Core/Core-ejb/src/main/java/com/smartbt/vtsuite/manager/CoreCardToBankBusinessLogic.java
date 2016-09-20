@@ -108,8 +108,15 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             hasAch = achManager.existAchCard(terminalId, cardNumber);
             client = creditCardManager.getClient(cardNumber);
             if(client != null){
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Client Name" + client.getFirstName(), null);
-                fullAddress = client.getAddress().getFullAddress();
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Client Name = " + client.getFirstName(), null);
+                if(client.getAddress() != null){
+                    fullAddress = client.getAddress().getFullAddress();
+                }else{
+                    fullAddress = "";
+                }
+                
+            }else{
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Client was NULL", null);
             }
             Terminal terminal = terminalManager.findBySerialNumber( terminalId );
             merchant = terminal.getMerchant();
@@ -134,7 +141,6 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] hasAch = " + hasAch, null);
 
         if (hasAch) {
-
             Map map = new HashMap();
             map.put(ParameterName.EXISTACH, true);// exist ach
 

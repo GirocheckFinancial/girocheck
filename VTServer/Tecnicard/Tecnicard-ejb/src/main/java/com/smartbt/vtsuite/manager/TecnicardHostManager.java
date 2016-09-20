@@ -104,8 +104,8 @@ public class TecnicardHostManager {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] Parsing  fee_amount value :: " + request.getTransactionData().get(ParameterName.FEE_AMMOUNT),null);
         }
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] creating a connection with Tecnicard WSDL",null);
-       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
-//        MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+//       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
+        MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] connection with Tecnicard WSDL DONE",null);
         TransactionType originalTransactionType = (TransactionType)request.getTransactionData().get( TransactionType.TRANSACTION_TYPE);
 

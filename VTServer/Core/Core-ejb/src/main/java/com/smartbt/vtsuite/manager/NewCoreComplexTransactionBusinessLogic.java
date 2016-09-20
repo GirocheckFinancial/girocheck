@@ -108,20 +108,18 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         if (!originalTransaction.equals(TransactionType.CARD_RELOAD_WITH_DATA)) {
 
             Map transactioDataWITHDL;
-            
-             DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
 
-                if (!personalInfoResponse.wasApproved()) {
-                    personalInfoResponse.setTransactionType(TransactionType.PERSONAL_INFO);
-                    CoreTransactionUtil.subTransactionFailed(transaction, personalInfoResponse, jmsManager.getCoreOutQueue(), correlationId);
-                    return;
-                }else{
-                    transactioDataWITHDL = personalInfoResponse.getTransactionData();
-                }
+            DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
+
+            if (!personalInfoResponse.wasApproved()) {
+                personalInfoResponse.setTransactionType(TransactionType.PERSONAL_INFO);
+                CoreTransactionUtil.subTransactionFailed(transaction, personalInfoResponse, jmsManager.getCoreOutQueue(), correlationId);
+                return;
+            } else {
+                transactioDataWITHDL = personalInfoResponse.getTransactionData();
+            }
 
             if (transactioDataWITHDL != null) {
-                //rrodriguez:: I commented this line because doesn't make sense to me. There are more information other than the personal info that needs to be taken from the terminal input.
-//                request.getTransactionData().clear();
                 request.getTransactionData().putAll(transactioDataWITHDL);
             }
 
@@ -148,14 +146,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 response = sendMessageToHost(request, NomHost.ISTREAM.toString(), ISTREAM_HOST_WAIT_TIME, false);
 
             } catch (Exception e) {
-                //sendEmail
-                StringBuffer buffer2 = new StringBuffer();
-                buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer2.append("There was a problem receiving generic host validation response ************").append(" at ").append((new Date()).toString());
-                buffer2.append("</body></html>");
-
-                generateNotificationEmail(buffer2, null);
+                generateNotificationEmail("There was a problem receiving generic host validation response", null);
                 return;
             }
 
@@ -179,40 +170,13 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 personalInfoRequest = receiveMessageFromFront(TransactionType.PERSONAL_INFO);
             } catch (Exception e) {
-
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Error Receiving personal info ", null);
-
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer.append("There was a problem receiving personal info ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
-                buffer.append("</body></html>");
-
-                generateNotificationEmail(buffer, null);
+                e.printStackTrace();
+                generateNotificationEmail("There was a problem receiving personal info", null);
                 return;
             }
 
             Map personalInfoRequestMap = personalInfoRequest.getTransactionData();
-
-//            if (personalInfoRequestMap.containsKey(ParameterName.FEE_AMMOUNT)) {
-//                try {
-//                     double feeAmmount = (Double) personalInfoRequestMap.get(ParameterName.FEE_AMMOUNT);
-//                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] FEE_AMMOUNT from ISTREAM personal Info value: "+ feeAmmount,null);
-//                    transaction.setFeeAmmount(feeAmmount);
-//                } catch (NumberFormatException e) {
-//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Error NumberFormatException ",e.getMessage());
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    double payoutAmmount =(Double) personalInfoRequestMap.get(ParameterName.PAYOUT_AMMOUNT);
-//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] PAYOUT_AMOUNT from ISTREAM personal Info value: "+ payoutAmmount,null);
-//                    transaction.setPayoutAmmount(payoutAmmount);
-//                } catch (NumberFormatException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] FEE_AMOUNT from ISTREAM personal Info value: " + personalInfoRequestMap.get(ParameterName.FEE_AMMOUNT), null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] PAYOUT_AMOUNT from ISTREAM personal Info value: " + personalInfoRequestMap.get(ParameterName.PAYOUT_AMMOUNT), null);
 
             request.getTransactionData().putAll(personalInfoRequestMap);
 
@@ -334,14 +298,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 response = sendMessageToHost(reqOE, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME, true);
             } catch (Exception e) {
-                //sendEmail
-                StringBuffer buffer2 = new StringBuffer();
-                buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer2.append("There was a problem receiving OE Contrataciones ************").append(" at ").append((new Date()).toString());
-                buffer2.append("</body></html>");
-
-                generateNotificationEmail(buffer2, null);
+                generateNotificationEmail("There was a problem receiving OE Contrataciones", null);
                 return;
             }
 
@@ -388,7 +345,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             }
 
             /**
-             * *********************** OE LOG METHOD commented for tests only ***************
+             * *********************** OE LOG METHOD commented for tests only
+             * ***************
              */
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic]  Sending from core to OE host call LOGS: : ", null);
             DirexTransactionRequest req002 = request;
@@ -399,16 +357,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 responseeeee2 = sendMessageToHost(req002, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_LOG_WAIT_TIME, true);
             } catch (Exception e) {
-                //sendEmail
-                sendResponseToIStreamFront(false, checkId);
-                OEDevolucion(request);
-                StringBuffer buffer2 = new StringBuffer();
-                buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer2.append("There were a problem receiving OE log response ************").append(" at ").append((new Date()).toString());
-                buffer2.append("</body></html>");
-
-                generateNotificationEmail(buffer2, null);
+                generateNotificationEmail("There were a problem receiving OE log response", null);
                 return;
             }
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Response from method log OE OP_CODE : " + responseeeee2.getTransactionData().get(ParameterName.OP_CODE), null);
@@ -427,7 +376,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             }
 
             /**
-             * *******************************end test the OE method ************************
+             * *******************************end test the OE method
+             * ************************
              */
             //----------  TECNICARD VALIDATON ------------------
             String hostName = (String) request.getTransactionData().get(ParameterName.HOSTNAME);
@@ -454,18 +404,11 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 certegyRequest = receiveMessageFromFront(TransactionType.CERTEGY_INFO);
             } catch (Exception e) {
-
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Error Receiving certegy ", null);
 
                 OEDevolucion(request);
                 e.printStackTrace();
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer.append("There was a problem receiving certegy ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
-                buffer.append("</body></html>");
-
-                generateNotificationEmail(buffer, null);
+                generateNotificationEmail("There was a problem receiving certegy", null);
                 return;
             }
 
@@ -530,26 +473,14 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 confirmationRequest = receiveMessageFromFront(TransactionType.TECNICARD_CONFIRMATION);
             } catch (Exception e) {
-                //sendEmail
-
-                //send message to istream for cancel the transaction with checkAuthSubmit
                 String action = "decline";
                 sendIstreamCheckAuthSubmit(request, action);
-                //end
+
                 OEDevolucion(request);
 
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer.append("There was a problem trying to load a card ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
-                buffer.append("</body></html>");
-
-                generateNotificationEmail(buffer, null);
+                generateNotificationEmail("There was a problem trying to load a card", null);
                 return;
             }
-
-            //-------------Validate whether the check was truncated successfully.
-//            validateCheckTruncation(confirmationRequest);
 
             extractTecnicardConfirmationInformation(confirmationRequest);
 
@@ -578,11 +509,6 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                     response.setErrorCode("FAILED LOADING CARD");
 
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                    buffer.append("There was a problem trying to load a card ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
-
                     if (hostName.equals(NomHost.TECNICARD.toString())) {
                         response.setResultCode(ResultCode.FAILED);
                         response.setResultMessage(ResultMessage.TECNICARD_FAILED.getMessage());
@@ -603,13 +529,13 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                         response2.setErrorCode("FAILED CARD LOADING" + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
 
                         transaction.addSubTransactionList(response2.getTransaction().getSub_Transaction());
+
                         CoreTransactionUtil.persistTransaction(transaction);
-                        buffer.append(" The transaction status from Fuze is: ").append(response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
+
                         sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), ResultMessage.FUZE_HOST_FAILED.getTerminalMessage(), hostName);
                     }
 
-                    buffer.append("</body></html>");
-                    generateNotificationEmail(buffer, null);
+                    generateNotificationEmail("There was a problem trying to load a card", null);
 
                     String action = "decline";
                     sendIstreamCheckAuthSubmit(request, action);
@@ -623,12 +549,6 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                     OEPago(request);
                 }
             } catch (Exception be) {
-
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer.append("There was a problem trying to load a card ************").append(((String) request.getTransactionData().get(ParameterName.CARD_NUMBER)).substring(12)).append(" by the client with ID = ").append((String) request.getTransactionData().get(ParameterName.ID)).append(" at ").append((new Date()).toString());
-
                 if (hostName.equals(NomHost.FUZE.toString())) {
                     transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
@@ -639,14 +559,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                     response2.setErrorCode("FAILED CARD LOADING" + " Transaction Status from Fuze: " + response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
 
                     transaction.addSubTransactionList(response2.getTransaction().getSub_Transaction());
+
                     CoreTransactionUtil.persistTransaction(transaction);
-                    buffer.append(" The transaction status from Fuze is: ").append(response2.getTransactionData().get(ParameterName.FUZE_TRANSACTION_STATUS));
 
                 }
 
-                buffer.append("</body></html>");
-
-                generateNotificationEmail(buffer, null);
+                generateNotificationEmail("There was a problem trying to load a card", null);
 
                 String action = "decline";
                 sendIstreamCheckAuthSubmit(request, action);
@@ -672,11 +590,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             // SI OCURRE UNA EXCEPCION, SE LE NOTIFICA A LOS FRONTS QUE ESTEN ESPERANDO MSG.
 
             switch (state) {
+                case 1:
+                    CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
+                    break;
                 case 2:
                     sendResponseToIStreamFront(false, checkId);
                     OEDevolucion(request);
-                case 1:
-                    CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
                 default:
                     transaction.setResultCode(ResultCode.CORE_ERROR.getCode());
                     String msg = e.getMessage();
@@ -685,7 +604,6 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                     } else {
                         transaction.setResultMessage("Message Error was printed, Please check the server logs");
                     }
-
                     CoreTransactionUtil.persistTransaction(transaction);
             }
             sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.CORE_ERROR, " Check Transaction Error, check server logs for mor inf.", null);
@@ -979,12 +897,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         if (transactionMap.containsKey(ParameterName.EXPIRATION_DATE)) {
             identidication.setExpirationDate(((Date) transactionMap.get(ParameterName.EXPIRATION_DATE)));
         }
-        if (transactionMap.containsKey(ParameterName.IDFRONT)) {
+        if (transactionMap.containsKey(ParameterName.IDFRONT) && transactionMap.get(ParameterName.IDFRONT) != null) {
             byte[] idFront = (byte[]) transactionMap.get(ParameterName.IDFRONT);
             java.sql.Blob idFrontBlob = new SerialBlob(idFront);
             identidication.setIdFront(idFrontBlob);
         }
-        if (transactionMap.containsKey(ParameterName.IDBACK)) {
+        if (transactionMap.containsKey(ParameterName.IDBACK) && transactionMap.get(ParameterName.IDBACK) != null) {
             byte[] idBack = (byte[]) transactionMap.get(ParameterName.IDBACK);
             java.sql.Blob idBackBlob = new SerialBlob(idBack);
             identidication.setIdFront(idBackBlob);
@@ -1071,7 +989,6 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] extractTecnicardConfirmationInformation(...) DONE", null);
     }
 
-
     private void validateCheckTruncation(DirexTransactionRequest request) throws Exception {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] validateCheckTruncation(...)", null);
@@ -1081,54 +998,14 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
             Map<ParameterName, ImagePart> images = new HashMap<>();
 
-            try {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] validateCheckTruncation() contain the check image", null);
-                byte[] truncatedCheck = (byte[]) transactionData.get(ParameterName.TRUNCATED_CHECK);
-                String imageAsBase64;
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] validateCheckTruncation() contain the check image", null);
+            byte[] truncatedCheck = (byte[]) transactionData.get(ParameterName.TRUNCATED_CHECK);
+            String imageAsBase64;
 
-                imageAsBase64 = Base64.encode(truncatedCheck);
+            imageAsBase64 = Base64.encode(truncatedCheck);
 
-                ImagePart truncatedCheckk = new ImagePart(imageAsBase64, ParameterName.TRUNCATED_CHECK.toString(), "truncatedCheck");
-                images.put(ParameterName.TRUNCATED_CHECK, truncatedCheckk);
-
-                //call the WS to validate the truncatedCheck.
-                String barCodeResult;
-
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] validateCheckTruncation() ready to send verify barcode",null);
-//                barCodeResult = port.validate(imageAsBase64, "21");
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] barcode result value : " + barCodeResult,null);
-//
-//                if (!barCodeResult.equals("true")) {
-//
-//                    StringBuffer buffer = new StringBuffer();
-//                    buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-//
-//                    buffer.append("The barcode from the truncated check wasn't read, at ").append((new Date()).toString());
-//                    buffer.append("</body></html>");
-//
-//                    try {
-//                        generateNotificationEmail(buffer, images);
-//                    } catch (Exception ex) {
-//                        ex.printStackTrace();
-//                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Error sending generateNotificationEmail().",null);
-//                    }
-//                }
-            } catch (Exception e) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] validateCheckTruncation ERROR at " + (new Date()).toString(), e.getMessage());
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-                buffer.append("The barcode from the truncated check wasn't read because it was a problem with the validation method at ").append((new Date()).toString());
-                buffer.append("</body></html>");
-
-                try {
-                    generateNotificationEmail(buffer, images);
-                } catch (Exception ex) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Error 4 ", ex.getMessage());
-                    ex.printStackTrace();
-                }
-                throw new Exception();
-            }
+            ImagePart truncatedCheckk = new ImagePart(imageAsBase64, ParameterName.TRUNCATED_CHECK.toString(), "truncatedCheck");
+            images.put(ParameterName.TRUNCATED_CHECK, truncatedCheckk);
 
         } else {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] extractTecnicardConfirmationInformation truncatedCheck IS null", null);
@@ -1179,7 +1056,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
     }
 
-    public static void generateNotificationEmail(StringBuffer buffer, Map<ParameterName, ImagePart> images) throws Exception {
+    public static void generateNotificationEmail(String msg, Map<ParameterName, ImagePart> images) throws Exception {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
+
+        buffer.append(msg).append(" at ").append((new Date()).toString());
+        buffer.append("</body></html>");
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Sending email", null);
         String receiptTitle = "SBT Middleware Warning Message";
@@ -1270,7 +1152,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
     }
 
     /**
-     * *****************************commented for tests only **********************************
+     * *****************************commented for tests only
+     * **********************************
      */
     private void OEPago(DirexTransactionRequest request) throws Exception {
 
@@ -1282,16 +1165,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         DirexTransactionResponse responseeeee;
         try {
             responseeeee = sendMessageToHost(req00, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME, false);
-        } catch (Exception e) {
-            //sendEmail
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] ERROR sending message to host method pago(...)", null);
-            StringBuffer buffer2 = new StringBuffer();
-            buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-            buffer2.append("There were a problem receiving OE Pago ************").append(" at ").append((new Date()).toString());
-            buffer2.append("</body></html>");
-
-            generateNotificationEmail(buffer2, null);
+        } catch (Exception e) { 
+            generateNotificationEmail("There were a problem receiving OE Pago", null);
             return;
         }
 
@@ -1309,16 +1184,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         DirexTransactionResponse responseeeee1;
         try {
             responseeeee1 = sendMessageToHost(req001, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME, false);
-        } catch (Exception e) {
-            //sendEmail
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] ERROR sending message to host method devolucion(...)", null);
-            StringBuffer buffer2 = new StringBuffer();
-            buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-            buffer2.append("There were a problem receiving OE Pago ************").append(" at ").append((new Date()).toString());
-            buffer2.append("</body></html>");
-
-            generateNotificationEmail(buffer2, null);
+        } catch (Exception e) { 
+            generateNotificationEmail("There were a problem receiving OE Pago", null);
             return;
         }
 
@@ -1367,7 +1234,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 if (personalInfoMap != null) {
 
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] ----------------- Printing PersonInfo map  -----------------  ", null);
-                    String ssn = (String)request.getTransactionData().get(ParameterName.SSN);
+                    String ssn = (String) request.getTransactionData().get(ParameterName.SSN);
                     dtr.getTransactionData().put(ParameterName.IDTYPE, CoreTransactionUtil.getIdTypeFromId(ssn));
                     dtr.getTransactionData().put(ParameterName.ID, personalInfoMap.get(ParameterName.ID));
                     fixPersonInfoName(personalInfoMap);
@@ -1440,7 +1307,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 //    }
     private void feeCalculator(DirexTransactionRequest request, Transaction transaction) {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() start ...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexCashBL] feeCalculator() start ...", null);
 
         Map map = new HashMap();
 
@@ -1458,27 +1325,17 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             HibernateUtil.rollbackTransaction();
         }
 
-        String finalFee = map.get("FINALFEE") + "";
+        Float feeAmount = (Float) map.get(ParameterName.CRDLDF);
 
         Double amount = (Double) request.getTransactionData().get(ParameterName.AMMOUNT);
-        Double payOut;
-        Double feeAmount = Double.parseDouble(finalFee);
 
-//        if (request.getTransactionData().containsKey(ParameterName.HOSTNAME)) {
-//            if (request.getTransactionData().get(ParameterName.HOSTNAME).equals("FUZE")) {
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] The fee applied was 4.95 for a Fuze transaction",null);
-//                payOut = amount - 4.95;
-//                feeAmount = "4.95";
-//            } else {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FEE_AMOUNT applied: " + feeAmount, null);
-        payOut = amount - feeAmount;//No se le resta ese fee a peticion de carlos aparicio dic/04/2014
-//            }
+        Double payOut = amount - feeAmount;//No se le resta ese fee a peticion de carlos aparicio dic/04/2014
 
-//        }
         request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, payOut);
         request.getTransactionData().put(ParameterName.FEE_AMMOUNT, feeAmount);
 
-        transaction.setFeeAmmount(feeAmount);
+        transaction.setFeeAmmount(feeAmount.doubleValue());
         transaction.setPayoutAmmount(payOut);
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() done with PAYOUT_AMOUNT: " + payOut, null);
     }

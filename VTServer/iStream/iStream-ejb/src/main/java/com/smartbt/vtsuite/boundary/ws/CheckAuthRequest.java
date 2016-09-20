@@ -147,11 +147,10 @@ public class CheckAuthRequest {
         
         identificationn.setId(MapUtil.getStringValueFromMap( map, ParameterName.ID, false ));
         if(map.get(ParameterName.BORNDATE) != null){
-                    String dob = (String)map.get(ParameterName.BORNDATE);
+                String dob = map.get(ParameterName.BORNDATE).toString();             
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE original DATE: "+dob,null);
                     Date dobIn = new SimpleDateFormat("MMddyyyy").parse(dob);
                     SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
-
                     identificationn.setDob(dobOut.format(dobIn));
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE value : "+dobOut.format(dobIn),null);
         }

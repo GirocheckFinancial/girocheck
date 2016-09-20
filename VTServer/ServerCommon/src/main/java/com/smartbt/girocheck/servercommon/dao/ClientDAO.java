@@ -52,35 +52,36 @@ public class ClientDAO extends BaseDAO<Client> {
     }
 
     public Client createOrGet( String ssn, byte[] addressForm ) throws SQLException {
-        Client client;
-        String encryptedSSN = "";
+ 
         String maskSSN = "";
-        if(ssn!= null && !ssn.equals("")){
+        if(ssn!= null && ssn.length() >= 9){
             maskSSN = ssn.substring(5, 9);
         }
         
-        try {
-            //encrypting cardNumber
-            encryptedSSN = CryptoUtils.encrypt(ssn);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet getting client with encryptedSSN = " + encryptedSSN ,null);
-        Criteria criteria = HibernateUtil.getSession().createCriteria( Client.class ).add( Restrictions.eq( "hashSSN", encryptedSSN ) );
-//        Criteria criteria = HibernateUtil.getSession().createCriteria( Client.class ).add( Restrictions.eq( "ssn", encryptedSSN ) );
-        client = (Client) criteria.uniqueResult();
+//        try {
+//            //encrypting cardNumber
+////            encryptedSSN = CryptoUtils.encrypt(ssn);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet getting client with ssn = " + ssn ,null);
+//        Criteria criteria = HibernateUtil.getSession().createCriteria( Client.class ).add( Restrictions.eq( "hashSSN", encryptedSSN ) );
+        Client client = (Client)HibernateUtil.getSession().createCriteria( Client.class )
+                .add( Restrictions.eq( "ssn", ssn ))
+                .setMaxResults(1)
+                .uniqueResult();
 
-        boolean newClient = client == null;
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet newClient = " + newClient ,null);
-   
-        if ( newClient ) {
+        boolean isNewClient = (client == null);
+        
+        if ( isNewClient ) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] Creating newClient with SSN = " + ssn ,null);
             client = new Client();
-            client.setHashSSN(encryptedSSN );
             client.setSsn( ssn );
             client.setMaskSSN(maskSSN );
             client.setActive( true);
-            client.setHashSSN(ssn);
             client.setCreatedAt( new Date());
+        }else{
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] Client already exist.",null);
         }
 
         if ( addressForm != null ) {
@@ -88,7 +89,7 @@ public class ClientDAO extends BaseDAO<Client> {
             client.setAddressForm( addressFormBlob );
         }
 
-        if ( newClient || addressForm != null ) {
+        if ( isNewClient || addressForm != null ) {
             saveOrUpdate( client );
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet -> after saveOrUpdate client.id = " + client.getId() ,null);
         }       

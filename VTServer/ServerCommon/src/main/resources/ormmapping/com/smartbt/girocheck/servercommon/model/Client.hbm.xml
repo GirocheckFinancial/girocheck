@@ -29,9 +29,7 @@ License Type: Evaluation
                 </property>
                 
 		<property name="maskSSN" column="mask_ssn" type="string" length="15" not-null="true" lazy="false"/>
-                <property name="hashSSN" column="hash_ssn" type="string" length="255" not-null="false" lazy="false">
-                    
-                </property>
+         
 		<property name="idBeneficiary" column="id_beneficiary" type="string" length="255" not-null="false" lazy="false"/>
 		<set name="data_SC" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="client" not-null="false"/>

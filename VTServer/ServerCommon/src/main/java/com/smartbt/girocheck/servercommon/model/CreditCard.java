@@ -27,9 +27,7 @@ public class CreditCard implements Serializable {
     private String maskCardNumber;
 
     private String key;
-    
-    private String pan;
-
+     
     private com.smartbt.girocheck.servercommon.model.CardType card_type;
 
     private com.smartbt.girocheck.servercommon.model.Client client;
@@ -132,20 +130,5 @@ public class CreditCard implements Serializable {
      */
     public void setMaskCardNumber(String maskCardNumber) {
         this.maskCardNumber = maskCardNumber;
-    }
-
-    /**
-     * @return the pan
-     */
-    public String getPan() {
-        return pan;
-    }
-
-    /**
-     * @param pan the pan to set
-     */
-    public void setPan(String pan) {
-        this.pan = pan;
-    }
-
+    } 
     }

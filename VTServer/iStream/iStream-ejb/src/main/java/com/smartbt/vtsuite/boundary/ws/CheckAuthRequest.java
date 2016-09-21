@@ -149,7 +149,7 @@ public class CheckAuthRequest {
         if(map.get(ParameterName.BORNDATE) != null){
                 String dob = map.get(ParameterName.BORNDATE).toString();             
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE original DATE: "+dob,null);
-                    Date dobIn = new SimpleDateFormat("MMddyyyy").parse(dob);
+                    Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
                     SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
                     identificationn.setDob(dobOut.format(dobIn));
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE value : "+dobOut.format(dobIn),null);

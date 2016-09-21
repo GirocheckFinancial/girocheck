@@ -69,6 +69,8 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
                 url = "http://gwin.orderexpress.com.mx:8081/stored/Service1.asmx?wsdl";
             }
             
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] URL = " + url,null);
+            
             BindingProvider bindingProvider = (BindingProvider) port;
             bindingProvider.getRequestContext().put(
                     BindingProvider.ENDPOINT_ADDRESS_PROPERTY,

@@ -36,8 +36,8 @@ public class OrderExpressHostManager {
 
     public DirexTransactionResponse processTransaction( DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts ) throws Exception {
 
-  MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
-//       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
+  // MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+      OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
         
         

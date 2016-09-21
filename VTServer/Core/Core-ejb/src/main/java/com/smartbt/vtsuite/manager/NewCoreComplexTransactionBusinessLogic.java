@@ -1226,6 +1226,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                     try {
                         personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
                     } catch (Exception e) {
+                        e.printStackTrace();
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);
                         return DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, " Null personInfo from DLicense WS ", "");
                     }

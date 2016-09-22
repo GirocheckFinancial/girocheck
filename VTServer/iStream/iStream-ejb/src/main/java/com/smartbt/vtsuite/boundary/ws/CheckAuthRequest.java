@@ -146,15 +146,16 @@ public class CheckAuthRequest {
         Identification identificationn = new Identification();
         
         identificationn.setId(MapUtil.getStringValueFromMap( map, ParameterName.ID, false ));
-        if(map.get(ParameterName.BORNDATE) != null){
-                String dob = map.get(ParameterName.BORNDATE).toString();             
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE original DATE: "+dob,null);
-                    Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
-                    SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
-                    identificationn.setDob(dobOut.format(dobIn));
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE value : "+dobOut.format(dobIn),null);
-        }
+//        if(map.get(ParameterName.BORNDATE) != null){
+//                String dob = map.get(ParameterName.BORNDATE).toString();             
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE original DATE: "+dob,null);
+//                    Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
+//                    SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
+//                    identificationn.setDob(dobOut.format(dobIn));
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE value : "+dobOut.format(dobIn),null);
+//        }
         
+        identificationn.setDob(MapUtil.getStringValueFromMap( map, ParameterName.BORNDATE, false ));
         identificationn.setFirstName(MapUtil.getStringValueFromMap( map, ParameterName.FIRST_NAME, false ));
         identificationn.setLastName(MapUtil.getStringValueFromMap( map, ParameterName.LAST_NAME, false ));
         identificationn.setAddress(MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false ));
@@ -228,6 +229,13 @@ public class CheckAuthRequest {
         sb.append( "      <sendTime> " + sendTime + " </sendTime>" );
         sb.append( "      <serial> " + serial + " </serial>" );
         sb.append( "      <ssn> " + ssn + " </ssn>" );
+        
+        if(identification != null){
+            sb.append(identification.getAsXML());
+        }else{
+            sb.append( "identification iS NULL");
+        }
+        
         sb.append( "</CheckAuthRequest>" );
         
         return sb.toString();
@@ -259,6 +267,7 @@ public class CheckAuthRequest {
         System.out.println( "      <scannerManufacturer> " + scannerManufacturer + " </scannerManufacturer>" );
         System.out.println( "      <sendTime> " + sendTime + " </sendTime>" );
         System.out.println( "      <serial> " + serial + " </serial>" );
+        identification.printAsXML();
         System.out.println( "      <ssn> " + ssn + " </ssn>" );
         System.out.println( "</CheckAuthRequest>" );
     }

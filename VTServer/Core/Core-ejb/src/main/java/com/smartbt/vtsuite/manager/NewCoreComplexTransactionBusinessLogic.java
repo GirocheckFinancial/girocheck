@@ -797,7 +797,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
     }
 
     private void fillOutClient(Map transactionMap) throws SQLException, Exception {
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fillOutClient(...)", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fillOutClient(...) ::", null);
         try {
             if (transactionMap.containsKey(ParameterName.FIRST_NAME)) {
                 transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.FIRST_NAME));
@@ -827,7 +827,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE));
             }
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fillOutClient(...) Before field validation ADDRESS_CORRECT = [" + transactionMap.get(ParameterName.ADDRESS_CORRECT) + "]", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fillOutClient(...) transaction.getClient().getBornDate() = " + transaction.getClient().getBornDate(), null);
 
             if (transactionMap.containsKey(ParameterName.ADDRESS_CORRECT) && transactionMap.get(ParameterName.ADDRESS_CORRECT) != null) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fillOutClient(...) ADDRESS_CORRECT != null: true.", null);
@@ -1224,7 +1224,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                 if (dlData != null && !dlData.isEmpty()) {
                     try {
-                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
+                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData, 5);
                     } catch (Exception e) {
                         e.printStackTrace();
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);

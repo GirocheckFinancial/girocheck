@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.HttpResponse;
@@ -30,12 +32,18 @@ public class IDScanner {
 
     public static void main(String[] args) throws Exception {
 //       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
-       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzVaRjAyMTQwMDY1RExEQUFST0JFUlRTLEJFUk5BREVUVEUsSk9FTExBCkRBRzIzMjUgWU9SSyBTVApEQUlPUEEgTE9DS0EKREFKRkwKREFLMzMwNTQtMDAwMCAKREFRUjE2MzA3MDYwNjc4OApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIwMDUxOApEQkIxOTYwMDUxOApEQkMyCkRCRDIwMTIwNzEzCkRCSFkKREFVNTAyDVpGWkZBUkVQTEFDRUQ6IDIwMTUwMzI2ClpGQgpaRkNTMTExNTAzMjYwMDA2ClpGRApaRkUwNi0wMS0xNApaRkYN");
-   
-        System.out.println(map.get(ParameterName.BORNDATE));
+        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==", 5);
+
+        System.out.println(map.get(ParameterName.BORNDATE)); 
+
     }
 
-    public static Map<ParameterName, String> parseID(String authKey, String text) throws Exception {
+    public static Map<ParameterName, String> parseID(String authKey, String text, Integer attempts) throws Exception {
+        if (attempts == 0) {
+            return new HashMap();
+        }
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scanning id...", null);
         HttpClient client = new DefaultHttpClient();
         //TODO put in a System Property
         HttpPost post = new HttpPost("https://app1.idware.net/DriverLicenseParserRest.svc/Parse");
@@ -44,13 +52,13 @@ public class IDScanner {
         StringEntity input = new StringEntity(scannerInput.toString());
         input.setContentType("application/json");
 
-        System.out.println("-Request-");
-        System.out.println(scannerInput.toString());
-
         post.setEntity(input);
-        HttpResponse response = client.execute(post);
-
-        System.out.println("-RESPONSE-");
+        HttpResponse response;
+        try {
+            response = client.execute(post);
+        } catch (Exception e) {
+            return parseID(authKey, text, attempts - 1);
+        }
 
         if (response.getEntity() != null) {
             String resp = EntityUtils.toString(response.getEntity());
@@ -68,18 +76,18 @@ public class IDScanner {
 
                     System.out.println(dl.toString());
 
-                    Map map = new HashMap<ParameterName, String>(); 
+                    Map map = new HashMap<ParameterName, String>();
                     map.put(ParameterName.ID, getString(dl, "LicenseNumber"));
                     map.put(ParameterName.ADDRESS, getString(dl, "Address1"));
                     map.put(ParameterName.GENDER, getString(dl, "Gender"));
                     map.put(ParameterName.CITY, getString(dl, "City"));
-                    map.put(ParameterName.STATE, getString(dl, "IssuedBy")); 
+                    map.put(ParameterName.STATE, getString(dl, "IssuedBy"));
                     map.put(ParameterName.EXPIRATION_DATE, getString(dl, "ExpirationDate"));
                     map.put(ParameterName.LAST_NAME, getString(dl, "LastName"));
-                    map.put(ParameterName.ZIPCODE,getString(dl, "PostalCode"));
+                    map.put(ParameterName.ZIPCODE, getString(dl, "PostalCode"));
                     map.put(ParameterName.FIRST_NAME, getString(dl, "FirstName"));
-                    map.put(ParameterName.MIDDLE_NAME,getString(dl, "MiddleName"));
-                    map.put(ParameterName.BORNDATE, getString(dl, "Birthdate"));
+                    map.put(ParameterName.MIDDLE_NAME, getString(dl, "MiddleName"));
+                    map.put(ParameterName.BORNDATE, formatDate( getString(dl, "Birthdate")));
                     map.put(ParameterName.IDSTATE, getString(dl, "IssuedBy"));
 
                     map.put(ParameterName.COUNTRY, "US");
@@ -98,6 +106,18 @@ public class IDScanner {
         }
         return "";
     }
+
+    public static String formatDate(String date) {
+        try {
+            Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
+            return dobOut.format(dobIn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return date;
+        }
+    }
+
 }
 
 class ScannerInput {

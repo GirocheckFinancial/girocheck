@@ -35,6 +35,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
+import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.IMap;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthRequest;
 import com.smartbt.vtsuite.boundary.ws.CheckAuthSubmitRes;
@@ -79,6 +80,7 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
 
         TransactionType transactionType = request.getTransactionType();
 
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug,"[MockIStreamBusinessLogic]:: transactionType = " + transactionType ,null);
         
         switch (transactionType) {
             case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
@@ -139,6 +141,7 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
     }
 
      public CheckAuthRes checkAuth(Map transactionData) throws Exception{
+         
          CheckAuthRequest request = new CheckAuthRequest();
          request.build(transactionData);
          request.printAsXML();

@@ -19,15 +19,12 @@ import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
-import com.smartbt.vtsuite.mock.MockOrderExpressBusinessLogic;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
-import static com.smartbt.vtsuite.utils.MapUtil.getDoubleValueFromMap;
+import com.smartbt.vtsuite.mock.MockOrderExpressBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 
 /**
@@ -39,7 +36,7 @@ public class OrderExpressHostManager {
 
     public DirexTransactionResponse processTransaction( DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts ) throws Exception {
 
-  // MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+//   MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
         

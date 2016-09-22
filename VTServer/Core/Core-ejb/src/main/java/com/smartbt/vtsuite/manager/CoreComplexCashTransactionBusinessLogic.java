@@ -253,7 +253,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 if (personalInfoRequestMap.get(ParameterName.BORNDATE) != null) {
                     String dob = (String) personalInfoRequestMap.get(ParameterName.BORNDATE);
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value after convert it to a DATE: " + dob, null);
-                    Date dobb = new SimpleDateFormat("MMddyyyy").parse(dob);
+                    Date dobb = new SimpleDateFormat("MM-dd-yyyy").parse(dob);
                     request.getTransactionData().put(ParameterName.BORNDATE, dobb);
 
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value : " + dobb, null);
@@ -766,7 +766,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             Date date = new Date();
             try {
-                date = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH).parse((String) transactionMap.get(ParameterName.BORNDATE));
+                date = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH).parse((String) transactionMap.get(ParameterName.BORNDATE));
             } catch (ParseException ex) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() error parsing the date ", null);
                 ex.printStackTrace();
@@ -951,7 +951,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                if (dlData != null && !dlData.isEmpty()) {
                     try {
-                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
+                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData, 5);
                     } catch (Exception e) {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);
                         return DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, " Null personInfo from DLicense WS ", "");

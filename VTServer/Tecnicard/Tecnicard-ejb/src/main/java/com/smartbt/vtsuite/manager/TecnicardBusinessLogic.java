@@ -325,13 +325,16 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
     public IMap wmCardHolderValidation( Map map ) throws Exception {
 //        String pIdType = IdType.SSN.getId() + "";
-        String pIdType = MapUtil.getStringValueFromMap( map, ParameterName.SENSITIVEIDTYPE, true );
+//        String pIdType = MapUtil.getStringValueFromMap( map, ParameterName.SENSITIVEIDTYPE, true );
+        IdType idType = (IdType)map.get(ParameterName.IDTYPE);
+        
+       // String pIdType = MapUtil.getStringValueFromMap( map, ParameterName.SENSITIVEIDTYPE, true );
         String pId = MapUtil.getStringValueFromMap( map, ParameterName.SSN, true );
         
         String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false );
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardHolderValidation("+ pRequestID+ ",  " + pCardNumber+ ",  " + pId+ ",  " + pIdType+ ")",null );
-        return port.wmCardHolderValidation( pRequestID, pCardNumber, pId, pIdType );
+        return port.wmCardHolderValidation( pRequestID, pCardNumber, pId, idType.getId() + "" );
     }
 
     public IMap wmEcho( Map map ) throws Exception {

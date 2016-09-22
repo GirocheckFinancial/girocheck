@@ -333,7 +333,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         
         String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardHolderValidation("+ pRequestID+ ",  " + pCardNumber+ ",  " + pId+ ",  " + pIdType+ ")",null );
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardHolderValidation("+ pRequestID+ ",  " + pCardNumber+ ",  " + pId+ ",  " + idType.getId()+ ")",null );
         return port.wmCardHolderValidation( pRequestID, pCardNumber, pId, idType.getId() + "" );
     }
 

@@ -193,18 +193,18 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         if (hostName.equalsIgnoreCase("TECNICARD") && operation.equalsIgnoreCase("02")) {
             Double amount = (Double) map.get(ParameterName.AMMOUNT);
             
-            input.setDEPOSIT(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(((double)amount-3.95)+"") : "NULL");
+            input.setDEPOSIT(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(((double)amount-3.95)+"") : "NULL");
             input.setTAX("NULL");
             input.setTOTAL(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false)) ? OEUtils.singleQuote(amount+"") : "NULL");
             input.setRATE("1.00");
-            input.setRELIEVE(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(((double)amount-3.95)+"") : "NULL");
+            input.setRELIEVE(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(((double)amount-3.95)+"") : "NULL");
             input.setSERVICE(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) ? OEUtils.singleQuote("3.95") : "NULL");
         }else{
-            input.setDEPOSIT(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
+            input.setDEPOSIT(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
             input.setTAX("NULL");
             input.setTOTAL(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false)) : "NULL");
             input.setRATE("1.00");
-            input.setRELIEVE(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
+            input.setRELIEVE(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
             input.setSERVICE(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) : "NULL");
         }
         corresponsal.setIDMERCHANT( System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
@@ -330,8 +330,11 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
                     break;
                 case SSN:
                 default:
-                    clientDocumentation.setSS( id  );
-                    clientDocumentationB.setSSB( id );
+                    clientDocumentation.setLICENCIA( id);
+                    clientDocumentationB.setLICENCIAB( id );
+                    
+//                    clientDocumentation.setSS( id  );
+//                    clientDocumentationB.setSSB( id );
                     break;
             }
 

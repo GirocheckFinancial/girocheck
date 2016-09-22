@@ -24,7 +24,10 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import static com.smartbt.vtsuite.utils.MapUtil.getDoubleValueFromMap;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.lang.ArrayUtils;
 
 /**
@@ -40,6 +43,7 @@ public class OrderExpressHostManager {
       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
         
+        fixZipCode(direxTransactionRequest);
         
         try {
             response = (DirexTransactionResponse) bizLogic.handle( direxTransactionRequest );
@@ -118,6 +122,23 @@ public class OrderExpressHostManager {
         }
 
         return response;
+    }
+    
+//    public static void main(String[] args) throws Exception {
+//       DirexTransactionRequest req = new DirexTransactionRequest();
+//       Map map = new HashMap();
+//       map.put(ParameterName.ZIPCODE, "33157-4567");
+//       req.setTransactionData(map);
+//       fixZipCode(req);
+//        System.out.println(req.getTransactionData().get(ParameterName.ZIPCODE));
+//    }
+    
+    private static void fixZipCode( DirexTransactionRequest direxTransactionRequest){
+        if(direxTransactionRequest.getTransactionData().containsKey(ParameterName.ZIPCODE) &&
+          ((String)direxTransactionRequest.getTransactionData().get(ParameterName.ZIPCODE)).length() > 5){
+            String newZip = ((String)direxTransactionRequest.getTransactionData().get(ParameterName.ZIPCODE)).substring(0, 5);
+            direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, newZip);
+        }
     }
      
     public ResultMessage selectResultMessage(String code){

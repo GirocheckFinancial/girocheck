@@ -2,9 +2,9 @@ INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VAL
 
 CREATE TABLE `fee_buckets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `minimum` float DEFAULT NULL,
-  `fixed` float DEFAULT NULL,
-  `percentage` float DEFAULT NULL,
+  `minimum` decimal(10,2) DEFAULT NULL,
+  `fixed` decimal(10,2) DEFAULT NULL,
+  `percentage` decimal(10,2) DEFAULT NULL,
   `fee_schedule_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `schedule_id` (`fee_schedule_id`),

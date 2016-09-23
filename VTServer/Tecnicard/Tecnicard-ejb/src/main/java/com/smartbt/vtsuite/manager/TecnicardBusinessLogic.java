@@ -262,9 +262,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID " +
                 pRequestID+ ",  pCard " + pCard+ ",  pId " + pId+ ",  pIdType " + idType+ ",  pIdExpiration " + pIdExpiration+ ",  pIdCountry " + pIdCountry+ ",  pIdState " + pIdState+ ",  pPersonTitle " + pPersonTitle+ ",  pFirstName " + pFirstName+ ", pMiddleName " + pMiddleName+ ", pLastName " + pLastName+ ", pMaidenName " + pMaidenName+ ", pDateOfBirth " + pDateOfBirth+ ", pCountry " + pCountry+ ", pState " +
                 pState+ ", pCity " + pCity+ ", pAddress  " + pAddress+ ", pZipCode " + pZipCode+ ", pEmail " + pEmail+ ", pTelephoneAreaCode " + pTelephoneAreaCode+ ", pTelephone " + pTelephone+ ", pCellphoneAreaCode " + pCellphoneAreaCode+ ", pCellphone " + pCellphone+ ", pWorkphoneAreaCode " + pWorkphoneAreaCode+ ", pWorkphone " + pWorkphone+ ", pFaxAreaCode " + pFaxAreaCode+ ", pFaxphone " + pFaxphone+ ", pRBService " + pRBService+ ", pCurrentAddress " + pCurrentAddress + ")",null);
-//        return port.wmCardPersonalization(
-//                pRequestID, pCard, "112223333", "1", "", "840", "", "", "John", "", "Smith", "", "19750228", "840",
-//                "11", "Atlanta", "222333 PEACHTREE PLACE", "30318", "girocheck@cardmarte.com", "", "", "786", "4540209", "", "", "", "", "0", "Y" );
+
         return port.wmCardPersonalization(
                 pRequestID, pCard, pId, "" + idType, pIdExpiration, pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry,
                 pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress );

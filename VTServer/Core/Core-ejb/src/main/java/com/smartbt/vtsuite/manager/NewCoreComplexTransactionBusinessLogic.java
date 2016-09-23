@@ -500,10 +500,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 if (hostName.equals(NomHost.FUZE.toString())) {
                     request.getTransactionData().put(ParameterName.BILLER_ID, response.getTransactionData().get(ParameterName.BILLER_ID));
                     request.getTransactionData().put(ParameterName.TRANSACTION_ID, transaction.getId());
-                } else {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] SEND TO GENERIC HOST, GENERIC_HOST_CARD_LOAD with amount: " + request.getTransactionData().get(ParameterName.AMMOUNT), null);
-                    request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, request.getTransactionData().get(ParameterName.AMMOUNT));
-                }
+                } 
+                
                 response = sendMessageToHost(request, hostName, GENERIC_CARD_LOAD_WAIT_TIME, false);
                 if (!response.wasApproved()) {
 

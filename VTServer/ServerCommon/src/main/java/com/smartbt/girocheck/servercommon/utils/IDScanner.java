@@ -44,6 +44,8 @@ public class IDScanner {
         }
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scanning id...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: authKey = " + authKey, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
         HttpClient client = new DefaultHttpClient();
         //TODO put in a System Property
         HttpPost post = new HttpPost("https://app1.idware.net/DriverLicenseParserRest.svc/Parse");

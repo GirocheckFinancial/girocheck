@@ -36,9 +36,9 @@ import java.util.Map;
  * The Host Manager class
  */
 public class TecnicardHostManager {
-    
-//    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(TecnicardHostManager.class);
-
+      TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
+//        MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+ 
     public static Map TRANSACTION_SEQUENCE;
     //   private Map<String, String> persistentParameters;
     private static String CODE_000000, CODE_100011, CODE_100012, CODE_100015;
@@ -104,8 +104,7 @@ public class TecnicardHostManager {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] Parsing  fee_amount value :: " + request.getTransactionData().get(ParameterName.FEE_AMMOUNT),null);
         }
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] creating a connection with Tecnicard WSDL",null);
-       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
-//        MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] connection with Tecnicard WSDL DONE",null);
         TransactionType originalTransactionType = (TransactionType)request.getTransactionData().get( TransactionType.TRANSACTION_TYPE);
 

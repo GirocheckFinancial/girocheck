@@ -22,25 +22,42 @@ public class FeeBucketsManager {
     }
 
     FeeBucketsDAO feeBucketsDAO = FeeBucketsDAO.get();
-    
-    public Map getFees(String merchantId, String operation, String amountString){
+
+    public Map getFees(String merchantId, String operation, String amountString) {
         float amount = 0;
         Map responseMap = new HashMap();
-        try{
+        try {
             amount = Float.parseFloat(amountString);
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("[FeeBucketsManager] FeeBucketsManager() converting amount from string to double fail.");
             e.printStackTrace();
         }
+
         FeeBuckets bucket = feeBucketsDAO.getFees(merchantId, operation, amount);
-        if(bucket != null){
-            Float fee = bucket.getFixed()+amount*(bucket.getPercentage()/100);
-            System.out.println("[FeeBucketsManager] FeeBucketsManager() final fee result: " + fee);
+        if (bucket != null) {
             responseMap = bucket.toMap();
-            responseMap.put(ParameterName.CRDLDF, fee);
+
+            if (operation.equals("01")) {  //check 
+                responseMap.put(ParameterName.CRDLDF, getFeeForChecks(amount));
+            } else {
+                Float fee = bucket.getFixed() + amount * (bucket.getPercentage() / 100);
+                responseMap.put(ParameterName.CRDLDF, fee);
+            }
+
+            System.out.println("[FeeBucketsManager] FeeBucketsManager() final fee result: " + responseMap.get(ParameterName.CRDLDF));
         }
+
         return responseMap;
-        
+
+    }
+
+    //provitional method for calculate checks
+    private Float getFeeForChecks(float amount) {
+        if (amount <= 295) {
+            return 2.95F;
+        } else {
+            return amount * 0.01F;
+        }
     }
 
 }

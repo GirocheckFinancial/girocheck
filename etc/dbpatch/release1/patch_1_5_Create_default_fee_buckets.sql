@@ -1,10 +1,8 @@
 INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(1, 'patch_1_5', now(), 'Inset fee_buckets for default schedules');
 
---cash
-INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (10.0, 3.95, 0.0,(select id from girocheck.fee_schedules where method_id = 2 AND isdefault = true));
+INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (0.0, 3.95, 0.0,(select id from girocheck.fee_schedules where method_id = 2 AND isdefault = true));
 
---check
-INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (10.0, 2.95, 0.0,(select id from girocheck.fee_schedules where method_id = 1 AND isdefault = true));
+INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (0.0, 2.95, 0.0,(select id from girocheck.fee_schedules where method_id = 1 AND isdefault = true));
 INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (100.01, 3.50, 0.0,(select id from girocheck.fee_schedules where method_id = 1 AND isdefault = true));
 INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (200.01, 4.50, 0.0,(select id from girocheck.fee_schedules where method_id = 1 AND isdefault = true));
 INSERT INTO girocheck.fee_buckets (minimum, fixed, percentage, fee_schedule_id) VALUES (300.01, 5.25, 0.0,(select id from girocheck.fee_schedules where method_id = 1 AND isdefault = true));

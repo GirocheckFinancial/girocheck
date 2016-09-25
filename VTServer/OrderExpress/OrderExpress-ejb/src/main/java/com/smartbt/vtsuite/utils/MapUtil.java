@@ -30,8 +30,14 @@ public class MapUtil {
 
     public static void main(String[] args) throws Exception {
         Map map = new HashMap();
-        map.put(ParameterName.PAYOUT_AMMOUNT, "3.14159265");
-        System.out.println("----testing-----");
+        System.out.println("3.14".contains("."));
+        System.out.println("3.14".contains("//."));
+
+        map.put(ParameterName.PAYOUT_AMMOUNT, "3.14534");
+        System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+        map.put(ParameterName.PAYOUT_AMMOUNT, "5.1");
+        System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+        map.put(ParameterName.PAYOUT_AMMOUNT, "5"); 
         System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
     }
 
@@ -41,13 +47,24 @@ public class MapUtil {
                 return "";
             }
             String val = map.get(requestParameterName).toString();
-            try { 
-                BigDecimal bd = new BigDecimal(val);
-                bd = bd.setScale(2, BigDecimal.ROUND_FLOOR);
-                return bd.toString();
-            } catch (Exception e) {
-                return val;
+
+            if (val.contains(".")) {
+                int dot = val.indexOf(".");
+                if(val.length() > dot + 2){
+                   val = val.substring(0, dot) + "." + val.substring(dot + 1, dot + 3);
+                }
+                
             }
+
+            return val;
+
+//            try { 
+//                BigDecimal bd = new BigDecimal(val);
+//                bd = bd.setScale(2, BigDecimal.ROUND_FLOOR);
+//                return bd.toString();
+//            } catch (Exception e) {
+//                return val;
+//            }
         } else {
             if (required) {
                 throw new Exception(requestParameterName.toString() + " required for OrderExpress transaction");

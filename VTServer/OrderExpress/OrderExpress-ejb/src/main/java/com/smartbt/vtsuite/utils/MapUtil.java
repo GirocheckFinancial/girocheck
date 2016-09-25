@@ -33,7 +33,7 @@ public class MapUtil {
         System.out.println("3.14".contains("."));
         System.out.println("3.14".contains("//."));
 
-        map.put(ParameterName.PAYOUT_AMMOUNT, "3.14534");
+        map.put(ParameterName.PAYOUT_AMMOUNT, "5.079999999999999");
         System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
         map.put(ParameterName.PAYOUT_AMMOUNT, "5.1");
         System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));

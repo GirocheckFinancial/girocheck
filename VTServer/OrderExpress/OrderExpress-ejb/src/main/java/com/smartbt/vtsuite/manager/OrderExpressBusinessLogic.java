@@ -193,19 +193,19 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         if (hostName.equalsIgnoreCase("TECNICARD") && operation.equalsIgnoreCase("02")) {
             Double amount = (Double) map.get(ParameterName.AMMOUNT);
             
-            input.setDEPOSIT(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(((double)amount-3.95)+"") : "NULL");
+            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
             input.setTAX("NULL");
-            input.setTOTAL(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false)) ? OEUtils.singleQuote(amount+"") : "NULL");
+            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
             input.setRATE("1.00");
-            input.setRELIEVE(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(((double)amount-3.95)+"") : "NULL");
-            input.setSERVICE(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) ? OEUtils.singleQuote("3.95") : "NULL");
+            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
         }else{
-            input.setDEPOSIT(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
+            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
             input.setTAX("NULL");
-            input.setTOTAL(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false)) : "NULL");
+            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
             input.setRATE("1.00");
-            input.setRELIEVE(!"NULL".equals(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
-            input.setSERVICE(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) : "NULL");
+            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
         }
         corresponsal.setIDMERCHANT( System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
         
@@ -214,8 +214,8 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             input.setIDDESTINY(System.getProperty("PARAM_OE_ID_DESTINY_CH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_ID_DESTINY_CH")) : "84693");//7574 - poner la variable en el glassfish
             input.setPAYMENTMETHOD(System.getProperty("PARAM_OE_PAYMENT_METHOD_CH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_PAYMENT_METHOD_CH")) : "02");
 
-            input.setPAYMENTIMPORT(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false)) : "NULL");
-            input.setPAYMENTCOMISSION(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false)) : "NULL");
+            input.setPAYMENTIMPORT(MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+            input.setPAYMENTCOMISSION(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
         } else {
             input.setIDDESTINY(System.getProperty("PARAM_OE_ID_DESTINY_CASH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_ID_DESTINY_CASH")) : "84693");//7574 - poner la variable en el glassfish
             input.setPAYMENTMETHOD(System.getProperty("PARAM_OE_PAYMENT_METHOD_CASH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_PAYMENT_METHOD_CASH")) : "01");

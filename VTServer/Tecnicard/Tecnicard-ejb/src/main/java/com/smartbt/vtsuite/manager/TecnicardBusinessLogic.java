@@ -287,7 +287,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCardLoad( Map map ) throws Exception {
-        String pTransAmount = MapUtil.getStringValueFromMap( map, ParameterName.PAYOUT_AMMOUNT, false );
+        String pTransAmount = MapUtil.getStringValueFromMap( map, ParameterName.AMMOUNT, false );
         String pCheckFee = MapUtil.getStringValueFromMap( map, ParameterName.FEE_AMMOUNT, false );
         String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         String pTerminalCode = MapUtil.getStringValueFromMap( map, ParameterName.TERMINAL_ID_TECNICARD, false );
@@ -304,7 +304,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 //modificar campos
     public IMap wmCardToBank( Map map ) throws Exception {
-        String pAmount = MapUtil.getStringValueFromMap( map, ParameterName.PAYOUT_AMMOUNT, false );
+        String pAmount = MapUtil.getStringValueFromMap( map, ParameterName.AMMOUNT, false );
         String pRoutingBankNumber = MapUtil.getStringValueFromMap( map, ParameterName.ROUTING_BANK_NUMBER, false );
         String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         String pAccountNumber = MapUtil.getStringValueFromMap( map, ParameterName.ACCOUNT_NUMBER, false );
@@ -350,7 +350,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCashToCard( Map map ) throws Exception {
-        String pTransAmount = MapUtil.getStringValueFromMap( map, ParameterName.PAYOUT_AMMOUNT, false );
+        String pTransAmount = MapUtil.getStringValueFromMap( map, ParameterName.AMMOUNT, false );
         String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         String pTerminalCode =MapUtil.getStringValueFromMap( map, ParameterName.TERMINAL_ID_TECNICARD, false );
         String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false );

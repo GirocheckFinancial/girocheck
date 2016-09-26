@@ -3,6 +3,7 @@ package com.smartbt.girocheck.servercommon.manager;
 import com.smartbt.girocheck.servercommon.dao.FeeBucketsDAO;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.model.FeeBuckets;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,19 +37,19 @@ public class FeeBucketsManager {
         FeeBuckets bucket = feeBucketsDAO.getFees(merchantId, operation, amount);
         if (bucket != null) {
             responseMap = bucket.toMap();
-
+            Float fee = 0F;
             if (operation.equals("01")) {  //check 
-                responseMap.put(ParameterName.CRDLDF, getFeeForChecks(amount));
+                fee = getFeeForChecks(amount);
             } else {
-                Float fee = bucket.getFixed() + amount * (bucket.getPercentage() / 100);
-                responseMap.put(ParameterName.CRDLDF, fee);
+                fee = bucket.getFixed() + amount * (bucket.getPercentage() / 100);
             }
+            BigDecimal bd = new BigDecimal(fee).setScale(2, BigDecimal.ROUND_HALF_UP);
+        
+            responseMap.put(ParameterName.CRDLDF, Float.parseFloat(bd.toString()));
 
             System.out.println("[FeeBucketsManager] FeeBucketsManager() final fee result: " + responseMap.get(ParameterName.CRDLDF));
         }
-
         return responseMap;
-
     }
 
     //provitional method for calculate checks
@@ -58,6 +59,12 @@ public class FeeBucketsManager {
         } else {
             return amount * 0.01F;
         }
+    }
+    
+    public static void main(String args[]){
+        float f =  3.18F;
+        BigDecimal bd = new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP);
+        System.out.println(Float.parseFloat(bd.toString()));
     }
 
 }

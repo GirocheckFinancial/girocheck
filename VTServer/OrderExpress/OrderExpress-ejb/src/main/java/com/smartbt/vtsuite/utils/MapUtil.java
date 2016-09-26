@@ -29,16 +29,13 @@ public class MapUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        Map map = new HashMap();
-        System.out.println("3.14".contains("."));
-        System.out.println("3.14".contains("//."));
-
-        map.put(ParameterName.PAYOUT_AMMOUNT, "5.079999999999999");
-        System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
-        map.put(ParameterName.PAYOUT_AMMOUNT, "5.1");
-        System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
-        map.put(ParameterName.PAYOUT_AMMOUNT, "5"); 
-        System.out.println(getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+       
+        System.out.println( round("3.14"));
+        System.out.println( round("3.141"));
+        System.out.println( round("3.145"));
+        System.out.println( round("3.146"));
+        System.out.println( round("3.1"));
+        System.out.println( round("3"));
     }
 
     public static String getDoubleValueFromMap(Map map, ParameterName requestParameterName, boolean required) throws Exception {
@@ -48,23 +45,8 @@ public class MapUtil {
             }
             String val = map.get(requestParameterName).toString();
 
-            if (val.contains(".")) {
-                int dot = val.indexOf(".");
-                if(val.length() > dot + 2){
-                   val = val.substring(0, dot) + "." + val.substring(dot + 1, dot + 3);
-                }
-                
-            }
+            return round(val);
 
-            return val;
-
-//            try { 
-//                BigDecimal bd = new BigDecimal(val);
-//                bd = bd.setScale(2, BigDecimal.ROUND_FLOOR);
-//                return bd.toString();
-//            } catch (Exception e) {
-//                return val;
-//            }
         } else {
             if (required) {
                 throw new Exception(requestParameterName.toString() + " required for OrderExpress transaction");
@@ -72,6 +54,23 @@ public class MapUtil {
                 return "NULL";
             }
         }
+    }
+    
+    
+    
+    public static String round(String original){
+        String val = original;
+         if (original.contains(".")) {
+                int dot = original.indexOf(".");
+                if(original.length() > dot + 3){
+                   val = original.substring(0, dot) + "." + original.substring(dot + 1, dot + 3);
+                   Integer thirdDigit = Integer.parseInt(original.charAt(dot + 3) + "");
+                   if(thirdDigit > 5){
+                       val = (Double.parseDouble(val) + 0.01) + "";
+                   }
+                }
+            }
+         return val;
     }
 
     public static int getIntegerValueFromMap(Map map, ParameterName requestParameterName, boolean required) throws Exception {

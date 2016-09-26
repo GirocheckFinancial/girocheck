@@ -6,10 +6,13 @@
 package com.smartbt.girocheck.servercommon.utils;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -23,13 +26,28 @@ import org.json.JSONObject;
  * @author rrodriguez
  */
 public class IDScanner {
+
     private static HttpPost post = new HttpPost("https://app1.idware.net/DriverLicenseParserRest.svc/Parse");
+    private static HttpClient client = new DefaultHttpClient();
+
     public static void main(String[] args) throws Exception {
 //       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
         Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==", 5);
 
-        System.out.println(map.get(ParameterName.BORNDATE)); 
+        System.out.println(map.get(ParameterName.BORNDATE));
 
+    }
+
+    public static boolean testParseID() {
+        try {
+            Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==", 5);
+            
+            return map.containsKey(ParameterName.BORNDATE)
+                    && map.get(ParameterName.BORNDATE) != null
+                    && map.get(ParameterName.BORNDATE).equals("05-17-1976");
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     public static Map<ParameterName, String> parseID(String authKey, String text, Integer attempts) throws Exception {
@@ -40,10 +58,8 @@ public class IDScanner {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scanning id...", null);
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: authKey = " + authKey, null);
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
-        HttpClient client = new DefaultHttpClient();
-        //TODO put in a System Property
-        
 
+        //TODO put in a System Property
         ScannerInput scannerInput = new ScannerInput(authKey, text);
         StringEntity input = new StringEntity(scannerInput.toString());
         input.setContentType("application/json");
@@ -53,11 +69,12 @@ public class IDScanner {
         try {
             response = client.execute(post);
         } catch (Exception e) {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
+            GoogleMail.SendIdScanFailEmail();
             return parseID(authKey, text, attempts - 1);
         }
 
-        if (response.getEntity() != null) {
+        if (response != null && response.getEntity() != null) {
             String resp = EntityUtils.toString(response.getEntity());
 
             System.out.println(resp);
@@ -84,17 +101,19 @@ public class IDScanner {
                     map.put(ParameterName.ZIPCODE, getString(dl, "PostalCode"));
                     map.put(ParameterName.FIRST_NAME, getString(dl, "FirstName"));
                     map.put(ParameterName.MIDDLE_NAME, getString(dl, "MiddleName"));
-                    map.put(ParameterName.BORNDATE, formatDate( getString(dl, "Birthdate")));
+                    formatDate(getString(dl, "Birthdate"), map);
                     map.put(ParameterName.IDSTATE, getString(dl, "IssuedBy"));
 
                     map.put(ParameterName.COUNTRY, "US");
                     map.put(ParameterName.IDCOUNTRY, "US");
-
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scan was Success", null);
                     return map;
                 }
             }
         }
-        throw new Exception("Can not parse the ID.");
+
+        GoogleMail.SendIdScanFailEmail();
+        return parseID(authKey, text, attempts - 1);
     }
 
     public static String getString(JSONObject json, String key) {
@@ -104,14 +123,14 @@ public class IDScanner {
         return "";
     }
 
-    public static String formatDate(String date) {
+    public static void formatDate(String date, Map map) {
         try {
             Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            map.put(ParameterName.BORNDATE_AS_DATE, dobIn);
             SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
-            return dobOut.format(dobIn);
+            map.put(ParameterName.BORNDATE, dobOut.format(dobIn));
         } catch (Exception e) {
             e.printStackTrace();
-            return date;
         }
     }
 

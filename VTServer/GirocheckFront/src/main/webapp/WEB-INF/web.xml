@@ -10,4 +10,10 @@
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
+    
+    <listener>
+        <listener-class>
+          com.smartbt.vtsuite.util.MyContextListener 
+        </listener-class>
+    </listener>
 </web-app>

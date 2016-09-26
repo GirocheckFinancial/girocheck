@@ -821,8 +821,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             if (transactionMap.containsKey(ParameterName.EMAIL)) {
                 transaction.getClient().setEmail((String) transactionMap.get(ParameterName.EMAIL));
             }
-            if (transactionMap.containsKey(ParameterName.BORNDATE)) {
-                transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE));
+            if (transactionMap.containsKey(ParameterName.BORNDATE_AS_DATE)) {
+                transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE_AS_DATE));
             }
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fillOutClient(...) transaction.getClient().getBornDate() = " + transaction.getClient().getBornDate(), null);

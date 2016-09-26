@@ -190,22 +190,32 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         String hostName = MapUtil.getStringValueFromMap( map,ParameterName.HOSTNAME,true);
         String operation = MapUtil.getStringValueFromMap( map, ParameterName.OPERATION,true);
         
+        Double amount = (Double) map.get(ParameterName.AMMOUNT);
+        Float fee = (Float) map.get(ParameterName.FEE_AMMOUNT);
+        Double payout = (Double) map.get(ParameterName.PAYOUT_AMMOUNT); 
+        
+        input.setTOTAL(amount + "");
+        input.setSERVICE(fee + "");
+        
+        input.setDEPOSIT(payout + "");
+        input.setRELIEVE(payout + "");
+        
         if (hostName.equalsIgnoreCase("TECNICARD") && operation.equalsIgnoreCase("02")) {
-            Double amount = (Double) map.get(ParameterName.AMMOUNT);
             
-            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+            
+//            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
             input.setTAX("NULL");
-            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
+//            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
             input.setRATE("1.00");
-            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
-            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
+//            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+//            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
         }else{
-            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+//            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
             input.setTAX("NULL");
-            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
+//            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
             input.setRATE("1.00");
-            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
-            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
+//            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
+//            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
         }
         corresponsal.setIDMERCHANT( System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
         

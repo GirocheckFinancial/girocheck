@@ -19,12 +19,12 @@ public class GoogleMail {
   
     public static void main(String[] args) throws MessagingException{
         System.out.println("Sending email...");
-        SendIdScanFailEmail();
+        SendIdScanFailEmail("text");
         System.out.println("Email sent");
     }
      
-    public static void SendIdScanFailEmail() throws AddressException, MessagingException {
-        SendEmail("IDScan Failed","This email is a warning that the IDScan failed in the Girocheck platform in the production environment.         Consider that we make until 5 attempts within the same transaction, so you might receiving several emails associated to the same problem.");
+    public static void SendIdScanFailEmail(String text) throws AddressException, MessagingException {
+        SendEmail("IDScan Failed","This email is a warning that the IDScan failed in the Girocheck platform in the production environment. text:[" + text + "]");
     }
     
     /**

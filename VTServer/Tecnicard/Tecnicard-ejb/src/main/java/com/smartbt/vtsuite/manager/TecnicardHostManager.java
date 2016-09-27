@@ -36,11 +36,11 @@ import java.util.Map;
  * The Host Manager class
  */
 public class TecnicardHostManager {
-      TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
-//        MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+//      TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
+        MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
  
     public static Map TRANSACTION_SEQUENCE;
-    //   private Map<String, String> persistentParameters;
+    
     private static String CODE_000000, CODE_100011, CODE_100012, CODE_100015;
 
     private Transaction transaction;

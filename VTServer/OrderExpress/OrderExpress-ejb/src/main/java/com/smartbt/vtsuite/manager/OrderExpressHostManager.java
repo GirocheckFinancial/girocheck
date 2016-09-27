@@ -14,7 +14,7 @@
  **
  */
 package com.smartbt.vtsuite.manager;
- 
+
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -31,22 +31,20 @@ import org.apache.commons.lang.ArrayUtils;
  * The Host Manager class
  */
 public class OrderExpressHostManager {
-    //If OE returns any of these codes the transaction needs to be re-submitted.
-    private static final String[] codesToRepeat = new String[]{"025","14", "506"};
-
-    public DirexTransactionResponse processTransaction( DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts ) throws Exception {
+ 
+    public DirexTransactionResponse processTransaction(DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts) throws Exception {
 
 //   MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
-      OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
+        OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
-        
+
         fixZipCode(direxTransactionRequest);
-        
+
         try {
-            response = (DirexTransactionResponse) bizLogic.handle( direxTransactionRequest );
-        } catch ( Exception e ) {
+            response = (DirexTransactionResponse) bizLogic.handle(direxTransactionRequest);
+        } catch (Exception e) {
             e.printStackTrace();
-            return DirexTransactionResponse.forException( ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED," Error description: " + e.getMessage() ,"");
+            return DirexTransactionResponse.forException(ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Error description: " + e.getMessage(), "");
         }
 
         if (!response.getTransactionType().equals(TransactionType.ORDER_EXPRESS_LOGS)) {
@@ -60,17 +58,17 @@ public class OrderExpressHostManager {
 
             if (!opCode.equals("001")) {
                 String opCode2 = (String) response.getTransactionData().get(ParameterName.OP_CODE2);
-                
-                if(opCode2 != null && ArrayUtils.contains(codesToRepeat, opCode2) && numberOfAttempts > 1){
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 = " + opCode2 + ", Re-Submitting request... " , null);
+
+                if (opCode2 != null && needToRepeatTransaction(opCode2) && numberOfAttempts > 1) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 = " + opCode2 + ", Re-Submitting request... ", null);
                     return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
-                }else{
-                  response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
-                  response.setErrorCode(opCode2);
+                } else {
+                    response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
+                    response.setErrorCode(opCode2);
                 }
-               
+
             }
-        }else{
+        } else {
 
             if (response.getTransactionData().containsKey(ParameterName.OP_CODE) && (response.getTransactionData().get(ParameterName.OP_CODE) == null || ((String) response.getTransactionData().get(ParameterName.OP_CODE)).isEmpty())) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OrderExpress LogMethod did not return an op_code value.", null);
@@ -78,11 +76,11 @@ public class OrderExpressHostManager {
             } else if (response.getTransactionData().containsKey(ParameterName.OP_CODE)) {
                 String opCode = (String) response.getTransactionData().get(ParameterName.OP_CODE);
                 String opCode2 = (String) response.getTransactionData().get(ParameterName.OP_CODE2);
-                
-                if(opCode2 != null && opCode2.equals("025") && numberOfAttempts > 1){
-                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 == '025', Re-Submitting request... " , null);
-                     return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
-                }else{
+
+                if (opCode2 != null && needToRepeatTransaction(opCode2) && numberOfAttempts > 1) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 == opCode2, Re-Submitting request... ", null);
+                    return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
+                } else {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] LogMethod opCode: " + opCode, null);
                     response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express LogMethod return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));
                     response.setErrorCode(opCode2);
@@ -94,8 +92,8 @@ public class OrderExpressHostManager {
 
                 if (!status.equals("3")) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] Condition Status != 3 and OELOGTIMEOUT value: " + response.getTransactionData().get(ParameterName.OELOGTIMEOUT), null);
-                    
-                    if ((boolean)response.getTransactionData().get(ParameterName.OELOGTIMEOUT)) {
+
+                    if ((boolean) response.getTransactionData().get(ParameterName.OELOGTIMEOUT)) {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OELOGTIMEOUT true", null);
                         response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.OE_LOG_TIME_OUT, " Order Express return OESTATUS : " + status);
                         response.setErrorCode((String) response.getTransactionData().get(ParameterName.OESTATUS));
@@ -108,19 +106,19 @@ public class OrderExpressHostManager {
             }
         }
 
-        if ( response.wasApproved() ) {
+        if (response.wasApproved()) {
             SubTransaction subTransaction = new SubTransaction();
-            subTransaction.setType( response.getTransactionType().getCode());
-            subTransaction.setResultCode( ResultCode.SUCCESS.getCode() );
-            subTransaction.setErrorCode( response.getErrorCode() );
-            subTransaction.setResultMessage( ResultMessage.SUCCESS.getMessage() );
-            subTransaction.setHost( NomHost.ORDER_EXPRESS.getId() );
-            response.getTransaction().addSubTransaction(subTransaction );
+            subTransaction.setType(response.getTransactionType().getCode());
+            subTransaction.setResultCode(ResultCode.SUCCESS.getCode());
+            subTransaction.setErrorCode(response.getErrorCode());
+            subTransaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
+            subTransaction.setHost(NomHost.ORDER_EXPRESS.getId());
+            response.getTransaction().addSubTransaction(subTransaction);
         }
 
         return response;
     }
-    
+
 //    public static void main(String[] args) throws Exception {
 //       DirexTransactionRequest req = new DirexTransactionRequest();
 //       Map map = new HashMap();
@@ -129,19 +127,37 @@ public class OrderExpressHostManager {
 //       fixZipCode(req);
 //        System.out.println(req.getTransactionData().get(ParameterName.ZIPCODE));
 //    }
-    
-    private static void fixZipCode( DirexTransactionRequest direxTransactionRequest){
-        if(direxTransactionRequest.getTransactionData().containsKey(ParameterName.ZIPCODE) &&
-          ((String)direxTransactionRequest.getTransactionData().get(ParameterName.ZIPCODE)).length() > 5){
-            String newZip = ((String)direxTransactionRequest.getTransactionData().get(ParameterName.ZIPCODE)).substring(0, 5);
+    private static void fixZipCode(DirexTransactionRequest direxTransactionRequest) {
+        if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.ZIPCODE)
+                && ((String) direxTransactionRequest.getTransactionData().get(ParameterName.ZIPCODE)).length() > 5) {
+            String newZip = ((String) direxTransactionRequest.getTransactionData().get(ParameterName.ZIPCODE)).substring(0, 5);
             direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, newZip);
         }
     }
      
-    public ResultMessage selectResultMessage(String code){
-        
-        switch(code){
-            
+
+    private static boolean needToRepeatTransaction(String resultCode) {
+        try {
+            int code = Integer.parseInt(resultCode);
+
+            return ((code >= 237 && code <= 282)
+                    || (code >= 411 && code <= 424)
+                    || (code >= 430 && code < 490 && (code % 10 == 0 || code % 10 == 1))
+                    || (code >= 482 && code <= 485)
+                    || (code == 25)
+                    || (code == 14)
+                    || (code == 506));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public ResultMessage selectResultMessage(String code) {
+
+        switch (code) {
+
             case "201":
                 return ResultMessage.OE_LOG_201;
             case "202":

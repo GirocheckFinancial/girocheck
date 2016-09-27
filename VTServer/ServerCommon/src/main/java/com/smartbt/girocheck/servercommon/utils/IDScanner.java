@@ -6,13 +6,14 @@
 package com.smartbt.girocheck.servercommon.utils;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.utils.idscanner.DriverLicense;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -30,18 +31,55 @@ public class IDScanner {
     private static HttpPost post = new HttpPost("https://app1.idware.net/DriverLicenseParserRest.svc/Parse");
     private static HttpClient client = new DefaultHttpClient();
 
+//    public static void main(String[] args) throws Exception {
+//         DriverLicense dl = new DriverLicense("@\n" +
+//"\n" +
+//"ANSI 6360100102DL00390170ZF02090065DLDAAJARAMILLO,JAIME, A\n" +
+//"DAG2935 SW 30TH CT\n" +
+//"DAICOCONUT GROVE\n" +
+//"DAJFL\n" +
+//"DAK33133-3615 \n" +
+//"DAQJ654421761770\n" +
+//"DARE   \n" +
+//"DASNONE\n" +
+//"DATNONE\n" +
+//"DBA20220517\n" +
+//"DBB19760517\n" +
+//"DBC1\n" +
+//"DBD20140513\n" +
+//"DAU510\n" +
+//"ZFZFAREPLACED: 00000000\n" +
+//"ZFB\n" +
+//"ZFCX631405131266\n" +
+//"ZFD\n" +
+//"ZFE09-01-12\n" +
+//"ZFF");
+//
+//         Map map = dl.toMap();
+//         
+//        for (Iterator iterator = map.keySet().iterator(); iterator.hasNext();) {
+//            Object next = iterator.next();
+//            System.out.println(next + " -> " + map.get(next));
+//        } 
+//        
+//        validateOutput(map);
+//    }
+//
     public static void main(String[] args) throws Exception {
 //       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
-        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==", 5);
+        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
 
-        System.out.println(map.get(ParameterName.BORNDATE));
-
+        for (Iterator iterator = map.keySet().iterator(); iterator.hasNext();) {
+            Object next = iterator.next();
+            System.out.println(next + " -> " + map.get(next));
+        }
+ 
     }
 
     public static boolean testParseID() {
         try {
-            Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==", 5);
-            
+            Map map = parseIDRemotely("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==", 5);
+
             return map.containsKey(ParameterName.BORNDATE)
                     && map.get(ParameterName.BORNDATE) != null
                     && map.get(ParameterName.BORNDATE).equals("05-17-1976");
@@ -50,14 +88,44 @@ public class IDScanner {
         }
     }
 
-    public static Map<ParameterName, String> parseID(String authKey, String text, Integer attempts) throws Exception {
+    public static Map<ParameterName, String> parseID(String authKey, String text) throws Exception {
+        Map<ParameterName, String> map = null;
+        try {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally...", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
+            map = parseIdLocally(text);
+        } catch (Exception e) {
+        }
+         
+        if (!validateOutput(map)) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... FAILED", null);
+            try{
+               map = parseIDRemotely(authKey, text, 5);  
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+           
+            if(!validateOutput(map)){
+                GoogleMail.SendIdScanFailEmail(text);
+            }
+        }else{
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... SUCCESS", null);
+        }
+        return map;
+    }
+
+    public static Map<ParameterName, String> parseIdLocally(String text) {
+
+        String decoded = new String(Base64.decodeBase64(text));
+        return new DriverLicense(decoded).toMap();
+    }
+
+    public static Map<ParameterName, String> parseIDRemotely(String authKey, String text, Integer attempts) throws Exception {
         if (attempts == 0) {
             return new HashMap();
         }
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scanning id...", null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: authKey = " + authKey, null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID remotely...", null);
 
         //TODO put in a System Property
         ScannerInput scannerInput = new ScannerInput(authKey, text);
@@ -69,9 +137,8 @@ public class IDScanner {
         try {
             response = client.execute(post);
         } catch (Exception e) {
-            Thread.sleep(2000);
-            GoogleMail.SendIdScanFailEmail();
-            return parseID(authKey, text, attempts - 1);
+            Thread.sleep(2000); 
+            return parseIDRemotely(authKey, text, attempts - 1);
         }
 
         if (response != null && response.getEntity() != null) {
@@ -112,10 +179,26 @@ public class IDScanner {
             }
         }
 
-        GoogleMail.SendIdScanFailEmail();
-        return parseID(authKey, text, attempts - 1);
+        GoogleMail.SendIdScanFailEmail(text);
+        return parseIDRemotely(authKey, text, attempts - 1);
     }
 
+    public static boolean validateOutput(Map<ParameterName, String> map){
+        if(map == null)return false;
+        
+        for (Iterator<ParameterName> iterator = map.keySet().iterator(); iterator.hasNext();) {
+            ParameterName key = iterator.next();
+            
+            if(key != ParameterName.MIDDLE_NAME
+                    && (!map.containsKey(key) || map.get(key) == null || map.get(key).isEmpty())){
+               CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Rejecting map for property = " + key, null);
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
     public static String getString(JSONObject json, String key) {
         if (json.has(key)) {
             return json.getString(key);

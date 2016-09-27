@@ -1222,7 +1222,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                 if (dlData != null && !dlData.isEmpty()) {
                     try {
-                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData, 5);
+                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
                     } catch (Exception e) {
                         e.printStackTrace();
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);

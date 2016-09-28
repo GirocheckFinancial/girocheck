@@ -105,9 +105,6 @@ public class IDScanner {
                 e.printStackTrace();
             }
            
-            if(!validateOutput(map)){
-                GoogleMail.SendIdScanFailEmail(text);
-            }
         }else{
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... SUCCESS", null);
         }
@@ -179,7 +176,6 @@ public class IDScanner {
             }
         }
 
-        GoogleMail.SendIdScanFailEmail(text);
         return parseIDRemotely(authKey, text, attempts - 1);
     }
 

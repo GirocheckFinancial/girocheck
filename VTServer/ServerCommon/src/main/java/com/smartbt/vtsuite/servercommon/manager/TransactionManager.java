@@ -235,7 +235,7 @@ public class TransactionManager {
 
         email.setMessage("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body><img src=\"cid:image\"></body></html>", "text/html");
         email.setImage(receiptInfo.substring(22), "receipt.png", "image/png", "image");
-        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
+//        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
     }
 
     /**

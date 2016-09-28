@@ -107,75 +107,75 @@ public class EmailUtils {
      * @param subject The email subject
      * @param debug Flag to enable or disable SMTP debug output
      */
-    public void sendEmail(String recipients[], String from, String subject, boolean debug) {
-
-        Properties props = new Properties();
-        props.put("mail.smtp.host", smtpHostAddress);
-        props.put("mail.smtp.port", smtpHostPort);
-
-        if (debug) {
-//            log.info("== Attempting to send email with host: " + smtpHostAddress);
-//            log.info("== Attempting to send email with port: " + smtpHostPort);
-//            log.info("== Attempting to send email with smtpUsername: " + smtpUsername);
-//            log.info("== Attempting to send email with smtpPassword: " + smtpPassword);
-        }
-        
-        Session session = null;
-
-        if (smtpUsername != null) {
-
-            props.put("mail.smtp.auth", "true");
-
-            session = Session.getInstance(props,
-                    new javax.mail.Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(smtpUsername, smtpPassword);
-                }
-            });
-        } else {
-
-            props.put("mail.smtp.auth", "false");
-            session = Session.getInstance(props);
-        }
-
-        session.setDebug(debug);
-
-        Message msg = new MimeMessage(session);
-
-        try {
-
-            InternetAddress addressFrom = new InternetAddress(from);
-            msg.setFrom(addressFrom);
-            msg.setSubject(subject);
-
-            Multipart multipart = new MimeMultipart("related");
-            multipart.addBodyPart(getMessagePart());
-
-                for (ImagePart image : images) {
-                    multipart.addBodyPart(getImagePart(image));
-                }
-            
-
-            msg.setContent(multipart);
-
-            InternetAddress[] addressTo = new InternetAddress[1];
-
-            for (int i = 0; i < recipients.length; i++) {
-
-                if (debug) {
-//                    log.info("== Sending email to: " + recipients[i]);
-                }
-                addressTo[0] = new InternetAddress(recipients[i]);
-                msg.setRecipients(Message.RecipientType.TO, addressTo);
-                Transport.send(msg);
-            }
-
-        } catch (MessagingException ex) {
-//            log.debug("Error sending email.");
-            ex.printStackTrace();
-        }
-    }
+//    public void sendEmail(String recipients[], String from, String subject, boolean debug) {
+//
+//        Properties props = new Properties();
+//        props.put("mail.smtp.host", smtpHostAddress);
+//        props.put("mail.smtp.port", smtpHostPort);
+//
+//        if (debug) {
+////            log.info("== Attempting to send email with host: " + smtpHostAddress);
+////            log.info("== Attempting to send email with port: " + smtpHostPort);
+////            log.info("== Attempting to send email with smtpUsername: " + smtpUsername);
+////            log.info("== Attempting to send email with smtpPassword: " + smtpPassword);
+//        }
+//        
+//        Session session = null;
+//
+//        if (smtpUsername != null) {
+//
+//            props.put("mail.smtp.auth", "true");
+//
+//            session = Session.getInstance(props,
+//                    new javax.mail.Authenticator() {
+//                @Override
+//                protected PasswordAuthentication getPasswordAuthentication() {
+//                    return new PasswordAuthentication(smtpUsername, smtpPassword);
+//                }
+//            });
+//        } else {
+//
+//            props.put("mail.smtp.auth", "false");
+//            session = Session.getInstance(props);
+//        }
+//
+//        session.setDebug(debug);
+//
+//        Message msg = new MimeMessage(session);
+//
+//        try {
+//
+//            InternetAddress addressFrom = new InternetAddress(from);
+//            msg.setFrom(addressFrom);
+//            msg.setSubject(subject);
+//
+//            Multipart multipart = new MimeMultipart("related");
+//            multipart.addBodyPart(getMessagePart());
+//
+//                for (ImagePart image : images) {
+//                    multipart.addBodyPart(getImagePart(image));
+//                }
+//            
+//
+//            msg.setContent(multipart);
+//
+//            InternetAddress[] addressTo = new InternetAddress[1];
+//
+//            for (int i = 0; i < recipients.length; i++) {
+//
+//                if (debug) {
+////                    log.info("== Sending email to: " + recipients[i]);
+//                }
+//                addressTo[0] = new InternetAddress(recipients[i]);
+//                msg.setRecipients(Message.RecipientType.TO, addressTo);
+//                Transport.send(msg);
+//            }
+//
+//        } catch (MessagingException ex) {
+////            log.debug("Error sending email.");
+//            ex.printStackTrace();
+//        }
+//    }
 
     private BodyPart getMessagePart() throws MessagingException {
 

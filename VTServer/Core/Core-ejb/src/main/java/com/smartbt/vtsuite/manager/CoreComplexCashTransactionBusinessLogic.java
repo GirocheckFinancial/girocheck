@@ -1041,7 +1041,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         }
 
         email.setMessage(buffer.toString(), "text/html");
-        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
+//        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
     }
 //
 //    private void feeCalculator(DirexTransactionRequest request, Transaction transaction) {

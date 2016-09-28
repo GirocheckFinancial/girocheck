@@ -1096,7 +1096,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         }
 
         email.setMessage(buffer.toString(), "text/html");
-        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
+//        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
     }
 
     public void fixPersonalInfoName(DirexTransactionRequest requestData) throws Exception {

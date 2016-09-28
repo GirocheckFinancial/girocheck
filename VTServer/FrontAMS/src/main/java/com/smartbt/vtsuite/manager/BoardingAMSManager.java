@@ -616,7 +616,6 @@ public class BoardingAMSManager {
 
             email.setMessage("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=Shift_JIS\"><style type=\"text/css\">body{border:0px none;}</style></head><body>" + I18N.get(Messages.AMS_BOARDING_EMAIL_BODY, "<br/>", userName, password) + "</body></html>", "text/html; charset=Shift_JIS");
 
-            email.sendEmail(recipients, server_from_address, receiptTittle, email_debug);
         }
 
     }

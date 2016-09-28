@@ -292,8 +292,8 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
 //            coreLogger.logAndStore("CoreCardToBankBL", " [CoreCardToBankBL::]            Sending message to Tecnicard :: ammount :: " + request.getTransactionData().get(ParameterName.AMMOUNT));
 //            log.debug("[CoreCardToBankBL::] Sending message to Tecnicard :: ammount :: "+request.getTransactionData().get(ParameterName.AMMOUNT));
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Sending message to Tecnicard :: amount :: "+request.getTransactionData().get(ParameterName.AMMOUNT),null);
-            request.setTransactionData(map1);
-
+           // request.setTransactionData(map1);
+            request.getTransactionData().putAll(map1);
             jmsManager.sendWithProps(request, jmsManager.getHostInQueue(), direxTransactionRequest.getCorrelation(), tecnicardProps);
 
             Message tecnicardMessage = null;

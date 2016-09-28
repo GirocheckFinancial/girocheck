@@ -191,11 +191,12 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         String operation = MapUtil.getStringValueFromMap( map, ParameterName.OPERATION,true);
         
         Double amount = (Double) map.get(ParameterName.AMMOUNT);
-        Float fee = (Float) map.get(ParameterName.FEE_AMMOUNT);
+        String fee =  map.get(ParameterName.FEE_AMMOUNT) + "";
+  
         Double payout = (Double) map.get(ParameterName.PAYOUT_AMMOUNT); 
         
         input.setTOTAL(amount + "");
-        input.setSERVICE(fee + "");
+        input.setSERVICE(fee);
         
         input.setDEPOSIT(payout + "");
         input.setRELIEVE(payout + "");

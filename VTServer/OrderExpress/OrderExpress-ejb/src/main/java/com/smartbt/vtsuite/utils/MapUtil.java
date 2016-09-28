@@ -31,11 +31,13 @@ public class MapUtil {
     public static void main(String[] args) throws Exception {
        
         System.out.println( round("3.14"));
-        System.out.println( round("3.141"));
-        System.out.println( round("3.145"));
-        System.out.println( round("3.146"));
-        System.out.println( round("3.1"));
-        System.out.println( round("3"));
+        Map map = new HashMap();
+        
+        float f = 3.1234F;
+        Double d = Double.parseDouble(f + "");
+//        map.put(ParameterName.FEE_AMMOUNT,d);
+//       Double fee = (Double) map.get(ParameterName.FEE_AMMOUNT);
+        System.out.println(d);
     }
 
     public static String getDoubleValueFromMap(Map map, ParameterName requestParameterName, boolean required) throws Exception {

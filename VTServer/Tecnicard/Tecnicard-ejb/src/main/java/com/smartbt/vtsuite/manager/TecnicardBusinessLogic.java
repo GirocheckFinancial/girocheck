@@ -249,9 +249,9 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pFaxphone = MapUtil.getStringValueFromMap( map, ParameterName.FAX_PHONE, false );
         String pCard = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         
-        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE, false );
+//        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE, false );
 //        String pIdExpiration = "";// = (date != null) ? df.format( date ) : "";
-        String pIdExpiration = (datee != null) ? df.format( datee ) : "";
+//        String pIdExpiration = (datee != null) ? df.format( datee ) : "";
 
 //        String fields = " pRequestID, pCard, pId, pIdType, pIdExpiration, pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry, pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress";
 //        String[] names = fields.split( ",");
@@ -260,11 +260,11 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 //                "11", "Atlanta", "222333 PEACHTREE PLACE", "30318", "girocheck@cardmarte.com", "", "", "786", "4540209", "", "", "", "", "0", "Y"  );
         
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID " +
-                pRequestID+ ",  pCard " + pCard+ ",  pId " + pId+ ",  pIdType " + idType+ ",  pIdExpiration " + pIdExpiration+ ",  pIdCountry " + pIdCountry+ ",  pIdState " + pIdState+ ",  pPersonTitle " + pPersonTitle+ ",  pFirstName " + pFirstName+ ", pMiddleName " + pMiddleName+ ", pLastName " + pLastName+ ", pMaidenName " + pMaidenName+ ", pDateOfBirth " + pDateOfBirth+ ", pCountry " + pCountry+ ", pState " +
+                pRequestID+ ",  pCard " + pCard+ ",  pId " + pId+ ",  pIdType " + idType+ ",  pIdExpiration,  pIdCountry " + pIdCountry+ ",  pIdState " + pIdState+ ",  pPersonTitle " + pPersonTitle+ ",  pFirstName " + pFirstName+ ", pMiddleName " + pMiddleName+ ", pLastName " + pLastName+ ", pMaidenName " + pMaidenName+ ", pDateOfBirth " + pDateOfBirth+ ", pCountry " + pCountry+ ", pState " +
                 pState+ ", pCity " + pCity+ ", pAddress  " + pAddress+ ", pZipCode " + pZipCode+ ", pEmail " + pEmail+ ", pTelephoneAreaCode " + pTelephoneAreaCode+ ", pTelephone " + pTelephone+ ", pCellphoneAreaCode " + pCellphoneAreaCode+ ", pCellphone " + pCellphone+ ", pWorkphoneAreaCode " + pWorkphoneAreaCode+ ", pWorkphone " + pWorkphone+ ", pFaxAreaCode " + pFaxAreaCode+ ", pFaxphone " + pFaxphone+ ", pRBService " + pRBService+ ", pCurrentAddress " + pCurrentAddress + ")",null);
 
         return port.wmCardPersonalization(
-                pRequestID, pCard, pId, "" + idType, pIdExpiration, pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry,
+                pRequestID, pCard, pId, "" + idType, "", pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry,
                 pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress );
     }
     

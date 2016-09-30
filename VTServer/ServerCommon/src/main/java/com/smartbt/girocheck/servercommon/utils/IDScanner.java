@@ -32,7 +32,8 @@ public class IDScanner {
     private static HttpClient client = new DefaultHttpClient();
 
 //    public static void main(String[] args) throws Exception {
-//         DriverLicense dl = new DriverLicense("@\n" +
+//         DriverLicense dl = new DriverLicense(
+//"@\n" +
 //"\n" +
 //"ANSI 6360100102DL00390170ZF02090065DLDAAJARAMILLO,JAIME, A\n" +
 //"DAG2935 SW 30TH CT\n" +
@@ -53,7 +54,8 @@ public class IDScanner {
 //"ZFCX631405131266\n" +
 //"ZFD\n" +
 //"ZFE09-01-12\n" +
-//"ZFF");
+//"ZFF"
+//);
 //
 //         Map map = dl.toMap();
 //         
@@ -110,6 +112,15 @@ public class IDScanner {
         }else{
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... SUCCESS", null);
         }
+        
+        if(map.containsKey(ParameterName.LAST_NAME)){
+            String lastName = map.get(ParameterName.LAST_NAME);
+            
+            if(lastName != null && lastName.trim().contains(" ")){
+               map.put(ParameterName.LAST_NAME, lastName.trim().split(" ")[0]); 
+            }
+        }
+        
         return map;
     }
 

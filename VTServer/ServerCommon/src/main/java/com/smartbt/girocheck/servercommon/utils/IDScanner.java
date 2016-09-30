@@ -111,15 +111,7 @@ public class IDScanner {
            
         }else{
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... SUCCESS", null);
-        }
-        
-        if(map.containsKey(ParameterName.LAST_NAME)){
-            String lastName = map.get(ParameterName.LAST_NAME);
-            
-            if(lastName != null && lastName.trim().contains(" ")){
-               map.put(ParameterName.LAST_NAME, lastName.trim().split(" ")[0]); 
-            }
-        }
+        } 
         
         return map;
     }

@@ -753,9 +753,9 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         if (transactionMap.containsKey(ParameterName.FIRST_NAME)) {
             transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.FIRST_NAME));
         }
-        if (transactionMap.containsKey(ParameterName.LAST_NAME)) {
-            transaction.getClient().setLastName((String) transactionMap.get(ParameterName.LAST_NAME));
-        }
+//        if (transactionMap.containsKey(ParameterName.LAST_NAME)) {
+//            transaction.getClient().setLastName((String) transactionMap.get(ParameterName.LAST_NAME));
+//        }
         if (transactionMap.containsKey(ParameterName.TELEPHONE)) {
             transaction.getClient().setTelephone((String) transactionMap.get(ParameterName.TELEPHONE));
         }

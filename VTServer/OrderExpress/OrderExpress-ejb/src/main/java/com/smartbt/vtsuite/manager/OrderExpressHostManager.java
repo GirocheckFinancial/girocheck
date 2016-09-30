@@ -140,7 +140,7 @@ public class OrderExpressHostManager {
         try {
             int code = Integer.parseInt(resultCode);
 
-            return ((code >= 237 && code <= 282)
+            return ((code >= 201 && code <= 282)
                     || (code >= 411 && code <= 424)
                     || (code >= 430 && code < 490 && (code % 10 == 0 || code % 10 == 1))
                     || (code >= 482 && code <= 485)

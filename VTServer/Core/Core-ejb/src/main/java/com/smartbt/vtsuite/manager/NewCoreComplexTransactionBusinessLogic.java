@@ -178,6 +178,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
             Map personalInfoRequestMap = personalInfoRequest.getTransactionData();
 
+            //dont take the past name sent by iStream,
+            //because when it is composed it will be trimed
+            if(personalInfoRequestMap.containsKey(ParameterName.LAST_NAME)){
+                personalInfoRequestMap.remove(ParameterName.LAST_NAME);
+            }
+            
             request.getTransactionData().putAll(personalInfoRequestMap);
 
             feeCalculator(request, transaction);

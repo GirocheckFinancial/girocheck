@@ -324,8 +324,8 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         Map responseMap = new HashMap();
 
         responseMap.put(ParameterName.AUTHO_NUMBER, "OE: AUTHO_NUMBER");
-        responseMap.put(ParameterName.OP_CODE, "002");
-        responseMap.put(ParameterName.OP_CODE2, "025");
+        responseMap.put(ParameterName.OP_CODE, "001");
+        responseMap.put(ParameterName.OP_CODE2, "1");
         responseMap.put(ParameterName.IDCONSIGNOR, "OE IDCONSIGNOR");
         responseMap.put(ParameterName.IDBENEFICIARY, "IDBENEFICIARY");
         responseMap.put(ParameterName.BANK_AUTHO, "BANK_AUTHO");

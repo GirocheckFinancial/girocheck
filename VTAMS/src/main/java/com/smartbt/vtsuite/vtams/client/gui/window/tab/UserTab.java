@@ -322,10 +322,11 @@ public class UserTab extends BaseTab implements BaseInterface {
         Record recordToSave = editorWindow.getRecord();
         editorWindow.hide();
 
-        String actionex = recordToSave.getAttribute("actionEx");
-        Utils.debug("Entered Save() actionEx value: " + actionex);
+//        String actionex = recordToSave.getAttribute("actionEx");
+       String id = recordToSave.getAttribute("id");
+        Utils.debug("***Entered Save() actionEx id: " + id);
         
-        if (actionex.equals("add")) {
+        if (id == null) {
             editorWindow.getDataForm().getDataSource().addData(recordToSave, new DSCallback() {
                 /**
                  * Callback to invoke on completion
@@ -344,8 +345,7 @@ public class UserTab extends BaseTab implements BaseInterface {
                     }
                 }
             });
-        } else {
-             if (actionex.equals("upd"))
+        } else { 
             editorWindow.getDataForm().getDataSource().updateData(recordToSave, new DSCallback() {
                 /**
                  * Callback to invoke on completion

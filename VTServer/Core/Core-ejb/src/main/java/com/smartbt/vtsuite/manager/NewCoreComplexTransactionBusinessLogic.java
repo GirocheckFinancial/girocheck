@@ -107,21 +107,28 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         //COMMENT FOR TESTING
         if (!originalTransaction.equals(TransactionType.CARD_RELOAD_WITH_DATA)) {
 
-            Map transactioDataWITHDL;
+          //  Map transactioDataWITHDL;
 
             DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
 
-            if (!personalInfoResponse.wasApproved()) {
-                personalInfoResponse.setTransactionType(TransactionType.PERSONAL_INFO);
-                CoreTransactionUtil.subTransactionFailed(transaction, personalInfoResponse, jmsManager.getCoreOutQueue(), correlationId);
-                return;
-            } else {
-                transactioDataWITHDL = personalInfoResponse.getTransactionData();
+            if (personalInfoResponse.wasApproved()) {
+                Map driverLicenseInfo = personalInfoResponse.getTransactionData();
+                request.getTransactionData().putAll(driverLicenseInfo);
+            }else{
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Driver License ILEGIBLE", null); 
             }
+            
+//            if (!personalInfoResponse.wasApproved()) {
+//                personalInfoResponse.setTransactionType(TransactionType.PERSONAL_INFO);
+//                CoreTransactionUtil.subTransactionFailed(transaction, personalInfoResponse, jmsManager.getCoreOutQueue(), correlationId);
+//                return;
+//            } else {
+//                transactioDataWITHDL = personalInfoResponse.getTransactionData();
+//            }
 
-            if (transactioDataWITHDL != null) {
-                request.getTransactionData().putAll(transactioDataWITHDL);
-            }
+//            if (transactioDataWITHDL != null) {
+//                request.getTransactionData().putAll(transactioDataWITHDL);
+//            }
 
         }
 

@@ -23,27 +23,27 @@ public class MyContextListener
 
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        System.out.println("&&&&&&..............................&&&&&&");
-        System.out.println("&&&&&&......... STARTING............&&&&&&");
-        System.out.println("&&&&&&..............................&&&&&&");
-        System.out.println("&&&&&&........TESTING ID SCAN.......&&&&&&");
-        System.out.println("&&&&&&..............................&&&&&&");
-
-        if (IDScanner.testParseID()) {
-            System.out.println("&&&&&&............SUCCESS...........&&&&&&");
-        } else {
-            System.out.println("&&&&&&......FAILED FIRST ATTEMPT....&&&&&&");
-
-            if (IDScanner.testParseID()) {
-                System.out.println("&&&&&&............SUCCESS...........&&&&&&");
-            } else {
-                System.out.println("&&&&&&......FAILED SECOND ATTEMPT....&&&&&&");
-            }
-        }
-
-        System.out.println("&&&&&&..............................&&&&&&");
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+//        System.out.println("&&&&&&..............................&&&&&&");
+//        System.out.println("&&&&&&......... STARTING............&&&&&&");
+//        System.out.println("&&&&&&..............................&&&&&&");
+//        System.out.println("&&&&&&........TESTING ID SCAN.......&&&&&&");
+//        System.out.println("&&&&&&..............................&&&&&&");
+//
+//        if (IDScanner.testParseID()) {
+//            System.out.println("&&&&&&............SUCCESS...........&&&&&&");
+//        } else {
+//            System.out.println("&&&&&&......FAILED FIRST ATTEMPT....&&&&&&");
+//
+//            if (IDScanner.testParseID()) {
+//                System.out.println("&&&&&&............SUCCESS...........&&&&&&");
+//            } else {
+//                System.out.println("&&&&&&......FAILED SECOND ATTEMPT....&&&&&&");
+//            }
+//        }
+//
+//        System.out.println("&&&&&&..............................&&&&&&");
+//        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
 }

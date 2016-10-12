@@ -22,7 +22,6 @@ import com.smartbt.vtsuite.boundary.ws.CheckAuthSubmitRequest;
 import com.smartbt.vtsuite.boundary.ws.EnhancedCheckAuthPollRequest;
 import com.smartbt.vtsuite.boundary.ws.Scan;
 import com.smartbt.vtsuite.boundary.ws.Scan_Service;
-import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 
@@ -38,11 +37,11 @@ import java.util.Map;
 import javax.xml.ws.BindingProvider;
 
 
-public class IStreamBusinessLogic extends AbstractBusinessLogicModule{
+public class IStreamBusinessLogic{
     
     private static IStreamBusinessLogic INSTANCE;
     
-    public static IStreamBusinessLogic getInstance(){
+    public static synchronized IStreamBusinessLogic getInstance(){
         if(INSTANCE == null) {
             INSTANCE = new IStreamBusinessLogic();
         }
@@ -71,48 +70,35 @@ public class IStreamBusinessLogic extends AbstractBusinessLogicModule{
                 }
         }
         
-      }
-            
+             String url = System.getProperty("WS_ISTREAM_PRODUCTION_URL"); 
 
-    public void preprocess(DirexTransactionRequest tr) throws Exception {
-
-    }
-
- 
-    public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
-
-        IMap response = null;
-        Map transactionResponseMap = new HashMap();
-
-        Map transactionData = request.getTransactionData();
-
-        TransactionType transactionType = request.getTransactionType();
-
-//        log.info("[IStreamBusinessLogic] Processing "+ transactionType);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] Processing "+ transactionType,null);
-//        String url = "https://giro-1.istreamdeposit.com/Scan?wsdl";
-//        String url = "https://istreamdeposit.com/Scan?wsdl";
-        
-        String url = System.getProperty("WS_ISTREAM_PRODUCTION_URL");
-//        String url = "https://giro-1.istreamdeposit.com/Scan?WSDL";
-CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] WS_ISTREAM_PRODUCTION_URL: " + url,null);
         if (url == null) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] url == null" ,null);
-            url = "https://istreamdeposit.com/Scan?wsdl";
+          url = "https://istreamdeposit.com/Scan?wsdl";
         }
         
-        try {
-
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] URL: " + url,null);
+        
+        try { 
             BindingProvider bp = (BindingProvider) port;
             bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url);
-
         } catch (Exception ex) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStreamBusinessLogic] IStream Conection Error. Error calling "+ url,null);
             ex.printStackTrace();
         }
         
-//        log.info("[IStreamBusinessLogic] After BindingProvider modification ");
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] procesing " + transactionType ,null);
+      }
+            
+ 
+    public DirexTransactionResponse process(DirexTransactionRequest request, int attempt) throws Exception {
+        try{
+        IMap response = null;
+        Map transactionResponseMap = new HashMap();
+
+        Map transactionData = request.getTransactionData();
+
+        TransactionType transactionType = request.getTransactionType(); 
+        
+       CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] procesing " + transactionType ,null);
         switch (transactionType) {
             case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
                 response = port.checkAuthLocationConfig(new CheckAuthLocationConfigRequest().build(transactionData));
@@ -141,9 +127,7 @@ CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] 
                 response = port.checkAuthSubmit(new CheckAuthSubmitRequest().build(transactionData));
                 break;
                 
-           default:
-//               System.out.println( "default............" );
-//               log.debug( "[IStreamBusinessLogic] default..." );
+           default: 
                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] default...",null);
                response = port.checkAuth(new CheckAuthRequest().build(transactionData));
                
@@ -162,12 +146,18 @@ CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] 
         direxTransactionResponse.setTransactionData(transactionResponseMap);
 
         return direxTransactionResponse;
+        
+        }catch(Exception e){
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] Host connection failed, Re-submitting transaction... attempt # " + attempt,null);
+            if(attempt == 0){
+                return DirexTransactionResponse.forException( ResultCode.ISTREAM_HOST_ERROR, ResultMessage.ISTREAM_FAILED, "IStream failed all attempts to connect.", "0" );
+            }else{
+                Thread.sleep(1000);
+               return process(request, attempt - 1);
+            }
+        }
 
     }
-
-   
-    public void postprocess(DirexTransactionRequest transactionRequest, DirexTransactionResponse transactionResponse) throws Exception {
-    }
-
+ 
 
 }

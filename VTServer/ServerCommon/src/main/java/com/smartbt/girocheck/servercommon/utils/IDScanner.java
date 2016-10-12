@@ -124,7 +124,7 @@ public class IDScanner {
 
     public static Map<ParameterName, String> parseIDRemotely(String authKey, String text, Integer attempts) throws Exception {
         if (attempts == 0) {
-            return new HashMap();
+            return null;
         }
         
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID remotely...", null);

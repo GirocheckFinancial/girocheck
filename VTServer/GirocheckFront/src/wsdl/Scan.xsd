@@ -162,7 +162,7 @@
 
     <xs:complexType name="ActivityReportRes">
         <xs:sequence>
-            <xs:element name="salida" type="xs:string" minOccurs="0"/>
+            <xs:element name="transactions" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

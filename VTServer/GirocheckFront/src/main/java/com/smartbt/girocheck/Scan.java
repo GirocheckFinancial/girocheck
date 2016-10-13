@@ -25,9 +25,13 @@ import com.smartbt.girocheck.scan.CheckAuthSubmitRequest;
 import com.smartbt.girocheck.scan.CheckAuthSubmitRes;
 import com.smartbt.girocheck.scan.TecnicardConfirmationRequest;
 import com.smartbt.girocheck.scan.TecnicardConfirmationRes;
+import com.smartbt.girocheck.scan.Transaction;
+import com.smartbt.girocheck.scan.Transactions;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.manager.FrontManager;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.jws.WebService;
 
@@ -50,7 +54,17 @@ public class Scan {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[GCHFront Scan] ActivityReport",null );
         System.out.println("Entrada = " + arg0.getEntrada());
         ActivityReportRes res = new ActivityReportRes();
-        res.setSalida("La entrada fue " + arg0.getEntrada());
+        
+        Transaction t1 = new Transaction("t1");
+        Transaction t2 = new Transaction("t1");
+        List<Transaction> transactionList = new ArrayList<>();
+        transactionList.add(t1);
+        transactionList.add(t2);
+        
+        Transactions transactions = new Transactions();
+        transactions.setTransactionList(transactionList);
+        
+        res.setTransactions(transactions);
         return res;
 
     }

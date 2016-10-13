@@ -162,12 +162,31 @@
             <xs:element name="return" type="tns:ActivityReportRes" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
-
+    
+     <xs:complexType name="Transaction">
+        <xs:sequence> 
+            <xs:element name="transactionType" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+ 
+      <xs:complexType name="Transactions">
+        <xs:sequence>
+            <xs:element name="transactionList" type="tns:Transaction" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+     <xs:complexType name="ActivityReportRes">
+        <xs:sequence> 
+            <!--<xs:element name="salida" type="xs:string" minOccurs="0"/>-->
+            <xs:element name="transactionList" type="tns:Transactions" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+<!--
     <xs:complexType name="ActivityReportRes">
         <xs:sequence> 
             <xs:element name="salida" type="xs:string" minOccurs="0"/>
         </xs:sequence>
-    </xs:complexType>
+    </xs:complexType>-->
 
     <xs:complexType name="tecnicardConfirmationResponse">
         <xs:sequence>
@@ -385,102 +404,102 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="CardToBankRes">
-        <xs:sequence>
-            <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
-            <xs:element name="amount" type="xs:string" minOccurs="0"/>
-            <xs:element name="date" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>-->
+        <xs:complexType name="CardToBankRes">
+            <xs:sequence>
+                <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
+                <xs:element name="amount" type="xs:string" minOccurs="0"/>
+                <xs:element name="date" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>-->
     
-    <!--  MODIFICATION For CARDTOBANK  -->
+        <!--  MODIFICATION For CARDTOBANK  -->
     
-    <xs:complexType name="cardToBank">
-        <xs:sequence>
-            <xs:element name="arg0" type="tns:cardToBankRequest" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+        <xs:complexType name="cardToBank">
+            <xs:sequence>
+                <xs:element name="arg0" type="tns:cardToBankRequest" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
 
-    <xs:complexType name="cardToBankRequest">
-        <xs:sequence>
-            <xs:element name="user" type="xs:string" minOccurs="0"/>
-            <xs:element name="password" type="xs:string" minOccurs="0"/>
-            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
-            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+        <xs:complexType name="cardToBankRequest">
+            <xs:sequence>
+                <xs:element name="user" type="xs:string" minOccurs="0"/>
+                <xs:element name="password" type="xs:string" minOccurs="0"/>
+                <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+                <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
             
-            <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
-<!--            <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>-->
-<!--            <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
-            <xs:element name="amount" type="xs:string" minOccurs="0"/>-->
-        </xs:sequence>
-    </xs:complexType>
+                <xs:element name="cardNumber" type="xs:string" minOccurs="0"/>
+                <!--            <xs:element name="accountNumber" type="xs:string" minOccurs="0"/>-->
+                <!--            <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
+                <xs:element name="amount" type="xs:string" minOccurs="0"/>-->
+            </xs:sequence>
+        </xs:complexType>
 
-    <xs:complexType name="cardToBankResponse">
-        <xs:sequence>
-            <xs:element name="return" type="tns:CardToBankRes" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+        <xs:complexType name="cardToBankResponse">
+            <xs:sequence>
+                <xs:element name="return" type="tns:CardToBankRes" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
     
-    <xs:complexType name="CardToBankRes">
-<!--        <xs:sequence>
-            <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
-            <xs:element name="amount" type="xs:string" minOccurs="0"/>
-            <xs:element name="date" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
-        </xs:sequence>-->
-        <xs:sequence>
-            <xs:element name="merchantName" type="xs:string" minOccurs="0"/>
-            <xs:element name="customerAddress" type="xs:string" minOccurs="0"/>
-            <xs:element name="customerName" type="xs:string" minOccurs="0"/>
-            <xs:element name="bankName" type="xs:string" minOccurs="0"/>
-            <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
-            <xs:element name="accountNumer" type="xs:string" minOccurs="0"/>
-            <xs:element name="bankName" type="xs:string" minOccurs="0"/>
-            <xs:element name="existAch" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+        <xs:complexType name="CardToBankRes">
+            <!--        <xs:sequence>
+                <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
+                <xs:element name="amount" type="xs:string" minOccurs="0"/>
+                <xs:element name="date" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+            </xs:sequence>-->
+            <xs:sequence>
+                <xs:element name="merchantName" type="xs:string" minOccurs="0"/>
+                <xs:element name="customerAddress" type="xs:string" minOccurs="0"/>
+                <xs:element name="customerName" type="xs:string" minOccurs="0"/>
+                <xs:element name="bankName" type="xs:string" minOccurs="0"/>
+                <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
+                <xs:element name="accountNumer" type="xs:string" minOccurs="0"/>
+                <xs:element name="bankName" type="xs:string" minOccurs="0"/>
+                <xs:element name="existAch" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
     
-<!--    New WS    -->
+        <!--    New WS    -->
 
-    <xs:complexType name="cardToBankConfirmation">
-        <xs:sequence>
-            <xs:element name="arg0" type="tns:cardToBankConfirmationRequest" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+        <xs:complexType name="cardToBankConfirmation">
+            <xs:sequence>
+                <xs:element name="arg0" type="tns:cardToBankConfirmationRequest" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
 
-    <xs:complexType name="cardToBankConfirmationRequest">
-        <xs:sequence>
-            <xs:element name="user" type="xs:string" minOccurs="0"/>
-            <xs:element name="password" type="xs:string" minOccurs="0"/>
-            <xs:element name="requestId" type="xs:string" minOccurs="0"/>
-            <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
+        <xs:complexType name="cardToBankConfirmationRequest">
+            <xs:sequence>
+                <xs:element name="user" type="xs:string" minOccurs="0"/>
+                <xs:element name="password" type="xs:string" minOccurs="0"/>
+                <xs:element name="requestId" type="xs:string" minOccurs="0"/>
+                <xs:element name="terminalId" type="xs:string" minOccurs="0"/>
             
-            <xs:element name="achForm" type="xs:base64Binary" minOccurs="0"/>
-            <xs:element name="existAch" type="xs:string" minOccurs="0"/>
-<!--            <xs:element name="approved" type="xs:string" minOccurs="0"/>-->
-            <xs:element name="amount" type="xs:string" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+                <xs:element name="achForm" type="xs:base64Binary" minOccurs="0"/>
+                <xs:element name="existAch" type="xs:string" minOccurs="0"/>
+                <!--            <xs:element name="approved" type="xs:string" minOccurs="0"/>-->
+                <xs:element name="amount" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
 
-    <xs:complexType name="cardToBankConfirmationResponse">
-        <xs:sequence>
-            <xs:element name="return" type="tns:CardToBankConfirmationRes" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+        <xs:complexType name="cardToBankConfirmationResponse">
+            <xs:sequence>
+                <xs:element name="return" type="tns:CardToBankConfirmationRes" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
 
-    <xs:complexType name="CardToBankConfirmationRes">
-        <xs:sequence>
-            <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
-            <xs:element name="amount" type="xs:string" minOccurs="0"/>
-            <xs:element name="printLogo" type="xs:string" minOccurs="0"/>
-            <xs:element name="date" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
-            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
+        <xs:complexType name="CardToBankConfirmationRes">
+            <xs:sequence>
+                <xs:element name="transactionNumber" type="xs:string" minOccurs="0"/>
+                <xs:element name="amount" type="xs:string" minOccurs="0"/>
+                <xs:element name="printLogo" type="xs:string" minOccurs="0"/>
+                <xs:element name="date" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+                <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
     
 </xs:schema>

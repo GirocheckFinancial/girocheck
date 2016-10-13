@@ -4,6 +4,7 @@ import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.utils.IBuilder;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="salida" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="transactionList" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,36 +34,29 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType( XmlAccessType.FIELD )
-@XmlType( name = "ActivityReportRes", propOrder = { 
-    "transactions" 
+@XmlType( name = "Transactions", propOrder = { 
+    "transactionList" 
 } )
-public class ActivityReportRes extends MainResponseContainer implements IBuilder {
+public class Transactions extends MainResponseContainer{
  
-    @XmlElement( name = "transactions" )
-    private Transactions transactions;
-    
-    @Override
-    public ActivityReportRes build( Map map ) throws Exception { 
-        return this;
-    }
-    
-    public ActivityReportRes mock(){ 
-        return this;
+    @XmlElement( name = "transactionList" )
+    private List<Transaction> transactionList;
+
+    public Transactions() {
     }
 
     /**
-     * @return the transactions
+     * @return the transactionList
      */
-    public Transactions getTransactions() {
-        return transactions;
+    public List<Transaction> getTransactionList() {
+        return transactionList;
     }
 
     /**
-     * @param transactions the transactions to set
+     * @param transactionList the transactionList to set
      */
-    public void setTransactions(Transactions transactions) {
-        this.transactions = transactions;
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
  
-
 }

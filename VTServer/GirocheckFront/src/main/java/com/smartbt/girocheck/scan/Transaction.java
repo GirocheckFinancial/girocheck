@@ -33,36 +33,37 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType( XmlAccessType.FIELD )
-@XmlType( name = "ActivityReportRes", propOrder = { 
-    "transactions" 
+@XmlType( name = "Transaction", propOrder = { 
+    "transactionType" 
 } )
-public class ActivityReportRes extends MainResponseContainer implements IBuilder {
+public class Transaction extends MainResponseContainer{
  
-    @XmlElement( name = "transactions" )
-    private Transactions transactions;
-    
-    @Override
-    public ActivityReportRes build( Map map ) throws Exception { 
-        return this;
+    @XmlElement( name = "transactionType" )
+    private String transactionType;
+
+    public Transaction() {
     }
+
+    public Transaction(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
     
-    public ActivityReportRes mock(){ 
-        return this;
+    
+    /**
+     * @return the transactionType
+     */
+    public String getTransactionType() {
+        return transactionType;
     }
 
     /**
-     * @return the transactions
+     * @param transactionType the transactionType to set
      */
-    public Transactions getTransactions() {
-        return transactions;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
-
-    /**
-     * @param transactions the transactions to set
-     */
-    public void setTransactions(Transactions transactions) {
-        this.transactions = transactions;
-    }
+     
  
 
 }

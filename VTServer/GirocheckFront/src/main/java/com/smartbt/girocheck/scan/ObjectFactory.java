@@ -28,6 +28,7 @@ public class ObjectFactory {
    
 
     private final static QName _CheckAuth_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkAuth");
+    private final static QName _ActivityReport_QNAME = new QName("http://scan.girocheck.smartbt.com/", "activityReport");
     private final static QName _CardReload_QNAME = new QName("http://scan.girocheck.smartbt.com/", "cardReload");
     private final static QName _CardReloadData_QNAME = new QName("http://scan.girocheck.smartbt.com/", "cardReloadData");
 
@@ -37,6 +38,7 @@ public class ObjectFactory {
     private final static QName _CheckAuthLocationConfig_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkAuthLocationConfig");
     private final static QName _CheckAuthSubmit_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkAuthSubmit");
     private final static QName _CheckAuthResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkAuthResponse");
+    private final static QName _ActivityReportResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "activityReportResponse");
     private final static QName _CardReloadResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "cardReloadResponse");
     private final static QName _CardReloadDataResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "cardReloadDataResponse");
     
@@ -71,6 +73,14 @@ public class ObjectFactory {
      */
     public CheckAuthResponse createCheckAuthResponse() {
         return new CheckAuthResponse();
+    }
+
+    /**
+     * Create an instance of {@link ActivityReportResponse }
+     * 
+     */
+    public ActivityReportResponse createActivityReportResponse() {
+        return new ActivityReportResponse();
     }
     /**
      * Create an instance of {@link CheckAuthResponse }
@@ -120,6 +130,14 @@ public class ObjectFactory {
     public CheckAuth createCheckAuth() {
         return new CheckAuth();
     }
+    
+    /**
+     * Create an instance of {@link CheckAuth }
+     * 
+     */
+    public ActivityReport createActivityReport() {
+        return new ActivityReport();
+    }
     /**
      * Create an instance of {@link CheckAuth }
      * 
@@ -145,6 +163,13 @@ public class ObjectFactory {
      */
     public CheckAuthRequest createCheckAuthRequest() {
         return new CheckAuthRequest();
+    }
+    /**
+     * Create an instance of {@link CheckAuthRequest }
+     * 
+     */
+    public ActivityReportRequest createActivityReportRequest() {
+        return new ActivityReportRequest();
     }
     /**
      * Create an instance of {@link CheckAuthRequest }
@@ -176,6 +201,13 @@ public class ObjectFactory {
      */
     public CheckAuthRes createCheckAuthRes() {
         return new CheckAuthRes();
+    }
+    /**
+     * Create an instance of {@link CheckAuthRes }
+     * 
+     */
+    public ActivityReportRes createActivityReportRes() {
+        return new ActivityReportRes();
     }
     /**
      * Create an instance of {@link CheckAuthRes }
@@ -242,6 +274,15 @@ public class ObjectFactory {
     }
    
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link activityReport }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://scan.girocheck.smartbt.com/", name = "activityReport")
+    public JAXBElement<ActivityReport> createActivityReport(ActivityReport value) {
+        return new JAXBElement<ActivityReport>(_ActivityReport_QNAME, ActivityReport.class, null, value);
+    }
+   
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CardReload }{@code >}}
      * 
      */
@@ -304,6 +345,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://scan.girocheck.smartbt.com/", name = "checkAuthResponse")
     public JAXBElement<CheckAuthResponse> createCheckAuthResponse(CheckAuthResponse value) {
         return new JAXBElement<CheckAuthResponse>(_CheckAuthResponse_QNAME, CheckAuthResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CheckAuthResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://scan.girocheck.smartbt.com/", name = "activityReportResponse")
+    public JAXBElement<ActivityReportResponse> createActivityReportResponse(ActivityReportResponse value) {
+        return new JAXBElement<ActivityReportResponse>(_ActivityReportResponse_QNAME, ActivityReportResponse.class, null, value);
     }
 
     /**

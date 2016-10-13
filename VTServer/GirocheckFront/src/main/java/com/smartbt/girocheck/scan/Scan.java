@@ -38,6 +38,21 @@ public interface Scan {
     public CheckAuthRes checkAuth(
         @WebParam(name = "arg0", targetNamespace = "")
         CheckAuthRequest arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
+     *     returns com.smartbt.girocheck.scan.ActivityReportRes
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "activityReport", targetNamespace = "http://scan.girocheck.smartbt.com/", className = "com.smartbt.girocheck.scan.ActivityReport")
+    @ResponseWrapper(localName = "activityReportResponse", targetNamespace = "http://scan.girocheck.smartbt.com/", className = "com.smartbt.girocheck.scan.ActivityReportResponse")
+    @Action(input = "http://scan.girocheck.smartbt.com/Scan/activityReportRequest", output = "http://scan.girocheck.smartbt.com/Scan/activityReportResponse")
+    public ActivityReportRes activityReport(
+        @WebParam(name = "arg0", targetNamespace = "")
+        ActivityReportRequest arg0);
     /**
      * 
      * @param arg0

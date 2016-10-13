@@ -9,6 +9,9 @@
     <message name="checkAuth">
         <part name="parameters" element="tns:checkAuth"/>
     </message>
+    <message name="activityReport">
+        <part name="parameters" element="tns:activityReport"/>
+    </message>
     <message name="tecnicardConfirmation">
         <part name="parameters" element="tns:tecnicardConfirmation"/>
     </message>
@@ -20,6 +23,9 @@
     </message>
     <message name="checkAuthResponse">
         <part name="parameters" element="tns:checkAuthResponse"/>
+    </message>
+    <message name="activityReportResponse">
+        <part name="parameters" element="tns:activityReportResponse"/>
     </message>
     <message name="tecnicardConfirmationResponse">
         <part name="parameters" element="tns:tecnicardConfirmationResponse"/>
@@ -70,6 +76,10 @@
             <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest" message="tns:checkAuth"/>
             <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkAuthResponse" message="tns:checkAuthResponse"/>
         </operation>
+        <operation name="activityReport">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/activityReportRequest" message="tns:activityReport"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/activityReportResponse" message="tns:activityReportResponse"/>
+        </operation>
         <operation name="tecnicardConfirmation">
             <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/tecnicardConfirmationRequest" message="tns:tecnicardConfirmation"/>
             <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/tecnicardConfirmationResponse" message="tns:tecnicardConfirmationResponse"/>
@@ -110,6 +120,16 @@
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
       
         <operation name="checkAuth">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+      
+        <operation name="activityReport">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>

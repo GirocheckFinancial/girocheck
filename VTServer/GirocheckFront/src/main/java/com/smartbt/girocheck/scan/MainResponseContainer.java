@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.XmlType;
     CardToBankConfirmationRes.class,
     CheckAuthLocationConfigRes.class,
     CheckAuthRes.class,
+    ActivityReportRes.class,
     TecnicardConfirmationRes.class
 })
 public abstract class MainResponseContainer {

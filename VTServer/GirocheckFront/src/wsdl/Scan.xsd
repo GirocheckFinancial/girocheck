@@ -7,12 +7,16 @@
     <xs:element name="personalInfoResponse" type="tns:personalInfoResponse"/>
     
     <xs:element name="checkAuth" type="tns:checkAuth"/>
+    
+    <xs:element name="activityReport" type="tns:activityReport"/>
 
     <xs:element name="checkAuthLocationConfig" type="tns:checkAuthLocationConfig"/>
 
     <xs:element name="checkAuthLocationConfigResponse" type="tns:checkAuthLocationConfigResponse"/>
 
     <xs:element name="checkAuthResponse" type="tns:checkAuthResponse"/>
+
+    <xs:element name="activityReportResponse" type="tns:activityReportResponse"/>
 
     <xs:element name="checkAuthSubmit" type="tns:checkAuthSubmit"/>
 
@@ -132,6 +136,33 @@
     <xs:complexType name="CheckAuthRes">
         <xs:sequence>
             <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    
+    
+
+    <xs:complexType name="activityReport">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:activityReportRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="activityReportRequest">
+        <xs:sequence>
+            <xs:element name="entrada" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="activityReportResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:ActivityReportRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ActivityReportRes">
+        <xs:sequence>
+            <xs:element name="salida" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

@@ -5,6 +5,8 @@
  */
 package com.smartbt.girocheck;
 
+import com.smartbt.girocheck.scan.ActivityReportRequest;
+import com.smartbt.girocheck.scan.ActivityReportRes;
 import com.smartbt.girocheck.scan.BalanceInquiryRequest;
 import com.smartbt.girocheck.scan.BalanceInquiryRes;
 import com.smartbt.girocheck.scan.CardReloadDataRequest;
@@ -42,6 +44,15 @@ public class Scan {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[GCHFront Scan] After sendcheckAuth",null );
         return new CheckAuthRes().build( FrontManager.processTransaction( arg0 ) );
  
+    }
+
+    public ActivityReportRes activityReport( final ActivityReportRequest arg0 ) throws Exception { 
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[GCHFront Scan] ActivityReport",null );
+        System.out.println("Entrada = " + arg0.getEntrada());
+        ActivityReportRes res = new ActivityReportRes();
+        res.setSalida("La entrada fue " + arg0.getEntrada());
+        return res;
+
     }
 
     public TecnicardConfirmationRes tecnicardConfirmation( final TecnicardConfirmationRequest arg0 ) throws Exception {

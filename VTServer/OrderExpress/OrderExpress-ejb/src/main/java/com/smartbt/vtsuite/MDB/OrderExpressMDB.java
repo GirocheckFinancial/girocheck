@@ -84,7 +84,7 @@ public class OrderExpressMDB implements MessageListener {
                 direxTransactionRequest = (DirexTransactionRequest) s;
 
              
-               direxTransactionResponse = hostManager.processTransaction(direxTransactionRequest, 3);  // 3 atempts, if OP_CODE2 = 025, resubmit again.
+               direxTransactionResponse = hostManager.processTransaction(direxTransactionRequest, 6);  //6 atempts, if OP_CODE2 = 025, resubmit again.
 
             } else {
                    direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.ORDER_EXPRESS_HOST_RECEIVED_NULL, ResultMessage.HOST_RECEIVED_NULL);

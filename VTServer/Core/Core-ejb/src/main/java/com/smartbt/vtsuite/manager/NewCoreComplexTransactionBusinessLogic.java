@@ -98,7 +98,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
     public void process(DirexTransactionRequest request, Transaction transaction) throws Exception {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Send answer to TERMINAL", null);
-
+        boolean idScanSuccess = true;
         state = 1;
         DirexTransactionResponse response;
         Map responseMap;
@@ -111,7 +111,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
             DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
 
-            if (personalInfoResponse.wasApproved()) {
+            if (idScanSuccess = personalInfoResponse.wasApproved()) {
                 Map driverLicenseInfo = personalInfoResponse.getTransactionData();
                 request.getTransactionData().putAll(driverLicenseInfo);
             }else{
@@ -187,7 +187,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
             //dont take the past name sent by iStream,
             //because when it is composed it will be trimed
-            if(personalInfoRequestMap.containsKey(ParameterName.LAST_NAME)){
+            if(idScanSuccess && personalInfoRequestMap.containsKey(ParameterName.LAST_NAME)){
                 personalInfoRequestMap.remove(ParameterName.LAST_NAME);
             }
             

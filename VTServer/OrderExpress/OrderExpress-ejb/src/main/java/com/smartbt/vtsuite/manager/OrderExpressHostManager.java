@@ -61,6 +61,7 @@ public class OrderExpressHostManager {
 
                 if (opCode2 != null && needToRepeatTransaction(opCode2) && numberOfAttempts > 1) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 = " + opCode2 + ", Re-Submitting request... ", null);
+                    Thread.sleep(30_000);
                     return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
                 } else {
                     response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Order Express return OP_CODE : " + opCode + "and OP_CODE2: " + (String) response.getTransactionData().get(ParameterName.OP_CODE2));

@@ -3,7 +3,10 @@ package com.smartbt.girocheck.scan;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
+import com.smartbt.girocheck.servercommon.utils.DateUtils;
 import com.smartbt.girocheck.servercommon.utils.IBuilder;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -34,18 +37,33 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlType( name = "Transaction", propOrder = { 
-    "transactionType" 
+    "transactionType",
+    "dateTime",
+    "amount"
 } )
 public class Transaction extends MainResponseContainer{
  
     @XmlElement( name = "transactionType" )
     private String transactionType;
+ 
+    @XmlElement( name = "dateTime" )
+    private Date dateTime;
+ 
+    @XmlElement( name = "amount" )
+    private Double amount;
 
     public Transaction() {
     }
 
-    public Transaction(String transactionType) {
+    public Transaction(String transactionType, Date dateTime, Double amount) {
         this.transactionType = transactionType;
+        this.dateTime = dateTime;
+        this.amount =  roundDouble(amount);
+    }
+
+      private Double roundDouble(Double amount){
+        BigDecimal bd = new BigDecimal(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return bd.doubleValue();
     }
 
     
@@ -62,6 +80,36 @@ public class Transaction extends MainResponseContainer{
      */
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
+    }
+
+    /**
+     * @return the dateTime
+     */
+    public String getDateTime() {
+        return DateUtils.dateToISOFormat(dateTime);
+    }
+
+    /**
+     * @param dateTime the dateTime to set
+     */
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    /**
+     * @return the amount
+     */
+    public Double getAmount() {
+        return amount;
+    }
+
+    /**
+     * @param amount the amount to set
+     */
+    public void setAmount(Double amount) {
+        System.out.println("setAmount = " + amount);
+        System.out.println("setAmountRound = " + roundDouble(amount));
+        this.amount = roundDouble(amount);
     }
      
  

@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
@@ -54,7 +55,7 @@ public class DateUtils {
         newDate.set(Calendar.DAY_OF_MONTH, date.get(Calendar.DAY_OF_MONTH) - numerOfDays);
         return newDate.getTime();
     }
-    
+
     public static Date getDateByString(String dateStr, String pattern) {
         try {
             if (dateStr == null) {
@@ -97,5 +98,20 @@ public class DateUtils {
         } catch (ParseException ex) {
         }
         return null;
+    }
+
+    public static String dateToISOFormat(Date date) {
+        if (date == null) {
+            return "";
+        }
+        try {
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            return df.format(new Date());
+        } catch (Exception e) {
+            return date.toString();
+        }
+
     }
 }

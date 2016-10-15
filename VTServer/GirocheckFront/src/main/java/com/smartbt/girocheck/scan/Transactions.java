@@ -35,28 +35,33 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType( XmlAccessType.FIELD )
 @XmlType( name = "Transactions", propOrder = { 
-    "transactionList" 
+    "transaction" 
 } )
 public class Transactions extends MainResponseContainer{
  
-    @XmlElement( name = "transactionList" )
-    private List<Transaction> transactionList;
+    @XmlElement( name = "transaction" )
+    private List<Transaction> transaction;
 
     public Transactions() {
     }
 
+    public Transactions(List<Transaction> transaction) {
+        this.transaction = transaction;
+    }
+    
+    
+
     /**
-     * @return the transactionList
+     * @return the transaction
      */
-    public List<Transaction> getTransactionList() {
-        return transactionList;
+    public List<Transaction> getTransaction() {
+        return transaction;
     }
 
     /**
-     * @param transactionList the transactionList to set
+     * @param transaction the transaction to set
      */
-    public void setTransactionList(List<Transaction> transactionList) {
-        this.transactionList = transactionList;
+    public void setTransaction(List<Transaction> transaction) {
+        this.transaction = transaction;
     }
- 
 }

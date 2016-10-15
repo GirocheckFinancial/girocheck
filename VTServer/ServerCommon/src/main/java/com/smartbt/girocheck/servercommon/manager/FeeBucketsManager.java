@@ -62,7 +62,7 @@ public class FeeBucketsManager {
     }
     
     public static void main(String args[]){
-        float f =  3.18F;
+        float f =  3.1823232F;
         BigDecimal bd = new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP);
         System.out.println(Float.parseFloat(bd.toString()));
     }

@@ -127,7 +127,9 @@
 
     <xs:complexType name="activityReportRequest">
         <xs:sequence>
-            <xs:element name="entrada" type="xs:string" minOccurs="0"/> 
+            <xs:element name="terminalId" type="xs:string" minOccurs="0"/> 
+            <xs:element name="startDate" type="xs:string" minOccurs="0"/> 
+            <xs:element name="endDate" type="xs:string" minOccurs="0"/> 
         </xs:sequence>
     </xs:complexType>
     
@@ -166,19 +168,38 @@
      <xs:complexType name="Transaction">
         <xs:sequence> 
             <xs:element name="transactionType" type="xs:string" minOccurs="0"/>
+            <xs:element name="dateTime" type="xs:string" minOccurs="0"/>
+            <xs:element name="amount" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
  
       <xs:complexType name="Transactions">
         <xs:sequence>
-            <xs:element name="transactionList" type="tns:Transaction" minOccurs="0"/>
+            <xs:element name="transaction" type="tns:Transaction" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
     
      <xs:complexType name="ActivityReportRes">
         <xs:sequence> 
-            <!--<xs:element name="salida" type="xs:string" minOccurs="0"/>-->
-            <xs:element name="transactionList" type="tns:Transactions" minOccurs="0"/>
+            <xs:element name="check2cardCount" type="xs:string" minOccurs="0"/>
+            <xs:element name="cash2cardCount" type="xs:string" minOccurs="0"/>
+            <xs:element name="card2merchantCount" type="xs:string" minOccurs="0"/>
+            
+            <xs:element name="check2cardTotal" type="xs:string" minOccurs="0"/>
+            <xs:element name="cash2cardTotal" type="xs:string" minOccurs="0"/>
+            <xs:element name="card2merchantTotal" type="xs:string" minOccurs="0"/>
+            
+            <xs:element name="cashIn" type="xs:string" minOccurs="0"/>
+            <xs:element name="cashOut" type="xs:string" minOccurs="0"/>
+            <xs:element name="netCash" type="xs:string" minOccurs="0"/>
+            
+            <xs:element name="totalRows" type="xs:string" minOccurs="0"/>
+            <xs:element name="success" type="xs:string" minOccurs="0"/>
+            
+            <xs:element name="check2cardTransactions" type="tns:Transactions" minOccurs="0"/>
+            <xs:element name="cash2cardTransactions" type="tns:Transactions" minOccurs="0"/>
+            <xs:element name="card2merchantTransactions" type="tns:Transactions" minOccurs="0"/>
+ 
         </xs:sequence>
     </xs:complexType>
 <!--

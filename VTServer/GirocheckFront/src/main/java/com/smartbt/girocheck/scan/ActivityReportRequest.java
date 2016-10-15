@@ -1,19 +1,24 @@
-
 package com.smartbt.girocheck.scan;
 
 import com.smartbt.girocheck.servercommon.utils.IMap;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for checkAuthRequest complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
+ * Java class for checkAuthRequest complex type.
+ *
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
+ *
  * <pre>
  * &lt;complexType name="checkAuthRequest">
  *   &lt;complexContent>
@@ -25,44 +30,87 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "activityReportRequest", propOrder = {
-   "entrada"
+    "terminalId",
+    "startDate",
+    "endDate"
 })
-public class ActivityReportRequest implements IMap{
+public class ActivityReportRequest implements IMap {
 
-    private String entrada;
-   
-    
-     @Override
-   public Map toMap() {
-      Map map = new HashMap();
-      
-    return map;
+    private String terminalId;
+    private Date startDate;
+    private Date endDate;
+
+    private Date getDateFromString(String dateStr) {
+        if (dateStr == null || dateStr.isEmpty()) {
+            return null;
+        }
+
+        try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            return df.parse(dateStr);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Map toMap() {
+        Map map = new HashMap();
+
+        return map;
     }
 
     public Map mock() {
-      Map map = new HashMap();
-     
-    return map;
+        Map map = new HashMap();
+
+        return map;
     }
 
     /**
-     * @return the entrada
+     * @return the terminalId
      */
-    public String getEntrada() {
-        return entrada;
+    public String getTerminalId() {
+        return terminalId;
     }
 
     /**
-     * @param entrada the entrada to set
+     * @param terminalId the terminalId to set
      */
-    public void setEntrada(String entrada) {
-        this.entrada = entrada;
+    public void setTerminalId(String terminalId) {
+        this.terminalId = terminalId;
     }
-   
- 
+
+    /**
+     * @return the startDate
+     */
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the startDate to set Expected format: yyyy-MM-dd
+     */
+    public void setStartDate(String startDateStr) throws ParseException {
+            this.startDate = getDateFromString(startDateStr);
+    }
+
+    /**
+     * @return the endDate
+     */
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the endDate to set Expected format: yyyy-MM-dd
+     */
+    public void setEndDate(String endDateStr) throws ParseException { 
+        this.endDate= getDateFromString(endDateStr);
+    }
+
 }

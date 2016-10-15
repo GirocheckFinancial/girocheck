@@ -29,10 +29,14 @@ import com.smartbt.girocheck.scan.Transaction;
 import com.smartbt.girocheck.scan.Transactions;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.manager.FrontManager;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import javax.jws.WebService;
 
 /**
@@ -52,20 +56,81 @@ public class Scan {
 
     public ActivityReportRes activityReport( final ActivityReportRequest arg0 ) throws Exception { 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[GCHFront Scan] ActivityReport",null );
-        System.out.println("Entrada = " + arg0.getEntrada());
+        System.out.println("TerminalId = " + arg0.getTerminalId());
+        System.out.println("StartDate = " + arg0.getStartDate());
+        System.out.println("EndDate = " + arg0.getEndDate());
         ActivityReportRes res = new ActivityReportRes();
         
-        Transaction t1 = new Transaction("t1");
-        Transaction t2 = new Transaction("t1");
-        List<Transaction> transactionList = new ArrayList<>();
-        transactionList.add(t1);
-        transactionList.add(t2);
+        Transaction checkTransaction1 = new Transaction("check2card", new Date(), 12.56345D);
+        Transaction checkTransaction2 = new Transaction("check2card", new Date(), 23.5663);
+        List<Transaction> checkTransactionList = new ArrayList<>();
+        checkTransactionList.add(checkTransaction1);
+        checkTransactionList.add(checkTransaction2);
         
-        Transactions transactions = new Transactions();
-        transactions.setTransactionList(transactionList);
+        Transaction cashTransaction1 = new Transaction("cash2card", new Date(), 15.27457D);
+        Transaction cashTransaction2 = new Transaction("cash2card", new Date(), 25.85873);
+        List<Transaction> cashTransactionList = new ArrayList<>();
+        cashTransactionList.add(cashTransaction1);
+        cashTransactionList.add(cashTransaction2);
         
-        res.setTransactions(transactions);
+        Transaction cardTransaction1 = new Transaction("card2merchant", new Date(), 10.8335D);
+        Transaction cardTransaction2 = new Transaction("card2merchant", new Date(), 27.1575);
+        List<Transaction> cardTransactionList = new ArrayList<>();
+        cardTransactionList.add(cardTransaction1);
+        cardTransactionList.add(cardTransaction2);
+        
+        Transactions checkToCardTransactions = new Transactions( checkTransactionList );
+        Transactions cashToCardTransactions = new Transactions( cashTransactionList );
+        Transactions cardToMerchantTransactions = new Transactions( cardTransactionList );
+        
+        res.setCheck2cardTransactions(checkToCardTransactions);
+        res.setCash2cardTransactions(cashToCardTransactions);
+        res.setCard2merchantTransactions(cardToMerchantTransactions);
+        
+        res.setCheck2cardCount(checkToCardTransactions.getTransaction().size());
+        res.setCash2cardCount(cashToCardTransactions.getTransaction().size());
+        res.setCard2merchantCount(cardToMerchantTransactions.getTransaction().size());
+        
+        res.setCheck2cardTotal(sum(checkToCardTransactions.getTransaction()));
+        res.setCash2cardTotal(sum(cashToCardTransactions.getTransaction()));
+        res.setCard2merchantTotal(sum(cardToMerchantTransactions.getTransaction()));
+        
+        res.setCashIn(res.getCheck2cardTotal() + res.getCash2cardTotal());
+        res.setCashOut(res.getCard2merchantTotal());
+        res.setNetCash(res.getCashIn()- res.getCashOut());
+        
+        res.setSuccess(true);
+        res.setTotalRows(res.getCheck2cardCount() + res.getCash2cardCount() + res.getCard2merchantCount());
         return res;
+
+    }
+    
+    private Double sum(List<Transaction> list){
+        Double sum = 0D;
+        
+        for (Transaction t : list) {
+            sum += t.getAmount();
+        }
+        return sum;
+    }
+    
+    public static void main(String[] args){
+     Date date = new Date();
+        System.out.println(dateToISOFormat(new Date()));
+    }
+    
+     public static String dateToISOFormat(Date date) {
+        if (date == null) {
+            return "";
+        }
+        try {
+            TimeZone tz = TimeZone.getTimeZone("UTC");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+            df.setTimeZone(tz);
+            return df.format(new Date());
+        } catch (Exception e) {
+            return date.toString();
+        }
 
     }
 

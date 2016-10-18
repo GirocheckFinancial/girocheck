@@ -1,5 +1,7 @@
 package com.smartbt.girocheck.scan;
 
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.IMap;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -60,8 +62,15 @@ public class ActivityReportRequest implements IMap {
 
     @Override
     public Map toMap() {
-        Map map = new HashMap();
-
+        Map map = new HashMap(); 
+        map.put(ParameterName.TERMINAL_ID, terminalId); 
+        map.put(ParameterName.START_DATE, startDate);
+        map.put(ParameterName.END_DATE, endDate);
+        
+        System.out.println("toMap()");
+        System.out.println("terminalId = " + terminalId);
+        System.out.println("startDate = " + startDate);
+        System.out.println("endDate = " + endDate);
         return map;
     }
 

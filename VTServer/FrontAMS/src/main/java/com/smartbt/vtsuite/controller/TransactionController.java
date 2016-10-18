@@ -41,7 +41,7 @@ public class TransactionController {
     private HttpServletResponse response;
     @Context
     private HttpServletRequest request;
-    private TransactionManager manager = new TransactionManager();
+    private TransactionManager manager = TransactionManager.get();
     private SubTransactionManager subTransactionManager = new SubTransactionManager();
 //    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(TransactionController.class);
 

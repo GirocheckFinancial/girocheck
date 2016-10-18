@@ -16,12 +16,15 @@ package com.smartbt.girocheck.servercommon.manager;
 import com.smartbt.girocheck.servercommon.dao.TransactionDAO;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.vtsuite.common.VTSuiteMessages;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -30,6 +33,43 @@ import java.util.List;
 public class TransactionManager {
     private TransactionDAO transactionDAO = TransactionDAO.get();
    
+    protected static TransactionManager _this;
+    
+    public static TransactionManager get() {
+        if (_this == null) {
+            _this = new TransactionManager();
+        }
+        return _this;
+    }
+    
+     public Map activityReport(Map input){
+        Date dateStart = (Date)input.get(ParameterName.START_DATE);
+        Date dateEnd = new Date();
+        if(input.containsKey(ParameterName.END_DATE)){
+            dateEnd = (Date)input.get(ParameterName.END_DATE);
+            dateEnd.setHours(23);
+            dateEnd.setMinutes(59);
+            dateEnd.setSeconds(59);
+        }
+        
+        if((dateEnd.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24) > 30){
+            System.out.println("DateEnd < dateStart > 30 days");
+            Calendar c = Calendar.getInstance();
+            c.setTime(dateEnd);
+            c.add(Calendar.DAY_OF_MONTH, -1);
+            dateStart = c.getTime();
+            System.out.println("Setting dateStart to " + dateStart);
+        }
+        
+        dateStart.setHours(0);
+        dateStart.setMinutes(0);
+        dateStart.setSeconds(0);
+        
+        input.put(ParameterName.START_DATE, dateStart);
+        input.put(ParameterName.END_DATE, dateEnd);
+        
+        return transactionDAO.activityReport(input);
+    }
     
     public Transaction findById(int id){
         return transactionDAO.findById( id );

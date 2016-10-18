@@ -46,7 +46,9 @@ public enum TransactionType {
     CHECK_AUTH_LOCATION_CONFIG(NomHost.ISTREAM, 31),
     ORDER_EXPRESS_DEVOLUCION( NomHost.ORDER_EXPRESS, 32 ),
     ORDER_EXPRESS_REPORTAPAGO( NomHost.ORDER_EXPRESS, 33 ),
-    ORDER_EXPRESS_LOGS( NomHost.ORDER_EXPRESS, 34 );
+    ORDER_EXPRESS_LOGS( NomHost.ORDER_EXPRESS, 34 ),
+    
+    ACTIVITY_REPORT(null, 35 ); //no transactional
 
     private NomHost host;
 

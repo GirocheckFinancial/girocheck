@@ -1,23 +1,28 @@
 package com.smartbt.girocheck.servercommon.dao;
 
+import com.smartbt.girocheck.servercommon.display.ActivityReportTransactionDisplay;
 import com.smartbt.girocheck.servercommon.display.AddressImageFormDisplay;
 import com.smartbt.girocheck.servercommon.display.SubTransactionImageDisplay;
 import com.smartbt.girocheck.servercommon.display.TransactionDisplay;
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.ImgConvTiffToPng;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.utils.bd.TransformerComplexBeans;
 import com.smartbt.vtsuite.servercommon.utils.DateUtils;
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activity.ActivityRequiredException;
 import javax.xml.bind.DatatypeConverter;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
@@ -27,7 +32,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
-import org.hibernate.type.StandardBasicTypes;
 
 /**
  *
@@ -46,6 +50,79 @@ public class TransactionDAO extends BaseDAO<Transaction> {
             dao = new TransactionDAO();
         }
         return dao;
+    }
+
+    public Map activityReport(Map input) {
+        Map output = new HashMap();
+
+        try {
+            String terminalId = (String) input.get(ParameterName.TERMINAL_ID);
+            Date dateStart = (Date) input.get(ParameterName.START_DATE);
+            Date dateEnd = (Date) input.get(ParameterName.END_DATE);
+
+            List<ActivityReportTransactionDisplay> checkTransactions = getActivityCriteriaCheckCash(terminalId, dateStart, dateEnd, "01", true).list();
+            List<ActivityReportTransactionDisplay> cashTransactions = getActivityCriteriaCheckCash(terminalId, dateStart, dateEnd, "02", true).list();
+            List<ActivityReportTransactionDisplay> card2MerchantTransactions = getActivityCriteriaCard2Bank(terminalId, dateStart, dateEnd, true).list();
+
+            System.out.println("DAO checkTransactions.size = " + checkTransactions.size());
+            System.out.println("DAO cashTransactions.size = " + cashTransactions.size());
+            System.out.println("DAO card2MerchantTransactions.size = " + card2MerchantTransactions.size());
+            
+            Double checkTotal = (Double) getActivityCriteriaCheckCash(terminalId, dateStart, dateEnd, "01", false).uniqueResult();
+            Double cashTotal = (Double) getActivityCriteriaCheckCash(terminalId, dateStart, dateEnd, "02", false).uniqueResult();
+            Double cardTotal = (Double) getActivityCriteriaCard2Bank(terminalId, dateStart, dateEnd, false).uniqueResult();
+
+            output.put(ParameterName.CHECK2CARD_TRANSACTIONS, checkTransactions);
+            output.put(ParameterName.CASH2CARD_TRANSACTIONS, cashTransactions);
+            output.put(ParameterName.CARD2MERCHANT_TRANSACTIONS, card2MerchantTransactions);
+
+            output.put(ParameterName.CHECK2CARD_COUNT, checkTransactions.size());
+            output.put(ParameterName.CASH2CARD_COUNT, cashTransactions.size());
+            output.put(ParameterName.CARD2MERCHANT_COUNT, card2MerchantTransactions.size());
+
+            output.put(ParameterName.CHECK2CARD_TOTAL, checkTotal);
+            output.put(ParameterName.CASH2CARD_TOTAL, cashTotal);
+            output.put(ParameterName.CARD2MERCHANT_TOTAL, cardTotal);
+
+            output.put(ParameterName.CASH_IN, checkTotal + cashTotal);
+            output.put(ParameterName.CASH_OUT, cardTotal);
+            output.put(ParameterName.NET_CASH, (checkTotal + cashTotal) - cardTotal);
+
+            output.put(ParameterName.TOTAL_ROWS, checkTransactions.size() + cashTransactions.size() + card2MerchantTransactions.size());
+            output.put(ParameterName.SUCCESS, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            output.put(ParameterName.SUCCESS, false);
+        }
+        return output;
+    }
+
+    private Criteria getActivityCriteriaCheckCash(String terminalId, Date dateStart, Date dateEnd, String operation, boolean isList) {
+        return getActivityCriteria(terminalId, dateStart, dateEnd, isList).add(Restrictions.eq("operation", operation));
+    }
+
+    private Criteria getActivityCriteriaCard2Bank(String terminalId, Date dateStart, Date dateEnd, boolean isList) {
+        return getActivityCriteria(terminalId, dateStart, dateEnd, isList).add(Restrictions.eq("transactionType", TransactionType.TECNICARD_CARD_TO_BANK.getCode()));
+    }
+
+    private Criteria getActivityCriteria(String terminalId, Date dateStart, Date dateEnd, boolean isList) {
+        Criteria criteria = HibernateUtil.getSession().createCriteria(Transaction.class)
+                .createAlias("terminal", "terminal")
+                .add(Restrictions.eq("terminal.serialNumber", terminalId))
+                .add(Restrictions.ge("dateTime", dateStart))
+                .add(Restrictions.le("dateTime", dateEnd));
+
+        if (isList) {
+            ProjectionList projectionList = Projections.projectionList()
+                    .add(Projections.property("dateTime").as("dateTime"))
+                    .add(Projections.property("ammount").as("amount"));
+
+            criteria.setProjection(projectionList)
+                    .setResultTransformer(Transformers.aliasToBean(ActivityReportTransactionDisplay.class));
+        } else {
+            criteria.setProjection(Projections.sum("ammount"));
+        }
+        return criteria;
     }
 
     public boolean cancelTransaction(String requestId) {
@@ -315,14 +392,14 @@ public class TransactionDAO extends BaseDAO<Transaction> {
     }
 
     public List<Transaction> getAll() {
-        Criteria criteria =  HibernateUtil.getSession().createCriteria(Transaction.class)
+        Criteria criteria = HibernateUtil.getSession().createCriteria(Transaction.class)
                 .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN)
                 // .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
                 .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
                 .addOrder(Order.desc("dateTime"));
-        
+
         return criteria.list();
     }
 

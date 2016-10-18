@@ -1,8 +1,6 @@
 package com.smartbt.girocheck.scan;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
-import com.smartbt.girocheck.servercommon.enums.ResultCode;
-import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.utils.IBuilder;
 import java.math.BigDecimal;
 import java.util.List;
@@ -100,11 +98,30 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
 
     @XmlElement(name = "card2merchantTransactions")
     private Transactions card2merchantTransactions;
-
+ 
      
     
     @Override
     public ActivityReportRes build(Map map) throws Exception {
+        this.check2cardCount = (Integer)map.get(ParameterName.CHECK2CARD_COUNT);
+        this.cash2cardCount = (Integer)map.get(ParameterName.CASH2CARD_COUNT);
+        this.card2merchantCount = (Integer)map.get(ParameterName.CARD2MERCHANT_COUNT);
+        
+        this.check2cardTotal = roundDouble((Double)map.get(ParameterName.CHECK2CARD_TOTAL));
+        this.cash2cardTotal = roundDouble((Double)map.get(ParameterName.CASH2CARD_TOTAL));
+        this.card2merchantTotal = roundDouble((Double)map.get(ParameterName.CARD2MERCHANT_TOTAL));
+        
+        this.cashIn = roundDouble((Double)map.get(ParameterName.CASH_IN));
+        this.cashOut = roundDouble((Double)map.get(ParameterName.CASH_OUT));
+        this.netCash = roundDouble((Double)map.get(ParameterName.NET_CASH));
+        
+        this.totalRows = (Integer)map.get(ParameterName.TOTAL_ROWS);
+        this.success = (Boolean)map.get(ParameterName.SUCCESS);
+        
+        this.check2cardTransactions = (Transactions)map.get(ParameterName.CHECK2CARD_TRANSACTIONS);
+        this.cash2cardTransactions = (Transactions)map.get(ParameterName.CASH2CARD_TRANSACTIONS);
+        this.card2merchantTransactions = (Transactions)map.get(ParameterName.CARD2MERCHANT_TRANSACTIONS);
+        
         return this;
     }
 

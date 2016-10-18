@@ -153,7 +153,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 response = sendMessageToHost(request, NomHost.ISTREAM.toString(), ISTREAM_HOST_WAIT_TIME, false);
 
             } catch (Exception e) {
-                generateNotificationEmail("There was a problem receiving generic host validation response", null);
+//                generateNotificationEmail("There was a problem receiving generic host validation response", null);
                 return;
             }
 
@@ -179,7 +179,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             } catch (Exception e) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Error Receiving personal info ", null);
                 e.printStackTrace();
-                generateNotificationEmail("There was a problem receiving personal info", null);
+//                generateNotificationEmail("There was a problem receiving personal info", null);
                 return;
             }
 
@@ -311,7 +311,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 response = sendMessageToHost(reqOE, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME, true);
             } catch (Exception e) {
-                generateNotificationEmail("There was a problem receiving OE Contrataciones", null);
+//                generateNotificationEmail("There was a problem receiving OE Contrataciones", null);
                 return;
             }
 
@@ -370,7 +370,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             try {
                 responseeeee2 = sendMessageToHost(req002, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_LOG_WAIT_TIME, true);
             } catch (Exception e) {
-                generateNotificationEmail("There were a problem receiving OE log response", null);
+//                generateNotificationEmail("There were a problem receiving OE log response", null);
                 return;
             }
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Response from method log OE OP_CODE : " + responseeeee2.getTransactionData().get(ParameterName.OP_CODE), null);
@@ -421,7 +421,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                 OEDevolucion(request);
                 e.printStackTrace();
-                generateNotificationEmail("There was a problem receiving certegy", null);
+//                generateNotificationEmail("There was a problem receiving certegy", null);
                 return;
             }
 
@@ -491,7 +491,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                 OEDevolucion(request);
 
-                generateNotificationEmail("There was a problem trying to load a card", null);
+//                generateNotificationEmail("There was a problem trying to load a card", null);
                 return;
             }
 
@@ -546,7 +546,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                         sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), ResultMessage.FUZE_HOST_FAILED.getTerminalMessage(), hostName);
                     }
 
-                    generateNotificationEmail("There was a problem trying to load a card", null);
+//                    generateNotificationEmail("There was a problem trying to load a card", null);
 
                     String action = "decline";
                     sendIstreamCheckAuthSubmit(request, action);
@@ -575,7 +575,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                 }
 
-                generateNotificationEmail("There was a problem trying to load a card", null);
+//                generateNotificationEmail("There was a problem trying to load a card", null);
 
                 String action = "decline";
                 sendIstreamCheckAuthSubmit(request, action);
@@ -735,7 +735,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 correlation = correlationId;
                 waitTime = TECNICARD_CONFIRMATION_WAIT_TIME;
                 queue = jmsManager.getCore2InQueue();
-                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] receiveMessageFromFront(...) queue = jmsManager.getCore2InQueue();", null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] receiveMessageFromFront(...) queue = jmsManager.getCore2InQueue(); correlationId = " + correlationId, null);
                 break;
         }
 
@@ -1067,50 +1067,50 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
     }
 
-    public static void generateNotificationEmail(String msg, Map<ParameterName, ImagePart> images) throws Exception {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-        buffer.append(msg).append(" at ").append((new Date()).toString());
-        buffer.append("</body></html>");
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Sending email", null);
-        String receiptTitle = "SBT Middleware Warning Message";
-
-        List<String> emailList = new ArrayList<String>();
-
-        emailList.add(System.getProperty("SEND_MAIL_GCH"));
-        emailList.add(System.getProperty("SEND_MAIL_GCH2"));
-
-        String server_address = "smtp.cbeyond.com";
-        String server_port = "587";
-        String server_username = "direx@smartbt.com";
-        String server_password = "MiamiRocks12";
-        String server_from_address = "direx@smartbt.com";
-
-        boolean email_debug = false;
-
-        String[] recipients = new String[emailList.size()];
-        emailList.toArray(recipients);
-
-        EmailUtils email;
-
-        if (server_username != null && !server_username.isEmpty()) {
-            email = new EmailUtils(server_address, server_port, server_username, server_password);
-        } else {
-            email = new EmailUtils(server_address, server_port);
-        }
-
-        if (images != null) {
-            for (Object key : images.keySet()) {
-                ImagePart img = (ImagePart) images.get(key);
-                email.addImage(img);
-            }
-        }
-
-        email.setMessage(buffer.toString(), "text/html");
-//        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
-    }
+//    public static void generateNotificationEmail(String msg, Map<ParameterName, ImagePart> images) throws Exception {
+//        StringBuffer buffer = new StringBuffer();
+//        buffer.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
+//
+//        buffer.append(msg).append(" at ").append((new Date()).toString());
+//        buffer.append("</body></html>");
+//
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Sending email", null);
+//        String receiptTitle = "SBT Middleware Warning Message";
+//
+//        List<String> emailList = new ArrayList<String>();
+//
+//        emailList.add(System.getProperty("SEND_MAIL_GCH"));
+//        emailList.add(System.getProperty("SEND_MAIL_GCH2"));
+//
+//        String server_address = "smtp.cbeyond.com";
+//        String server_port = "587";
+//        String server_username = "direx@smartbt.com";
+//        String server_password = "MiamiRocks12";
+//        String server_from_address = "direx@smartbt.com";
+//
+//        boolean email_debug = false;
+//
+//        String[] recipients = new String[emailList.size()];
+//        emailList.toArray(recipients);
+//
+//        EmailUtils email;
+//
+//        if (server_username != null && !server_username.isEmpty()) {
+//            email = new EmailUtils(server_address, server_port, server_username, server_password);
+//        } else {
+//            email = new EmailUtils(server_address, server_port);
+//        }
+//
+//        if (images != null) {
+//            for (Object key : images.keySet()) {
+//                ImagePart img = (ImagePart) images.get(key);
+//                email.addImage(img);
+//            }
+//        }
+//
+//        email.setMessage(buffer.toString(), "text/html");
+////        email.sendEmail(recipients, server_from_address, receiptTitle, email_debug);
+//    }
 
     public void fixPersonalInfoName(DirexTransactionRequest requestData) throws Exception {
 
@@ -1177,7 +1177,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         try {
             responseeeee = sendMessageToHost(req00, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME, false);
         } catch (Exception e) { 
-            generateNotificationEmail("There were a problem receiving OE Pago", null);
+//            generateNotificationEmail("There were a problem receiving OE Pago", null);
             return;
         }
 
@@ -1196,7 +1196,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
         try {
             responseeeee1 = sendMessageToHost(req001, NomHost.ORDER_EXPRESS.toString(), ORDER_EXPRESS_WAIT_TIME, false);
         } catch (Exception e) { 
-            generateNotificationEmail("There were a problem receiving OE Pago", null);
+//            generateNotificationEmail("There were a problem receiving OE Pago", null);
             return;
         }
 

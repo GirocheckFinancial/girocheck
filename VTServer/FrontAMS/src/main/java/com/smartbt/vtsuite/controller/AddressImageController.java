@@ -21,7 +21,7 @@ public class AddressImageController {
     
 //    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AddressImageController.class);
     
-    TransactionManager tManager = new TransactionManager();
+    TransactionManager tManager = TransactionManager.get();
     
     @POST
     @Path("getAddressFormImage")

@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class TecnicardHostManager {
        TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
-    //   MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+//       MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
  
     public static Map TRANSACTION_SEQUENCE;
     

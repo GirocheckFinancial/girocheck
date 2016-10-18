@@ -1,10 +1,12 @@
 package com.smartbt.girocheck.scan;
 
+import com.smartbt.girocheck.servercommon.display.ActivityReportTransactionDisplay;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.utils.DateUtils;
 import com.smartbt.girocheck.servercommon.utils.IBuilder;
+import com.smartbt.vtsuite.util.OperationType;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
@@ -59,6 +61,12 @@ public class Transaction extends MainResponseContainer{
         this.transactionType = transactionType;
         this.dateTime = dateTime;
         this.amount =  roundDouble(amount);
+    }
+
+    public Transaction (ActivityReportTransactionDisplay display, OperationType operationType) {
+        this.transactionType = operationType.getOperation();
+        this.dateTime = display.getDateTime();
+        this.amount = display.getAmount();
     }
 
       private Double roundDouble(Double amount){

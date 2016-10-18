@@ -359,10 +359,7 @@
             <xs:element name="authFeem" type="xs:string" minOccurs="0"/>
             <xs:element name="authFeep" type="xs:string" minOccurs="0"/>
             <xs:element name="crdldf" type="xs:string" minOccurs="0"/>
-            <xs:element name="param1" type="xs:string" minOccurs="0"/>
-            <xs:element name="param2" type="xs:string" minOccurs="0"/>
-            <xs:element name="param3" type="xs:string" minOccurs="0"/>
-            <xs:element name="param4" type="xs:string" minOccurs="0"/>
+            <xs:element name="activationFee" type="xs:string" minOccurs="0"/> 
         </xs:sequence>
     </xs:complexType>
 

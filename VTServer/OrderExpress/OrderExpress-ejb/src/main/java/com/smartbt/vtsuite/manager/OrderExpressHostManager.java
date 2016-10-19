@@ -34,8 +34,8 @@ public class OrderExpressHostManager {
  
     public DirexTransactionResponse processTransaction(DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts) throws Exception {
 
-//    MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
-       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
+    MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+//       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
 
         fixZipCode(direxTransactionRequest);
@@ -80,6 +80,7 @@ public class OrderExpressHostManager {
 
                 if (opCode2 != null && needToRepeatTransaction(opCode2) && numberOfAttempts > 1) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OP_CODE2 == opCode2, Re-Submitting request... ", null);
+                    Thread.sleep(30_000);
                     return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
                 } else {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] LogMethod opCode: " + opCode, null);

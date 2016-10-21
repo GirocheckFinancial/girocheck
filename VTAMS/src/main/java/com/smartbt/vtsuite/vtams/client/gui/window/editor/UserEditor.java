@@ -23,6 +23,7 @@ import com.smartbt.vtsuite.vtams.client.gui.component.BaseTextItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.DataSourceBuilder;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.RoleDS;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.UserDS;
+import static com.smartbt.vtsuite.vtams.client.utils.Utils.debug;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.Record;
@@ -56,8 +57,10 @@ public class UserEditor extends BaseEditorWindow {
      * @param recordEntity
      */
     public UserEditor(EntityType entityType, Record recordEntity) {
-
         super(I18N.GET.WINDOW_USER_TITLE());
+        
+        debug("--UserEditor() 1");
+        
         this.entityType = entityType;
         usernameText = new BaseTextItem("username", true);
         usernameText.setWidth(COMPONENTS_WIDTH);
@@ -75,6 +78,8 @@ public class UserEditor extends BaseEditorWindow {
         emailText = new BaseTextItem("email", false);
         emailText.setWidth(COMPONENTS_WIDTH);
 
+        debug("--UserEditor() 2");
+        
         roleSelect = new BaseSelectItem("role", I18N.GET.LABEL_ROLE_TITLE(), new RoleDS(), true);
         roleSelect.setDataPath("role/id");
         roleSelect.setEmptyDisplayValue(I18N.GET.MESSAGE_EMPTY_ROLE_SELECT());
@@ -82,9 +87,9 @@ public class UserEditor extends BaseEditorWindow {
 
         recAux = recordEntity;
         dataForm.setDataSource(new UserDS(entityType));
- 
+ debug("--UserEditor() 3");
         dataForm.setFields(usernameText, lastNameText, firstNameText, passwordText, activeSelect, emailText, roleSelect);
- 
+ debug("--UserEditor() 4");
     }
 
     /**

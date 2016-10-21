@@ -15,16 +15,26 @@
  */
 package com.smartbt.vtsuite.vtams.client.gui.window;
 
-
+import com.smartbt.vtsuite.vtams.client.classes.Properties;
 import com.smartbt.vtsuite.vtams.client.classes.Settings;
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseWindow;
 import com.smartbt.vtsuite.vtams.client.gui.component.BaseLinkItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.BaseStaticTextItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.MenuButtonItem;
+import com.smartbt.vtsuite.vtams.client.gui.component.datasource.UserDS;
+import com.smartbt.vtsuite.vtams.client.gui.listener.EditorListener;
+import com.smartbt.vtsuite.vtams.client.gui.window.editor.ProfileEditor;
 import com.smartbt.vtsuite.vtams.client.gui.window.transaction.TransactionWindow;
 import com.smartbt.vtsuite.vtams.client.utils.Utils;
+import static com.smartbt.vtsuite.vtams.client.utils.Utils.debug;
+import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
+import com.smartgwt.client.data.Criteria;
+import com.smartgwt.client.data.DSCallback;
+import com.smartgwt.client.data.DSRequest;
+import com.smartgwt.client.data.DSResponse;
+import com.smartgwt.client.data.Record;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.HeaderControls;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -42,6 +52,7 @@ public class MainWindow extends BaseWindow {
 
     private BaseWindow currentWindow;
     private VLayout vLayout;
+    private ProfileEditor profileEditor;
 
     /**
      * Constructor
@@ -51,12 +62,13 @@ public class MainWindow extends BaseWindow {
         //setting size to make the window use the scroll bar when the size is less than the one set
         setMinHeight(900);
         setMinWidth(1900);
-        
+
         DynamicForm userForm = new DynamicForm();
-        userForm.setWidth(200);
-        userForm.setNumCols(2);
-        userForm.setColWidths(250, 50);
-        userForm.setLayoutAlign(Alignment.CENTER);
+        userForm.setWidth(150);
+        userForm.setNumCols(3);
+        userForm.setColWidths(50,50,50);
+//        userForm.setLayoutAlign(Alignment.CENTER);
+        userForm.setLayoutAlign(Alignment.RIGHT);
 
         BaseLinkItem logoutLink = new BaseLinkItem("logoutLink", I18N.GET.LABEL_LOGOUT_TITLE());
         logoutLink.setWidth(50);
@@ -69,13 +81,56 @@ public class MainWindow extends BaseWindow {
 
         BaseStaticTextItem welcomeText = new BaseStaticTextItem("welcomeText");
         welcomeText.setShowTitle(false);
-        welcomeText.setWidth(250);
-        welcomeText.setValue(I18N.GET.LABEL_WELCOME_TITLE() + Utils.getUsername());
+        welcomeText.setAlign(Alignment.RIGHT);
+        welcomeText.setWidth(50);
+        welcomeText.setValue(I18N.GET.LABEL_WELCOME_TITLE());
         welcomeText.setTextBoxStyle("header-text");
 
-        userForm.setItems(welcomeText, logoutLink);
+        BaseLinkItem profileLink = new BaseLinkItem("profileLink", Utils.getUsername());
+        profileLink.setAlign(Alignment.LEFT);
+        profileLink.setWidth(50);
+        profileLink.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+            public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+                debug("--Profile link click");
+                Criteria criteria = new Criteria();
+                Record record = new Record();
+                criteria.setAttribute("userId", Utils.getUserId());
 
-        setTitle(I18N.GET.WINDOW_MAIN_TITLE(I18N.GET.GIROCHECK_NAME(),I18N.GET.GIROCHECK_AMS_FULL_NAME(),I18N.GET.GIROCHECK_AMS_VERSION()));
+                UserDS userDS = new UserDS(EntityType.AMS);
+                userDS.setFetchDataURL(Properties.GET_USER_WS);
+                debug("--before request");
+                userDS.fetchData(criteria, new DSCallback() {
+                    public void execute(DSResponse response, Object rawData, DSRequest request) {
+                        debug("--Call back");
+                        profileEditor = new ProfileEditor(EntityType.AMS, response.getData()[0]);
+                        debug("--After creating userEditor");
+
+                        profileEditor.updateRecord(response.getData()[0]);
+                        debug("--After updateRecord");
+
+                        profileEditor.addListener(new EditorListener() { 
+                            public void SaveActionExecuted() {
+                                debug("--SaveProfile");
+                                SaveProfile();
+                            }
+ 
+                            public void CloseActionExecuted() {
+                                debug("--CloseActionExecuted");
+                                profileEditor.hide();
+                            }
+                        });
+
+                        profileEditor.show();
+                        debug("--userEditor.show();");
+                    }
+                }, null);
+
+            }
+        });
+
+        userForm.setItems(welcomeText, profileLink, logoutLink);
+
+        setTitle(I18N.GET.WINDOW_MAIN_TITLE(I18N.GET.GIROCHECK_NAME(), I18N.GET.GIROCHECK_AMS_FULL_NAME(), I18N.GET.GIROCHECK_AMS_VERSION()));
         setSize("700", "500");
         setMargin(10);
         setHeaderControls(HeaderControls.HEADER_LABEL, userForm);
@@ -84,20 +139,20 @@ public class MainWindow extends BaseWindow {
         mainMenu.setWidth100();
         mainMenu.setStyleName("main-menu");
 
-         // Transactions Menu Button ---------------------------------------------------------------------------------------------------------------
+        // Transactions Menu Button ---------------------------------------------------------------------------------------------------------------
         if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_TRANSACTION)) {
-        Utils.debug("transactionMenuButton >> Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_TRANSACTION)" + Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_TRANSACTION));
-        MenuButtonItem transactionMenuButton = new MenuButtonItem("Transactions Platform");
-        mainMenu.addButton(transactionMenuButton);
-        transactionMenuButton.addClickHandler(new MainMenuClickHandler(this) {
-            @Override
-            public BaseWindow createWindow() {
-                return new TransactionWindow();
-            }
-        });
+            Utils.debug("transactionMenuButton >> Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_TRANSACTION)" + Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_TRANSACTION));
+            MenuButtonItem transactionMenuButton = new MenuButtonItem("Transactions Platform");
+            mainMenu.addButton(transactionMenuButton);
+            transactionMenuButton.addClickHandler(new MainMenuClickHandler(this) {
+                @Override
+                public BaseWindow createWindow() {
+                    return new TransactionWindow();
+                }
+            });
         }
         // Boarding Menu Button ---------------------------------------------------------------------------------------------------------------
-        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_BOARDING)) {  
+        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_BOARDING)) {
             MenuButtonItem boardingButton = new MenuButtonItem(I18N.GET.BUTTON_BOARDING_TITLE());
             mainMenu.addButton(boardingButton);
             boardingButton.addClickHandler(new MainMenuClickHandler(this) {
@@ -108,16 +163,16 @@ public class MainWindow extends BaseWindow {
             });
         }
         // Boarding Address Image Menu Button ---------------------------------------------------------------------------------------------------------------
-        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_ADDRESS)) {      
-        MenuButtonItem addressMenuButton = new MenuButtonItem(I18N.GET.BUTTON_ADDRESS_TITLE());
-        mainMenu.addButton(addressMenuButton);
-        addressMenuButton.addClickHandler(new MainMenuClickHandler(this) {
-            @Override
-            public BaseWindow createWindow() {
+        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_ADDRESS)) {
+            MenuButtonItem addressMenuButton = new MenuButtonItem(I18N.GET.BUTTON_ADDRESS_TITLE());
+            mainMenu.addButton(addressMenuButton);
+            addressMenuButton.addClickHandler(new MainMenuClickHandler(this) {
+                @Override
+                public BaseWindow createWindow() {
 //                return new AddressPlatformWindow();
-                return new ImageAddressViewerWindow();
-            }
-        });
+                    return new ImageAddressViewerWindow();
+                }
+            });
         }
 
         // Boarding Administration Menu Button ---------------------------------------------------------------------------------------------------------------
@@ -131,7 +186,7 @@ public class MainWindow extends BaseWindow {
                 }
             });
         }
-        
+
         mainMenu.addFill();
 
         vLayout = new VLayout();
@@ -157,6 +212,17 @@ public class MainWindow extends BaseWindow {
 
     public void setCurrentWindow(BaseWindow currentWindow) {
         this.currentWindow = currentWindow;
+    }
+    
+      public void SaveProfile(){
+        Record recordToSave = profileEditor.getRecord();
+          
+         profileEditor.getDataForm().getDataSource().updateData(recordToSave, new DSCallback() {
+               
+                public void execute(DSResponse response, Object rawData, DSRequest request) {
+                    profileEditor.hide();
+                }
+            });
     }
 }
 
@@ -187,4 +253,6 @@ abstract class MainMenuClickHandler implements ClickHandler {
     }
 
     public abstract BaseWindow createWindow();
+    
+  
 }

@@ -158,8 +158,6 @@ public class Utils {
     
     public static String getToken() {
 
-        debug("Utils.getToken() -> ");
-        
         String tokenCookieTest = Cookies.getCookie("TOKEN");
         
         if (!tokenCookieTest.equals("undefined")) {
@@ -168,13 +166,41 @@ public class Utils {
 //        Cookies.removeCookie("TOKEN");
 //        Cookies.removeCookieNative("TOKEN", "/VTAMS");
 
-       // debug("Utils.getToken() received -> "+tokenCookie);
+          debug("Utils.getToken() received -> "+tokenCookie);
 
                 if ((tokenCookie != null) && (!tokenCookie.isEmpty())) {
                     tokenCookie = tokenCookie.replace("\"", "");
+                    tokenCookie = tokenCookie.split("_")[1];
+                    debug("Utils.getToken() after process -> "+tokenCookie);
                 }
              //   debug("Utils.getToken() output -> " + tokenCookie);
                 return tokenCookie;
+            } else {
+                return null;
+            }
+        } else {
+            redirectToLoginPage();
+        }
+        return null;
+    }
+    
+    public static String getUserId() {
+
+        String tokenCookieTest = Cookies.getCookie("TOKEN");
+        
+        if (!tokenCookieTest.equals("undefined")) {
+            if (!Cookies.getCookie("TOKEN").isEmpty()) {
+                String idCookie = Cookies.getCookie("TOKEN");
+ 
+          debug("Utils.getUserId() received -> "+idCookie);
+
+                if ((idCookie != null) && (!idCookie.isEmpty())) {
+                    idCookie = idCookie.replace("\"", "");
+                    idCookie = idCookie.split("_")[0];
+                    debug("Utils.getToken() after process -> "+idCookie);
+                }
+             //   debug("Utils.getToken() output -> " + tokenCookie);
+                return idCookie;
             } else {
                 return null;
             }

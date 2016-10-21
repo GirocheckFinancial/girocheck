@@ -144,6 +144,7 @@ public class Properties {
      * Parameters: getClient
      */
     public static final String GET_CLIENT_WS = WS_URL + "getClient";
+    public static final String GET_USER_WS = WS_URL + "getUser";
     /**
      * Web Service for search all transactions that match the filter.
      *
@@ -404,5 +405,9 @@ public class Properties {
     public static final String TRANSACTIONREPORTS_WS = WS_URL + "searchTransactionReport";
     
     public static final String ENTITYREPORTS_WS = WS_URL + "searchEntityReport";
+    
+    public static String getUrl(String url){
+        return WS_URL + url;
+    }
 
 }

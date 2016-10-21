@@ -20,6 +20,7 @@ import com.google.gwt.json.client.JSONNumber;
 import com.smartbt.vtsuite.vtams.client.classes.Settings;
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.utils.Utils;
+import static com.smartbt.vtsuite.vtams.client.utils.Utils.debug;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
@@ -156,6 +157,7 @@ public class BaseDatasource extends RestDataSource {
             case DSResponse.STATUS_SUCCESS:
                 JSONArray valueStatus = XMLTools.selectObjects(data, "/status");
                 String status = ((JSONNumber) valueStatus.get(0)).toString();
+               
                 JSONArray valueTotalPages = XMLTools.selectObjects(data, "/totalPages");
                 if (valueTotalPages.size() > 0) {
                     response.setAttribute("totalPages", Integer.valueOf(((JSONNumber) valueTotalPages.get(0)).toString()));
@@ -221,7 +223,14 @@ public class BaseDatasource extends RestDataSource {
                             }
                         }
                     }, new Dialog());
-                } 
+                }
+                else if(status.equals(String.valueOf(Constants.INVALID_PASSWORD))){
+                   response.setStatus(Constants.INVALID_PASSWORD);
+                   JSONArray errors = XMLTools.selectObjects(data, "/statusMessage");
+                   String statusMessage = errors.get(0).isString().toString();
+                   debug("--BaseDataSource statusMessage = " + statusMessage);
+                   SC.warn("Invalid Password", statusMessage);
+                }
 
                 break;
         }

@@ -149,15 +149,7 @@ public class BaseEditorWindow extends Window {
             }
         });
 
-        resetButton = new BaseButtonItem("resetButton", I18N.GET.BUTTON_RESET_TITLE());
-        resetButton.setWidth(60);
-        resetButton.setAlign(Alignment.RIGHT);
-        resetButton.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                dataForm.reset();
-                dataForm.focusInItem(0);
-            }
-        });
+        resetButton = createResetButton();
 
         closeButton = new BaseButtonItem("closeButton", I18N.GET.BUTTON_CLOSE_TITLE());
         closeButton.setWidth(60);
@@ -175,7 +167,8 @@ public class BaseEditorWindow extends Window {
         actionForm.setNumCols(4);
         actionForm.setWidth100();
         actionForm.setAlign(Alignment.RIGHT);
-        actionForm.setFields(rowSpacer, confirmButton, resetButton, closeButton);
+        //rowSpacer,
+        actionForm.setFields( confirmButton, resetButton, closeButton);
 
         dataForm = new DynamicForm();
         dataForm.setHiliteRequiredFields(false);
@@ -193,6 +186,23 @@ public class BaseEditorWindow extends Window {
         mainVLayout.addMember(actionLayout);
 
         addItem(mainVLayout);
+    }
+    
+    public BaseButtonItem createResetButton(){
+        BaseButtonItem resetButton = new BaseButtonItem("resetButton", I18N.GET.BUTTON_RESET_TITLE());
+        resetButton.setWidth(60);
+        resetButton.setAlign(Alignment.RIGHT);
+        resetButton.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                Reset();
+            }
+        });
+        return resetButton;
+    }
+    
+    public void Reset(){
+        dataForm.reset();
+        dataForm.focusInItem(0);
     }
 
     /**

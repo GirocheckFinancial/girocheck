@@ -87,7 +87,7 @@ function getThings(){
         } else {
             document.getElementById('username').value = "";
             document.getElementById('password').value = "";
-            document.getElementById('error').innerHTML = "Invalid User"; // Invalid User
+            document.getElementById('error').innerHTML = obj['statusMessage'];//"Invalid User"; // Invalid User
         }        
     }
 

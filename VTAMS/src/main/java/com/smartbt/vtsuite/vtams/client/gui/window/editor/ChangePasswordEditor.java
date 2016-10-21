@@ -42,8 +42,8 @@ public final class ChangePasswordEditor extends BaseEditorWindow {
         passwordText = new BasePasswordItem("password", true);
         checkpasswordText = new BasePasswordItem("RepeatPassword", true);
 
-        passwordText.setKeyPressFilter(RegExp.VALID_TEXT_REG_EXP);
-        checkpasswordText.setKeyPressFilter(RegExp.VALID_TEXT_REG_EXP);
+        passwordText.setKeyPressFilter(RegExp.VALID_PASSW_REG_EXP);
+        checkpasswordText.setKeyPressFilter(RegExp.VALID_PASSW_REG_EXP);
         
         
         dataForm.setDataSource(new UserDS(entityType));
@@ -69,5 +69,10 @@ public final class ChangePasswordEditor extends BaseEditorWindow {
         userRecord.setAttribute("password", passwordText.getValueAsString());
         userRecord.setAttribute("checkpassword", checkpasswordText.getValueAsString());
         return userRecord;
+    }
+    
+    public void Reset(){
+        passwordText.setValue("");
+        checkpasswordText.setValue(""); 
     }
 }

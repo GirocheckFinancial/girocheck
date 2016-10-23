@@ -31,10 +31,10 @@ import org.apache.commons.lang.ArrayUtils;
  * The Host Manager class
  */
 public class OrderExpressHostManager {
- 
+
     public DirexTransactionResponse processTransaction(DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts) throws Exception {
 
-    MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+        MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
 //       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
 
@@ -95,6 +95,11 @@ public class OrderExpressHostManager {
                 if (!status.equals("3")) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] Condition Status != 3 and OELOGTIMEOUT value: " + response.getTransactionData().get(ParameterName.OELOGTIMEOUT), null);
 
+                    if (numberOfAttempts > 1) {
+                        Thread.sleep(30_000);
+                        return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
+                    }
+
                     if ((boolean) response.getTransactionData().get(ParameterName.OELOGTIMEOUT)) {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressHostManager] OELOGTIMEOUT true", null);
                         response = DirexTransactionResponse.forException(response.getTransactionType(), ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.OE_LOG_TIME_OUT, " Order Express return OESTATUS : " + status);
@@ -136,7 +141,6 @@ public class OrderExpressHostManager {
             direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, newZip);
         }
     }
-     
 
     private static boolean needToRepeatTransaction(String resultCode) {
         try {

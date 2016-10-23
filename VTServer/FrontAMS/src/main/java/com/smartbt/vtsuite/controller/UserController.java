@@ -18,12 +18,9 @@ package com.smartbt.vtsuite.controller;
 import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.display.UserDisplay;
+import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.manager.UserManager;
-import com.smartbt.vtsuite.utils.AuditLogMessage;
-import com.smartbt.vtsuite.vtcommon.enums.EntityType;
-import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
 import java.security.NoSuchAlgorithmException;
-import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -71,7 +68,7 @@ public class UserController {
     @PUT
     @Path("addUser")
     @Produces(MediaType.APPLICATION_JSON)
-    public BaseResponse addUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException, Exception {
+    public ResponseData addUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException, Exception {
 //        log.info("Incoming parameters : \n entityType: " + " \n name: " + user.getUsername());
 
 //        return AuditLogMessage.logAddUser(user.toString(), manager.addUser(user));
@@ -114,9 +111,23 @@ public class UserController {
 
     @Produces(MediaType.APPLICATION_JSON)
     public BaseResponse changePassword(@FormParam("userId") int id, @FormParam("password") String password) throws Exception {
-//        log.info("Incoming parameters : \n idUser and password to change password UserController.changePassword() : " + id);
-        
+        System.out.println("UserController.changePassword password = " + password);
         return manager.changePassword(id,password);
     }
     
+    
+       /**
+     * Get the user by a given id
+     *
+     * @param userId
+     * @return
+     */
+    @POST
+    @Path("getUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseData getUser(@FormParam("userId") Integer userId) throws Exception {
+      
+        System.out.println("Incoming parameters : \n userId: " + userId);
+        return new ResponseData(manager.getUserById(userId));
+    }
 }

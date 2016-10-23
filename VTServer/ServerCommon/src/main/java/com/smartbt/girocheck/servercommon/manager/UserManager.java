@@ -20,9 +20,12 @@ import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.display.UserDisplay;
 import com.smartbt.girocheck.servercommon.dao.UserDAO;
+import com.smartbt.girocheck.servercommon.display.message.ResponseData;
+import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import com.smartbt.girocheck.servercommon.validators.UserValidator;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
 import javax.xml.bind.ValidationException;
 import org.apache.log4j.Logger;
 
@@ -88,23 +91,40 @@ public class UserManager {
         return response;
     }
 
-    public BaseResponse addUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException, Exception {
+    public ResponseData addUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException, Exception {
         UserValidator.addUser(user);
-        BaseResponse response = new BaseResponse();
-        
-        userDAO.addUser(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getActive(), user.getEmail(), user.getRole().getId());
+        ResponseData response = new ResponseData();
+        String generatedPassword = PasswordUtil.generatePassword(8);
+        UserDisplay userDisplay = userDAO.addUser(user.getUsername(), generatedPassword, user.getFirstName(), user.getLastName(), user.getActive(), user.getEmail(), user.getRole().getId());
         response.setStatus(Constants.CODE_SUCCESS);
         response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.SUCCESS);
+        response.setData(userDisplay);
         return response;
     }
     
     public BaseResponse changePassword(int userId, String password){
-        BaseResponse response = new BaseResponse();
+        BaseResponse response = new BaseResponse(); 
+        if(PasswordUtil.validatePasswordFormat(password)){ 
+            
+            try {
+                userDAO.changePassword(userId,password);
+                response.setStatus(Constants.CODE_SUCCESS);
+                response.setStatusMessage(VTSuiteMessages.SUCCESS);
+            } catch (ValidationException ex) {
+                response.setStatus(Constants.INVALID_PASSWORD);
+                response.setStatusMessage(ex.getMessage());
+            }
+            
+        }else{ 
+            response.setStatus(Constants.INVALID_PASSWORD);
+            response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.INVALID_PASSWORD);
+        }
         
-        userDAO.changePassword(userId,password);
-        response.setStatus(Constants.CODE_SUCCESS);
-        response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.SUCCESS);
+        
         return response;
     }
     
+    public UserDisplay getUserById(Integer id) {
+        return userDAO.getUserById(id);
+    }
 }

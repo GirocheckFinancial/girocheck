@@ -101,20 +101,7 @@ public class ClientController {
 //        return AuditLogMessage.logSaveOrUpdateClient(client.getId(), resp);
 //    }
 
-    /**
-     * Get the client by a given id
-     *
-     * @param clientId
-     * @return
-     */
-//    @POST
-//    @Path("getClient")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public ResponseData getClient(@FormParam("clientId") int clientId) throws Exception {
-//        log.info("Incoming parameters : \n clientId: " + clientId);
-//
-//        return manager.getClient(clientId);
-//    }
+ 
 
     /**
      * delete all clients

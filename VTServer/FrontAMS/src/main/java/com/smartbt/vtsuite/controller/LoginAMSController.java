@@ -35,8 +35,8 @@ public class LoginAMSController {
     @Path("authenticateUser")
     @Produces( MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public BaseResponse authenticateUser( @FormParam( "username" ) String username, @FormParam( "password" ) String password ) throws ValidationException, NoSuchAlgorithmException {
-//             log.info( "Incoming parameters : \n username :: " + username);
+    public BaseResponse authenticateUser( @FormParam( "username" ) String username, @FormParam( "password" ) String password ) throws ValidationException, NoSuchAlgorithmException, Exception {
+            System.out.println( "Incoming parameters : \n username :: " + username + " \n password :: " + password);
         
         return manager.authenticateUser( username, password);
        

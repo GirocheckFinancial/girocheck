@@ -127,6 +127,8 @@ public class VTSuiteMessages {
      * Message
      */
     public final static String INVALID_USER = "INVALID USER";
+    
+    public final static String USER_BLOCKED = "User Blocked";
     /**
      * Message
      */
@@ -247,6 +249,8 @@ public class VTSuiteMessages {
      * Message
      */
     public final static String PASSWORD_IS_NULL = "PASSWORD IS NULL";
+    public final static String INVALID_PASSWORD = "Invalid password format.";
+    public final static String LAST_5_PASSW = "Can not repeat one of the last 5 passwords.";
     
     /**
      * Message
@@ -324,7 +328,8 @@ public class VTSuiteMessages {
     /**
      * Message
      */
-    public final static String INVALID_LOGIN_CREDENTIALS = "INVALID LOGIN CREDENTIALS";
+    public final static String INVALID_LOGIN_CREDENTIALS = "Invalid Credentials";
+    public final static String INACTIVE_USER = "Inactive user";
 
     /**
      * Message
@@ -388,6 +393,7 @@ public class VTSuiteMessages {
     public final static String TERMINAL_ID_NOT_NULL = "The terminal must have a terminalId.";
     
     public static String ERROR_CLERK_REPEATED = "There is already an clerk with the username: ";
+    public static String PASSWORD_EXPIRED = "Password Expired";
     
     
     /**

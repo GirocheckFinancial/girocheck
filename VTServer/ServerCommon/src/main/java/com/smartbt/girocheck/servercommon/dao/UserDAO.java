@@ -21,6 +21,7 @@ import com.smartbt.girocheck.servercommon.model.User;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.utils.bd.TransformerComplexBeans;
 import com.smartbt.girocheck.common.VTSuiteMessages;
+import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -39,9 +40,8 @@ import org.hibernate.criterion.Restrictions;
  * @author Ariel Saavedra
  */
 public class UserDAO extends BaseDAO<User> {
-    
-//    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(UserDAO.class);
 
+//    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(UserDAO.class);
     protected static UserDAO dao;
 
     public UserDAO() {
@@ -63,16 +63,28 @@ public class UserDAO extends BaseDAO<User> {
      */
     public void updateUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException {
         User aux = findById(user.getId());
-        Role role = RoleDAO.get().findById(user.getRole().getId());
-        
+
         aux.setUsername(user.getUsername());
-        aux.setPassword(user.getPassword());
         aux.setFirstName(user.getFirstName());
         aux.setLastName(user.getLastName());
-        aux.setActive(user.getActive());
+       
         aux.setEmail(user.getEmail());
-        aux.setRole(role);
         
+        if(!aux.getActive() && user.getActive()){
+           aux.setFailedAttempts(0);
+        }
+        
+         aux.setActive(user.getActive());
+
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            aux.setPassword(user.getPassword());
+        }
+
+        if (user.getRole() != null) {
+            Role role = RoleDAO.get().findById(user.getRole().getId());
+            aux.setRole(role);
+        }
+
         HibernateUtil.getSession().saveOrUpdate(aux);
     }
 
@@ -116,10 +128,12 @@ public class UserDAO extends BaseDAO<User> {
 
         criteria.setProjection(projectionList);
         criteria.setResultTransformer(new TransformerComplexBeans(UserDisplay.class));
-        /**************/
-        
+        /**
+         * ***********
+         */
+
         List<UserDisplay> UserList = criteria.list();
-        
+
         return UserList;
 //        return criteria.list();
     }
@@ -128,56 +142,82 @@ public class UserDAO extends BaseDAO<User> {
         Criteria cri = HibernateUtil.getSession().createCriteria(User.class).add(Restrictions.eq("email", email));
         return (User) cri.uniqueResult();
     }
-    
-    public void deleteUser(int idUser) {        
+
+    public void deleteUser(int idUser) {
         super.delete(findById(idUser));
     }
-        
-    public void addUser(String userName, String password, String firstName, String lastName, Boolean active, String email, int roleid) throws ValidationException, NoSuchAlgorithmException {
-//
+
+    public UserDisplay addUser(String userName, String password, String firstName, String lastName, Boolean active, String email, int roleid) throws ValidationException, NoSuchAlgorithmException {
         Role role = RoleDAO.get().findById(roleid);
+        String encyptedPassword = PasswordUtil.encryptPassword(password);
         
-                User user = new User();
-                user.setUsername(userName);
-                user.setPassword(encryptPassword(password));
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setActive(active);
-                user.setEmail(email);
-                user.setRole(role);
-                HibernateUtil.getSession().saveOrUpdate(user);
+        User user = new User();
+        user.setUsername(userName);
+        user.setPassword(encyptedPassword);
+        user.setLast5passwords(encyptedPassword + " ");
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setActive(active);
+        user.setEmail(email);
+        user.setRole(role);
+        HibernateUtil.getSession().saveOrUpdate(user);
+        
+        UserDisplay display = new UserDisplay();
+        display.setPassword(password);
+        return display;
     }
-    
-    public void changePassword(int userId, String password){
-        
+
+    public void changePassword(int userId, String password) throws ValidationException {
         try {
+            String encryptedPassword = PasswordUtil.encryptPassword(password);
+
             User us = findById(userId);
-            us.setPassword(encryptPassword(password));
+            
+            String last5Passwords = us.getLast5passwords();
+            
+            if(last5Passwords == null || last5Passwords.isEmpty()){
+                last5Passwords = encryptedPassword + " ";
+            }else{
+                String[] passwordsArray = last5Passwords.split(" ");
+                
+                for (String passw : passwordsArray) {
+                    if(encryptedPassword.equals(passw)){
+                        throw new ValidationException(VTSuiteMessages.LAST_5_PASSW);
+                    }
+                }
+                
+                if(passwordsArray.length == 5){
+                   last5Passwords = last5Passwords.substring( last5Passwords.indexOf(" "));
+                }
+                
+                last5Passwords += (encryptedPassword + " ");
+            }
+            
+            us.setPassword(encryptedPassword);
+            us.setLast5passwords(last5Passwords);
             HibernateUtil.getSession().saveOrUpdate(us);
-        } catch (ValidationException ex) {
-//            log.debug("[UserDAO] ", ex);
-            ex.printStackTrace();
         } catch (NoSuchAlgorithmException ex) {
-//            log.debug("[UserDAO] ", ex);
             ex.printStackTrace();
         }
-        
-    }
-    
-    public String encryptPassword(String password) throws ValidationException, NoSuchAlgorithmException {
-        
-         if (  password == null ) {
-            throw new ValidationException( VTSuiteMessages.CANNOT_ENCRYPT_NULL_PASSWORD );
-        }
-        
-        MessageDigest mDigest = MessageDigest.getInstance("SHA-1");
-        byte[] result = mDigest.digest(password.getBytes());
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < result.length; i++) {
-            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
 
     }
-    
+
+    public UserDisplay getUserById(Integer id) {
+
+        Criteria criteria = HibernateUtil.getSession().createCriteria(User.class)
+                .add(Restrictions.eq("id", id)).setMaxResults(1);
+
+        ProjectionList projectionList = Projections.projectionList()
+                .add(Projections.property("id").as("id"))
+                .add(Projections.property("username").as("username"))
+                .add(Projections.property("firstName").as("firstName"))
+                .add(Projections.property("lastName").as("lastName"))
+                .add(Projections.property("email").as("email"));
+
+        criteria.setProjection(projectionList);
+        criteria.setResultTransformer(new TransformerComplexBeans(UserDisplay.class));
+
+        return (UserDisplay) criteria.uniqueResult();
+    }
+
 }

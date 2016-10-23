@@ -21,7 +21,6 @@ import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseDatasource;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseInterface;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseTab;
-import com.smartbt.vtsuite.vtams.client.gui.component.datasource.UserDS;
 import com.smartbt.vtsuite.vtams.client.gui.listener.EditorListener;
 import com.smartbt.vtsuite.vtams.client.gui.listener.FilterListenerImp;
 import com.smartbt.vtsuite.vtams.client.gui.listener.ListListener;
@@ -269,41 +268,22 @@ public class UserTab extends BaseTab implements BaseInterface {
      * Delete method
      *
      */
-    public void Delete() {
-        
-        Utils.debug("Entered Delete() with a delete button");
-
+    public void Delete() { 
         Record recordToDelete = listGrid.getSelectedRecord();
         
         BaseDatasource ds = new BaseDatasource();
 
         Criteria criteria = new Criteria();
         criteria.addCriteria( "id", recordToDelete.getAttributeAsInt("id"));
-        
-        Utils.debug("Entered userTab.Delete() with user id: " + recordToDelete.getAttributeAsInt("id"));
-//        recordToDelete.setAttribute("entityType", entityType.toString());
-        
+         
         ds.setFetchDataURL( Properties.DELETE_USER_WS );
         ds.fetchData( criteria, new DSCallback() {
-            
-//        listGrid.removeData(recordToDelete, new DSCallback() {
-//        UserDS userds = new UserDS(entityType);
-//        userds.removeData(recordToDelete, new DSCallback() {
-            /**
-             * Callback to invoke on completion
-             *
-             * @param response Response sent by the server in response to a
-             * DataSource request.
-             * @param rawData data
-             * @param request Request sent to the server to initiate a
-             * DataSource operation.
-             */
+          
             public void execute(DSResponse response, Object rawData, DSRequest request) {
                 Filter();
             }
         });
-        Utils.debug("Entered userTab.Delete() with user id: " + recordToDelete.getAttributeAsInt("id")+ "Done <*>");
-    }
+      }
 
     /**
      * Save method
@@ -315,31 +295,24 @@ public class UserTab extends BaseTab implements BaseInterface {
             ChangePassword();
             return;
         }
-
-        Utils.debug("Entered Save() with a confirm button");
-        
+ 
 
         Record recordToSave = editorWindow.getRecord();
-        editorWindow.hide();
+        
 
 //        String actionex = recordToSave.getAttribute("actionEx");
        String id = recordToSave.getAttribute("id");
-        Utils.debug("***Entered Save() actionEx id: " + id);
-        
+     
         if (id == null) {
             editorWindow.getDataForm().getDataSource().addData(recordToSave, new DSCallback() {
-                /**
-                 * Callback to invoke on completion
-                 *
-                 * @param response Response sent by the server in response to a
-                 * DataSource request.
-                 * @param rawData data
-                 * @param request Request sent to the server to initiate a
-                 * DataSource operation.
-                 */
+               
                 public void execute(DSResponse response, Object rawData, DSRequest request) {
                     if (response.getStatus() == Constants.CODE_SUCCESS) {
-                        Filter();
+                        Record record = response.getData()[0];
+                        SC.say("Generated Password", record.getAttribute("password"));
+                        Filter(); 
+                       
+                       editorWindow.hide();
                     } else {
                         SC.warn(I18N.GET.WINDOW_ERROR_TITLE(), I18N.GET.MESSAGE_ERROR_ACTION());
                     }
@@ -374,7 +347,7 @@ public class UserTab extends BaseTab implements BaseInterface {
         
         Record recordTochange = listGrid.getSelectedRecord();
         Record passwordRecord = passwordEditorWindow.getRecord();
-        passwordEditorWindow.hide();
+        
         if(!passwordRecord.getAttribute("password").equals(passwordRecord.getAttribute("checkpassword"))){          
             ChangePassWindow(listGrid.getSelectedRecord());
             return;
@@ -388,17 +361,10 @@ public class UserTab extends BaseTab implements BaseInterface {
         
         ds.setFetchDataURL( Properties.CHANGE_PASSWORD_WS );
         ds.fetchData( criteria, new DSCallback() {
-            /**
-             * Callback to invoke on completion
-             *
-             * @param response Response sent by the server in response to a
-             * DataSource request.
-             * @param rawData data
-             * @param request Request sent to the server to initiate a
-             * DataSource operation.
-             */
+             
             public void execute(DSResponse response, Object rawData, DSRequest request) {
                 Filter();
+                passwordEditorWindow.hide();
             }
         });
         Utils.debug("Entered userTab.Delete() with user id: " + recordTochange.getAttributeAsInt("id")+ "Done <*>");

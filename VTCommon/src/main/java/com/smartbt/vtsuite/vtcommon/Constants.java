@@ -141,4 +141,6 @@ public class Constants {
     
     public static final int REPORT_ERROR_CODE = 311;    
     
+    public static final int INVALID_PASSWORD = 413;  
+    
 }

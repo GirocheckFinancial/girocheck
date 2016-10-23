@@ -62,6 +62,8 @@ public class RegExp {
      * Allowed Characters: [a-z] [A-Z] [0-9]
      */
     public final static String VALID_TEXT_REG_EXP = "^[a-zA-Z0-9]*$";
+    
+    public final static String VALID_PASSW_REG_EXP = "^[a-zA-Z0-9!@#$%^*]*$";
 
     /**
      * DO NOT CHANGE - Regular Expression to validate user entry on any text field. 

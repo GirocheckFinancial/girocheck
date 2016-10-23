@@ -227,7 +227,7 @@ public class BaseDatasource extends RestDataSource {
                 else if(status.equals(String.valueOf(Constants.INVALID_PASSWORD))){
                    response.setStatus(Constants.INVALID_PASSWORD);
                    JSONArray errors = XMLTools.selectObjects(data, "/statusMessage");
-                   String statusMessage = errors.get(0).isString().toString();
+                   String statusMessage = errors.get(0).isString().toString().replaceAll("\"", "");
                    debug("--BaseDataSource statusMessage = " + statusMessage);
                    SC.warn("Invalid Password", statusMessage);
                 }

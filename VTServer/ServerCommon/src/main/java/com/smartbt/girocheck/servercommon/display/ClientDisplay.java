@@ -29,7 +29,7 @@ public class ClientDisplay implements Serializable {
         return serialVersionUID;
     }
 
-    private Integer id;
+    private Long id;
 
 //    private com.smartbt.girocheck.servercommon.model.Address address;
     private String address;
@@ -71,34 +71,7 @@ public class ClientDisplay implements Serializable {
 
     public  ClientDisplay(){}   
     
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the address
-     */
-//    public com.smartbt.girocheck.servercommon.model.Address getAddress() {
-//        return address;
-//    }
-
-    /**
-     * @param address the address to set
-     */
-//    public void setAddress(com.smartbt.girocheck.servercommon.model.Address address) {
-//        this.address = address;
-//    }
-
+     
     /**
      * @return the firstName
      */
@@ -223,6 +196,20 @@ public class ClientDisplay implements Serializable {
      */
     public void setMaskSS(String maskSS) {
         this.maskSS = maskSS;
+    }
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
     }
     
     /**

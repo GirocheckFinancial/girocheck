@@ -14,6 +14,7 @@
 package com.smartbt.girocheck.servercommon.model;
 
 import java.io.Serializable;
+import java.util.Date;
 public class User implements Serializable {
 	public User() {
 	}
@@ -33,7 +34,18 @@ public class User implements Serializable {
 	private String email;
 	
 	private com.smartbt.girocheck.servercommon.model.Role role;
+        
+        // Pasword restrictions field
+        
+        private Date lastTimeUpdatePassword;
 	
+        private String last5passwords;
+        
+        private Integer failedAttempts;
+        
+        private Date lastTimeFailedAttempt;
+        
+        
 	private void setId(int value) {
 		this.id = value;
 	}
@@ -109,6 +121,62 @@ public class User implements Serializable {
 	public String toString() {
 		return String.valueOf(getId());
 	}
+
+    /**
+     * @return the lastTimeUpdatePassword
+     */
+    public Date getLastTimeUpdatePassword() {
+        return lastTimeUpdatePassword;
+    }
+
+    /**
+     * @param lastTimeUpdatePassword the lastTimeUpdatePassword to set
+     */
+    public void setLastTimeUpdatePassword(Date lastTimeUpdatePassword) {
+        this.lastTimeUpdatePassword = lastTimeUpdatePassword;
+    }
+
+    /**
+     * @return the last5passwords
+     */
+    public String getLast5passwords() {
+        return last5passwords;
+    }
+
+    /**
+     * @param last5passwords the last5passwords to set
+     */
+    public void setLast5passwords(String last5passwords) {
+        this.last5passwords = last5passwords;
+    }
+
+    /**
+     * @return the failedAttempts
+     */
+    public Integer getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    /**
+     * @param failedAttempts the failedAttempts to set
+     */
+    public void setFailedAttempts(Integer failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    /**
+     * @return the lastTimeFailedAttempt
+     */
+    public Date getLastTimeFailedAttempt() {
+        return lastTimeFailedAttempt;
+    }
+
+    /**
+     * @param lastTimeFailedAttempt the lastTimeFailedAttempt to set
+     */
+    public void setLastTimeFailedAttempt(Date lastTimeFailedAttempt) {
+        this.lastTimeFailedAttempt = lastTimeFailedAttempt;
+    }
 
     /**
      * @return the userRole

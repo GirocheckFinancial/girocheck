@@ -60,4 +60,18 @@ public class LoginAMSDAO extends BaseDAO<User> {
         return (User) cri.uniqueResult();
     }
 
+    /**
+     * Find a user by username  
+     *
+     * @param username 
+     * @return User
+     */
+    public User findByUserName(String username) {
+        
+        Criteria cri = HibernateUtil.getSession().createCriteria(User.class)
+                .add(Restrictions.eq("username", username).ignoreCase());
+        
+        return (User) cri.uniqueResult();
+    }
+
 }

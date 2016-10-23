@@ -19,6 +19,7 @@ import com.smartbt.girocheck.servercommon.dao.CountryDAO;
 import com.smartbt.girocheck.servercommon.dao.CreditCardDAO;
 import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 import com.smartbt.girocheck.servercommon.dao.StateDAO;
+import com.smartbt.girocheck.servercommon.display.ClientDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.model.Country;
@@ -44,7 +45,7 @@ public class ClientManager {
     public Client createOrGet( String ssn, byte[] addressForm ) throws SQLException {
         return clientDAO.createOrGet( ssn, addressForm );
     }
-
+     
     public void saveOrUpdate( Client client ) {
 
         if ( client.getAddress() != null ) {

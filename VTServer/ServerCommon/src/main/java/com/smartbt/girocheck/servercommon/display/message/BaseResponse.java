@@ -39,6 +39,13 @@ public class BaseResponse implements Serializable {
     public BaseResponse() {
     }
 
+    public BaseResponse(int status, String statusMessage) {
+        this.status = status;
+        this.statusMessage = statusMessage;
+    }
+    
+    
+
     /**
      *
      * @return

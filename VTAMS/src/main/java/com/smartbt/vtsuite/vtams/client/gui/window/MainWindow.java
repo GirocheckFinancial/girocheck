@@ -64,9 +64,9 @@ public class MainWindow extends BaseWindow {
         setMinWidth(1900);
 
         DynamicForm userForm = new DynamicForm();
-        userForm.setWidth(150);
+        userForm.setWidth(160);
         userForm.setNumCols(3);
-        userForm.setColWidths(50,50,50);
+        userForm.setColWidths(60,50,50);
 //        userForm.setLayoutAlign(Alignment.CENTER);
         userForm.setLayoutAlign(Alignment.RIGHT);
 
@@ -81,47 +81,44 @@ public class MainWindow extends BaseWindow {
 
         BaseStaticTextItem welcomeText = new BaseStaticTextItem("welcomeText");
         welcomeText.setShowTitle(false);
-        welcomeText.setAlign(Alignment.RIGHT);
-        welcomeText.setWidth(50);
+        welcomeText.setAlign(Alignment.LEFT);
+        welcomeText.setTextAlign(Alignment.LEFT);
+        welcomeText.setWidth(60);
         welcomeText.setValue(I18N.GET.LABEL_WELCOME_TITLE());
         welcomeText.setTextBoxStyle("header-text");
 
         BaseLinkItem profileLink = new BaseLinkItem("profileLink", Utils.getUsername());
         profileLink.setAlign(Alignment.LEFT);
+        profileLink.setTextAlign(Alignment.LEFT);
         profileLink.setWidth(50);
         profileLink.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
             public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-                debug("--Profile link click");
+     
                 Criteria criteria = new Criteria();
                 Record record = new Record();
                 criteria.setAttribute("userId", Utils.getUserId());
 
                 UserDS userDS = new UserDS(EntityType.AMS);
                 userDS.setFetchDataURL(Properties.GET_USER_WS);
-                debug("--before request");
+               
                 userDS.fetchData(criteria, new DSCallback() {
                     public void execute(DSResponse response, Object rawData, DSRequest request) {
-                        debug("--Call back");
+                   
                         profileEditor = new ProfileEditor(EntityType.AMS, response.getData()[0]);
-                        debug("--After creating userEditor");
-
+                      
                         profileEditor.updateRecord(response.getData()[0]);
-                        debug("--After updateRecord");
-
+                         
                         profileEditor.addListener(new EditorListener() { 
-                            public void SaveActionExecuted() {
-                                debug("--SaveProfile");
+                            public void SaveActionExecuted() { 
                                 SaveProfile();
                             }
  
-                            public void CloseActionExecuted() {
-                                debug("--CloseActionExecuted");
+                            public void CloseActionExecuted() { 
                                 profileEditor.hide();
                             }
                         });
 
-                        profileEditor.show();
-                        debug("--userEditor.show();");
+                        profileEditor.show(); 
                     }
                 }, null);
 

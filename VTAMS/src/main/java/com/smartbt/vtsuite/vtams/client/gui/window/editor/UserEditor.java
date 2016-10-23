@@ -17,7 +17,6 @@ package com.smartbt.vtsuite.vtams.client.gui.window.editor;
 
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseEditorWindow;
-import com.smartbt.vtsuite.vtams.client.gui.component.BasePasswordItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.BaseSelectItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.BaseTextItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.DataSourceBuilder;
@@ -38,13 +37,10 @@ public class UserEditor extends BaseEditorWindow {
 
     private BaseTextItem usernameText;
     private BaseTextItem lastNameText;
-    private BaseTextItem firstNameText;
-    private BasePasswordItem passwordText;
+    private BaseTextItem firstNameText; 
     private BaseTextItem emailText;
     private BaseSelectItem activeSelect;
-    private BaseSelectItem roleSelect;
-    private int actionEx;
-    private Record recAux;
+    private BaseSelectItem roleSelect; 
  
     private EntityType entityType;
     private static final int COMPONENTS_WIDTH = 175;
@@ -58,18 +54,14 @@ public class UserEditor extends BaseEditorWindow {
      */
     public UserEditor(EntityType entityType, Record recordEntity) {
         super(I18N.GET.WINDOW_USER_TITLE());
-        
-        debug("--UserEditor() 1");
-        
+         
         this.entityType = entityType;
         usernameText = new BaseTextItem("username", true);
         usernameText.setWidth(COMPONENTS_WIDTH);
         lastNameText = new BaseTextItem("lastName", true);
         lastNameText.setWidth(COMPONENTS_WIDTH);
         firstNameText = new BaseTextItem("firstName", true);
-        firstNameText.setWidth(COMPONENTS_WIDTH);
-        passwordText = new BasePasswordItem("password", true);
-        passwordText.setWidth(COMPONENTS_WIDTH);
+        firstNameText.setWidth(COMPONENTS_WIDTH); 
 
         activeSelect = new BaseSelectItem("active", "Active", DataSourceBuilder.getUserActiveDS(), false);
  
@@ -77,19 +69,16 @@ public class UserEditor extends BaseEditorWindow {
 
         emailText = new BaseTextItem("email", false);
         emailText.setWidth(COMPONENTS_WIDTH);
-
-        debug("--UserEditor() 2");
+ 
         
         roleSelect = new BaseSelectItem("role", I18N.GET.LABEL_ROLE_TITLE(), new RoleDS(), true);
         roleSelect.setDataPath("role/id");
         roleSelect.setEmptyDisplayValue(I18N.GET.MESSAGE_EMPTY_ROLE_SELECT());
         roleSelect.setWidth(COMPONENTS_WIDTH);
-
-        recAux = recordEntity;
-        dataForm.setDataSource(new UserDS(entityType));
- debug("--UserEditor() 3");
-        dataForm.setFields(usernameText, lastNameText, firstNameText, passwordText, activeSelect, emailText, roleSelect);
- debug("--UserEditor() 4");
+ 
+        dataForm.setDataSource(new UserDS(entityType)); 
+        dataForm.setFields(usernameText, lastNameText, firstNameText, activeSelect, emailText, roleSelect);
+ 
     }
 
     /**
@@ -102,8 +91,7 @@ public class UserEditor extends BaseEditorWindow {
     public void updateRecord(Record record) {
         usernameText.setDisabled(false);
         firstNameText.setDisabled(false);
-        lastNameText.setDisabled(false);
-        passwordText.setDisabled(true);
+        lastNameText.setDisabled(false); 
         activeSelect.setDisabled(false);
         emailText.setDisabled(false);
  
@@ -114,8 +102,7 @@ public class UserEditor extends BaseEditorWindow {
         criteria.addCriteria("entityType", EntityType.AMS.toString());
  
         roleSelect.setPickListCriteria(criteria);
-        roleSelect.fetchData(); 
-        actionEx = 1;
+        roleSelect.fetchData();  
  
         super.updateRecord(record);
     }
@@ -124,8 +111,7 @@ public class UserEditor extends BaseEditorWindow {
     public void addRecord(Record record) {
         usernameText.setDisabled(false);
         firstNameText.setDisabled(false);
-        lastNameText.setDisabled(false);
-        passwordText.setDisabled(false);
+        lastNameText.setDisabled(false); 
         activeSelect.setDisabled(false);
         emailText.setDisabled(false);
 
@@ -133,8 +119,7 @@ public class UserEditor extends BaseEditorWindow {
         criteria.addCriteria("entityType", EntityType.AMS.toString());
  
         roleSelect.setPickListCriteria(criteria);
-        roleSelect.fetchData(); 
-        actionEx = 0;
+        roleSelect.fetchData();  
  
         super.addRecord(record);
     }
@@ -145,15 +130,10 @@ public class UserEditor extends BaseEditorWindow {
           userRecord.setAttribute("id", dataForm.getValuesAsRecord().getAttributeAsInt("id"));
         userRecord.setAttribute("username", usernameText.getValueAsString());
         userRecord.setAttribute("lastName", lastNameText.getValueAsString());
-        userRecord.setAttribute("firstName", firstNameText.getValueAsString());
-        userRecord.setAttribute("password", passwordText.getValueAsString());
-       
+        userRecord.setAttribute("firstName", firstNameText.getValueAsString());  
+        userRecord.setAttribute("active", activeSelect.getValue()); 
+        userRecord.setAttribute("email", emailText.getValueAsString()); 
         
-        userRecord.setAttribute("active", activeSelect.getValue());
-
-        
-        userRecord.setAttribute("email", emailText.getValueAsString());
-     
         ListGridRecord roleRecord = roleSelect.getSelectedRecord();
    
         Integer idRole = roleRecord.getAttributeAsInt("id");

@@ -16,7 +16,13 @@ License Type: Evaluation
 		<property name="lastName" column="lastname" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="active" column="active" type="boolean" length="1" not-null="false" lazy="false"/>
 		<property name="email" column="email" type="string" length="255" not-null="false" lazy="false"/>
-		<many-to-one name="role" cascade="lock" column="role" class="com.smartbt.girocheck.servercommon.model.Role" not-null="true" lazy="proxy">
+		
+                <property name="lastTimeUpdatePassword" column="last_time_update_password" type="timestamp" not-null="false" lazy="false"/>
+                <property name="lastTimeFailedAttempt" column="last_time_failed_attempt" type="timestamp" not-null="false" lazy="false"/>
+                <property name="failedAttempts" column="failed_attempts" type="integer" not-null="false" lazy="false"/>
+                <property name="last5passwords" column="last5passwords" type="string" not-null="false" lazy="false"/>
+                
+                <many-to-one name="role" cascade="lock" column="role" class="com.smartbt.girocheck.servercommon.model.Role" not-null="true" lazy="proxy">
 		</many-to-one>
 	</class>
 </hibernate-mapping>

@@ -37,42 +37,22 @@ public class GoogleMail {
 
     public static void main(String[] args) throws MessagingException {
         System.out.println("Sending email...");
-        String body = "This is an email generated automatically by <b>Girocheck</b>,\n"
-                + "<br>\n"
-                + "The reason of this email is comunicate to <b>Tecnicard</b> that the user user_name performed a successful second load to the card ending in {card_last4}.\n"
-                + "<br><br>\n"
-                + "This is the personal information of the user:\n"
-                + "<br>\n"
-                + "<b>Name:</b>&nbsp;user_name\n"
-                + "<br>\n"
-                + "<b>Last Name:</b>&nbsp;user_lastname\n"
-                + "<br>\n"
-                + "<b>SSN:</b>&nbsp;user_ssn\n"
-                + "<br>\n"
-                + "<b>DOB:</b>&nbsp;user_dob\n"
-                + "<br>\n"
-                + "<b>Phone:</b>&nbsp;user_phone\n"
-                + "<br>\n"
-                + "<b>Address:</b>&nbsp;user_address\n"
-                + "<br>\n"
-                + "For further information, please contact Girocheck Financial INC.";
+        String recipient = "robertosoftwareengineer@gmail.com,kerdberg@girocheck.com,caparicio@girocheck.com";
+       
+        String[] ccList;
+        if (recipient.contains(",")) {
+            String[] recipientList = recipient.split(",");
+            recipient = recipientList[0];
 
-        Map<String, String> values = new HashMap<String, String>();
-        values.put("user_name", "John");
-        values.put("user_lastname", "Smith");
-        values.put("user_ssn", "123456789");
-        values.put("user_dob", "01/03/1988");
-        values.put("user_phone", "7864540209");
-        values.put("user_address", "9840 Palmetto Club Dr, Miami FL, 33157");
+            ccList = new String[recipientList.length - 1];
 
-        Iterator<String> keys = values.keySet().iterator();
-        String b = body;
-        while (keys.hasNext()) {
-            String keyword = keys.next();
-            b = b.replaceAll( keyword, values.get(keyword));
+            for (int i = 1; i < recipientList.length; i++) {
+                ccList[i - 1] = recipientList[i];
+            }
+        } else {
+            ccList = new String[0];
         }
-        System.out.println("Email sent");
-        System.out.println(b);
+        System.out.println("Email sent"); 
     }
 
     public void sendEmail(Email email) throws EmailException, MessagingException {
@@ -158,11 +138,11 @@ public class GoogleMail {
         final MimeMessage msg = new MimeMessage(session);
 
         // -- Set the FROM and TO fields --
-        msg.setFrom(new InternetAddress(username + "@gmail.com"));
+        msg.setFrom(new InternetAddress(username));
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientEmail, false));
 
         for (int i = 0; i < ccEmail.length; i++) {
-            msg.setRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail[i], false));
+            msg.addRecipients(Message.RecipientType.CC, InternetAddress.parse(ccEmail[i], false));
         }
 
         msg.setSubject(title);

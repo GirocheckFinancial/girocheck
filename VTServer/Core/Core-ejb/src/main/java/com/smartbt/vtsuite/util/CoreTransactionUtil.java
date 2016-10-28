@@ -70,7 +70,7 @@ public class CoreTransactionUtil {
 
     public static void persistTransaction(Transaction transaction) throws Exception {
         Boolean send2LoadsEmail = false;
-        String cardNumber = "";
+        String maskedCardNumber = "";
         TerminalManager terminalManager = TerminalManager.get();
         TransactionManager transactionManager = TransactionManager.get();
         ClientManager clientManager = ClientManager.get();
@@ -102,7 +102,7 @@ public class CoreTransactionUtil {
 
                     if (client.getSuccessfulLoads() == 2) {
                         send2LoadsEmail = true;
-                        cardNumber = card.getCardNumber();
+                        maskedCardNumber = card.getMaskCardNumber();
                     }
 
                     transaction.setData_sc1(card);
@@ -121,22 +121,9 @@ public class CoreTransactionUtil {
  
                 Map<String, String> values = new HashMap<>();
                 values.put("user_name", client.getFirstName());
-                values.put("user_lastname", client.getLastName());
-                values.put("user_ssn", client.getSsn());
-                values.put("card_last4", cardNumber.substring(12));
-
-                values.put("user_phone", client.getTelephone());
-
-                Date dob = client.getBornDate();
-                if (dob != null) {
-                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-                    values.put("user_dob", df.format(client.getBornDate()));
-                }
-
-                if (client.getAddress() != null) {
-                    values.put("user_address", client.getAddress().getFullAddress());
-                }
-
+                values.put("user_lastname", client.getLastName()); 
+                values.put("masked_card", maskedCardNumber);
+ 
                 email.setValues(values);
 
                 GoogleMail.get().sendEmail(email);

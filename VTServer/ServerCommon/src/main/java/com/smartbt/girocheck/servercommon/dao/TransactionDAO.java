@@ -84,9 +84,9 @@ public class TransactionDAO extends BaseDAO<Transaction> {
             output.put(ParameterName.CASH2CARD_TOTAL, cashTotal);
             output.put(ParameterName.CARD2MERCHANT_TOTAL, cardTotal);
 
-            output.put(ParameterName.CASH_IN, checkTotal + cashTotal);
+            output.put(ParameterName.CASH_IN, cashTotal);
             output.put(ParameterName.CASH_OUT, cardTotal);
-            output.put(ParameterName.NET_CASH, (checkTotal + cashTotal) - cardTotal);
+            output.put(ParameterName.NET_CASH, cashTotal - cardTotal);
 
             output.put(ParameterName.TOTAL_ROWS, checkTransactions.size() + cashTransactions.size() + card2MerchantTransactions.size());
             output.put(ParameterName.SUCCESS, true);

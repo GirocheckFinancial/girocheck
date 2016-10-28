@@ -28,6 +28,15 @@ import com.smartbt.vtsuite.vtcommon.Constants;
  * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class TerminalManager {
+    
+    protected static TerminalManager INSTANCE;
+    
+    public static TerminalManager get() {
+        if ( INSTANCE == null ) {
+            INSTANCE = new TerminalManager();
+        }
+        return INSTANCE;
+    }
 
     private final TerminalDAO terminalDAO = TerminalDAO.get();
     private final MerchantDAO merchantDAO = MerchantDAO.get();

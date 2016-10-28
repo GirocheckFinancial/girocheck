@@ -18,7 +18,7 @@ License Type: Evaluation
 		<property name="resultCode" column="result_code" type="integer" length="10" not-null="false" lazy="false"/>
 		<property name="resultMessage" column="result_message" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="dateTime" column="date_time" type="timestamp" not-null="false" lazy="false"/>
-		<many-to-one name="data_sc1" cascade="lock" column="creditcard" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="false" lazy="proxy">
+		<many-to-one name="data_sc1" cascade="save-update,lock" column="creditcard" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="false" lazy="proxy">
 		</many-to-one>
 		<property name="transactionType" column="transaction_type" type="integer" length="10" not-null="false" lazy="false"/>
 		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>

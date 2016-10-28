@@ -80,6 +80,7 @@ public class ClientDAO extends BaseDAO<Client> {
             client.setMaskSSN(maskSSN );
             client.setActive( true);
             client.setCreatedAt( new Date());
+            client.setSuccessfulLoads(0);
         }else{
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] Client already exist.",null);
         }

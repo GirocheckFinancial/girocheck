@@ -5,23 +5,30 @@
  */
 package com.smartbt.vtsuite.util;
 
+import com.smartbt.girocheck.servercommon.enums.EmailName;
+import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
 import com.smartbt.girocheck.servercommon.log.LogUtil;
 import com.smartbt.girocheck.servercommon.manager.ClientManager;
+import com.smartbt.girocheck.servercommon.manager.EmailManager;
 import com.smartbt.girocheck.servercommon.manager.TerminalManager;
 import com.smartbt.girocheck.servercommon.manager.TransactionManager;
-import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.IdType;
+import com.smartbt.girocheck.servercommon.model.Client;
+import com.smartbt.girocheck.servercommon.model.CreditCard;
+import com.smartbt.girocheck.servercommon.model.Email;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.model.Terminal;
 import com.smartbt.girocheck.servercommon.model.Transaction;
-import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
+import com.smartbt.vtsuite.util.email.GoogleMail;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
-import java.io.IOException;
-import java.util.Iterator;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import javax.jms.Queue;
 
@@ -57,15 +64,16 @@ public class CoreTransactionUtil {
         String msg = (response.getResultMessage() != null && response.getResultMessage().length() > 254) ? response.getResultMessage().substring(0, 254) : response.getResultMessage();
         transaction.setResultMessage(msg);
 
-        
         persistTransaction(transaction);
 
     }
 
     public static void persistTransaction(Transaction transaction) throws Exception {
-        TerminalManager terminalManager = new TerminalManager();
-        TransactionManager transactionManager = new TransactionManager();
-        ClientManager clientManager = new ClientManager();
+        Boolean send2LoadsEmail = false;
+        String cardNumber = "";
+        TerminalManager terminalManager = TerminalManager.get();
+        TransactionManager transactionManager = TransactionManager.get();
+        ClientManager clientManager = ClientManager.get();
         transaction.setTransactionFinished(true);
         printTransaction(transaction);
 
@@ -77,11 +85,62 @@ public class CoreTransactionUtil {
             transaction.setTerminal(persistentTerminal);
             // transaction.getClient().getTransaction().add( transaction );
 
+            Client client = transaction.getClient();
             if (transaction.getClient() != null) {
-                clientManager.saveOrUpdate(transaction.getClient());
-            }
+                if (transaction.getResultCode() == ResultCode.SUCCESS.getCode()
+                        && (transaction.getOperation().equals("01") || transaction.getOperation().equals("02"))) {
 
+                    CreditCard card = transaction.getData_sc1();
+
+                    Integer successfulLoads = client.getSuccessfulLoads();
+                    if (successfulLoads == null) {
+                        successfulLoads = 0;
+                    }
+
+                    System.out.println("previous successfulLoads = " + successfulLoads);
+                    client.setSuccessfulLoads(successfulLoads + 1);
+
+                    if (client.getSuccessfulLoads() == 2) {
+                        send2LoadsEmail = true;
+                        cardNumber = card.getCardNumber();
+                    }
+
+                    transaction.setData_sc1(card);
+                } 
+                
+                clientManager.saveOrUpdate(client);
+            }
+            
             transactionManager.saveOrUpdate(transaction);
+
+            System.out.println("**************  TRANSACTION SAVED SUCCESSFULY **************");
+
+            if (send2LoadsEmail) {
+                System.out.println("--------------  SENDING 2 SUCCESSFULL LOADS EMAIL TO TECNICARD --------------");
+                Email email = EmailManager.get().getByName(EmailName.TWO_SUCCESSFUL_LOADS_TO_TECNICARD);
+ 
+                Map<String, String> values = new HashMap<>();
+                values.put("user_name", client.getFirstName());
+                values.put("user_lastname", client.getLastName());
+                values.put("user_ssn", client.getSsn());
+                values.put("card_last4", cardNumber.substring(12));
+
+                values.put("user_phone", client.getTelephone());
+
+                Date dob = client.getBornDate();
+                if (dob != null) {
+                    DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                    values.put("user_dob", df.format(client.getBornDate()));
+                }
+
+                if (client.getAddress() != null) {
+                    values.put("user_address", client.getAddress().getFullAddress());
+                }
+
+                email.setValues(values);
+
+                GoogleMail.get().sendEmail(email);
+            }
 
             HibernateUtil.commitTransaction();
         } catch (Exception e) {
@@ -90,8 +149,6 @@ public class CoreTransactionUtil {
             throw e;
         }
 
-        // LogUtil.sendLogEmail();
-        System.out.println("**************  TRANSACTION SAVED SUCCESSFULY **************");
     }
 
     public static void printTransaction(Transaction transaction) {
@@ -173,5 +230,4 @@ public class CoreTransactionUtil {
 //            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] " + key + " -> " + map.get(key), null);
 //        }
 //    }
-
 }

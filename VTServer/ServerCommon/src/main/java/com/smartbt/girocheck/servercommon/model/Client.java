@@ -36,7 +36,7 @@ public class Client implements Serializable {
 	
 	private java.sql.Blob addressForm;
 	
-	
+	private Integer successfulLoads;
 	
 	private java.util.Date bornDate;
 	
@@ -229,6 +229,20 @@ public class Client implements Serializable {
             return true;
         }
         return 900940000<=auxSsn && auxSsn<=999999999;
+    }
+
+    /**
+     * @return the successfulLoads
+     */
+    public Integer getSuccessfulLoads() {
+        return successfulLoads;
+    }
+
+    /**
+     * @param successfulLoads the successfulLoads to set
+     */
+    public void setSuccessfulLoads(Integer successfulLoads) {
+        this.successfulLoads = successfulLoads;
     }
         	
 }

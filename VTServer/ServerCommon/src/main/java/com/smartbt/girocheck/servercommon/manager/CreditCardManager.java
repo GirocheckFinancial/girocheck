@@ -30,6 +30,10 @@ public class CreditCardManager {
     public CreditCard getCardByNumber( String number ) throws Exception {
         return dao.getCard( number );
     }
+    
+    public void saveOrUpdate(CreditCard card){
+        dao.saveOrUpdate(card);
+    }
 
 //    public CreditCard getCardWaitingOfficialNumber( String ssn ) throws DirexException {
 //        return dao.getCardWaitingOfficialNumber( ssn );

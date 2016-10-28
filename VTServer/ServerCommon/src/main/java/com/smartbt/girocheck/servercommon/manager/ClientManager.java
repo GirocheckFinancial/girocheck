@@ -19,6 +19,7 @@ import com.smartbt.girocheck.servercommon.dao.CountryDAO;
 import com.smartbt.girocheck.servercommon.dao.CreditCardDAO;
 import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 import com.smartbt.girocheck.servercommon.dao.StateDAO;
+import com.smartbt.girocheck.servercommon.dao.TerminalDAO;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.model.Client;
@@ -34,6 +35,17 @@ import java.sql.SQLException;
  * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class ClientManager {
+    protected static ClientManager INSTANCE;
+
+    public ClientManager() {
+    }
+
+    public static ClientManager get() {
+        if ( INSTANCE == null ) {
+            INSTANCE = new ClientManager();
+        }
+        return INSTANCE;
+    }
 
     private ClientDAO clientDAO = ClientDAO.get();
     private AddressDAO addressDAO = AddressDAO.get();

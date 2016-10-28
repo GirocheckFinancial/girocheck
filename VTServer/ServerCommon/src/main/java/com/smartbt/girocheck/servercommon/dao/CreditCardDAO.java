@@ -12,17 +12,11 @@
  */
 package com.smartbt.girocheck.servercommon.dao;
 
-import com.smartbt.girocheck.servercommon.enums.CardStatus;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.model.CreditCard;
 import com.smartbt.girocheck.servercommon.model.Merchant;
-import com.smartbt.girocheck.servercommon.utils.CryptoUtils;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -70,7 +64,7 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
             creditCard.setCardNumber(cardNumber);
             creditCard.setMaskCardNumber(maskCardNumber);
             creditCard.setClient(client);
-            creditCard.setMerchant(merchant);
+            creditCard.setMerchant(merchant); 
             saveOrUpdate(creditCard);
         } else {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet creditCard already exist.", null);

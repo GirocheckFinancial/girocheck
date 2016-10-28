@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.smartbt.girocheck.servercommon.model.Email" table="email" lazy="false">
+        <id name="id" column="id" type="integer" unsaved-value="0">
+            <generator class="native">
+            </generator>
+        </id>
+        <property name="name" column="name" type="string" length="20" not-null="false" lazy="false"/>
+        <property name="username" column="username" type="string" length="255" not-null="false" lazy="false"/>
+        <property name="password" column="password" type="string" length="255" not-null="true" lazy="false"/>
+        <property name="recipients" column="recipients" type="string" length="1024" not-null="false" lazy="false"/>
+        <property name="title" column="title" type="string" length="255" not-null="false" lazy="false"/>
+        <property name="body" column="body" type="string" length="2048" not-null="false" lazy="false"/>
+   </class>
+</hibernate-mapping>

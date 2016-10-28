@@ -51,7 +51,7 @@ public class TransactionDAO extends BaseDAO<Transaction> {
         }
         return dao;
     }
-
+    
     public Map activityReport(Map input) {
         Map output = new HashMap();
 
@@ -111,6 +111,8 @@ public class TransactionDAO extends BaseDAO<Transaction> {
                 .add(Restrictions.eq("terminal.serialNumber", terminalId))
                 .add(Restrictions.ge("dateTime", dateStart))
                 .add(Restrictions.le("dateTime", dateEnd));
+        
+        criteria.add(Restrictions.eq("resultCode", 0));
 
         if (isList) {
             ProjectionList projectionList = Projections.projectionList()

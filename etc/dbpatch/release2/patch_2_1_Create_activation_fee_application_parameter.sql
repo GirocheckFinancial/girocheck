@@ -1,4 +1,4 @@
-INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(1, 'patch_2_1', now(), 'Create activation fee in application parameter table');
+INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(2, 'patch_2_1', now(), 'Create activation fee in application parameter table');
 
 INSERT INTO girocheck.application_parameter(
    name

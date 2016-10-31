@@ -147,8 +147,9 @@ public class IStreamBusinessLogic{
 
         return direxTransactionResponse;
         
-        }catch(Exception e){
+        }catch(Exception e){ 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamBusinessLogic] Host connection failed, Re-submitting transaction... attempt # " + attempt,null);
+           e.printStackTrace();
             if(attempt == 0){
                 return DirexTransactionResponse.forException( ResultCode.ISTREAM_HOST_ERROR, ResultMessage.ISTREAM_FAILED, "IStream failed all attempts to connect.", "0" );
             }else{

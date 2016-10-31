@@ -223,6 +223,11 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
             return auxResponse;
         }
         
+        if(auxResponse.getTransactionData().containsKey(ParameterName.ACTIVATION_FEE)){
+           CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] ACTIVATION_FEE = " + auxResponse.getTransactionData().get(ParameterName.ACTIVATION_FEE),null);
+           response.getTransactionData().put(ParameterName.ACTIVATION_FEE, auxResponse.getTransactionData().get(ParameterName.ACTIVATION_FEE));
+        }
+        
         response.setResultCode(auxResponse.getResultCode());
         response.setResultMessage(auxResponse.getResultMessage());
         response.setTerminalResultMessage(auxResponse.getTerminalResultMessage());
@@ -231,9 +236,7 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
     }
     
     private DirexTransactionResponse sendMessageToHost(DirexTransactionRequest request, String hostName, long waitTime, Transaction transaction) throws JMSException, BreakException, Exception {
-//        coreLogger.logAndStore("CoreLocalBL", "             Send message to host " + hostName);
-//        log.info("[CoreLocalTransactionBusinessLogic] Send message to host " + hostName);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] Send message to host " + hostName,null);
+          CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBusinessLogic] Send message to host " + hostName,null);
 
         Properties props = new Properties();
         props.setProperty("hostName", hostName);
@@ -287,19 +290,12 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
         try {
             response = sendMessageToHost(direxTransactionRequest, NomHost.TECNICARD.name(), CARD_VALIDATION_WAIT_TIME, transaction);
         } catch (Exception e) {
-            //sendEmail
-            StringBuffer buffer2 = new StringBuffer();
-            buffer2.append("<html><head><style type=\"text/css\">body{border:0px none;text-align:center;}</style></head><body>");
-
-            buffer2.append("There were a problem receiving generic host validation response ************").append(" at ").append((new Date()).toString());
-            buffer2.append("</body></html>");
-
-            generateNotificationEmail(buffer2, null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBL] Exception calling Tecnicard.", null);
             response.setApproved(false);
 
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Recived message from " + NomHost.TECNICARD.name() + " Validation", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreLocalTransactionBL] Recived message from " + NomHost.TECNICARD.name() + " Validation", null);
 
         transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
 
@@ -311,68 +307,68 @@ public class CoreLocalTransactionBusinessLogic extends CoreAbstractTransactionBu
             
         } else {
 
-            String code = (String) response.getTransactionData().get(ParameterName.RESULT_CODE);
-
-            switch (code) {
-                case "000000":
-                    response.setResultCode(ResultCode.SUCCESS);
-                    response.setResultMessage(ResultMessage.TC_000000.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_000000.getTerminalMessage());
-                    break;
-                case "000031":
-                    response.setResultCode(ResultCode.FAILED);
-                    response.setResultMessage(ResultMessage.TC_000031.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_000031.getTerminalMessage());
-                    break;
-                case "000122":
-                    response.setResultCode(ResultCode.FAILED);
-                    response.setResultMessage(ResultMessage.TC_000122.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_000122.getTerminalMessage());
-                    break;
-                case "000199":
-                    response.setResultCode(ResultCode.FAILED);
-                    response.setResultMessage(ResultMessage.TC_000199.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_000199.getTerminalMessage());
-                    break;
-                case "100011":
-                    response.setResultCode(ResultCode.SUCCESS);
-                    response.setResultMessage(ResultMessage.TC_100011.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100011.getTerminalMessage());
-                    break;
-                case "100012":
-                    response.setResultCode(ResultCode.SUCCESS);
-                    response.setResultMessage(ResultMessage.TC_100012.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100012.getTerminalMessage());
-                    break;
-                case "100013":
-                    response.setResultCode(ResultCode.SUCCESS);
-                    response.setResultMessage(ResultMessage.TC_100013.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100013.getTerminalMessage());
-                    break;
-                case "100014":
-                    response.setResultCode(ResultCode.FAILED);
-                    response.setResultMessage(ResultMessage.TC_100014.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100014.getTerminalMessage());
-                    break;
-                case "100015":
-                    response.setResultCode(ResultCode.SUCCESS);
-                    response.setResultMessage(ResultMessage.TC_100015.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100015.getTerminalMessage());
-                    break;
-                case "100016":
-                    response.setResultCode(ResultCode.FAILED);
-                    response.setResultMessage(ResultMessage.TC_100016.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100016.getTerminalMessage());
-                    break;
-                case "100017":
-                    response.setResultCode(ResultCode.FAILED);
-                    response.setResultMessage(ResultMessage.TC_100017.getMessage());
-                    response.setTerminalResultMessage(ResultMessage.TC_100017.getTerminalMessage());
-                    break;
-                default:
-                    response = manageUnexpectedAnswer(response.getTransactionData(), TransactionType.TECNICARD_CARD_VALIDATION, transaction);
-                    break;
-            }
+//            String code = (String) response.getTransactionData().get(ParameterName.RESULT_CODE);
+//
+//            switch (code) {
+//                case "000000":
+//                    response.setResultCode(ResultCode.SUCCESS);
+//                    response.setResultMessage(ResultMessage.TC_000000.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_000000.getTerminalMessage());
+//                    break;
+//                case "000031":
+//                    response.setResultCode(ResultCode.FAILED);
+//                    response.setResultMessage(ResultMessage.TC_000031.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_000031.getTerminalMessage());
+//                    break;
+//                case "000122":
+//                    response.setResultCode(ResultCode.FAILED);
+//                    response.setResultMessage(ResultMessage.TC_000122.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_000122.getTerminalMessage());
+//                    break;
+//                case "000199":
+//                    response.setResultCode(ResultCode.FAILED);
+//                    response.setResultMessage(ResultMessage.TC_000199.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_000199.getTerminalMessage());
+//                    break;
+//                case "100011":
+//                    response.setResultCode(ResultCode.SUCCESS);
+//                    response.setResultMessage(ResultMessage.TC_100011.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100011.getTerminalMessage());
+//                    break;
+//                case "100012":
+//                    response.setResultCode(ResultCode.SUCCESS);
+//                    response.setResultMessage(ResultMessage.TC_100012.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100012.getTerminalMessage());
+//                    break;
+//                case "100013":
+//                    response.setResultCode(ResultCode.SUCCESS);
+//                    response.setResultMessage(ResultMessage.TC_100013.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100013.getTerminalMessage());
+//                    break;
+//                case "100014":
+//                    response.setResultCode(ResultCode.FAILED);
+//                    response.setResultMessage(ResultMessage.TC_100014.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100014.getTerminalMessage());
+//                    break;
+//                case "100015":
+//                    response.setResultCode(ResultCode.SUCCESS);
+//                    response.setResultMessage(ResultMessage.TC_100015.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100015.getTerminalMessage());
+//                    break;
+//                case "100016":
+//                    response.setResultCode(ResultCode.FAILED);
+//                    response.setResultMessage(ResultMessage.TC_100016.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100016.getTerminalMessage());
+//                    break;
+//                case "100017":
+//                    response.setResultCode(ResultCode.FAILED);
+//                    response.setResultMessage(ResultMessage.TC_100017.getMessage());
+//                    response.setTerminalResultMessage(ResultMessage.TC_100017.getTerminalMessage());
+//                    break;
+//                default:
+//                    response = manageUnexpectedAnswer(response.getTransactionData(), TransactionType.TECNICARD_CARD_VALIDATION, transaction);
+//                    break;
+//            }
 
         }
         return response;

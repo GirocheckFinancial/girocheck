@@ -35,8 +35,8 @@ import java.util.Map;
  * The Host Manager class
  */
 public class TecnicardHostManager {
-//       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
-       MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
+//       MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
  
     public static Map TRANSACTION_SEQUENCE;
     
@@ -77,7 +77,6 @@ public class TecnicardHostManager {
     public DirexTransactionResponse processTransaction( DirexTransactionRequest request ) throws Exception {
 
         transaction = new Transaction();
-
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardHostManager] Processing req transaction :: " + request.getTransactionType(),null );
         
         
@@ -116,6 +115,8 @@ public class TecnicardHostManager {
 
         TransactionType transactionType = request.getTransactionType();
         
+        String resultCode = "";
+        
         switch ( transactionType ) {
             case GENERIC_HOST_VALIDATION:
 
@@ -131,7 +132,7 @@ public class TecnicardHostManager {
 
                 Map sessionTagMap = (Map) response.getTransactionData().get( ParameterName.SESSION_TAG_MAP );
 
-                String resultCode = (String) sessionTagMap.get( ParameterName.RESULT_CODE ); 
+                resultCode = (String) sessionTagMap.get( ParameterName.RESULT_CODE ); 
 
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] TECNICARD_CARD_VALIDATION resultCode = " + resultCode ,null);
 
@@ -177,7 +178,7 @@ public class TecnicardHostManager {
                 }
             case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
 
-                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardHostManager] Processing: TECNICARD_CARD_VALIDATION for Loggin", null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardHostManager] Processing: ISTREAM_CHECK_AUTH_LOCATION_CONFIG", null);
                 request.setTransactionType(TransactionType.TECNICARD_CARD_VALIDATION);
 
                 try {
@@ -189,15 +190,22 @@ public class TecnicardHostManager {
 
                 Map sessionTagMapp = (Map) response.getTransactionData().get(ParameterName.SESSION_TAG_MAP);
 
-                String resultCodee = (String) sessionTagMapp.get(ParameterName.RESULT_CODE);
+                 resultCode = (String) sessionTagMapp.get(ParameterName.RESULT_CODE);
 
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] ISTREAM_CHECK_AUTH_LOCATION_CONFIG resultCode = " + resultCodee, null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] ISTREAM_CHECK_AUTH_LOCATION_CONFIG resultCode = " + resultCode, null);
 
-                if (TRANSACTION_SEQUENCE.containsKey(resultCodee)) {
+                if (TRANSACTION_SEQUENCE.containsKey(resultCode)) {
 
-                    addSubTransaction(TransactionType.TECNICARD_CARD_VALIDATION, ResultCode.SUCCESS, ResultMessage.SUCCESS.getMessage(), resultCodee);
+                    addSubTransaction(TransactionType.TECNICARD_CARD_VALIDATION, ResultCode.SUCCESS, ResultMessage.SUCCESS.getMessage(), resultCode);
 
                     response.setTransactionData(sessionTagMapp);
+                 
+                    if(!CODE_000000.equals(resultCode)){
+                       response.getTransactionData().put(ParameterName.ACTIVATION_FEE, 5.0);
+                       CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] ACTIVATION_FEE = 5", null);
+                    }
+                    
+                    
                     response.getTransaction().addSubTransactionList(transaction.getSub_Transaction());
 
                     response.setResultCode(ResultCode.SUCCESS);

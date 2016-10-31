@@ -52,6 +52,26 @@ public class MapUtil {
          }
         return resp;
     }
+
+    public static Double getDoubleValueFromMap(Map map, ParameterName requestParameterName, boolean required)throws Exception{
+       Double resp = 0D;
+        if(map.containsKey(requestParameterName)){
+            if(map.get(requestParameterName) != null){
+                try{
+                    resp = (Double)map.get(requestParameterName);
+                }catch(ClassCastException e){
+                    throw new Exception("Integer value expected from property: " + requestParameterName.toString());
+                }
+            }else{
+                if(required)
+                throw new Exception(requestParameterName.toString() + " can't be null.");
+            }
+        }else{
+            if(required)
+                throw new Exception(requestParameterName.toString() + " required for transaction: "+ getTType( map));
+         }
+        return resp;
+    }
     
   public static byte[] getByteArrayFromMap(Map map, ParameterName requestParameterName){
       if(map.containsKey(requestParameterName) && map.get(requestParameterName) != null &&  map.get(requestParameterName) instanceof byte[])

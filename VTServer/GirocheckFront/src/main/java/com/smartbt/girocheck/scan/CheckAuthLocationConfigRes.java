@@ -67,9 +67,8 @@ public class CheckAuthLocationConfigRes extends MainResponseContainer implements
         setAuthFeem( MapUtil.getStringValueFromMap( map, ParameterName.AUTH_FEEM));
         setAuthFeep( MapUtil.getStringValueFromMap( map, ParameterName.AUTH_FEEP));
         setCrdldf(MapUtil.getStringValueFromMap( map, ParameterName.CRDLDF)); 
-        
-        //provissional for Techtrex testing
-        setActivationFee(5D);
+        setActivationFee(MapUtil.getDoubleValueFromMap(map, ParameterName.ACTIVATION_FEE, false));
+         
         return this;
     }
     

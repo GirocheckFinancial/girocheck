@@ -81,7 +81,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
     private static final long PERSONAL_INFO_WAIT_TIME = 420000;//7min
     private static final long ORDER_EXPRESS_WAIT_TIME = 300000;//5min
     private static final long ORDER_EXPRESS_LOG_WAIT_TIME = 240000;//4mins
-    private static final long GENERIC_VALIDATION_WAIT_TIME = 60000;//1min
+    public static final long GENERIC_VALIDATION_WAIT_TIME = 60000;//1min
     private static final long GENERIC_CARD_LOAD_WAIT_TIME = 60000;//1min
     private static final long CERTEGY_INFO_WAIT_TIME = 420000;//7min
 

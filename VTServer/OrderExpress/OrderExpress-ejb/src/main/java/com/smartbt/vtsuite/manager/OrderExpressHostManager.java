@@ -33,7 +33,7 @@ import org.apache.commons.lang.ArrayUtils;
 public class OrderExpressHostManager {
 
     public DirexTransactionResponse processTransaction(DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts) throws Exception {
-
+        
 //        MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
        OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
@@ -43,8 +43,14 @@ public class OrderExpressHostManager {
         try {
             response = (DirexTransactionResponse) bizLogic.handle(direxTransactionRequest);
         } catch (Exception e) {
-            e.printStackTrace();
-            return DirexTransactionResponse.forException(ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Error description: " + e.getMessage(), "");
+            if( numberOfAttempts > 1){
+                 Thread.sleep(30_000);
+                  return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
+            }else{
+                e.printStackTrace();
+                return DirexTransactionResponse.forException(ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Error description: " + e.getMessage(), "");
+            }
+             
         }
 
         if (!response.getTransactionType().equals(TransactionType.ORDER_EXPRESS_LOGS)) {

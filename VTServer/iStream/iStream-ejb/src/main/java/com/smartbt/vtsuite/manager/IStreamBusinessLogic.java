@@ -153,7 +153,7 @@ public class IStreamBusinessLogic{
             if(attempt == 0){
                 return DirexTransactionResponse.forException( ResultCode.ISTREAM_HOST_ERROR, ResultMessage.ISTREAM_FAILED, "IStream failed all attempts to connect.", "0" );
             }else{
-                Thread.sleep(1000);
+                Thread.sleep(3000);
                return process(request, attempt - 1);
             }
         }

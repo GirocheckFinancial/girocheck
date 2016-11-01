@@ -65,6 +65,14 @@ public class SecurityFilter implements ContainerRequestFilter {
 
             String token = context.getRequestHeader("TOKEN") == null ? null : context.getRequestHeader("TOKEN").get(0);
             
+            System.out.println("Token before = " + token);
+            
+            if(token != null && token.contains("_")){
+                token = token.split("_")[1];
+            }
+            
+            System.out.println("Token after = " + token);
+            
             int code = VTSessionDAO.get().validateSession(token);
             if (code == Constants.CODE_SESSION_LOST) {
                 baseResponse.setStatus(Constants.CODE_SESSION_LOST);

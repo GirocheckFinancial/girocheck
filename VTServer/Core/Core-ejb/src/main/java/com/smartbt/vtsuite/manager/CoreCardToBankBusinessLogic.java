@@ -358,6 +358,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             JMSManager.get().send(direxTransactionResponse, jmsManager.getCore2OutQueue(), direxTransactionRequest.getCorrelation());
             CoreTransactionUtil.subTransactionFailed(transaction, direxTransactionResponse, jmsManager.getCore2OutQueue(), direxTransactionRequest.getCorrelation());
         } catch (Exception e) {
+            e.printStackTrace();
 //            System.out.println("Final Exception :: ");
 //            log.debug("[CoreCardToBankBL::] Unhandled exception ",e);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Unhandled exception ",e.getMessage());
@@ -369,7 +370,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             JMSManager.get().send(direxTransactionResponse, jmsManager.getCore2OutQueue(), direxTransactionRequest.getCorrelation());
             transaction.setResultCode(ResultCode.CORE_ERROR.getCode());
             String msg = e.getMessage();
-            transaction.setResultMessage((msg.length() > 254) ? msg.substring(0, 254) : msg);
+            transaction.setResultMessage((msg != null && msg.length() > 254) ? msg.substring(0, 254) : msg);
 
             CoreTransactionUtil.persistTransaction(transaction);
         }

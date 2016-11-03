@@ -116,4 +116,12 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
         super.delete(vtsession);
         
     }
+    
+    public void deleteSessionByUser(int idUser){ 
+        String sql = "delete from vtsession WHERE id_user = " + idUser;
+ 
+        int updatedRows = HibernateUtil.getSession().createSQLQuery(sql).executeUpdate();
+        
+        System.out.println("Deleted " + updatedRows + " sessions..");
+    }
 }

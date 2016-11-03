@@ -31,6 +31,7 @@ import javax.xml.bind.ValidationException;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -128,9 +129,8 @@ public class UserDAO extends BaseDAO<User> {
 
         criteria.setProjection(projectionList);
         criteria.setResultTransformer(new TransformerComplexBeans(UserDisplay.class));
-        /**
-         * ***********
-         */
+       
+        criteria.addOrder(Order.asc("username"));
 
         List<UserDisplay> UserList = criteria.list();
 
@@ -143,7 +143,7 @@ public class UserDAO extends BaseDAO<User> {
         return (User) cri.uniqueResult();
     }
 
-    public void deleteUser(int idUser) {
+    public void deleteUser(int idUser) { 
         super.delete(findById(idUser));
     }
 

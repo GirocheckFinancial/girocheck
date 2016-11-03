@@ -20,6 +20,7 @@ import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.display.UserDisplay;
 import com.smartbt.girocheck.servercommon.dao.UserDAO;
+import com.smartbt.girocheck.servercommon.dao.VTSessionDAO;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import com.smartbt.girocheck.servercommon.validators.UserValidator;
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
  * @author Ariel Saavedra
  */
 public class UserManager {
-
+    
     private static final Logger log = Logger.getLogger(UserManager.class);
     private UserDAO userDAO = UserDAO.get();
 
@@ -53,7 +54,7 @@ public class UserManager {
         response.setData(userDAO.searchUsers(search, pageNumber * rowsPerPage, rowsPerPage));
         int total = userDAO.searchUsers(search, -1, -1).size();
         response.setTotalPages((int) Math.ceil((float) total / (float) rowsPerPage));
-
+        
         response.setStatus(Constants.CODE_SUCCESS);
         response.setStatusMessage(VTSuiteMessages.SUCCESS);
         return response;
@@ -75,22 +76,18 @@ public class UserManager {
         return response;
     }
     
-    public BaseResponse deleteUser(int idUser) throws Exception {
+    public BaseResponse deleteUser(int idUser) throws Exception { 
         UserValidator.deleteUser(idUser);
         BaseResponse response = new BaseResponse();
-//            if (!frontFacade.existObject(ClerkRole.class, role.getId())) {
-//                response.setStatus(Constants.CODE_ERROR_GENERAL);
-//                response.setStatusMessage(VTSuiteMessages.CLERK_ROLE_DOES_NOT_EXIST);
-//                log.info("----->  updateClerkRole: This ClerkRole does not exist <-----");
-//            } else {
-
+         
+        VTSessionDAO.get().deleteSessionByUser(idUser); 
         userDAO.deleteUser(idUser);
         response.setStatus(Constants.CODE_SUCCESS);
         response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.SUCCESS);
 //            }
         return response;
     }
-
+    
     public ResponseData addUser(UserDisplay user) throws ValidationException, NoSuchAlgorithmException, Exception {
         UserValidator.addUser(user);
         ResponseData response = new ResponseData();
@@ -102,12 +99,12 @@ public class UserManager {
         return response;
     }
     
-    public BaseResponse changePassword(int userId, String password){
-        BaseResponse response = new BaseResponse(); 
-        if(PasswordUtil.validatePasswordFormat(password)){ 
+    public BaseResponse changePassword(int userId, String password) {
+        BaseResponse response = new BaseResponse();        
+        if (PasswordUtil.validatePasswordFormat(password)) {            
             
             try {
-                userDAO.changePassword(userId,password);
+                userDAO.changePassword(userId, password);
                 response.setStatus(Constants.CODE_SUCCESS);
                 response.setStatusMessage(VTSuiteMessages.SUCCESS);
             } catch (ValidationException ex) {
@@ -115,11 +112,10 @@ public class UserManager {
                 response.setStatusMessage(ex.getMessage());
             }
             
-        }else{ 
+        } else {            
             response.setStatus(Constants.INVALID_PASSWORD);
             response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.INVALID_PASSWORD);
         }
-        
         
         return response;
     }

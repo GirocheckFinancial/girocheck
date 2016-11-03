@@ -258,7 +258,7 @@ public class UserTab extends BaseTab implements BaseInterface {
         isChangePassword = 1;
         record.setAttribute("idEntity", idEntity);
         record.setAttribute("entityType", entityType.toString());
-        passwordEditorWindow.addRecord(record);
+       // passwordEditorWindow.addRecord(record);
         passwordEditorWindow.show();
     }
     

@@ -58,7 +58,7 @@ public final class ChangePasswordEditor extends BaseEditorWindow {
         Criteria criteria = new Criteria();
         criteria.addCriteria("entityType", EntityType.AMS.toString());
 
-        super.addRecord(record);
+       // super.addRecord(record);
     }
     
     public Record getRecord() {

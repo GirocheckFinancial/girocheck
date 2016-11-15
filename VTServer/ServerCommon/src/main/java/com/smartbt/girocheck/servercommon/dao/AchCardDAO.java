@@ -34,36 +34,13 @@ public class AchCardDAO extends BaseDAO<AchCard>{
         return dao;
     }
     
-    public Boolean existAchCard(String terminalId, String cardNumber){
-        System.out.println("ACH query");
-//        if ( terminalId != 0 && cardNumber!= null) {
-
-           int idMerchant = getMerchantByTerminalId(terminalId).getId();
-            
-      //  DetachedCriteria maxId = DetachedCriteria.forClass(AchCard.class)
-      //          .setProjection(Projections.max("id"));
-           
-            Criteria criteria = HibernateUtil.getSession().createCriteria( AchCard.class ).
-                    createAlias( "merchant", "merchant" )
-                 //   .add(Property.forName("id").eq(maxId))
-                //    .add( Restrictions.eq( "merchant.id", idMerchant ) )
+    public Boolean existAchCard(String terminalId, String cardNumber){ 
+            Criteria criteria = HibernateUtil.getSession().createCriteria( AchCard.class )
                     .add( Restrictions.eq( "cardNumber", cardNumber ) );
 
             criteria.setMaxResults( 1 );
-
-//            AchCard achCard = (AchCard) criteria.uniqueResult();
-//            log.debug("[AchCardDAO] AchCardDAO.existAchCard()");
+ 
             return criteria.uniqueResult() != null;
-
-//            if ( achCard != null ) {
-//                
-//                resp = true;
-//
-//            }
-//
-//        }
-//        
-//        return resp;
     }
     
     public Merchant getMerchantByTerminalId(String serialNumber){

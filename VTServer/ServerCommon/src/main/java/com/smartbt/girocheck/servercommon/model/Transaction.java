@@ -11,10 +11,14 @@
  */
 package com.smartbt.girocheck.servercommon.model;
 
+import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import java.io.Serializable;
 import java.sql.Blob;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class Transaction implements Serializable {
@@ -53,17 +57,17 @@ public class Transaction implements Serializable {
     private String errorCode;
 
     private String orderExpressId;
-    
+
     private boolean transactionFinished;
-    
+
 //    private java.sql.Blob achForm;//quitar ach form
     private java.sql.Blob truncatedCheck;
-    
+
     private Double ammount;
     private Double feeAmmount;
     private Double payoutAmmount;
     private String cardNumber;
-    
+
     private Boolean cancelated;
     private Boolean cancelable = true;
 
@@ -71,64 +75,86 @@ public class Transaction implements Serializable {
 
     private com.smartbt.girocheck.servercommon.model.Check check;
 
-    public void addSubTransaction( SubTransaction subTransaction ) {
-        subTransaction.setOrder( sub_Transaction.size() );
-        subTransaction.setTransaction( this );
-        sub_Transaction.add( subTransaction );
-         
+    public void addSubTransaction(SubTransaction subTransaction) {
+        if (sub_Transaction.isEmpty()) {
+            subTransaction.setOrder(1);
+        } else {
+            ArrayList<SubTransaction> curentList = new ArrayList<SubTransaction>(sub_Transaction);
+            Collections.sort(curentList);
+            subTransaction.setOrder(curentList.get(curentList.size() - 1).getOrder() + 1);
+
+        }
+
+        System.out.println("Transaction inserting subtransaction :: " + TransactionType.get(subTransaction.getType()));
+        subTransaction.setTransaction(this);
+        sub_Transaction.add(subTransaction);
+
     }
 
-    public void addSubTransactionList( Set<SubTransaction> list ) {
-        if(list == null)return;
-        
-        int begin = sub_Transaction.size();
+    public void addSubTransactionList(Set<SubTransaction> list) {
+        if (list == null) {
+            return;
+        }
 
-        for ( Iterator<SubTransaction> it = list.iterator(); it.hasNext(); ) {
-            SubTransaction subTransaction = it.next();
-            subTransaction.setOrder( begin + subTransaction.getOrder() );
-            subTransaction.setTransaction( this );
-            sub_Transaction.add( subTransaction );
+        List<SubTransaction> subtransactions = new ArrayList<SubTransaction>(list);
+        Collections.sort(subtransactions);
+
+        for (SubTransaction subTransaction : subtransactions) {
+            if (sub_Transaction.isEmpty()) {
+                subTransaction.setOrder(1);
+            } else {
+                ArrayList<SubTransaction> curentList = new ArrayList<SubTransaction>(sub_Transaction);
+                Collections.sort(curentList);
+                subTransaction.setOrder(curentList.get(curentList.size() - 1).getOrder() + 1);
+            }
+
+            subTransaction.setTransaction(this);
+            System.out.println("Transaction inserting subtransaction :: " + TransactionType.get(subTransaction.getType()));
+            sub_Transaction.add(subTransaction);
         }
     }
+    
+    public boolean containSubTransaction(TransactionType type){
+        for (SubTransaction sub_Transaction1 : sub_Transaction) {
+            if(sub_Transaction1.getType() == type.getCode()){
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public void setCancelable( Boolean cancelable ) {
+    public void setCancelable(Boolean cancelable) {
         this.cancelable = cancelable;
     }
 
     public Boolean isCancelable() {
         return cancelable;
     }
-    
-    
 
-    public void setCancelated( Boolean cancelated ) {
+    public void setCancelated(Boolean cancelated) {
         this.cancelated = cancelated;
     }
 
     public Boolean isCancelated() {
         return cancelated;
     }
-    
-    
 
-    public void setTruncatedCheck( java.sql.Blob truncatedCheck ) {
+    public void setTruncatedCheck(java.sql.Blob truncatedCheck) {
         this.truncatedCheck = truncatedCheck;
     }
 
     public java.sql.Blob getTruncatedCheck() {
         return truncatedCheck;
     }
-    
+
     //quitar ach form
 //    public void setAchForm(java.sql.Blob value) {
 //		this.achForm = value;
 //	}
-	
 //	public java.sql.Blob getAchForm() {
 //		return achForm;
 //	}
-
-    private void setId( int value ) {
+    private void setId(int value) {
         this.id = value;
     }
 
@@ -136,7 +162,7 @@ public class Transaction implements Serializable {
         return id;
     }
 
-    public void setCardNumber( String cardNumber ) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
@@ -144,16 +170,11 @@ public class Transaction implements Serializable {
         return cardNumber;
     }
 
-    
-    
-    
-    
-
     public int getORMID() {
         return getId();
     }
 
-    public void setOperation( String value ) {
+    public void setOperation(String value) {
         this.operation = value;
     }
 
@@ -161,11 +182,11 @@ public class Transaction implements Serializable {
         return operation;
     }
 
-    public void setResultCode( int value ) {
-        setResultCode( new Integer( value ) );
+    public void setResultCode(int value) {
+        setResultCode(new Integer(value));
     }
 
-    public void setResultCode( Integer value ) {
+    public void setResultCode(Integer value) {
         this.resultCode = value;
     }
 
@@ -173,8 +194,10 @@ public class Transaction implements Serializable {
         return resultCode;
     }
 
-    public void setResultMessage( String value ) {
-        if(value != null && value.length() > 254)value = value.substring( 0, 254 );
+    public void setResultMessage(String value) {
+        if (value != null && value.length() > 254) {
+            value = value.substring(0, 254);
+        }
         this.resultMessage = value;
     }
 
@@ -182,7 +205,7 @@ public class Transaction implements Serializable {
         return resultMessage;
     }
 
-    public void setDateTime( Date value ) {
+    public void setDateTime(Date value) {
         this.dateTime = value;
     }
 
@@ -190,11 +213,11 @@ public class Transaction implements Serializable {
         return dateTime;
     }
 
-    public void setTransactionType( int value ) {
-        setTransactionType( new Integer( value ) );
+    public void setTransactionType(int value) {
+        setTransactionType(new Integer(value));
     }
 
-    public void setTransactionType( Integer value ) {
+    public void setTransactionType(Integer value) {
         this.transactionType = value;
     }
 
@@ -202,7 +225,7 @@ public class Transaction implements Serializable {
         return transactionType;
     }
 
-    public void setKey( String value ) {
+    public void setKey(String value) {
         this.key = value;
     }
 
@@ -210,7 +233,7 @@ public class Transaction implements Serializable {
         return key;
     }
 
-    public void setAccount( String value ) {
+    public void setAccount(String value) {
         this.account = value;
     }
 
@@ -218,7 +241,7 @@ public class Transaction implements Serializable {
         return account;
     }
 
-    public void setRequestId( String value ) {
+    public void setRequestId(String value) {
         this.requestId = value;
     }
 
@@ -226,7 +249,7 @@ public class Transaction implements Serializable {
         return requestId;
     }
 
-    public void setIstream_id( String value ) {
+    public void setIstream_id(String value) {
         this.istream_id = value;
     }
 
@@ -234,11 +257,11 @@ public class Transaction implements Serializable {
         return istream_id;
     }
 
-    public void setSingle( boolean value ) {
-        setSingle( new Boolean( value ) );
+    public void setSingle(boolean value) {
+        setSingle(new Boolean(value));
     }
 
-    public void setSingle( Boolean value ) {
+    public void setSingle(Boolean value) {
         this.single = value;
     }
 
@@ -246,7 +269,7 @@ public class Transaction implements Serializable {
         return single;
     }
 
-    public void setErrorCode( String value ) {
+    public void setErrorCode(String value) {
         this.errorCode = value;
     }
 
@@ -254,7 +277,7 @@ public class Transaction implements Serializable {
         return errorCode;
     }
 
-    public void setOrderExpressId( String value ) {
+    public void setOrderExpressId(String value) {
         this.orderExpressId = value;
     }
 
@@ -262,7 +285,7 @@ public class Transaction implements Serializable {
         return orderExpressId;
     }
 
-    public void setTerminal( com.smartbt.girocheck.servercommon.model.Terminal value ) {
+    public void setTerminal(com.smartbt.girocheck.servercommon.model.Terminal value) {
         this.terminal = value;
     }
 
@@ -270,7 +293,7 @@ public class Transaction implements Serializable {
         return terminal;
     }
 
-    public void setClient( com.smartbt.girocheck.servercommon.model.Client value ) {
+    public void setClient(com.smartbt.girocheck.servercommon.model.Client value) {
         this.client = value;
     }
 
@@ -278,7 +301,7 @@ public class Transaction implements Serializable {
         return client;
     }
 
-    public void setData_sc1( com.smartbt.girocheck.servercommon.model.CreditCard value ) {
+    public void setData_sc1(com.smartbt.girocheck.servercommon.model.CreditCard value) {
         this.data_sc1 = value;
     }
 
@@ -286,7 +309,7 @@ public class Transaction implements Serializable {
         return data_sc1;
     }
 
-    public void setSub_Transaction( java.util.Set<com.smartbt.girocheck.servercommon.model.SubTransaction> value ) {
+    public void setSub_Transaction(java.util.Set<com.smartbt.girocheck.servercommon.model.SubTransaction> value) {
         this.sub_Transaction = value;
     }
 
@@ -294,7 +317,7 @@ public class Transaction implements Serializable {
         return sub_Transaction;
     }
 
-    public void setCheck( com.smartbt.girocheck.servercommon.model.Check value ) {
+    public void setCheck(com.smartbt.girocheck.servercommon.model.Check value) {
         this.check = value;
     }
 
@@ -303,7 +326,7 @@ public class Transaction implements Serializable {
     }
 
     public String toString() {
-        return String.valueOf( getId() );
+        return String.valueOf(getId());
     }
 
     /**
@@ -316,7 +339,7 @@ public class Transaction implements Serializable {
     /**
      * @param ammount the ammount to set
      */
-    public void setAmmount( Double ammount ) {
+    public void setAmmount(Double ammount) {
         this.ammount = ammount;
     }
 
@@ -330,7 +353,7 @@ public class Transaction implements Serializable {
     /**
      * @param feeAmmount the feeAmmount to set
      */
-    public void setFeeAmmount( Double feeAmmount ) {
+    public void setFeeAmmount(Double feeAmmount) {
         this.feeAmmount = feeAmmount;
     }
 
@@ -344,7 +367,7 @@ public class Transaction implements Serializable {
     /**
      * @param payoutAmmount the payoutAmmount to set
      */
-    public void setPayoutAmmount( Double payoutAmmount ) {
+    public void setPayoutAmmount(Double payoutAmmount) {
         this.payoutAmmount = payoutAmmount;
     }
 

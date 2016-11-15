@@ -68,16 +68,17 @@ public class IDScanner {
 //    }
 //
     public static void main(String[] args) throws Exception {
+        testParseID();
 //       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
 //        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
 //        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxOTJaRjAyMzEwMDYzRExEQUFST0xEQU4gQU5EUklOTyxTQUlSQSxMCkRBRzI5MjYwIFNXIDE0MiBBVkUKREFJSE9NRVNURUFECkRBSkZMCkRBSzMzMDMzLTMwMTcgCkRBUVI0MzU3OTI2MTY4ODYKREFSRSAgIApEQVMgICAgICAgICAgCkRBVCAgICAgCkRCQTIwMTgwNTI4CkRCQjE5NjEwNTI4CkRCQzIKREJEMjAxMDA2MjMKREJITiAgICAgICAgIApEQVU1MDMNWkZaRkFSRVBMQUNFRDogMDAwMDAwMDAKWkZCIApaRkNUMDYxMDA2MjMwMTgzClpGRCAKWkZFMDgtMzEtMDk=");
-        Map map = parseIDRemotely("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxOTJaRjAyMzEwMDYzRExEQUFST0xEQU4gQU5EUklOTyxTQUlSQSxMCkRBRzI5MjYwIFNXIDE0MiBBVkUKREFJSE9NRVNURUFECkRBSkZMCkRBSzMzMDMzLTMwMTcgCkRBUVI0MzU3OTI2MTY4ODYKREFSRSAgIApEQVMgICAgICAgICAgCkRBVCAgICAgCkRCQTIwMTgwNTI4CkRCQjE5NjEwNTI4CkRCQzIKREJEMjAxMDA2MjMKREJITiAgICAgICAgIApEQVU1MDMNWkZaRkFSRVBMQUNFRDogMDAwMDAwMDAKWkZCIApaRkNUMDYxMDA2MjMwMTgzClpGRCAKWkZFMDgtMzEtMDk=", 1);
+//        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxOTJaRjAyMzEwMDYzRExEQUFST0xEQU4gQU5EUklOTyxTQUlSQSxMCkRBRzI5MjYwIFNXIDE0MiBBVkUKREFJSE9NRVNURUFECkRBSkZMCkRBSzMzMDMzLTMwMTcgCkRBUVI0MzU3OTI2MTY4ODYKREFSRSAgIApEQVMgICAgICAgICAgCkRBVCAgICAgCkRCQTIwMTgwNTI4CkRCQjE5NjEwNTI4CkRCQzIKREJEMjAxMDA2MjMKREJITiAgICAgICAgIApEQVU1MDMNWkZaRkFSRVBMQUNFRDogMDAwMDAwMDAKWkZCIApaRkNUMDYxMDA2MjMwMTgzClpGRCAKWkZFMDgtMzEtMDk=");
+//
+//        for (Iterator iterator = map.keySet().iterator(); iterator.hasNext();) {
+//            Object next = iterator.next();
+//            System.out.println(next + " -> " + map.get(next));
+//        }
 
-        for (Iterator iterator = map.keySet().iterator(); iterator.hasNext();) {
-            Object next = iterator.next();
-            System.out.println(next + " -> " + map.get(next));
-        }
- 
     }
 
     public static boolean testParseID() {
@@ -92,41 +93,41 @@ public class IDScanner {
         }
     }
 
-    public static Map<ParameterName, String> parseID(String authKey, String text) throws Exception {
-        Map<ParameterName, String> map = null;
+    public static Map<ParameterName, Object> parseID(String authKey, String text) throws Exception {
+        Map<ParameterName, Object> map = null;
         try {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally...", null);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
             map = parseIdLocally(text);
         } catch (Exception e) {
         }
-         
+
         if (!validateOutput(map)) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... FAILED", null);
-            try{
-               map = parseIDRemotely(authKey, text, 5);  
-            }catch(Exception e){
+            try {
+                map = parseIDRemotely(authKey, text, 5);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-           
-        }else{
+
+        } else {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... SUCCESS", null);
-        } 
-        
+        }
+
         return map;
     }
 
-    public static Map<ParameterName, String> parseIdLocally(String text) {
+    public static Map<ParameterName, Object> parseIdLocally(String text) {
 
         String decoded = new String(Base64.decodeBase64(text));
         return new DriverLicense(decoded).toMap();
     }
 
-    public static Map<ParameterName, String> parseIDRemotely(String authKey, String text, Integer attempts) throws Exception {
+    public static Map<ParameterName, Object> parseIDRemotely(String authKey, String text, Integer attempts) throws Exception {
         if (attempts == 0) {
             return null;
         }
-        
+
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID remotely...", null);
 
         //TODO put in a System Property
@@ -139,7 +140,7 @@ public class IDScanner {
         try {
             response = client.execute(post);
         } catch (Exception e) {
-            Thread.sleep(2000); 
+            Thread.sleep(2000);
             return parseIDRemotely(authKey, text, attempts - 1);
         }
 
@@ -164,17 +165,20 @@ public class IDScanner {
                     map.put(ParameterName.ADDRESS, getString(dl, "Address1"));
                     map.put(ParameterName.GENDER, getString(dl, "Gender"));
                     map.put(ParameterName.CITY, getString(dl, "City"));
-                    map.put(ParameterName.STATE, getString(dl, "IssuedBy"));
-                    map.put(ParameterName.EXPIRATION_DATE, getString(dl, "ExpirationDate"));
+                    map.put(ParameterName.STATE, getString(dl, "IssuedBy")); 
                     map.put(ParameterName.LAST_NAME, getString(dl, "LastName"));
                     map.put(ParameterName.ZIPCODE, getString(dl, "PostalCode"));
                     map.put(ParameterName.FIRST_NAME, getString(dl, "FirstName"));
                     map.put(ParameterName.MIDDLE_NAME, getString(dl, "MiddleName"));
-                    formatDate(getString(dl, "Birthdate"), map);
+                   
                     map.put(ParameterName.IDSTATE, getString(dl, "IssuedBy"));
 
                     map.put(ParameterName.COUNTRY, "US");
                     map.put(ParameterName.IDCOUNTRY, "US");
+
+                     formatDate(ParameterName.BORNDATE, ParameterName.BORNDATE_AS_DATE, getString(dl, "Birthdate"), map);
+                     formatDate(ParameterName.EXPIRATION_DATE, ParameterName.EXPIRATION_DATE_AS_DATE, getString(dl, "ExpirationDate"), map);
+                     
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scan was Success", null);
                     return map;
                 }
@@ -184,22 +188,32 @@ public class IDScanner {
         return parseIDRemotely(authKey, text, attempts - 1);
     }
 
-    public static boolean validateOutput(Map<ParameterName, String> map){
-        if(map == null)return false;
-        
-        for (Iterator<ParameterName> iterator = map.keySet().iterator(); iterator.hasNext();) {
-            ParameterName key = iterator.next();
-            
-            if(key != ParameterName.MIDDLE_NAME
-                    && (!map.containsKey(key) || map.get(key) == null || map.get(key).isEmpty())){
-               CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Rejecting map for property = " + key, null);
-                return false;
-            }
+    public static boolean validateOutput(Map<ParameterName, Object> map) {
+        if (map == null) {
+            return false;
         }
-        
+
+        ParameterName key = null;
+
+        try {
+            for (Iterator<ParameterName> iterator = map.keySet().iterator(); iterator.hasNext();) {
+                key = iterator.next();
+
+                if (key != ParameterName.MIDDLE_NAME
+                        && (!map.containsKey(key) || map.get(key) == null || map.get(key).toString().isEmpty())) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Rejecting map for property = " + key, null);
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Exception validating Driver License :: key = " + key);
+
+            e.printStackTrace();
+        }
+
         return true;
     }
-    
+
     public static String getString(JSONObject json, String key) {
         if (json.has(key)) {
             return json.getString(key);
@@ -207,12 +221,12 @@ public class IDScanner {
         return "";
     }
 
-    public static void formatDate(String date, Map map) {
+    public static void formatDate(ParameterName parameter, ParameterName parameterAsDate, String date, Map map) {
         try {
-            Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-            map.put(ParameterName.BORNDATE_AS_DATE, dobIn);
+            Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+            map.put(parameterAsDate, d);
             SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
-            map.put(ParameterName.BORNDATE, dobOut.format(dobIn));
+            map.put(parameter, dobOut.format(d));
         } catch (Exception e) {
             e.printStackTrace();
         }

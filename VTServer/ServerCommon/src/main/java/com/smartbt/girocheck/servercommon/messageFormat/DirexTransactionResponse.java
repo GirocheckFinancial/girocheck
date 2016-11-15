@@ -52,15 +52,24 @@ public class DirexTransactionResponse extends DirexTransaction{
         
         DirexTransactionResponse response = forException( resultCode,  ex.getMessage());
         response.setTerminalResultMessage(ResultMessage.FAILED.getTerminalMessage());
+        response.setErrorCode("");
         return response;
 
     }
 
     public static DirexTransactionResponse forException(ResultCode resultCode, ResultMessage resultMessage) {
-        
         DirexTransactionResponse response = forException( resultCode,  resultMessage.getMessage());
         response.setTerminalResultMessage(resultMessage.getTerminalMessage());
         return response;
+    }
+
+    public static DirexTransactionResponse forException(ResultCode resultCode, String resultMessage) {
+        DirexTransactionResponse exRsp = new DirexTransactionResponse(); 
+        exRsp.setApproved(false);
+        exRsp.setResultCode(resultCode);
+        exRsp.setResultMessage(resultMessage);
+        exRsp.setTerminalResultMessage(resultMessage);
+        return exRsp;
     }
 
     public static DirexTransactionResponse forException(ResultCode resultCode, ResultMessage resultMessage, String resultMessageDetail, String errorCode) {
@@ -83,17 +92,7 @@ public class DirexTransactionResponse extends DirexTransaction{
         response.setTerminalResultMessage(resultMessage.getTerminalMessage());
         return response;
     }
-    
-    public static DirexTransactionResponse forException(ResultCode resultCode, String resultMessage) {
-        LogUtil.logAndStore("Exception :: " + resultCode , resultMessage);
-        
-        DirexTransactionResponse exRsp = new DirexTransactionResponse();
-        exRsp.setApproved(false);
-        exRsp.setResultCode(resultCode);
-        exRsp.setResultMessage(resultMessage);
-       
-        return exRsp;
-    }
+     
     
 
     public void setApproved(boolean approved) {

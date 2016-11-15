@@ -74,7 +74,7 @@ public class TransactionListGrid extends BaseListGrid {
             public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
                 Integer type = record.getAttributeAsInt("transactionType");
                 
-                if(type == null)return "Unknown";
+                if(type == null)return "Unknown..";
                 return ClientTransactionType.getTransactionName( type);
             }
         });

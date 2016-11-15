@@ -32,11 +32,11 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 public class IStreamHostManager {
     
   //private IStreamBusinessLogic businessLogic = new IStreamBusinessLogic();
-//   private MockIStreamBusinessLogic businessLogic = new MockIStreamBusinessLogic();
+   private MockIStreamBusinessLogic businessLogic = new MockIStreamBusinessLogic();
 
    private static IStreamHostManager INSTANCE;
     
-    public static IStreamHostManager getInstance(){
+    public static synchronized IStreamHostManager getInstance(){
         if(INSTANCE == null) {
             INSTANCE = new IStreamHostManager();
         }
@@ -55,8 +55,8 @@ public class IStreamHostManager {
         DirexTransactionResponse response;
         
         try {
-//            response = businessLogic.process(request);
-           response = (DirexTransactionResponse) IStreamBusinessLogic.getInstance().process( request, 2 );
+            response = businessLogic.process(request);
+//           response = (DirexTransactionResponse) IStreamBusinessLogic.getInstance().process( request, 2 );
         } catch ( Exception e ) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug,"[IStreamHostManager]:: Istream failed" ,null);
             e.printStackTrace();

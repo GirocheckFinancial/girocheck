@@ -106,6 +106,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             HibernateUtil.beginTransaction();
 
             hasAch = achManager.existAchCard(terminalId, cardNumber);
+             
             client = creditCardManager.getClient(cardNumber);
             if(client != null){
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Client Name = " + client.getFirstName(), null);
@@ -311,6 +312,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
                 }
 
             } catch (JMSException e) {
+                e.printStackTrace();
 //                coreLogger.logAndStore("CoreCardToBankBL", " [CoreCardToBankBL::]            JMSException trying to call Tecnicard");
 //                log.debug("[CoreCardToBankBL::] JMSException trying to call Tecnicard",e);
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] JMSException trying to call Tecnicard",e.getMessage());
@@ -325,7 +327,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             tmsg = (ObjectMessage) tecnicardMessage;
             Serializable s = tmsg.getObject();
             direxTransactionResponse = (DirexTransactionResponse) s;
-
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "1--[CoreCardToBankBL::] direxTransactionResponse.getResultCode().getCode() = " + direxTransactionResponse.getResultCode().getCode(), null);
             if (!direxTransactionResponse.getTransaction().getSub_Transaction().isEmpty()) {
                 transaction.addSubTransactionList(direxTransactionResponse.getTransaction().getSub_Transaction());
             }
@@ -341,6 +343,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             transaction.setClient(client);
 //            transaction.setAmmount((Double)request.getTransactionData().get(ParameterName.AMMOUNT));
             transaction.setAmmount(amount);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "2--[CoreCardToBankBL::] direxTransactionResponse.getResultCode().getCode() = " + direxTransactionResponse.getResultCode().getCode(), null);
             transaction.setResultCode(direxTransactionResponse.getResultCode().getCode());
             transaction.setResultMessage(direxTransactionResponse.getResultMessage());
             
@@ -359,12 +362,9 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
             CoreTransactionUtil.subTransactionFailed(transaction, direxTransactionResponse, jmsManager.getCore2OutQueue(), direxTransactionRequest.getCorrelation());
         } catch (Exception e) {
             e.printStackTrace();
-//            System.out.println("Final Exception :: ");
-//            log.debug("[CoreCardToBankBL::] Unhandled exception ",e);
+ 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Unhandled exception ",e.getMessage());
-
-//            coreLogger.logAndStore("CoreCardToBankBL", " [CoreCardToBankBL::]            Exception in core ");
-
+ 
             direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, "Tecnicard ",e.getMessage());
             direxTransactionResponse.setTransactionType(TransactionType.TECNICARD_CARD_TO_BANK_CONFIRMATION);
             JMSManager.get().send(direxTransactionResponse, jmsManager.getCore2OutQueue(), direxTransactionRequest.getCorrelation());

@@ -167,7 +167,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pIdCountry = MapUtil.getStringValueFromMap( map, ParameterName.IDCOUNTRY, false );
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd");
-        Date date = MapUtil.getDateValueFromMap( map, ParameterName.BORNDATE, false );
+        Date date = MapUtil.getDateValueFromMap( map, ParameterName.BORNDATE_AS_DATE, false );
         String pDateOfBirth = (date != null) ? df.format( date ) : "";
         
         String pAddress = MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false );
@@ -205,7 +205,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pFaxphone = MapUtil.getStringValueFromMap( map, ParameterName.FAX_PHONE, false );
         String pCard = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
         
-        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE, false );
+        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE_AS_DATE, false );
 //        String pIdExpiration = "";// = (date != null) ? df.format( date ) : "";
         String pIdExpiration = (datee != null) ? df.format( datee ) : "";
 
@@ -249,8 +249,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         SessionTag sessionTag = buildSessionTag("CardLoad", pRequestID, "0");
 
-        response.setSessionTag(sessionTag);
-
+        response.setSessionTag(sessionTag); 
         return response;
     }
 
@@ -309,7 +308,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         return response;
     }
 
-    public IMap wmCardHolderValidation(Map map) throws Exception {
+    public IMap wmCardHolderValidation(Map map) throws Exception { 
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.ID, false);
         String pIdType = MapUtil.getStringValueFromMap(map, ParameterName.IDTYPE, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
@@ -317,7 +316,6 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         CardHolderValidationResponse response = new CardHolderValidationResponse();
         response.setSessionTag(buildSessionTag("CardHolderValidation", pRequestID, "100013"));
-
         return response;
     }
 

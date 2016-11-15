@@ -25,7 +25,6 @@ import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.mock.MockOrderExpressBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
-import org.apache.commons.lang.ArrayUtils;
 
 /**
  * The Host Manager class
@@ -34,8 +33,8 @@ public class OrderExpressHostManager {
 
     public DirexTransactionResponse processTransaction(DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts) throws Exception {
         
-//        MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
-       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
+        MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+//       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
 
         fixZipCode(direxTransactionRequest);

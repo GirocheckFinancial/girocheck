@@ -76,8 +76,15 @@ public class ClientTransactionType {
                 return "OE Reporta Pago";
             case 34: 
                 return "OE Logs";
-            case 35: 
-                return "Card Reload Data";
+             case 35: 
+                return "Card Reload Data";     
+            case 36: 
+                return "Choice Insert Transaction";
+            case 37: 
+                return "Choice Cancelation Request";
+            case 38: 
+                return "Choice Notify Payment";
+           
             default:
                 return "Unknown";
         }

@@ -5,8 +5,10 @@
  */
 package com.smartbt.vtsuite.util;
 
+import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.enums.EmailName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
+import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
 import com.smartbt.girocheck.servercommon.log.LogUtil;
@@ -25,11 +27,13 @@ import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.util.email.GoogleMail;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.jms.Queue;
 
 /**
@@ -38,17 +42,20 @@ import javax.jms.Queue;
  */
 public class CoreTransactionUtil {
 
-    public static void subTransactionFailed(Transaction transaction, DirexTransactionResponse response, Queue queue, String CorrelationId) throws Exception {
+    public static void subTransactionFailed(Transaction transaction, DirexTransactionResponse response, Queue queue, String correlationId) throws Exception {
         if (queue != null) {
             response.setTransaction(null);
-            JMSManager.get().send(response, queue, CorrelationId);
+            System.out.println("CoreTransactionUtil :: subTransactionFailed  send(" + queue.getQueueName() + ", " + correlationId);
+            JMSManager.get().send(response, queue, correlationId);
+        }else{
+            System.out.println("CoreTransactionUtil :: subTransactionFailed  queue = null." );
         }
 
         String transactionType = response.getTransactionType() != null ? response.getTransactionType().toString() : "Unknown";
 
         LogUtil.logAndStore("CoreBL", "SubTransactionFailed  -> " + transactionType + "   " + response.getResultMessage());
 
-        if (response.getTransactionType() != null && response.getTransactionType() != TransactionType.TRANSACTION_TYPE) { // si entra aki es pk alguna sub_transaccion especifica fallo.
+        if (response.getTransactionType() != null && response.getTransactionType() != TransactionType.TRANSACTION_TYPE && !transaction.containSubTransaction(response.getTransactionType())) { // si entra aki es pk alguna sub_transaccion especifica fallo.
             SubTransaction subTransaction = new SubTransaction();
             subTransaction.setType(response.getTransactionType().getCode());
             subTransaction.setResultCode(response.getResultCode().getCode());
@@ -68,7 +75,17 @@ public class CoreTransactionUtil {
 
     }
 
+    //For the case there is not Response
+    public static void subTransactionFailed(Transaction transaction, Queue queue, String correlationId, TransactionType transactionType, String excepionMessage) throws Exception {
+        DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.FAILED, excepionMessage);
+
+        response.setTransactionType(transactionType);
+
+        subTransactionFailed(transaction, response, queue, correlationId);
+    }
+
     public static void persistTransaction(Transaction transaction) throws Exception {
+
         Boolean send2LoadsEmail = false;
         String maskedCardNumber = "";
         TerminalManager terminalManager = TerminalManager.get();
@@ -87,7 +104,7 @@ public class CoreTransactionUtil {
 
             Client client = transaction.getClient();
             if (transaction.getClient() != null) {
-                if (transaction.getResultCode() == ResultCode.SUCCESS.getCode()
+                if (transaction.getResultCode() == ResultCode.SUCCESS.getCode() && transaction.getOperation() != null
                         && (transaction.getOperation().equals("01") || transaction.getOperation().equals("02"))) {
 
                     CreditCard card = transaction.getData_sc1();
@@ -97,7 +114,6 @@ public class CoreTransactionUtil {
                         successfulLoads = 0;
                     }
 
-                    System.out.println("previous successfulLoads = " + successfulLoads);
                     client.setSuccessfulLoads(successfulLoads + 1);
 
                     if (client.getSuccessfulLoads() == 2) {
@@ -106,11 +122,11 @@ public class CoreTransactionUtil {
                     }
 
                     transaction.setData_sc1(card);
-                } 
-                
+                }
+
                 clientManager.saveOrUpdate(client);
             }
-            
+
             transactionManager.saveOrUpdate(transaction);
 
             System.out.println("**************  TRANSACTION SAVED SUCCESSFULY **************");
@@ -118,12 +134,12 @@ public class CoreTransactionUtil {
             if (send2LoadsEmail) {
                 System.out.println("--------------  SENDING 2 SUCCESSFULL LOADS EMAIL TO TECNICARD --------------");
                 Email email = EmailManager.get().getByName(EmailName.TWO_SUCCESSFUL_LOADS_TO_TECNICARD);
- 
+
                 Map<String, String> values = new HashMap<>();
                 values.put("user_name", client.getFirstName());
-                values.put("user_lastname", client.getLastName()); 
+                values.put("user_lastname", client.getLastName());
                 values.put("masked_card", maskedCardNumber);
- 
+
                 email.setValues(values);
 
                 GoogleMail.get().sendEmail(email);
@@ -140,23 +156,27 @@ public class CoreTransactionUtil {
 
     public static void printTransaction(Transaction transaction) {
 
-        LogUtil.logAndStore("");
+        System.out.println("");
 
-        LogUtil.logAndStore("--****************  SAVING TRANSACTION *****************--");
-        LogUtil.logAndStore("type :: " + TransactionType.get(transaction.getTransactionType()));
-        LogUtil.logAndStore("requestId :: " + transaction.getRequestId());
-        LogUtil.logAndStore("date :: " + transaction.getDateTime());
-        LogUtil.logAndStore("operation :: " + transaction.getOperation());
-        LogUtil.logAndStore("ResultCode :: " + transaction.getResultCode());
-        LogUtil.logAndStore("ResultMessage :: " + transaction.getResultMessage());
+        System.out.println("--****************  SAVING TRANSACTION *****************--");
+        System.out.println("type :: " + TransactionType.get(transaction.getTransactionType()));
+        System.out.println("requestId :: " + transaction.getRequestId());
+        System.out.println("date :: " + transaction.getDateTime());
+        System.out.println("operation :: " + transaction.getOperation());
+        System.out.println("ResultCode :: " + transaction.getResultCode());
+        System.out.println("ResultMessage :: " + transaction.getResultMessage());
 
-        LogUtil.logAndStore("");
-        for (SubTransaction subTransaction : transaction.getSub_Transaction()) {
-            LogUtil.logAndStore("________________  " + subTransaction.getOrder() + " :: " + TransactionType.get(subTransaction.getType()) + " __________________");
-            LogUtil.logAndStore("                ResultCode :: " + subTransaction.getResultCode());
-            LogUtil.logAndStore("                ResultMessage :: " + subTransaction.getResultMessage());
-            LogUtil.logAndStore("                Errorcode :: " + subTransaction.getErrorCode());
-            LogUtil.logAndStore("");
+        System.out.println("");
+        
+        List<SubTransaction> subTransactions =  new ArrayList(transaction.getSub_Transaction()); 
+        Collections.sort( subTransactions); 
+        
+        for (SubTransaction subTransaction : subTransactions) {
+            System.out.println("________________  " + subTransaction.getOrder() + " :: " + TransactionType.get(subTransaction.getType()) + " __________________");
+            System.out.println("                ResultCode :: " + subTransaction.getResultCode());
+            System.out.println("                ResultMessage :: " + subTransaction.getResultMessage());
+            System.out.println("                Errorcode :: " + subTransaction.getErrorCode());
+            System.out.println("");
         }
     }
 
@@ -217,4 +237,14 @@ public class CoreTransactionUtil {
 //            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] " + key + " -> " + map.get(key), null);
 //        }
 //    }
+    public static void addSuccessfulSubTransaction(Transaction transaction, TransactionType transactionType) {
+        SubTransaction subTransaction = new SubTransaction();
+        subTransaction.setType(transactionType.getCode());
+        subTransaction.setResultCode(ResultCode.SUCCESS.getCode());
+        subTransaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
+        transaction.addSubTransaction(subTransaction);
+    }
+
 }
+
+ 

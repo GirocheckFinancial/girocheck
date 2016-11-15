@@ -36,13 +36,15 @@ public enum NomHost {
     /**
      * HOST - FUZE
      */
-    FUZE(4);
+    FUZE(4),
+    
+    CHOICE(5);
 
     private NomHost(int id) {
         this.id = id;
     }
     private int id;
-
+ 
     /**
      * Get id
      *
@@ -51,12 +53,16 @@ public enum NomHost {
     public int getId() {
         return id;
     }
+    
+    
 
     /**
      * getViewValue
      *
      * @return the value
      */
+    
+    //TODO this is not needed  enum.toString gives this result
     public String getViewValue() {
         switch (this) {
             case ISTREAM:
@@ -67,6 +73,8 @@ public enum NomHost {
                 return "ORDER_EXPRESS";
             case FUZE:
                 return "FUZE";
+            case CHOICE:
+                return "CHOICE";
             default:
                 return "";
         }

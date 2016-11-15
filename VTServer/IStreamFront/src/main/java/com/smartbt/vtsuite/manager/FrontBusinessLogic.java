@@ -75,6 +75,7 @@ public class FrontBusinessLogic {
                     Serializable s = tmsg.getObject();
                     direxTransactionResponse = (DirexTransactionResponse) s;
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront BusinessLogic] transaction approved = " + direxTransactionResponse.wasApproved(),null);
+                    System.out.println("[IStreamFront BusinessLogic] after being approved");
                 } else {
                     direxTransactionResponse = DirexTransactionResponse.forException( ResultCode.RESPONSE_TIME_EXCEEDED, ResultMessage.RESPONSE_TIME_EXCEEDED );
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront BusinessLogic] Front recived message null from Core.",null);
@@ -85,6 +86,7 @@ public class FrontBusinessLogic {
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront BusinessLogic] Error.",null);
             throw new Exception( e.getMessage(), e.getCause() );
         }
+         System.out.println("[IStreamFront BusinessLogic] before return");
         return direxTransactionResponse;
     }
 

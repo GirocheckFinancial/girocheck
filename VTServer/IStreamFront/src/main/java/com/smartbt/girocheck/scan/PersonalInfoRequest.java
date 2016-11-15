@@ -166,6 +166,7 @@ public class PersonalInfoRequest implements IMap {
             map.put(ParameterName.IDCOUNTRY, getIdCountry());
             map.put(ParameterName.FIRST_NAME, getFirstName());
             map.put(ParameterName.BORNDATE, getBornDate());
+            map.put(ParameterName.BORNDATE_AS_DATE, getBornDate());
 
             errors += validateRequiredFields(map);
 

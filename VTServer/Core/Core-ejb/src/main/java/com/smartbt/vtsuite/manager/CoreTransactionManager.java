@@ -42,8 +42,7 @@ import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.DirexException;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat; 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +53,8 @@ import java.util.Map;
  */
 public class CoreTransactionManager {
 
+    private boolean useChoice = false;
+
     private static CoreAbstractTransactionBusinessLogic businessLogic;
     public static List SINGLE_TRANSACTION_LIST;
     public static List COMPLEX_TRANSACTION_LIST;
@@ -61,9 +62,9 @@ public class CoreTransactionManager {
     public static List CARD_TO_BANK_BL_LIST;
     private Host cardHost;
     private static HostManager hostManager = new HostManager();
-    private   ApplicationParameterManager applicationParameterManager = new ApplicationParameterManager();
+    private ApplicationParameterManager applicationParameterManager = new ApplicationParameterManager();
     private Map<EnumApplicationParameter, Double> amountAplicationParameters;
-    
+
     //TODO move this to System Properties
     public static final String ID_SCAN_AUTH_KEY = "48fa49a3-8ca4-4fc5-9a60-93271739969d";
 
@@ -120,21 +121,25 @@ public class CoreTransactionManager {
                     case NEW_CARD_LOAD:
 //                        direxTransactionRequest.getTransactionData().put(ParameterName.CARDLOADTYPE, 1);
                         if (transaction.getOperation().contains("02")) {
-                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new CoreComplexCashTransactionBusinessLogic(logger);", null);
-                            businessLogic = new CoreComplexCashTransactionBusinessLogic();
+
+                            if (useChoice) {
+                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new CashBusinessLogic", null);
+                                businessLogic = new CashBusinessLogic();
+                            } else {
+                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new CoreComplexCashTransactionBusinessLogic", null);
+                                businessLogic = new CoreComplexCashTransactionBusinessLogic();
+                            }
+
                         } else {
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);", null);
-                            businessLogic = new NewCoreComplexTransactionBusinessLogic();
+                            if (useChoice) {
+                                businessLogic = new CheckBusinessLogic();
+                            } else {
+                                businessLogic = new NewCoreComplexTransactionBusinessLogic();
+                            }
                         }
                         break;
-//                    case NEW_CARD_LOAD:
-//                        direxTransactionRequest.getTransactionData().put(ParameterName.CARDLOADTYPE, 0);
-//                        if(transaction.getOperation().contains( "02" )){
-//                            businessLogic = new CoreComplexCashTransactionBusinessLogic(logger);
-//                        }else{
-//                            businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);
-//                        }
-//                        break;
+
                     case ISTREAM_CHECK_AUTH_LOCATION_CONFIG:
                         businessLogic = new CoreLocalTransactionBusinessLogic();
                         break;
@@ -204,18 +209,18 @@ public class CoreTransactionManager {
             if (transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {
                 System.out.println("[CoreTransactionManager] transactionType == TransactionType.CARD_RELOAD_WITH_DATA");
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
-                 client = creditCardManager.getClient(cardNumberCR);
+                client = creditCardManager.getClient(cardNumberCR);
 
                 if (client == null || client.getFirstName().equals("BIQorCTB")) {
-                  System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
+                    System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
                     transaction.setResultCode(3);
                     return transaction;
-                }else{
-                  System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card exist");  
+                } else {
+                    System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card exist");
                 }
- 
+
                 System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> client.ssn = " + client.getSsn());
-                
+
                 Address address = new Address();
                 State state = new State();
                 try {
@@ -283,16 +288,16 @@ public class CoreTransactionManager {
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.AMMOUNT)) {
                 double ammount = (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AMMOUNT);
-                 
+
                 transaction.setAmmount(ammount);
-                
+
                 String operation = (String) direxTransactionRequest.getTransactionData().get(ParameterName.OPERATION);
-               
-                if(amountAplicationParameters == null){
+
+                if (amountAplicationParameters == null) {
                     amountAplicationParameters = applicationParameterManager.getAmountAplicationParameters();
                 }
-                
-                validateAmount( ammount,  operation,  transaction, amountAplicationParameters);
+
+                validateAmount(ammount, operation, transaction, amountAplicationParameters);
             }
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.SSN)) {
@@ -353,7 +358,6 @@ public class CoreTransactionManager {
                 String cell_phone = (String) direxTransactionRequest.getTransactionData().get(ParameterName.PHONE);
                 direxTransactionRequest.getTransactionData().put(ParameterName.CELL_PHONE, cell_phone.substring(3));
 
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] CELL AREA CODE: " + cell_phone.substring(0, 3) + " CELL NUMBER " + cell_phone.substring(3), null);
             }
             if (!direxTransactionRequest.getTransactionData().containsKey(ParameterName.ACCOUNT_NUMBER)) {
                 String account = terminalManager.getAccountFromMerchantByTerminalSerialNumber(terminal.getSerialNumber());
@@ -548,28 +552,23 @@ public class CoreTransactionManager {
         return host;
 
     }
-    
-    public void validateAmount(Double amount, String operation, Transaction transaction,Map<EnumApplicationParameter, Double> amountParameters) throws AmountException{
-       Double minCheck = amountParameters.get(EnumApplicationParameter.AMOUNT_MIN_CHECK);
-       Double maxCheck = amountParameters.get(EnumApplicationParameter.AMOUNT_MAX_CHECK);
-       Double minCash = amountParameters.get(EnumApplicationParameter.AMOUNT_MIN_CASH);
-       Double maxCash= amountParameters.get(EnumApplicationParameter.AMOUNT_MAX_CASH);
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MIN_CHECK = " + minCheck,null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MAX_CHECK = " + maxCheck,null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MIN_CASH = " + minCash,null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] AMOUNT_MAX_CASH = " + maxCash,null);
-       
+
+    public void validateAmount(Double amount, String operation, Transaction transaction, Map<EnumApplicationParameter, Double> amountParameters) throws AmountException {
+        Double minCheck = amountParameters.get(EnumApplicationParameter.AMOUNT_MIN_CHECK);
+        Double maxCheck = amountParameters.get(EnumApplicationParameter.AMOUNT_MAX_CHECK);
+        Double minCash = amountParameters.get(EnumApplicationParameter.AMOUNT_MIN_CASH);
+        Double maxCash = amountParameters.get(EnumApplicationParameter.AMOUNT_MAX_CASH);
+
         boolean isValid;
         if (operation != null && operation.contains("01")) {// check
             isValid = amount >= minCheck && amount <= maxCheck;
-        }else{
+        } else {
             isValid = amount >= minCash && amount <= maxCash;
         }
-        if(!isValid){
-             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Exception => INVALID AMOUNT",null);
-            
-            throw new AmountException("Amount " + amount + " is out of the allowed range.",transaction);
+        if (!isValid) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Exception => INVALID AMOUNT", null);
+
+            throw new AmountException("Amount " + amount + " is out of the allowed range.", transaction);
         }
     }
 
@@ -593,8 +592,7 @@ class TransactionException extends DirexException {
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
     }
-    
-    
+
 }
 
 class LoggingValidationException extends TransactionException {

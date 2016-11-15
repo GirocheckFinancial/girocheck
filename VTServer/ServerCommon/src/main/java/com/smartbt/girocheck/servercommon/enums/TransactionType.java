@@ -48,7 +48,11 @@ public enum TransactionType {
     ORDER_EXPRESS_REPORTAPAGO( NomHost.ORDER_EXPRESS, 33 ),
     ORDER_EXPRESS_LOGS( NomHost.ORDER_EXPRESS, 34 ),
     
-    ACTIVITY_REPORT(null, 35 ); //no transactional
+    ACTIVITY_REPORT(null, 35 ), //no transactional
+    
+    CHOICE_INSERT_TRANSACTION(NomHost.CHOICE, 36 ),
+    CHOICE_CANCELATION_REQUEST(NomHost.CHOICE, 37 ),  
+    CHOICE_NOTIFY_PAYMENT(NomHost.CHOICE, 38 );  
 
     private NomHost host;
 
@@ -143,6 +147,12 @@ public enum TransactionType {
                 return TransactionType.ORDER_EXPRESS_LOGS;
             case 35: 
                 return TransactionType.CARD_RELOAD_WITH_DATA;
+            case 36: 
+                return TransactionType.CHOICE_INSERT_TRANSACTION;
+            case 37: 
+                return TransactionType.CHOICE_CANCELATION_REQUEST;
+            case 38: 
+                return TransactionType.CHOICE_NOTIFY_PAYMENT;
             default:
                   return TransactionType.TRANSACTION_TYPE;
         }

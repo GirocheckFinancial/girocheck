@@ -17,25 +17,26 @@ package com.smartbt.girocheck.servercommon.messageFormat;
 
 import com.smartbt.girocheck.servercommon.diagnostics.Diagnosable;
 import com.smartbt.girocheck.servercommon.diagnostics.DiagnosticEvent;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
  * Direx Transaction Request Class
  */
-public class DirexTransactionRequest  extends DirexTransaction implements Diagnosable {
+public class DirexTransactionRequest extends DirexTransaction implements Diagnosable, Cloneable {
 
     private static final long serialVersionUID = 1L;
-    
-    private String correlation;
-   
-    private String requestId;
-    
-    
-    
-   
 
-    
-    
+    private String correlation;
+
+    private String requestId;
+
+    @Override
+    public DirexTransactionRequest clone() throws CloneNotSupportedException { 
+        DirexTransactionRequest clon =  (DirexTransactionRequest) super.clone();
+        clon.getTransaction().setSub_Transaction(new HashSet());
+        return clon;
+    }
 
     public void setCorrelation(String correlation) {
         this.correlation = correlation;
@@ -45,16 +46,13 @@ public class DirexTransactionRequest  extends DirexTransaction implements Diagno
         return correlation;
     }
 
-    public void setRequestId( String requestId ) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 
     public String getRequestId() {
         return requestId;
     }
-    
-    
-
 
     public void enableDiagnostics() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -91,6 +89,5 @@ public class DirexTransactionRequest  extends DirexTransaction implements Diagno
     public Long getElapsedTime(DiagnosticEvent evtT1, DiagnosticEvent evtT2) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
 }

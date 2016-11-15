@@ -6,6 +6,7 @@ import static com.smartbt.girocheck.servercommon.utils.IDScanner.formatDate;
 import static com.smartbt.girocheck.servercommon.utils.IDScanner.getString;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -321,30 +322,18 @@ public class DriverLicense {
      * @return Serialized string in JSON
      */
     public Map toMap() {
-
-//        HashMap jsonHash = new HashMap();
-//        jsonHash.put("first_name", getFirstName());
-//        jsonHash.put("last_name", getLastName());
-//        jsonHash.put("address", getAddress());
-//        jsonHash.put("city", getCity());
-//        jsonHash.put("state", getState());
-//        jsonHash.put("zipcode", getZipCode());
-//        jsonHash.put("driver_license_number", getDriverLicenseNumber());
-//        jsonHash.put("eye_color", getEyeColor());
-//        jsonHash.put("height", getHeight());
-//        jsonHash.put("sex", getSex());
-//
-//        jsonHash.put("dob", formatDate(getDOB()));
-//        jsonHash.put("license_issued_date", formatDate(getLicenseIssuedDate()));
-//        jsonHash.put("license_expiration_date",
-//                formatDate(getLicenseExpirationDate()));
+ 
         Map map = new HashMap<ParameterName, String>();
         map.put(ParameterName.ID, getDriverLicenseNumber());
         map.put(ParameterName.ADDRESS, getAddress());
         map.put(ParameterName.GENDER, getSex());
         map.put(ParameterName.CITY, getCity());
         map.put(ParameterName.STATE, getState());
-        map.put(ParameterName.EXPIRATION_DATE, formatDate(getLicenseExpirationDate()));
+        
+        Date expDate = getLicenseExpirationDate().getTime();
+        System.out.println("dl TO MAP expDate = " + expDate);
+        map.put(ParameterName.EXPIRATION_DATE, formatDate(expDate));
+        map.put(ParameterName.EXPIRATION_DATE_AS_DATE, expDate);
         map.put(ParameterName.LAST_NAME, getLastName());
         map.put(ParameterName.ZIPCODE, getZipCode());
         map.put(ParameterName.FIRST_NAME, getFirstName());
@@ -352,7 +341,7 @@ public class DriverLicense {
         map.put(ParameterName.IDSTATE, getState());
         map.put(ParameterName.COUNTRY, "US");
         map.put(ParameterName.IDCOUNTRY, "US");
-        map.put(ParameterName.BORNDATE,  formatDate(getDOB()));
+        map.put(ParameterName.BORNDATE,  formatDate(getDOB().getTime()));
         return map;
     }
 
@@ -380,10 +369,10 @@ public class DriverLicense {
         return calendar;
     }
 
-    protected String formatDate(Calendar date) {
+    protected String formatDate(Date date) {
         String result = "";
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-        result = sdf.format(date.getTime());
+        result = sdf.format(date);
         return result;
     }
 }

@@ -13,7 +13,7 @@ package com.smartbt.girocheck.servercommon.model;
 
 import java.io.Serializable;
 
-public class SubTransaction implements Serializable {
+public class SubTransaction implements Serializable, Comparable<SubTransaction> {
 
     public SubTransaction() {
     }
@@ -121,6 +121,10 @@ public class SubTransaction implements Serializable {
 
     public String toString() {
         return String.valueOf( getId() );
+    }
+
+    public int compareTo(SubTransaction o) {
+        return order.compareTo(o.getOrder());
     }
 
 }

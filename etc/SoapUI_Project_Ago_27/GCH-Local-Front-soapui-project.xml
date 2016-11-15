@@ -773,7 +773,7 @@
             <!--Optional:-->
             <achForm></achForm>
             <!--Optional:-->
-            <existAch>F</existAch>
+            <existAch>true</existAch>
             <!--Optional:-->
             <amount>18</amount>
          </arg0>
@@ -830,7 +830,7 @@
             <!--Optional:-->
             <ssn>900700001</ssn>
             <!--Optional:-->
-            <operation>01</operation>
+            <operation>02</operation>
             <!--Optional:-->
             <track1></track1>
             <!--Optional:-->

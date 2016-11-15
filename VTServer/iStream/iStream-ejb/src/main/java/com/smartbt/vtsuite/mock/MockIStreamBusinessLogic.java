@@ -140,8 +140,7 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
         return response;
     }
 
-     public CheckAuthRes checkAuth(Map transactionData) throws Exception{
-         
+     public CheckAuthRes checkAuth(Map transactionData) throws Exception{ 
          CheckAuthRequest request = new CheckAuthRequest();
          request.build(transactionData);
          request.printAsXML();

@@ -68,14 +68,14 @@ public class UserDAO extends BaseDAO<User> {
         aux.setUsername(user.getUsername());
         aux.setFirstName(user.getFirstName());
         aux.setLastName(user.getLastName());
-       
+
         aux.setEmail(user.getEmail());
-        
-        if(!aux.getActive() && user.getActive()){
-           aux.setFailedAttempts(0);
+
+        if (!aux.getActive() && user.getActive()) {
+            aux.setFailedAttempts(0);
         }
-        
-         aux.setActive(user.getActive());
+
+        aux.setActive(user.getActive());
 
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             aux.setPassword(user.getPassword());
@@ -129,13 +129,10 @@ public class UserDAO extends BaseDAO<User> {
 
         criteria.setProjection(projectionList);
         criteria.setResultTransformer(new TransformerComplexBeans(UserDisplay.class));
-       
+
         criteria.addOrder(Order.asc("username"));
 
-        List<UserDisplay> UserList = criteria.list();
-
-        return UserList;
-//        return criteria.list();
+        return criteria.list();
     }
 
     public User findByEmail(String email) {
@@ -143,14 +140,14 @@ public class UserDAO extends BaseDAO<User> {
         return (User) cri.uniqueResult();
     }
 
-    public void deleteUser(int idUser) { 
+    public void deleteUser(int idUser) {
         super.delete(findById(idUser));
     }
 
     public UserDisplay addUser(String userName, String password, String firstName, String lastName, Boolean active, String email, int roleid) throws ValidationException, NoSuchAlgorithmException {
         Role role = RoleDAO.get().findById(roleid);
         String encyptedPassword = PasswordUtil.encryptPassword(password);
-        
+
         User user = new User();
         user.setUsername(userName);
         user.setPassword(encyptedPassword);
@@ -161,7 +158,7 @@ public class UserDAO extends BaseDAO<User> {
         user.setEmail(email);
         user.setRole(role);
         HibernateUtil.getSession().saveOrUpdate(user);
-        
+
         UserDisplay display = new UserDisplay();
         display.setPassword(password);
         return display;
@@ -172,27 +169,27 @@ public class UserDAO extends BaseDAO<User> {
             String encryptedPassword = PasswordUtil.encryptPassword(password);
 
             User us = findById(userId);
-            
+
             String last5Passwords = us.getLast5passwords();
-            
-            if(last5Passwords == null || last5Passwords.isEmpty()){
+
+            if (last5Passwords == null || last5Passwords.isEmpty()) {
                 last5Passwords = encryptedPassword + " ";
-            }else{
+            } else {
                 String[] passwordsArray = last5Passwords.split(" ");
-                
+
                 for (String passw : passwordsArray) {
-                    if(encryptedPassword.equals(passw)){
+                    if (encryptedPassword.equals(passw)) {
                         throw new ValidationException(VTSuiteMessages.LAST_5_PASSW);
                     }
                 }
-                
-                if(passwordsArray.length == 5){
-                   last5Passwords = last5Passwords.substring( last5Passwords.indexOf(" "));
+
+                if (passwordsArray.length == 5) {
+                    last5Passwords = last5Passwords.substring(last5Passwords.indexOf(" "));
                 }
-                
+
                 last5Passwords += (encryptedPassword + " ");
             }
-            
+
             us.setPassword(encryptedPassword);
             us.setLast5passwords(last5Passwords);
             HibernateUtil.getSession().saveOrUpdate(us);

@@ -103,6 +103,7 @@ public enum ParameterName {
     ENTITY_NAME,
     ESTIMATED_POSTING_TIME,
     EXPIRATION_DATE,
+    EXPIRATION_DATE_AS_DATE,
     EXTRA2,
     EXTRA,
     EXISTACH,

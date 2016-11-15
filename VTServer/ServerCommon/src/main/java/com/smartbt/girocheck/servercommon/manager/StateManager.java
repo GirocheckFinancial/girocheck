@@ -14,18 +14,12 @@
 package com.smartbt.girocheck.servercommon.manager;
 
 import com.smartbt.girocheck.servercommon.dao.StateDAO;
-import com.smartbt.girocheck.servercommon.display.CountryDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
-import com.smartbt.girocheck.servercommon.model.Country;
 import com.smartbt.girocheck.servercommon.model.State;
-import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.common.VTSuiteMessages;
 import com.smartbt.vtsuite.servercommon.display.common.model.StateDisplay;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.util.List;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.transform.Transformers;
 
 /**
  *
@@ -33,6 +27,15 @@ import org.hibernate.transform.Transformers;
  */
 public class StateManager {
     private StateDAO dao = StateDAO.get();
+    
+    private static StateManager INSTANCE;
+    
+    public static synchronized StateManager get(){
+        if(INSTANCE == null) {
+            INSTANCE = new StateManager();
+        }
+        return INSTANCE;
+    }
     
      public State getByAbbreviation(String abbreviation){
         return dao.getByAbbreviation( abbreviation );

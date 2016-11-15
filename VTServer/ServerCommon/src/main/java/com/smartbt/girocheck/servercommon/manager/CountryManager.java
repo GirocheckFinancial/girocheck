@@ -16,21 +16,23 @@ import com.smartbt.girocheck.servercommon.dao.CountryDAO;
 import com.smartbt.girocheck.servercommon.display.CountryDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.model.Country;
-import com.smartbt.girocheck.servercommon.model.State;
-import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.common.VTSuiteMessages;
-import com.smartbt.vtsuite.servercommon.display.common.model.StateDisplay;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.util.List;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Projections;
-import org.hibernate.transform.Transformers;
 
 /**
  *
  * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class CountryManager {
+    private static CountryManager INSTANCE;
+    
+    public static synchronized CountryManager get(){
+        if(INSTANCE == null) {
+            INSTANCE = new CountryManager();
+        }
+        return INSTANCE;
+    }
 
     CountryDAO dao = CountryDAO.get();
 

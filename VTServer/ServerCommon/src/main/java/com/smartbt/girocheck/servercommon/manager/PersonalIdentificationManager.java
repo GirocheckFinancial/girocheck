@@ -10,20 +10,28 @@
  *
  *
  */
-
 package com.smartbt.girocheck.servercommon.manager;
 
 import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 
 /**
  *
- * @author Roberto Rodriguez   :: <roberto.rodriguez@smartbt.com>
+ * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class PersonalIdentificationManager {
-   private PersonalIdentificationDAO dao = PersonalIdentificationDAO.get();
-   
-   
-   public void removeByClientAndType(int idClient, int idType ){
-        dao.removeByClientAndType( idClient, idType);
-   }
+
+    private PersonalIdentificationDAO dao = PersonalIdentificationDAO.get();
+
+    protected static PersonalIdentificationManager _this;
+
+    public static PersonalIdentificationManager get() {
+        if (_this == null) {
+            _this = new PersonalIdentificationManager();
+        }
+        return _this;
+    }
+
+    public void removeByClientAndType(int idClient, int idType) {
+        dao.removeByClientAndType(idClient, idType);
+    }
 }

@@ -54,12 +54,12 @@ public class Scan {
     }
 
     public ActivityReportRes activityReport( final ActivityReportRequest arg0 ) throws Exception { 
-        System.out.println("activityReport...");
+        System.out.println("activityReport... >>>");
         
         Map map = FrontManager.activityReport(arg0);
         
-        System.out.println("map.size() = " + map.keySet().size());
-        System.out.println(Arrays.toString(map.entrySet().toArray()));
+      //  System.out.println("map.size() = " + map.keySet().size());
+     //   System.out.println(Arrays.toString(map.entrySet().toArray()));
         return new ActivityReportRes().build(map );
     }
 

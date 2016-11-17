@@ -66,7 +66,7 @@ public class ActivityReportRequest implements IMap {
         map.put(ParameterName.TERMINAL_ID, terminalId); 
         map.put(ParameterName.START_DATE, startDate);
         map.put(ParameterName.END_DATE, endDate);
-        
+         
         System.out.println("toMap()");
         System.out.println("terminalId = " + terminalId);
         System.out.println("startDate = " + startDate);
@@ -105,6 +105,7 @@ public class ActivityReportRequest implements IMap {
      * @param startDate the startDate to set Expected format: yyyy-MM-dd
      */
     public void setStartDate(String startDateStr) throws ParseException {
+        System.out.println("----Receiving from techtrex :: startDateStr = " + startDateStr );
             this.startDate = getDateFromString(startDateStr);
     }
 
@@ -119,7 +120,12 @@ public class ActivityReportRequest implements IMap {
      * @param endDate the endDate to set Expected format: yyyy-MM-dd
      */
     public void setEndDate(String endDateStr) throws ParseException { 
-        this.endDate= getDateFromString(endDateStr);
+        System.out.println("----Receiving from techtrex :: endDateStr = " + endDateStr );
+        if(endDateStr == null || endDateStr.isEmpty()){
+           this.endDate = new Date(); 
+        }else{
+           this.endDate= getDateFromString(endDateStr); 
+        } 
     }
 
 }

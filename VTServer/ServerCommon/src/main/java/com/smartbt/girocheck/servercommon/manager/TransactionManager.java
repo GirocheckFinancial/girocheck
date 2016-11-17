@@ -10,7 +10,6 @@
  *
  *
  */
-
 package com.smartbt.girocheck.servercommon.manager;
 
 import com.smartbt.girocheck.servercommon.dao.TransactionDAO;
@@ -28,65 +27,76 @@ import java.util.Map;
 
 /**
  *
- * @author Roberto Rodriguez   :: <roberto.rodriguez@smartbt.com>
+ * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class TransactionManager {
+
     private TransactionDAO transactionDAO = TransactionDAO.get();
-   
+
     protected static TransactionManager _this;
-    
+
     public static TransactionManager get() {
         if (_this == null) {
             _this = new TransactionManager();
         }
         return _this;
     }
-    
-     public Map activityReport(Map input){
-        Date dateStart = (Date)input.get(ParameterName.START_DATE);
+
+    public Map activityReport(Map input) {
+        Date dateStart = new Date();
         Date dateEnd = new Date();
-        if(input.containsKey(ParameterName.END_DATE)){
-            dateEnd = (Date)input.get(ParameterName.END_DATE);
-            dateEnd.setHours(23);
-            dateEnd.setMinutes(59);
-            dateEnd.setSeconds(59);
+
+        if (input.containsKey(ParameterName.START_DATE) && input.get(ParameterName.START_DATE) != null) {
+            dateStart = (Date) input.get(ParameterName.START_DATE);
         }
-        
-        if((dateEnd.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24) > 30){
+
+        if (input.containsKey(ParameterName.END_DATE) && input.get(ParameterName.END_DATE) != null) {
+            dateEnd = (Date) input.get(ParameterName.END_DATE);
+        }
+
+        dateEnd.setHours(23);
+        dateEnd.setMinutes(59);
+        dateEnd.setSeconds(59);
+
+        if ((dateEnd.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24) > 30) {
             System.out.println("DateEnd < dateStart > 30 days");
             Calendar c = Calendar.getInstance();
             c.setTime(dateEnd);
-            c.add(Calendar.DAY_OF_MONTH, -1);
+            c.add(Calendar.MONTH, -1);
             dateStart = c.getTime();
             System.out.println("Setting dateStart to " + dateStart);
         }
-        
+
         dateStart.setHours(0);
         dateStart.setMinutes(0);
         dateStart.setSeconds(0);
-        
+
+        System.out.println("TransactionManager -> activityReport");
+        System.out.println("startDate = " + dateStart);
+        System.out.println("endDate = " + dateEnd);
+
         input.put(ParameterName.START_DATE, dateStart);
         input.put(ParameterName.END_DATE, dateEnd);
-        
+
         return transactionDAO.activityReport(input);
     }
-    
-    public Transaction findById(int id){
-        return transactionDAO.findById( id );
-    }
-    
-    public boolean isCanceled(String requestId, boolean cancelable){
-        return transactionDAO.isCanceled( requestId, cancelable);
-    }
-    
-     public boolean cancelTransaction(String requestId){
-         return transactionDAO.cancelTransaction( requestId );
-     }
 
-    public void saveOrUpdate( Transaction transaction ) {
-        transactionDAO.saveOrUpdate( transaction );
+    public Transaction findById(int id) {
+        return transactionDAO.findById(id);
     }
-    
+
+    public boolean isCanceled(String requestId, boolean cancelable) {
+        return transactionDAO.isCanceled(requestId, cancelable);
+    }
+
+    public boolean cancelTransaction(String requestId) {
+        return transactionDAO.cancelTransaction(requestId);
+    }
+
+    public void saveOrUpdate(Transaction transaction) {
+        transactionDAO.saveOrUpdate(transaction);
+    }
+
     public ResponseData getAddressImageFromClientByTerminalSerialNumber(String serialNumber, boolean rotate)
             throws SQLException {
 
@@ -110,20 +120,20 @@ public class TransactionManager {
         return response;
 
     }
-    
+
     public ResponseDataList searchTransactions(String searchFilter, Date startRangeDate, Date endRangeDate,
             int transactionType, String operation, int pageNumber, int rowsPerPage, boolean filterAmmount, int ammountType, int opType, String ammount, boolean pending) throws Exception {
         ResponseDataList response = new ResponseDataList();
 
-        response.setData(transactionDAO.searchTransactions(searchFilter, startRangeDate, endRangeDate, pageNumber * rowsPerPage, rowsPerPage, transactionType, operation,  filterAmmount,  ammountType,  opType,  ammount, pending));
+        response.setData(transactionDAO.searchTransactions(searchFilter, startRangeDate, endRangeDate, pageNumber * rowsPerPage, rowsPerPage, transactionType, operation, filterAmmount, ammountType, opType, ammount, pending));
 
-        int total = transactionDAO.searchTransactions(searchFilter, startRangeDate, endRangeDate,-1, -1, transactionType, operation,  filterAmmount,  ammountType,  opType,  ammount, pending).size();
+        int total = transactionDAO.searchTransactions(searchFilter, startRangeDate, endRangeDate, -1, -1, transactionType, operation, filterAmmount, ammountType, opType, ammount, pending).size();
         response.setTotalPages((int) Math.ceil((float) total / (float) rowsPerPage));
         response.setStatus(Constants.CODE_SUCCESS);
         response.setStatusMessage(VTSuiteMessages.SUCCESS);
         return response;
     }
-    
+
     public ResponseData getTransactionImage(int idTransaction) throws SQLException {
 
         ResponseData response = new ResponseData();

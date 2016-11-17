@@ -72,6 +72,10 @@ public class TransactionDAO extends BaseDAO<Transaction> {
             Double cashTotal = (Double) getActivityCriteriaCheckCash(terminalId, dateStart, dateEnd, "02", false).uniqueResult();
             Double cardTotal = (Double) getActivityCriteriaCard2Bank(terminalId, dateStart, dateEnd, false).uniqueResult();
 
+            if(checkTotal == null) checkTotal = 0D;
+            if(cashTotal == null) cashTotal = 0D;
+            if(cardTotal == null) cardTotal = 0D;
+            
             output.put(ParameterName.CHECK2CARD_TRANSACTIONS, checkTransactions);
             output.put(ParameterName.CASH2CARD_TRANSACTIONS, cashTransactions);
             output.put(ParameterName.CARD2MERCHANT_TRANSACTIONS, card2MerchantTransactions);

@@ -181,7 +181,7 @@ public class CoreTransactionManager {
 
         Transaction transaction = new Transaction();
 
-        if (cardHost.getHostName().equals(NomHost.FUZE.toString())) {
+        if (cardHost == null || cardHost.getHostName().equals(NomHost.FUZE.toString())) {
             transaction.setResultCode(900);
             return transaction;
         }

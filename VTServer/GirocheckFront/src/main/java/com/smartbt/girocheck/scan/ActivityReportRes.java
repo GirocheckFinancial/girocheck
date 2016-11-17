@@ -130,6 +130,7 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
     }
     
     private Double roundDouble(Double amount){
+        if(amount == null)return 0D;
         BigDecimal bd = new BigDecimal(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
         return bd.doubleValue();
     }

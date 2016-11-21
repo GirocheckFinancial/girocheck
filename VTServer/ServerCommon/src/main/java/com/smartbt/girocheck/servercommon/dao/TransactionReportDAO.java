@@ -73,7 +73,13 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
         
         ReportFilters filters = (ReportFilters)cri.uniqueResult();
         
-        long created = filters.getCreateAt().getTime()+180000;//3 min
+        Date createdAt = filters.getCreateAt();
+        
+        if(createdAt == null) {
+           createdAt = new Date();
+        }
+        
+        long created = createdAt.getTime() + 180000;//3 min
         long actualTime = new Date().getTime();
         
         System.out.println(" [TransactionReportDAO] ACTUAL TIME: "+ actualTime +" CREATED TIME: " + created);

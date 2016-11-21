@@ -229,7 +229,10 @@ public class BaseDatasource extends RestDataSource {
                    JSONArray errors = XMLTools.selectObjects(data, "/statusMessage");
                    String statusMessage = errors.get(0).isString().toString().replaceAll("\"", "");
                    debug("--BaseDataSource statusMessage = " + statusMessage);
-                   SC.warn("Invalid Password", statusMessage);
+                   
+                   String msg = "The password needs to be at least 8 characters long and contain Lower Case, Upper Case letters, Digits, and Special Characters.";
+                   
+                   SC.warn("Invalid Password", msg);
                 }
 
                 break;

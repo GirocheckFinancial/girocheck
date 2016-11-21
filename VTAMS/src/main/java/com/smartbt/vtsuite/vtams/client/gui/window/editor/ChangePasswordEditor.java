@@ -20,25 +20,52 @@ import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseEditorWindow;
 import com.smartbt.vtsuite.vtams.client.gui.component.BasePasswordItem;
+import com.smartbt.vtsuite.vtams.client.gui.component.BaseStaticTextItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.UserDS;
 import com.smartbt.vtsuite.vtcommon.validator.Constants;
 import com.smartbt.vtsuite.vtcommon.validator.RegExp;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.Record;
+import com.smartgwt.client.types.Alignment;
 
 /**
  * The Role Editor Window
  *
  * @author Alejo
  */
-public final class ChangePasswordEditor extends BaseEditorWindow {
-
+public final class ChangePasswordEditor extends BaseEditorWindow { 
     private BasePasswordItem passwordText;
     private BasePasswordItem checkpasswordText;
 
     public ChangePasswordEditor(EntityType entityType, Record recordEntity) {
         super(I18N.GET.WINDOW_CHANGE_PASSWORD_TITLE());
 
+       
+        BaseStaticTextItem text1 = new BaseStaticTextItem("text1");
+        text1.setShowTitle(false);
+        text1.setAlign(Alignment.LEFT);
+        text1.setTextAlign(Alignment.LEFT);
+         String msg1 = "Password needs to be at least 8 characters";
+        text1.setValue(msg1);
+        text1.setTextBoxStyle("header-text");
+       
+        BaseStaticTextItem text2 = new BaseStaticTextItem("text2");
+        text2.setShowTitle(false);
+        text2.setAlign(Alignment.LEFT);
+        text2.setTextAlign(Alignment.LEFT);
+         String msg2 = "long and contain Lower Case, Upper Case letters,";
+        text2.setValue(msg2);
+        text2.setTextBoxStyle("header-text");
+       
+        BaseStaticTextItem text3 = new BaseStaticTextItem("text3");
+        text3.setShowTitle(false);
+        text3.setAlign(Alignment.LEFT);
+        text3.setTextAlign(Alignment.LEFT);
+         String msg3 = "Digits, and Special Characters.";
+        text3.setValue(msg3);
+        text3.setTextBoxStyle("header-text");
+        
+        
         passwordText = new BasePasswordItem("password", true);
         checkpasswordText = new BasePasswordItem("RepeatPassword", true);
 
@@ -47,7 +74,7 @@ public final class ChangePasswordEditor extends BaseEditorWindow {
         
         
         dataForm.setDataSource(new UserDS(entityType));
-        dataForm.setFields(passwordText, checkpasswordText);
+        dataForm.setFields(text1,text2,text3, passwordText, checkpasswordText);
     }
     
     @Override

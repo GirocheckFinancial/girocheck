@@ -59,6 +59,8 @@ License Type: Evaluation
 		<property name="oEAgentNumber" column="oe_agent_number" type="string" length="255" not-null="false" lazy="false"/>
                 <property name="istreamUser" column="istream_user" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="istreamPassword" column="istream_password" type="string" length="255" not-null="false" lazy="false"/>
+		<property name="inventory" column="inventory" type="integer"  not-null="false" lazy="false"/>
+		<property name="threshold" column="threshold" type="integer"  not-null="false" lazy="false"/>
 		<set name="merchant_Parameter_Value" lazy="true" cascade="save-update,lock" inverse="true">
 			<key column="merchant" not-null="true"/>
 			<one-to-many class="com.smartbt.girocheck.servercommon.model.MerchantParameterValue"/>

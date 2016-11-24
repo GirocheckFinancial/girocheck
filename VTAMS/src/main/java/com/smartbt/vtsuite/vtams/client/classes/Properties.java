@@ -150,6 +150,7 @@ public class Properties {
      *
      * Parameters: searchFilter
      */
+    public static final String SEARCH_INVENTORY_WS = WS_URL + "searchInventory";
     public static final String SEARCH_TRANSACTIONS_WS = WS_URL + "searchTransactions";
     public static final String SEARCH_SUB_TRANSACTIONS_WS = WS_URL + "listSubTransactions";
     /**
@@ -391,6 +392,7 @@ public class Properties {
     public static final String SAVE_OR_UPDATE_MERCHANT = WS_URL + "saveOrUpdateMerchant";
     
     public static final String SAVE_OR_UPDATE_AGRUPATION_WS = WS_URL + "saveOrUpdateAgrupation";
+    public static final String SAVE_OR_UPDATE_INVENTORY_WS = WS_URL + "saveOrUpdateInventory";
     
     public static final String LIST_COUNTRY_WS = WS_URL + "listCountry";
     

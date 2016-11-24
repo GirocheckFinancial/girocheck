@@ -19,7 +19,9 @@ package com.smartbt.girocheck.servercommon.enums;
  */
 public enum EmailName {
 
-    TWO_SUCCESSFUL_LOADS_TO_TECNICARD("2_successful_loads_to_tecnicard");
+    TWO_SUCCESSFUL_LOADS_TO_TECNICARD("2_successful_loads_to_tecnicard"),
+    ALERT_INVENTORY_REACH_THRESHOLD("alert_inventory_reach_threshold"),
+    ALERT_INVENTORY_REACH_ZERO("alert_inventory_reach_zero");
     
     private EmailName(String name) {
         this.name = name;

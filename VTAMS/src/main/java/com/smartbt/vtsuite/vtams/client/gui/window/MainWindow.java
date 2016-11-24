@@ -25,6 +25,7 @@ import com.smartbt.vtsuite.vtams.client.gui.component.MenuButtonItem;
 import com.smartbt.vtsuite.vtams.client.gui.component.datasource.UserDS;
 import com.smartbt.vtsuite.vtams.client.gui.listener.EditorListener;
 import com.smartbt.vtsuite.vtams.client.gui.window.editor.ProfileEditor;
+import com.smartbt.vtsuite.vtams.client.gui.window.inventory.InventoryWindow;
 import com.smartbt.vtsuite.vtams.client.gui.window.transaction.TransactionWindow;
 import com.smartbt.vtsuite.vtams.client.utils.Utils;
 import static com.smartbt.vtsuite.vtams.client.utils.Utils.debug;
@@ -66,7 +67,7 @@ public class MainWindow extends BaseWindow {
         DynamicForm userForm = new DynamicForm();
         userForm.setWidth(160);
         userForm.setNumCols(3);
-        userForm.setColWidths(60,50,50);
+        userForm.setColWidths(60, 50, 50);
 //        userForm.setLayoutAlign(Alignment.CENTER);
         userForm.setLayoutAlign(Alignment.RIGHT);
 
@@ -93,32 +94,32 @@ public class MainWindow extends BaseWindow {
         profileLink.setWidth(50);
         profileLink.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
             public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-     
+
                 Criteria criteria = new Criteria();
                 Record record = new Record();
                 criteria.setAttribute("userId", Utils.getUserId());
 
                 UserDS userDS = new UserDS(EntityType.AMS);
                 userDS.setFetchDataURL(Properties.GET_USER_WS);
-               
+
                 userDS.fetchData(criteria, new DSCallback() {
                     public void execute(DSResponse response, Object rawData, DSRequest request) {
-                   
+
                         profileEditor = new ProfileEditor(EntityType.AMS, response.getData()[0]);
-                      
+
                         profileEditor.updateRecord(response.getData()[0]);
-                         
-                        profileEditor.addListener(new EditorListener() { 
-                            public void SaveActionExecuted() { 
+
+                        profileEditor.addListener(new EditorListener() {
+                            public void SaveActionExecuted() {
                                 SaveProfile();
                             }
- 
-                            public void CloseActionExecuted() { 
+
+                            public void CloseActionExecuted() {
                                 profileEditor.hide();
                             }
                         });
 
-                        profileEditor.show(); 
+                        profileEditor.show();
                     }
                 }, null);
 
@@ -184,6 +185,16 @@ public class MainWindow extends BaseWindow {
             });
         }
 
+        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MANAGE_CARD_INVENTORY)) {
+            MenuButtonItem inventoryButton = new MenuButtonItem("Card Inventory");
+            inventoryButton.addClickHandler(new MainMenuClickHandler(this) {
+                @Override
+                public BaseWindow createWindow() {
+                    return new InventoryWindow();
+                }
+            });
+            mainMenu.addButton(inventoryButton);
+        }
         mainMenu.addFill();
 
         vLayout = new VLayout();
@@ -210,16 +221,16 @@ public class MainWindow extends BaseWindow {
     public void setCurrentWindow(BaseWindow currentWindow) {
         this.currentWindow = currentWindow;
     }
-    
-      public void SaveProfile(){
+
+    public void SaveProfile() {
         Record recordToSave = profileEditor.getRecord();
-          
-         profileEditor.getDataForm().getDataSource().updateData(recordToSave, new DSCallback() {
-               
-                public void execute(DSResponse response, Object rawData, DSRequest request) {
-                    profileEditor.hide();
-                }
-            });
+
+        profileEditor.getDataForm().getDataSource().updateData(recordToSave, new DSCallback() {
+
+            public void execute(DSResponse response, Object rawData, DSRequest request) {
+                profileEditor.hide();
+            }
+        });
     }
 }
 
@@ -250,6 +261,5 @@ abstract class MainMenuClickHandler implements ClickHandler {
     }
 
     public abstract BaseWindow createWindow();
-    
-  
+
 }

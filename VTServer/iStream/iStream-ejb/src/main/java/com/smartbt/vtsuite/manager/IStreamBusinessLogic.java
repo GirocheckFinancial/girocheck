@@ -70,11 +70,11 @@ public class IStreamBusinessLogic{
                 }
         }
         
-             String url = System.getProperty("WS_ISTREAM_PRODUCTION_URL"); 
+             String url = "https://girocheck.istreamdeposit.com/Scan?wsdl"; 
 
-        if (url == null) {
-          url = "https://istreamdeposit.com/Scan?wsdl";
-        }
+//        if (url == null) {
+//          url = "https://istreamdeposit.com/Scan?wsdl";
+//        }
         
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStreamBusinessLogic] URL: " + url,null);
         

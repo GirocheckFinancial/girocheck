@@ -18,7 +18,8 @@ import javax.xml.ws.WebServiceException;
  */
 //@WebServiceClient(name = "Scan", targetNamespace = "http://web.service.scanner.tc.com/", wsdlLocation = "https://stable-1.istreamdeposit.com/Scan?wsdl")
 //@WebServiceClient(name = "Scan", targetNamespace = "http://web.service.scanner.tc.com/", wsdlLocation = "https://giro-1.istreamdeposit.com/Scan?wsdl")
-@WebServiceClient(name = "Scan", targetNamespace = "http://web.service.scanner.tc.com/", wsdlLocation = "https://istreamdeposit.com/Scan?wsdl")
+//@WebServiceClient(name = "Scan", targetNamespace = "http://web.service.scanner.tc.com/", wsdlLocation = "https://istreamdeposit.com/Scan?wsdl")
+@WebServiceClient(name = "Scan", targetNamespace = "http://web.service.scanner.tc.com/", wsdlLocation = "https://girocheck.istreamdeposit.com/Scan?wsdl")
 public class Scan_Service
     extends Service
 {
@@ -33,7 +34,8 @@ public class Scan_Service
         try {
 //            url = new URL("https://stable-1.istreamdeposit.com/Scan?wsdl");
 //            url = new URL("https://giro-1.istreamdeposit.com/Scan?wsdl");
-            url = new URL("https://istreamdeposit.com/Scan?wsdl");
+//            url = new URL("https://istreamdeposit.com/Scan?wsdl");
+            url = new URL("https://girocheck.istreamdeposit.com/Scan?wsdl");
 //            url = new URL("https://giro-1.istreamdeposit.com/Scan?WSDL");
         } catch (MalformedURLException ex) {
             ex.printStackTrace();

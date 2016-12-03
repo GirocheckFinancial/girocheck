@@ -43,8 +43,8 @@ public class TransactionManager {
     }
 
     public Map activityReport(Map input) {
-        Date dateStart = new Date();
-        Date dateEnd = new Date();
+        Date dateStart = null;
+        Date dateEnd = null;
 
         if (input.containsKey(ParameterName.START_DATE) && input.get(ParameterName.START_DATE) != null) {
             dateStart = (Date) input.get(ParameterName.START_DATE);
@@ -54,24 +54,41 @@ public class TransactionManager {
             dateEnd = (Date) input.get(ParameterName.END_DATE);
         }
 
+        
+
+        if (dateStart == null && dateEnd == null) {
+            System.out.println("Both dates are NULL");
+            dateEnd = new Date();
+            dateStart= new Date(); 
+        } else {
+            if (dateEnd == null) {
+                 System.out.println("dateEnd is NULL");
+                dateEnd = getDateWithMonthDifference(dateStart, 1);
+                System.out.println("Setting dateEnd to " + dateEnd);
+            } else {
+                if (dateStart == null) {
+                     System.out.println("dateStart is NULL");
+                    dateStart = getDateWithMonthDifference(dateEnd, -1);
+                      System.out.println("Setting dateStart to " + dateStart);
+                } else {
+                    if ((dateEnd.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24) > 30) {
+                        System.out.println("DateEnd < dateStart > 30 days");
+                        dateStart = getDateWithMonthDifference(dateEnd, -1);
+                        System.out.println("Setting dateStart to " + dateStart);
+                    }
+                }
+            }
+        }
+        
         dateEnd.setHours(23);
         dateEnd.setMinutes(59);
         dateEnd.setSeconds(59);
-
-        if ((dateEnd.getTime() - dateStart.getTime()) / (1000 * 60 * 60 * 24) > 30) {
-            System.out.println("DateEnd < dateStart > 30 days");
-            Calendar c = Calendar.getInstance();
-            c.setTime(dateEnd);
-            c.add(Calendar.MONTH, -1);
-            dateStart = c.getTime();
-            System.out.println("Setting dateStart to " + dateStart);
-        }
 
         dateStart.setHours(0);
         dateStart.setMinutes(0);
         dateStart.setSeconds(0);
 
-        System.out.println("TransactionManager -> activityReport");
+        System.out.println("TransactionManager -> activityReport Dates::");
         System.out.println("startDate = " + dateStart);
         System.out.println("endDate = " + dateEnd);
 
@@ -79,6 +96,13 @@ public class TransactionManager {
         input.put(ParameterName.END_DATE, dateEnd);
 
         return transactionDAO.activityReport(input);
+    }
+
+    private static Date getDateWithMonthDifference(Date date, Integer difference) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH, difference);
+        return c.getTime();
     }
 
     public Transaction findById(int id) {

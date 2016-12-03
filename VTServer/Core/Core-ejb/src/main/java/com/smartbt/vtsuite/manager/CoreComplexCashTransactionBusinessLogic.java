@@ -248,27 +248,29 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 }
             }
 
-            if (personalInfoRequestMap.containsKey(ParameterName.BORNDATE) || personalInfoRequestMap.containsKey(ParameterName.EXPIRATION_DATE)) {
-
-                if (personalInfoRequestMap.get(ParameterName.BORNDATE) != null) {
-                    String dob = (String) personalInfoRequestMap.get(ParameterName.BORNDATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value after convert it to a DATE: " + dob, null);
-                    Date dobb = new SimpleDateFormat("MM-dd-yyyy").parse(dob);
-                    request.getTransactionData().put(ParameterName.BORNDATE, dobb);
-
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value : " + dobb, null);
-                }
-
-                if (personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE) != null) {
-
-                    String expDate = (String) personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE);
-                    Date expiDate = new SimpleDateFormat("yyyyMMdd").parse(expDate);
-                    request.getTransactionData().put(ParameterName.EXPIRATION_DATE, expiDate);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] EXPIRATIONDATE value: " + expiDate, null);
-
-                }
-
-            }
+            
+            
+//            if (personalInfoRequestMap.containsKey(ParameterName.BORNDATE) || personalInfoRequestMap.containsKey(ParameterName.EXPIRATION_DATE)) {
+//
+//                if (personalInfoRequestMap.get(ParameterName.BORNDATE) != null) {
+//                    String dob = (String) personalInfoRequestMap.get(ParameterName.BORNDATE);
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value after convert it to a DATE: " + dob, null);
+//                    Date dobb = new SimpleDateFormat("MM-dd-yyyy").parse(dob);
+//                    request.getTransactionData().put(ParameterName.BORNDATE, dobb);
+//
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] BORNDATE value : " + dobb, null);
+//                }
+//
+//                if (personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE) != null) {
+//
+//                    String expDate = (String) personalInfoRequestMap.get(ParameterName.EXPIRATION_DATE);
+//                    Date expiDate = new SimpleDateFormat("yyyyMMdd").parse(expDate);
+//                    request.getTransactionData().put(ParameterName.EXPIRATION_DATE, expiDate);
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] EXPIRATIONDATE value: " + expiDate, null);
+//
+//                }
+//
+//            }
 
             identification.setClient(transaction.getClient());
             Set set = new HashSet();
@@ -762,20 +764,9 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         if (transactionMap.containsKey(ParameterName.EMAIL)) {
             transaction.getClient().setEmail((String) transactionMap.get(ParameterName.EMAIL));
         }
-        if (transactionMap.containsKey(ParameterName.BORNDATE)) {
-
-            Date date = new Date();
-            try {
-                date = new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH).parse((String) transactionMap.get(ParameterName.BORNDATE));
-            } catch (ParseException ex) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() error parsing the date ", null);
-                ex.printStackTrace();
-                throw new Exception();
-            }
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FillOutClient() with date value: " + date, null);
-            transaction.getClient().setBornDate(date);
-        }
+         if (transactionMap.containsKey(ParameterName.BORNDATE_AS_DATE)) {
+                transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE_AS_DATE));
+         }
 
         try {
             if (transactionMap.containsKey(ParameterName.ADDRESS_CORRECT)) {
@@ -814,6 +805,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Address correct param not content", null);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Exception in ADDRESS_FORM", e.getMessage());
             e.printStackTrace();
             throw new Exception();
@@ -862,12 +854,12 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             identidication.setExpirationDate(date);
         }
-        if (transactionMap.containsKey(ParameterName.IDFRONT)) {
+        if (transactionMap.containsKey(ParameterName.IDFRONT) &&  transactionMap.get(ParameterName.IDFRONT) != null) {
             byte[] idFront = (byte[]) transactionMap.get(ParameterName.IDFRONT);
             java.sql.Blob idFrontBlob = new SerialBlob(idFront);
             identidication.setIdFront(idFrontBlob);
         }
-        if (transactionMap.containsKey(ParameterName.IDBACK)) {
+        if (transactionMap.containsKey(ParameterName.IDBACK) && transactionMap.get(ParameterName.IDBACK) != null) {
             byte[] idBack = (byte[]) transactionMap.get(ParameterName.IDBACK);
             java.sql.Blob idBackBlob = new SerialBlob(idBack);
             identidication.setIdFront(idBackBlob);

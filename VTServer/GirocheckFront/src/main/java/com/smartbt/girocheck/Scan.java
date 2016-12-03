@@ -54,9 +54,12 @@ public class Scan {
     }
 
     public ActivityReportRes activityReport( final ActivityReportRequest arg0 ) throws Exception { 
-        System.out.println("activityReport... >>>");
-        
+        System.out.println("activityReport... >>> Receiving from terminal");
+        System.out.println("arg0.getStartDate() = " + arg0.getStartDate());
+        System.out.println("arg0.getEndDate() = " + arg0.getEndDate());
         Map map = FrontManager.activityReport(arg0);
+        
+         
         
       //  System.out.println("map.size() = " + map.keySet().size());
      //   System.out.println(Arrays.toString(map.entrySet().toArray()));
@@ -172,6 +175,15 @@ public class Scan {
     public CheckAuthLocationConfigRes checkAuthLocationConfig( final CheckAuthLocationConfigRequest arg0 ) throws Exception {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] FRONT CHECK AUTH LOCATION CONFIG",null );
          
+        Map requestMap = arg0.toMap();
+        
+         Iterator itReq = requestMap.keySet().iterator();
+        
+        while (itReq.hasNext()) {
+            Object key = itReq.next();
+             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront CheckAuthLocationConfig] " + key + " -> " + requestMap.get(key),null );
+        }
+        
         Map map = FrontManager.processTransaction( arg0 );
         
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] Response got to Scan",null );

@@ -5,7 +5,6 @@
  */
 package com.smartbt.vtsuite.util;
 
-import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.enums.EmailName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -29,11 +28,9 @@ import com.smartbt.vtsuite.util.email.GoogleMail;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.jms.Queue;
 
 /**
@@ -85,6 +82,8 @@ public class CoreTransactionUtil {
     }
 
     public static void persistTransaction(Transaction transaction) throws Exception {
+    
+        
         List<EmailName> emailsToSend = new ArrayList<>();
         Map<String, String> emailValuesMap = new HashMap<>();
 
@@ -140,7 +139,14 @@ public class CoreTransactionUtil {
                                     System.out.println("[CoreTransactionUtil] threshold = " + threshold);
 
                                     if (inventory != null && threshold != null) {
-                                        persistentTerminal.getMerchant().setInventory(inventory - 1);
+                                        if(persistentTerminal.getMerchant().getInventory() == 1){
+                                         emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_ZERO);
+                                       }
+                                        
+                                        if(persistentTerminal.getMerchant().getInventory()> 0){
+                                           persistentTerminal.getMerchant().setInventory(inventory - 1);
+                                       } 
+                                      
                                         if (persistentTerminal.getMerchant().getInventory() == threshold) {
                                             emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_THRESHOLD);
                                             emailValuesMap.put("_merchant", persistentTerminal.getMerchant().getLegalName());
@@ -148,9 +154,7 @@ public class CoreTransactionUtil {
                                         }
                                     }
                                     
-                                    if(persistentTerminal.getMerchant().getInventory() == 0){
-                                         emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_ZERO);
-                                    }
+                                    
                                 } else {
                                     System.out.println("[CoreTransactionUtil] Merchant is NULL");
                                 }

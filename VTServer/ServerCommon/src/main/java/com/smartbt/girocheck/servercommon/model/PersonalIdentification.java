@@ -78,11 +78,16 @@ public class PersonalIdentification implements Serializable {
     }
 
     public byte[] getIdFrontAsByteArray() throws SQLException {
-        if (idFront == null || idFront.length() <= 0) {
+        try {
+            if (idFront == null || idFront.length() <= 0) {
+                return null;
+            }
+            int length = (int) idFront.length();
+            return idFront.getBytes(0, length);
+        } catch (Exception e) {
             return null;
         }
-        int length = (int) idFront.length();
-        return idFront.getBytes(0, length);
+
     }
 
     public void setIdBack(java.sql.Blob value) {
@@ -90,11 +95,15 @@ public class PersonalIdentification implements Serializable {
     }
 
     public byte[] getIdBackAsByteArray() throws SQLException {
-        if (idBack == null || idBack.length() <= 0) {
+        try {
+            if (idBack == null || idBack.length() <= 0) {
+                return null;
+            }
+            int length = (int) idBack.length();
+            return idBack.getBytes(0, length);
+        } catch (Exception e) {
             return null;
         }
-        int length = (int) idBack.length();
-        return idBack.getBytes(0, length);
     }
 
     public java.sql.Blob getIdBack() {

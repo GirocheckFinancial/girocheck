@@ -201,7 +201,9 @@ public class TecnicardHostManager {
 
                     response.setTransactionData(sessionTagMapp);
 
-                    if (!CODE_000000.equals(resultCode)) {
+                    if (CODE_100011.equals(resultCode)
+                            || CODE_100012.equals(resultCode)
+                            || CODE_100015.equals(resultCode)) {
                         response.getTransactionData().put(ParameterName.ACTIVATION_FEE, 5.0);
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] ACTIVATION_FEE = 5", null);
                     }

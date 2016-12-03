@@ -471,7 +471,7 @@
             <xs:sequence>
                 <xs:element name="merchantName" type="xs:string" minOccurs="0"/>
                 <xs:element name="customerAddress" type="xs:string" minOccurs="0"/>
-                <xs:element name="customerName" type="xs:string" minOccurs="0"/>
+                <xs:element name="customerName" type="xs:string" minOccurs="0"/> 
                 <xs:element name="bankName" type="xs:string" minOccurs="0"/>
                 <xs:element name="routingBankNumber" type="xs:string" minOccurs="0"/>
                 <xs:element name="accountNumer" type="xs:string" minOccurs="0"/>

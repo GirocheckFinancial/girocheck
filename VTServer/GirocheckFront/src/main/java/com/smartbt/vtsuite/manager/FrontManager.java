@@ -68,6 +68,8 @@ public class FrontManager {
 
     public static Map activityReport(IMap request) throws Exception {
         Map input = request.toMap();
+        System.out.println("From terminal:: Start Date = " + input.get(ParameterName.START_DATE));
+        System.out.println("From terminal:: End Date = " + input.get(ParameterName.END_DATE));
 
         Map output = null;
 
@@ -77,7 +79,7 @@ public class FrontManager {
             output = businessLogic.activityReport(input);
 
             HibernateUtil.commitTransaction();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             HibernateUtil.rollbackTransaction();

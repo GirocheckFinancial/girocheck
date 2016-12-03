@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType( name = "CardToBankResponse", propOrder = {
     "merchantName",
     "customerAddress",
-    "customerName",
+    "customerName", 
     "bankName",
     "routingBankNumber",
     "accountNumber",
@@ -64,7 +64,7 @@ public class CardToBankRes extends MainResponseContainer implements IBuilder {
     @XmlElement( name = "customerAddress" )
     private String customerAddress;
     @XmlElement( name = "customerName" )
-    private String customerName;
+    private String customerName; 
     @XmlElement( name = "bankName" )
     private String bankName;
     @XmlElement( name = "routingBankNumber" )
@@ -85,7 +85,7 @@ public class CardToBankRes extends MainResponseContainer implements IBuilder {
         existAch = MapUtil.getStringValueFromMap(map, ParameterName.EXISTACH);
         setMerchantName(MapUtil.getStringValueFromMap(map, ParameterName.MERCHANT_NAME));
         setCustomerAddress(MapUtil.getStringValueFromMap(map, ParameterName.CUSTUMER_ADDRESS)); 
-        setCustomerName(MapUtil.getStringValueFromMap(map, ParameterName.CUSTUMER_NAME));
+        setCustomerName(MapUtil.getStringValueFromMap(map, ParameterName.CUSTUMER_NAME)); 
         setBankName(MapUtil.getStringValueFromMap(map, ParameterName.BANK_NAME));
         setRoutingBankNumber(MapUtil.getStringValueFromMap(map, ParameterName.ROUTING_BANK_NUMBER));
         setAccountNumber(MapUtil.getStringValueFromMap(map, ParameterName.ACCOUNT_NUMBER));
@@ -274,5 +274,6 @@ public class CardToBankRes extends MainResponseContainer implements IBuilder {
     public void setMerchantName(String merchantName) {
         this.merchantName = merchantName;
     }
+ 
 
 }

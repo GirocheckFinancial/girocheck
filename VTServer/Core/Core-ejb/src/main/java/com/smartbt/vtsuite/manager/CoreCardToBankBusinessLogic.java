@@ -163,9 +163,10 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
                     map.put(ParameterName.BANK_NAME, clientBankName);
                     if(client == null){
                         map.put(ParameterName.CUSTUMER_NAME, "");
+                        map.put(ParameterName.LAST_NAME, "");
                         map.put(ParameterName.CUSTUMER_ADDRESS, "");
                     }else{
-                        map.put(ParameterName.CUSTUMER_NAME, client.getFirstName());
+                        map.put(ParameterName.CUSTUMER_NAME, client.getFirstName() + " " + client.getLastName());
                         map.put(ParameterName.CUSTUMER_ADDRESS, fullAddress);
                     }
                     
@@ -230,7 +231,8 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
 
         DirexTransactionRequest request = (DirexTransactionRequest) tmsg2.getObject();
 
-        if (!request.getTransactionData().get(ParameterName.EXISTACH).toString().equalsIgnoreCase("true")) {
+        if (!request.getTransactionData().containsKey(ParameterName.EXISTACH) 
+                || !request.getTransactionData().get(ParameterName.EXISTACH).toString().equalsIgnoreCase("true")) {
    
 //                coreLogger.logAndStore("CoreCardToBankBL", " [CoreCardToBankBL::]            ACH doesn't exist. Saving ACH ");
 //            log.info("[CoreCardToBankBL::] ACH doesn't exist. Saving ACH");

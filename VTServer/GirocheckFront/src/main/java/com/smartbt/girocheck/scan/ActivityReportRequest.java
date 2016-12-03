@@ -44,8 +44,8 @@ import javax.xml.bind.annotation.XmlType;
 public class ActivityReportRequest implements IMap {
 
     private String terminalId;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
 
     private Date getDateFromString(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) {
@@ -53,10 +53,10 @@ public class ActivityReportRequest implements IMap {
         }
 
         try {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
             return df.parse(dateStr);
         } catch (Exception e) {
-            return null;
+            throw new IllegalArgumentException("Invalid Date Format");
         }
     }
 
@@ -64,13 +64,13 @@ public class ActivityReportRequest implements IMap {
     public Map toMap() {
         Map map = new HashMap(); 
         map.put(ParameterName.TERMINAL_ID, terminalId); 
-        map.put(ParameterName.START_DATE, startDate);
-        map.put(ParameterName.END_DATE, endDate);
+        map.put(ParameterName.START_DATE, getDateFromString(getStartDate()));
+        map.put(ParameterName.END_DATE, getDateFromString(getEndDate()));
          
         System.out.println("toMap()");
         System.out.println("terminalId = " + terminalId);
-        System.out.println("startDate = " + startDate);
-        System.out.println("endDate = " + endDate);
+        System.out.println("startDate = " + getStartDate());
+        System.out.println("endDate = " + getEndDate());
         return map;
     }
 
@@ -97,35 +97,30 @@ public class ActivityReportRequest implements IMap {
     /**
      * @return the startDate
      */
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
     /**
-     * @param startDate the startDate to set Expected format: yyyy-MM-dd
+     * @param startDate the startDate to set
      */
-    public void setStartDate(String startDateStr) throws ParseException {
-        System.out.println("----Receiving from techtrex :: startDateStr = " + startDateStr );
-            this.startDate = getDateFromString(startDateStr);
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 
     /**
      * @return the endDate
      */
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
     /**
-     * @param endDate the endDate to set Expected format: yyyy-MM-dd
+     * @param endDate the endDate to set
      */
-    public void setEndDate(String endDateStr) throws ParseException { 
-        System.out.println("----Receiving from techtrex :: endDateStr = " + endDateStr );
-        if(endDateStr == null || endDateStr.isEmpty()){
-           this.endDate = new Date(); 
-        }else{
-           this.endDate= getDateFromString(endDateStr); 
-        } 
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
-
+ 
+  
 }

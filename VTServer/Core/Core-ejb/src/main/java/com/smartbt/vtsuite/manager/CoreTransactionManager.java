@@ -181,7 +181,7 @@ public class CoreTransactionManager {
 
         Transaction transaction = new Transaction();
 
-        if (cardHost == null || cardHost.getHostName().equals(NomHost.FUZE.toString())) {
+        if (cardHost == null || cardHost.getHostName() == null || cardHost.getHostName().equals(NomHost.FUZE.toString())) {
             transaction.setResultCode(900);
             return transaction;
         }
@@ -246,7 +246,7 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));
                 direxTransactionRequest.getTransactionData().put(ParameterName.ID, identification.getIdentification());
 
-                direxTransactionRequest.getTransactionData().put(ParameterName.BORNDATE, client.getBornDate());
+                direxTransactionRequest.getTransactionData().put(ParameterName.BORNDATE_AS_DATE, client.getBornDate());
                 direxTransactionRequest.getTransactionData().put(ParameterName.FIRST_NAME, client.getFirstName());
                 direxTransactionRequest.getTransactionData().put(ParameterName.LAST_NAME, client.getLastName());
                 direxTransactionRequest.getTransactionData().put(ParameterName.ADDRESS, address.getAddress());
@@ -351,7 +351,10 @@ public class CoreTransactionManager {
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] ASKING FOR PARAMETER.PHONE. ", null);
 
-            if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.PHONE)) {
+            if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.PHONE)
+                    && direxTransactionRequest.getTransactionData().get(ParameterName.PHONE) != null
+                    && !((String)direxTransactionRequest.getTransactionData().get(ParameterName.PHONE)).isEmpty()
+                    && ((String)direxTransactionRequest.getTransactionData().get(ParameterName.PHONE)).length() >= 3) {
                 String cell_area_code = (String) direxTransactionRequest.getTransactionData().get(ParameterName.PHONE);
                 direxTransactionRequest.getTransactionData().put(ParameterName.CELL_PHONE_AREA, cell_area_code.substring(0, 3));
 

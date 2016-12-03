@@ -5,7 +5,6 @@
  */
 package com.smartbt.vtsuite.util;
 
-import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.enums.EmailName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -29,11 +28,9 @@ import com.smartbt.vtsuite.util.email.GoogleMail;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.jms.Queue;
 
 /**
@@ -47,8 +44,8 @@ public class CoreTransactionUtil {
             response.setTransaction(null);
             System.out.println("CoreTransactionUtil :: subTransactionFailed  send(" + queue.getQueueName() + ", " + correlationId);
             JMSManager.get().send(response, queue, correlationId);
-        }else{
-            System.out.println("CoreTransactionUtil :: subTransactionFailed  queue = null." );
+        } else {
+            System.out.println("CoreTransactionUtil :: subTransactionFailed  queue = null.");
         }
 
         String transactionType = response.getTransactionType() != null ? response.getTransactionType().toString() : "Unknown";
@@ -85,9 +82,11 @@ public class CoreTransactionUtil {
     }
 
     public static void persistTransaction(Transaction transaction) throws Exception {
+    
+        
+        List<EmailName> emailsToSend = new ArrayList<>();
+        Map<String, String> emailValuesMap = new HashMap<>();
 
-        Boolean send2LoadsEmail = false;
-        String maskedCardNumber = "";
         TerminalManager terminalManager = TerminalManager.get();
         TransactionManager transactionManager = TransactionManager.get();
         ClientManager clientManager = ClientManager.get();
@@ -106,7 +105,7 @@ public class CoreTransactionUtil {
             if (transaction.getClient() != null) {
                 if (transaction.getResultCode() == ResultCode.SUCCESS.getCode() && transaction.getOperation() != null
                         && (transaction.getOperation().equals("01") || transaction.getOperation().equals("02"))) {
-
+                    System.out.println("[CoreTransactionUtil] Successfull Check or Cash clientId = " + client.getId());
                     CreditCard card = transaction.getData_sc1();
 
                     Integer successfulLoads = client.getSuccessfulLoads();
@@ -117,11 +116,53 @@ public class CoreTransactionUtil {
                     client.setSuccessfulLoads(successfulLoads + 1);
 
                     if (client.getSuccessfulLoads() == 2) {
-                        send2LoadsEmail = true;
-                        maskedCardNumber = card.getMaskCardNumber();
+
+                        emailsToSend.add(EmailName.TWO_SUCCESSFUL_LOADS_TO_TECNICARD);
+
+                        emailValuesMap.put("user_name", client.getFirstName());
+                        emailValuesMap.put("user_lastname", client.getLastName());
+                        emailValuesMap.put("masked_card", card.getMaskCardNumber());
                     }
 
                     transaction.setData_sc1(card);
+
+                    if (transaction.getSub_Transaction() != null) {
+                        for (SubTransaction subTransaction : transaction.getSub_Transaction()) {
+                            if (subTransaction.getType() == TransactionType.TECNICARD_CARD_PERSONALIZATION.getCode()
+                                    && subTransaction.getResultCode() == ResultCode.SUCCESS.getCode()) {
+
+                                System.out.println("[CoreTransactionUtil] Got a TECNICARD_CARD_PERSONALIZATION successful");
+                                if (persistentTerminal.getMerchant() != null) {
+                                    Integer inventory = persistentTerminal.getMerchant().getInventory();
+                                    Integer threshold = persistentTerminal.getMerchant().getThreshold();
+                                    System.out.println("[CoreTransactionUtil] inventory = " + inventory);
+                                    System.out.println("[CoreTransactionUtil] threshold = " + threshold);
+
+                                    if (inventory != null && threshold != null) {
+                                        if(persistentTerminal.getMerchant().getInventory() == 1){
+                                         emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_ZERO);
+                                       }
+                                        
+                                        if(persistentTerminal.getMerchant().getInventory()> 0){
+                                           persistentTerminal.getMerchant().setInventory(inventory - 1);
+                                       } 
+                                      
+                                        if (persistentTerminal.getMerchant().getInventory() == threshold) {
+                                            emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_THRESHOLD);
+                                            emailValuesMap.put("_merchant", persistentTerminal.getMerchant().getLegalName());
+                                            emailValuesMap.put("_threshold", persistentTerminal.getMerchant().getThreshold() + "");
+                                        }
+                                    }
+                                    
+                                    
+                                } else {
+                                    System.out.println("[CoreTransactionUtil] Merchant is NULL");
+                                }
+
+                            }
+                        }
+                    }
+
                 }
 
                 clientManager.saveOrUpdate(client);
@@ -131,18 +172,20 @@ public class CoreTransactionUtil {
 
             System.out.println("**************  TRANSACTION SAVED SUCCESSFULY **************");
 
-            if (send2LoadsEmail) {
-                System.out.println("--------------  SENDING 2 SUCCESSFULL LOADS EMAIL TO TECNICARD --------------");
-                Email email = EmailManager.get().getByName(EmailName.TWO_SUCCESSFUL_LOADS_TO_TECNICARD);
+            try{
+            if (!emailsToSend.isEmpty()) {
+                
+                Email email;
+                for (EmailName emailName : emailsToSend) {
+                    System.out.println("--------------  SENDING " + emailName +" EMAIL --------------");
+                    email = EmailManager.get().getByName(emailName);
+                    email.setValues(emailValuesMap);
+                    GoogleMail.get().sendEmail(email);
+                }
 
-                Map<String, String> values = new HashMap<>();
-                values.put("user_name", client.getFirstName());
-                values.put("user_lastname", client.getLastName());
-                values.put("masked_card", maskedCardNumber);
-
-                email.setValues(values);
-
-                GoogleMail.get().sendEmail(email);
+            }
+            }catch(Exception emailEx){
+                emailEx.printStackTrace();
             }
 
             HibernateUtil.commitTransaction();
@@ -167,10 +210,10 @@ public class CoreTransactionUtil {
         System.out.println("ResultMessage :: " + transaction.getResultMessage());
 
         System.out.println("");
-        
-        List<SubTransaction> subTransactions =  new ArrayList(transaction.getSub_Transaction()); 
-        Collections.sort( subTransactions); 
-        
+
+        List<SubTransaction> subTransactions = new ArrayList(transaction.getSub_Transaction());
+        Collections.sort(subTransactions);
+
         for (SubTransaction subTransaction : subTransactions) {
             System.out.println("________________  " + subTransaction.getOrder() + " :: " + TransactionType.get(subTransaction.getType()) + " __________________");
             System.out.println("                ResultCode :: " + subTransaction.getResultCode());
@@ -246,5 +289,3 @@ public class CoreTransactionUtil {
     }
 
 }
-
- 

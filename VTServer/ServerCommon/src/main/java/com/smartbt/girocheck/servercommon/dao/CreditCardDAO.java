@@ -57,7 +57,15 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
         CreditCard creditCard = getCard(cardNumber);
         
         if (creditCard == null) {
-            String maskCardNumber = cardNumber.substring(0, 4) + "********" + cardNumber.substring(12, 16);
+            String maskCardNumber = "";
+            if(cardNumber.length() >= 16){
+                maskCardNumber = cardNumber.substring(0, 4) + "********" + cardNumber.substring(12, 16);
+            }else{
+                 if(cardNumber.length() >= 4){
+                     maskCardNumber = cardNumber.substring(0, 4) + "********" ;
+                 }
+            }
+            
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet Creating Card:: " + maskCardNumber, null);
             creditCard = new CreditCard();

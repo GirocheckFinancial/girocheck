@@ -113,6 +113,9 @@ public class Merchant implements Serializable {
     private String oEAgentNumber;
     
     private double authFeeP;
+    
+    private Integer inventory;
+    private Integer threshold;
 
     private java.util.Set<com.smartbt.girocheck.servercommon.model.MerchantParameterValue> merchant_Parameter_Value = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.MerchantParameterValue>();
 
@@ -663,6 +666,34 @@ public class Merchant implements Serializable {
      */
     public void setIdTellerPagoOrderExp(String idTellerPagoOrderExp) {
         this.idTellerPagoOrderExp = idTellerPagoOrderExp;
+    }
+
+    /**
+     * @return the inventory
+     */
+    public Integer getInventory() {
+        return inventory;
+    }
+
+    /**
+     * @param inventory the inventory to set
+     */
+    public void setInventory(Integer inventory) {
+        this.inventory = inventory;
+    }
+
+    /**
+     * @return the threshold
+     */
+    public Integer getThreshold() {
+        return threshold;
+    }
+
+    /**
+     * @param threshold the threshold to set
+     */
+    public void setThreshold(Integer threshold) {
+        this.threshold = threshold;
     }
 
 

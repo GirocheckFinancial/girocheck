@@ -229,12 +229,11 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         client.setSNAME(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false)));
         clientB.setSNAMEB(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false)));
 
-        Date bornDate = MapUtil.getDateValueFromMap(map, ParameterName.BORNDATE, false);
+        Date bornDate = MapUtil.getDateValueFromMap(map, ParameterName.BORNDATE_AS_DATE, false);
         if (bornDate != null) {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = MapUtil.getDateValueFromMap(map, ParameterName.BORNDATE, false);
-            client.setBORNDATE(OEUtils.singleQuote(df.format(date)));
-            clientB.setBORNDATEB(OEUtils.singleQuote(df.format(date)));
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); 
+            client.setBORNDATE(OEUtils.singleQuote(df.format(bornDate)));
+            clientB.setBORNDATEB(OEUtils.singleQuote(df.format(bornDate)));
         }
 
         client.setSTREET(OEUtils.singleQuote(addressSplitter(MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false)).get(1)));

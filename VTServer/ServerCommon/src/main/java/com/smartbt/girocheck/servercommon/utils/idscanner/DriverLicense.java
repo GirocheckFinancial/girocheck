@@ -341,7 +341,9 @@ public class DriverLicense {
         map.put(ParameterName.IDSTATE, getState());
         map.put(ParameterName.COUNTRY, "US");
         map.put(ParameterName.IDCOUNTRY, "US");
-        map.put(ParameterName.BORNDATE,  formatDate(getDOB().getTime()));
+        Date bornDate = getDOB().getTime(); 
+        map.put(ParameterName.BORNDATE_AS_DATE, bornDate);
+        map.put(ParameterName.BORNDATE,  formatDate(bornDate));
         return map;
     }
 

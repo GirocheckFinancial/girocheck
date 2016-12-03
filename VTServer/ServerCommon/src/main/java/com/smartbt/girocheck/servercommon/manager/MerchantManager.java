@@ -73,16 +73,14 @@ public class MerchantManager {
 
         Merchant merchant = new Merchant();
         if ( display.getId() != null && display.getId() != 0) {
-            merchant.setId( display.getId() );
-             merchant.setCardInventory(Integer.parseInt(display.getCardInventory()) );
-        }else{
-             merchant.setCardInventory(0);
-        }
+            merchant.setId( display.getId() ); 
+        } 
         
         Agrupation agrupation = agrupationDAO.findById( display.getIdAgrupation());
         merchant.setAgrupation( agrupation );
 
-        merchant.setLegalName( URLEncoder.encode(display.getLegalName(), "UTF-8") );
+        merchant.setLegalName(display.getLegalName());
+//        merchant.setLegalName( URLEncoder.encode(display.getLegalName(), "UTF-8") );
         merchant.setAgentName( display.getAgentName() );
         merchant.setBankName(display.getBankName());
         merchant.setRoutingBankNumber(display.getRoutingBankNumber());

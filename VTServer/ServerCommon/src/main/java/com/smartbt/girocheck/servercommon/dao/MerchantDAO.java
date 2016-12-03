@@ -143,7 +143,7 @@ public class MerchantDAO extends BaseDAO<Merchant> {
             display.setIdIstreamTecnicardCheck(merchant.getIdIstreamTecnicardCheck());
             
             display.setSic( merchant.getSic() );
-            display.setCardInventory( merchant.getCardInventory() + "" );
+            display.setCardInventory( merchant.getInventory() + "" );
             display.setMerchantType( merchant.getMerchantType() + "" );
             display.setDistributor( merchant.getDistributor() + "" );
             display.setDistributionChanel( merchant.getDistributionChanel() + "" );

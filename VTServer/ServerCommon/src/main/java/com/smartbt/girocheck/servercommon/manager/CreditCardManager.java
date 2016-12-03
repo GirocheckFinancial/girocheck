@@ -25,28 +25,38 @@ import java.sql.SQLException;
  */
 public class CreditCardManager {
 
+    protected static CreditCardManager INSTANCE;
+
     private CreditCardDAO dao = CreditCardDAO.get();
 
-    public CreditCard getCardByNumber( String number ) throws Exception {
-        return dao.getCard( number );
+    public static CreditCardManager get() {
+        if (INSTANCE == null) {
+            INSTANCE = new CreditCardManager();
+        }
+        return INSTANCE;
     }
-    
-    public void saveOrUpdate(CreditCard card){
+
+    public CreditCard getCardByNumber(String number) throws Exception {
+        return dao.getCard(number);
+    }
+
+    public void saveOrUpdate(CreditCard card) {
         dao.saveOrUpdate(card);
+    }
+
+    public void delete(CreditCard card) {
+        dao.delete(card);
     }
 
 //    public CreditCard getCardWaitingOfficialNumber( String ssn ) throws DirexException {
 //        return dao.getCardWaitingOfficialNumber( ssn );
 //    }
-    
-    public CreditCard createOrGet( String cardNumber, Client client, Merchant merchant ) throws Exception {
-        return dao.createOrGet( cardNumber, client, merchant );
+    public CreditCard createOrGet(String cardNumber, Client client, Merchant merchant) throws Exception {
+        return dao.createOrGet(cardNumber, client, merchant);
     }
 
-    
-    public Client getClient( String cardNumber ) throws Exception {
-        return dao.getClient( cardNumber );
+    public Client getClient(String cardNumber) throws Exception {
+        return dao.getClient(cardNumber);
     }
 
-    
 }

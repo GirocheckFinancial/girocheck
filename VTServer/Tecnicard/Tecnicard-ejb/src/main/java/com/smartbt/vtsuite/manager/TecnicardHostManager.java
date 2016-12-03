@@ -16,7 +16,6 @@
 package com.smartbt.vtsuite.manager;
 
 //import com.smartbt.vtsuite.servercommon.manager.AuditManager;
-import com.smartbt.vtsuite.mock.MockTecnicardBusinessLogic;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
@@ -26,19 +25,19 @@ import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.vtsuite.mock.MockTecnicardBusinessLogic;
 import com.smartbt.vtsuite.util.FixUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
  * The Host Manager class
  */
 public class TecnicardHostManager {
-       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
+//       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
 
-//    MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+    MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
 
     public static Map TRANSACTION_SEQUENCE;
 

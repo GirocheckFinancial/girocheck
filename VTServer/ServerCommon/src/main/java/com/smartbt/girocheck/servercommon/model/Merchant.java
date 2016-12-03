@@ -77,8 +77,7 @@ public class Merchant implements Serializable {
     private String agentName;
 
     private Integer distributor;
-
-    private Integer cardInventory;
+ 
 
     private Boolean training;
 
@@ -295,19 +294,8 @@ public class Merchant implements Serializable {
     public Integer getDistributor() {
         return distributor;
     }
-
-    public void setCardInventory( int value ) {
-        setCardInventory( new Integer( value ) );
-    }
-
-    public void setCardInventory( Integer value ) {
-        this.cardInventory = value;
-    }
-
-    public Integer getCardInventory() {
-        return cardInventory;
-    }
-
+ 
+ 
     public void setTraining( boolean value ) {
         setTraining( new Boolean( value ) );
     }

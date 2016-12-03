@@ -151,8 +151,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     private IMap wmCardPersonalization(Map map) throws Exception {
-        Integer idType = 0;
-        
+        Integer idType = 0; 
         if(map.containsKey(ParameterName.IDTYPE)){
             IdType type = (IdType)map.get(ParameterName.IDTYPE);
             idType = type.getId();

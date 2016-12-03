@@ -28,7 +28,6 @@ License Type: Evaluation
 		<property name="phone" column="phone" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="agentName" column="agent_name" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="distributor" column="distributor" type="integer" length="10" not-null="false" lazy="false"/>
-		<property name="cardInventory" column="card_inventory" type="integer" length="10" not-null="false" lazy="false"/>
 		<property name="training" column="training" type="boolean" length="1" not-null="false" lazy="false"/>
 		<property name="documentApproved" column="document_approved" type="boolean" length="1" not-null="false" lazy="false"/>
 		<property name="documentNotes" column="document_notes" type="string" length="255" not-null="false" lazy="false"/>

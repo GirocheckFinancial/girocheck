@@ -12,6 +12,7 @@ import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
 import com.smartbt.girocheck.servercommon.log.LogUtil;
 import com.smartbt.girocheck.servercommon.manager.ClientManager;
+import com.smartbt.girocheck.servercommon.manager.CreditCardManager;
 import com.smartbt.girocheck.servercommon.manager.EmailManager;
 import com.smartbt.girocheck.servercommon.manager.TerminalManager;
 import com.smartbt.girocheck.servercommon.manager.TransactionManager;
@@ -82,8 +83,7 @@ public class CoreTransactionUtil {
     }
 
     public static void persistTransaction(Transaction transaction) throws Exception {
-    
-        
+
         List<EmailName> emailsToSend = new ArrayList<>();
         Map<String, String> emailValuesMap = new HashMap<>();
 
@@ -92,7 +92,7 @@ public class CoreTransactionUtil {
         ClientManager clientManager = ClientManager.get();
         transaction.setTransactionFinished(true);
         printTransaction(transaction);
-
+        boolean deleteCardBecauseCardPersonalizationFailed = false;
         try {
             HibernateUtil.beginTransaction();
 
@@ -103,88 +103,109 @@ public class CoreTransactionUtil {
 
             Client client = transaction.getClient();
             if (transaction.getClient() != null) {
-                if (transaction.getResultCode() == ResultCode.SUCCESS.getCode() && transaction.getOperation() != null
+
+                //if is Check or Cash
+                if (transaction.getOperation() != null
                         && (transaction.getOperation().equals("01") || transaction.getOperation().equals("02"))) {
-                    System.out.println("[CoreTransactionUtil] Successfull Check or Cash clientId = " + client.getId());
-                    CreditCard card = transaction.getData_sc1();
 
-                    Integer successfulLoads = client.getSuccessfulLoads();
-                    if (successfulLoads == null) {
-                        successfulLoads = 0;
-                    }
+                    //if SUCCESS
+                    if (transaction.getResultCode() == ResultCode.SUCCESS.getCode()) {
+                        System.out.println("[CoreTransactionUtil] Successfull Check or Cash clientId = " + client.getId());
+                        CreditCard card = transaction.getData_sc1();
 
-                    client.setSuccessfulLoads(successfulLoads + 1);
+                        Integer successfulLoads = client.getSuccessfulLoads();
+                        if (successfulLoads == null) {
+                            successfulLoads = 0;
+                        }
 
-                    if (client.getSuccessfulLoads() == 2) {
+                        client.setSuccessfulLoads(successfulLoads + 1);
 
-                        emailsToSend.add(EmailName.TWO_SUCCESSFUL_LOADS_TO_TECNICARD);
+                        if (client.getSuccessfulLoads() == 2) {
 
-                        emailValuesMap.put("user_name", client.getFirstName());
-                        emailValuesMap.put("user_lastname", client.getLastName());
-                        emailValuesMap.put("masked_card", card.getMaskCardNumber());
-                    }
+                            emailsToSend.add(EmailName.TWO_SUCCESSFUL_LOADS_TO_TECNICARD);
 
-                    transaction.setData_sc1(card);
+                            emailValuesMap.put("user_name", client.getFirstName());
+                            emailValuesMap.put("user_lastname", client.getLastName());
+                            emailValuesMap.put("masked_card", card.getMaskCardNumber());
+                        }
 
-                    if (transaction.getSub_Transaction() != null) {
-                        for (SubTransaction subTransaction : transaction.getSub_Transaction()) {
-                            if (subTransaction.getType() == TransactionType.TECNICARD_CARD_PERSONALIZATION.getCode()
-                                    && subTransaction.getResultCode() == ResultCode.SUCCESS.getCode()) {
+                        transaction.setData_sc1(card);
 
-                                System.out.println("[CoreTransactionUtil] Got a TECNICARD_CARD_PERSONALIZATION successful");
-                                if (persistentTerminal.getMerchant() != null) {
-                                    Integer inventory = persistentTerminal.getMerchant().getInventory();
-                                    Integer threshold = persistentTerminal.getMerchant().getThreshold();
-                                    System.out.println("[CoreTransactionUtil] inventory = " + inventory);
-                                    System.out.println("[CoreTransactionUtil] threshold = " + threshold);
+                        if (transaction.getSub_Transaction() != null) {
+                            for (SubTransaction subTransaction : transaction.getSub_Transaction()) {
+                                if (subTransaction.getType() == TransactionType.TECNICARD_CARD_PERSONALIZATION.getCode()
+                                        && subTransaction.getResultCode() == ResultCode.SUCCESS.getCode()) {
 
-                                    if (inventory != null && threshold != null) {
-                                        if(persistentTerminal.getMerchant().getInventory() == 1){
-                                         emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_ZERO);
-                                       }
-                                        
-                                        if(persistentTerminal.getMerchant().getInventory()> 0){
-                                           persistentTerminal.getMerchant().setInventory(inventory - 1);
-                                       } 
-                                      
-                                        if (persistentTerminal.getMerchant().getInventory() == threshold) {
-                                            emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_THRESHOLD);
-                                            emailValuesMap.put("_merchant", persistentTerminal.getMerchant().getLegalName());
-                                            emailValuesMap.put("_threshold", persistentTerminal.getMerchant().getThreshold() + "");
+                                    if (persistentTerminal.getMerchant() != null) {
+                                        Integer inventory = persistentTerminal.getMerchant().getInventory();
+                                        Integer threshold = persistentTerminal.getMerchant().getThreshold();
+
+                                        if (inventory != null && threshold != null) {
+                                            if (persistentTerminal.getMerchant().getInventory() == 1) {
+                                                emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_ZERO);
+                                            }
+
+                                            if (persistentTerminal.getMerchant().getInventory() > 0) {
+                                                persistentTerminal.getMerchant().setInventory(inventory - 1);
+                                            }
+
+                                            if (persistentTerminal.getMerchant().getInventory() == threshold) {
+                                                emailsToSend.add(EmailName.ALERT_INVENTORY_REACH_THRESHOLD);
+                                                emailValuesMap.put("_merchant", persistentTerminal.getMerchant().getLegalName());
+                                                emailValuesMap.put("_threshold", persistentTerminal.getMerchant().getThreshold() + "");
+                                            }
                                         }
-                                    }
-                                    
-                                    
-                                } else {
-                                    System.out.println("[CoreTransactionUtil] Merchant is NULL");
-                                }
 
+                                    } else {
+                                        System.out.println("[CoreTransactionUtil] Merchant is NULL");
+                                    }
+
+                                }
+                            }
+                        }
+                    } else {  //If is Chech or Chash and FAILED
+                        //Then look if it was a Card Personalization
+                        if (transaction.getSub_Transaction() != null) {
+                            for (SubTransaction subTransaction : transaction.getSub_Transaction()) {
+                                if (subTransaction.getType() == TransactionType.TECNICARD_CARD_PERSONALIZATION.getCode()){
+                                    deleteCardBecauseCardPersonalizationFailed = true;
+                                }
                             }
                         }
                     }
-
                 }
 
                 clientManager.saveOrUpdate(client);
             }
 
+             CreditCard cardToRemove = null;
+             
+            if(deleteCardBecauseCardPersonalizationFailed){
+                cardToRemove = transaction.getData_sc1();
+                transaction.setData_sc1(null);
+            }
+            
             transactionManager.saveOrUpdate(transaction);
 
+            if(cardToRemove != null){
+                CreditCardManager.get().delete(cardToRemove);
+            }
+            
             System.out.println("**************  TRANSACTION SAVED SUCCESSFULY **************");
 
-            try{
-            if (!emailsToSend.isEmpty()) {
-                
-                Email email;
-                for (EmailName emailName : emailsToSend) {
-                    System.out.println("--------------  SENDING " + emailName +" EMAIL --------------");
-                    email = EmailManager.get().getByName(emailName);
-                    email.setValues(emailValuesMap);
-                    GoogleMail.get().sendEmail(email);
-                }
+            try {
+                if (!emailsToSend.isEmpty()) {
 
-            }
-            }catch(Exception emailEx){
+                    Email email;
+                    for (EmailName emailName : emailsToSend) {
+                        System.out.println("--------------  SENDING " + emailName + " EMAIL --------------");
+                        email = EmailManager.get().getByName(emailName);
+                        email.setValues(emailValuesMap);
+                        GoogleMail.get().sendEmail(email);
+                    }
+
+                }
+            } catch (Exception emailEx) {
                 emailEx.printStackTrace();
             }
 

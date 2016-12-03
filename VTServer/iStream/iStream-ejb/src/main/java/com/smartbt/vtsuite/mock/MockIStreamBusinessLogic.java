@@ -146,7 +146,7 @@ public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
          request.printAsXML();
          CheckAuthRes response = new CheckAuthRes();
             
-        response.setCheckId("151258878");
+        response.setCheckId("1");
          
          return response;
      }

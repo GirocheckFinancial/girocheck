@@ -28,7 +28,7 @@ import org.hibernate.criterion.Restrictions;
 
 /**
  *
- * @author Ariel Saavedra
+ * @author Roberto Rodriguez
  */
 public class DateUtils {
 
@@ -104,11 +104,10 @@ public class DateUtils {
         if (date == null) {
             return "";
         }
-        try {
-            TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-            df.setTimeZone(tz);
-            return df.format(new Date());
+        try { 
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            
+            return df.format(date);
         } catch (Exception e) {
             return date.toString();
         }

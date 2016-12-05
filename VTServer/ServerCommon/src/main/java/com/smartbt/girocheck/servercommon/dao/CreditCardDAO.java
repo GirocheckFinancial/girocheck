@@ -59,7 +59,7 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
         if (creditCard == null) {
             String maskCardNumber = "";
             if(cardNumber.length() >= 16){
-                maskCardNumber = cardNumber.substring(0, 4) + "********" + cardNumber.substring(12, 16);
+                maskCardNumber = cardNumber.substring(0, 4) + "********" + cardNumber.substring(12);
             }else{
                  if(cardNumber.length() >= 4){
                      maskCardNumber = cardNumber.substring(0, 4) + "********" ;

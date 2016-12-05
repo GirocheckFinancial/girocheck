@@ -8,6 +8,9 @@ import com.smartbt.girocheck.servercommon.utils.DateUtils;
 import com.smartbt.girocheck.servercommon.utils.IBuilder;
 import com.smartbt.vtsuite.util.OperationType;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -37,45 +40,45 @@ import javax.xml.bind.annotation.XmlType;
  *
  *
  */
-@XmlAccessorType( XmlAccessType.FIELD )
-@XmlType( name = "Transaction", propOrder = { 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "Transaction", propOrder = {
     "transactionType",
     "dateTime",
     "amount"
-} )
-public class Transaction extends MainResponseContainer{
- 
-    @XmlElement( name = "transactionType" )
+})
+public class Transaction extends MainResponseContainer {
+
+    private static NumberFormat formatter = NumberFormat.getCurrencyInstance();
+
+    @XmlElement(name = "transactionType")
     private String transactionType;
- 
-    @XmlElement( name = "dateTime" )
-    private Date dateTime;
- 
-    @XmlElement( name = "amount" )
-    private Double amount;
+
+    @XmlElement(name = "dateTime")
+    private String dateTime;
+
+    @XmlElement(name = "amount")
+    private String amount;
 
     public Transaction() {
     }
 
     public Transaction(String transactionType, Date dateTime, Double amount) {
         this.transactionType = transactionType;
-        this.dateTime = dateTime;
-        this.amount =  roundDouble(amount);
+        this.dateTime = DateUtils.dateToISOFormat(dateTime);
+        this.amount = String.format("%,.2f", amount);
     }
 
-    public Transaction (ActivityReportTransactionDisplay display, OperationType operationType) {
+    public Transaction(ActivityReportTransactionDisplay display, OperationType operationType) {
         this.transactionType = operationType.getOperation();
-        this.dateTime = display.getDateTime();
-        this.amount = display.getAmount();
+        this.dateTime = DateUtils.dateToISOFormat(display.getDateTime());
+        this.amount = String.format("%,.2f", display.getAmount());
     }
 
-      private Double roundDouble(Double amount){
+    private Double roundDouble(Double amount) {
         BigDecimal bd = new BigDecimal(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
         return bd.doubleValue();
     }
 
-    
-    
     /**
      * @return the transactionType
      */
@@ -94,32 +97,28 @@ public class Transaction extends MainResponseContainer{
      * @return the dateTime
      */
     public String getDateTime() {
-        return DateUtils.dateToISOFormat(dateTime);
+        return dateTime;
     }
 
     /**
      * @param dateTime the dateTime to set
      */
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
 
     /**
      * @return the amount
      */
-    public Double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
     /**
      * @param amount the amount to set
      */
-    public void setAmount(Double amount) {
-        System.out.println("setAmount = " + amount);
-        System.out.println("setAmountRound = " + roundDouble(amount));
-        this.amount = roundDouble(amount);
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
-     
- 
 
 }

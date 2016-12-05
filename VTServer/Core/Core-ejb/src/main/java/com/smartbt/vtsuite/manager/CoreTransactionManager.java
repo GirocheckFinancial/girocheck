@@ -42,7 +42,7 @@ import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.DirexException;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
-import java.text.DateFormat; 
+import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -177,30 +177,34 @@ public class CoreTransactionManager {
         TransactionManager transactionManager = new TransactionManager();
         ClientManager clientManager = new ClientManager();
         CreditCardManager creditCardManager = new CreditCardManager();
-        cardHost = findingHost(direxTransactionRequest);
-
         Transaction transaction = new Transaction();
-
-        if (cardHost == null || cardHost.getHostName() == null || cardHost.getHostName().equals(NomHost.FUZE.toString())) {
-            transaction.setResultCode(900);
-            return transaction;
-        }
-
-        String requestId = direxTransactionRequest.getRequestId();
-        TransactionType originalTransactionType = direxTransactionRequest.getTransactionType();
-
-        transaction.setRequestId(requestId);
-        transaction.setTransactionType(originalTransactionType.getCode());
-        Date currentDate = new Date();
-        transaction.setDateTime(currentDate);
-
-        String terminalId = (String) direxTransactionRequest.getTransactionData().get(ParameterName.TERMINAL_ID);
-
-        Client client = null;
 
         try {
             HibernateUtil.beginTransaction();
 
+            cardHost = findingHost(direxTransactionRequest);
+
+            //------------------------------
+            
+
+            if (cardHost == null || cardHost.getHostName() == null || cardHost.getHostName().equals(NomHost.FUZE.toString())) {
+                transaction.setResultCode(900);
+                return transaction;
+            }
+
+            String requestId = direxTransactionRequest.getRequestId();
+            TransactionType originalTransactionType = direxTransactionRequest.getTransactionType();
+
+            transaction.setRequestId(requestId);
+            transaction.setTransactionType(originalTransactionType.getCode());
+            Date currentDate = new Date();
+            transaction.setDateTime(currentDate);
+
+            String terminalId = (String) direxTransactionRequest.getTransactionData().get(ParameterName.TERMINAL_ID);
+
+            Client client = null;
+
+            //--------------------------------------   
             /*
         
              new card reload stuff
@@ -211,7 +215,8 @@ public class CoreTransactionManager {
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
                 client = creditCardManager.getClient(cardNumberCR);
 
-                if (client == null || client.getFirstName().equals("BIQorCTB")) {
+//                if (client == null || client.getFirstName() != null || client.getFirstName().equals("BIQorCTB")) {
+                if (client == null || (client.getFirstName() != null && client.getFirstName().equals("BIQorCTB")) ){
                     System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
                     transaction.setResultCode(3);
                     return transaction;
@@ -353,8 +358,8 @@ public class CoreTransactionManager {
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.PHONE)
                     && direxTransactionRequest.getTransactionData().get(ParameterName.PHONE) != null
-                    && !((String)direxTransactionRequest.getTransactionData().get(ParameterName.PHONE)).isEmpty()
-                    && ((String)direxTransactionRequest.getTransactionData().get(ParameterName.PHONE)).length() >= 3) {
+                    && !((String) direxTransactionRequest.getTransactionData().get(ParameterName.PHONE)).isEmpty()
+                    && ((String) direxTransactionRequest.getTransactionData().get(ParameterName.PHONE)).length() >= 3) {
                 String cell_area_code = (String) direxTransactionRequest.getTransactionData().get(ParameterName.PHONE);
                 direxTransactionRequest.getTransactionData().put(ParameterName.CELL_PHONE_AREA, cell_area_code.substring(0, 3));
 
@@ -525,30 +530,30 @@ public class CoreTransactionManager {
             }
 
             if (!binNumber.isEmpty()) {
-                try {
-                    HibernateUtil.beginTransaction();
+//                try {
+//                    HibernateUtil.beginTransaction();
                     host = hostManager.getHostByBinNumber(binNumber);
 
-                    HibernateUtil.commitTransaction();
+//                    HibernateUtil.commitTransaction();
 
-                } catch (Exception e) {
-                    HibernateUtil.rollbackTransaction();
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting the host by bin number. ", e.getMessage());
-                    e.printStackTrace();
-                }
+//                } catch (Exception e) {
+//                    HibernateUtil.rollbackTransaction();
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting the host by bin number. ", e.getMessage());
+//                    e.printStackTrace();
+//                }
             }
 
         } else {
-            try {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Looking defaultHost", null);
-                HibernateUtil.beginTransaction();
+//            try {
+//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Looking defaultHost", null);
+//                HibernateUtil.beginTransaction();
                 host = hostManager.getDefaultHost();
-                HibernateUtil.commitTransaction();
-            } catch (Exception e) {
-                HibernateUtil.rollbackTransaction();
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting default host", e.getMessage());
-                e.printStackTrace();
-            }
+//                HibernateUtil.commitTransaction();
+//            } catch (Exception e) {
+//                HibernateUtil.rollbackTransaction();
+//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting default host", e.getMessage());
+//                e.printStackTrace();
+//            }
         }
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Finding Host result: " + host.getHostName(), null);

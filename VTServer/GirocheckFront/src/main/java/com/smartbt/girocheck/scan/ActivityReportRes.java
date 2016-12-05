@@ -3,7 +3,6 @@ package com.smartbt.girocheck.scan;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.utils.IBuilder;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -54,7 +53,7 @@ import javax.xml.bind.annotation.XmlType;
     "card2merchantTransactions",
 })
 public class ActivityReportRes extends MainResponseContainer implements IBuilder {
-
+    
     @XmlElement(name = "check2cardCount")
     private Integer check2cardCount;
 
@@ -65,22 +64,22 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
     private Integer card2merchantCount;
 
     @XmlElement(name = "check2cardTotal")
-    private Double check2cardTotal;
+    private String check2cardTotal; 
 
     @XmlElement(name = "cash2cardTotal")
-    private Double cash2cardTotal;
+    private String cash2cardTotal; 
 
     @XmlElement(name = "card2merchantTotal")
-    private Double card2merchantTotal;
+    private String card2merchantTotal;
     
      @XmlElement(name = "cashIn")
-    private Double cashIn;
+    private String cashIn;
 
     @XmlElement(name = "cashOut")
-    private Double cashOut;
+    private String cashOut;
 
     @XmlElement(name = "netCash")
-    private Double netCash;
+    private String netCash;
 
     @XmlElement(name = "totalRows")
     private Integer totalRows;
@@ -99,7 +98,10 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
     @XmlElement(name = "card2merchantTransactions")
     private Transactions card2merchantTransactions;
  
-     
+     public static void main(String[] args){
+         Double d = 45.760000000000005;
+         System.out.println(String.format("%,.2f", d));
+     }
     
     @Override
     public ActivityReportRes build(Map map) throws Exception {
@@ -107,14 +109,33 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
         this.cash2cardCount = (Integer)map.get(ParameterName.CASH2CARD_COUNT);
         this.card2merchantCount = (Integer)map.get(ParameterName.CARD2MERCHANT_COUNT);
         
-        this.check2cardTotal = roundDouble((Double)map.get(ParameterName.CHECK2CARD_TOTAL));
-        this.cash2cardTotal = roundDouble((Double)map.get(ParameterName.CASH2CARD_TOTAL));
-        this.card2merchantTotal = roundDouble((Double)map.get(ParameterName.CARD2MERCHANT_TOTAL));
+        Double check2cardTotalDouble = (Double)map.get(ParameterName.CHECK2CARD_TOTAL);
+        this.setCheck2cardTotal(String.format("%,.2f", check2cardTotalDouble));
         
-        this.cashIn = roundDouble((Double)map.get(ParameterName.CASH_IN));
-        this.cashOut = roundDouble((Double)map.get(ParameterName.CASH_OUT));
-        this.netCash = roundDouble((Double)map.get(ParameterName.NET_CASH));
+        Double cash2cardTotalDouble = (Double)map.get(ParameterName.CASH2CARD_TOTAL);
+        this.setCash2cardTotal(String.format("%,.2f", cash2cardTotalDouble));
         
+        Double card2merchantTotalDouble =  (Double)map.get(ParameterName.CARD2MERCHANT_TOTAL);
+        this.setCard2merchantTotal(String.format("%,.2f", card2merchantTotalDouble));
+        
+        Double cashInDouble = (Double)map.get(ParameterName.CASH_IN);
+        this.setCashIn(String.format("%,.2f", cashInDouble));
+        
+        Double cashOutDouble = (Double)map.get(ParameterName.CASH_OUT);
+        this.setCashOut(String.format("%,.2f", cashOutDouble));
+        
+        Double netCash = (Double)map.get(ParameterName.NET_CASH);
+        this.setNetCash(String.format("%,.2f", netCash));
+        
+//        
+//        this.check2cardTotal = roundDouble((Double)map.get(ParameterName.CHECK2CARD_TOTAL));
+//        this.cash2cardTotal = roundDouble((Double)map.get(ParameterName.CASH2CARD_TOTAL));
+//        this.card2merchantTotal = roundDouble((Double)map.get(ParameterName.CARD2MERCHANT_TOTAL));
+//        
+//        this.cashIn = roundDouble((Double)map.get(ParameterName.CASH_IN));
+//        this.cashOut = roundDouble((Double)map.get(ParameterName.CASH_OUT));
+//        this.netCash = roundDouble((Double)map.get(ParameterName.NET_CASH));
+//        
         this.totalRows = (Integer)map.get(ParameterName.TOTAL_ROWS);
         this.success = (Boolean)map.get(ParameterName.SUCCESS);
         
@@ -177,91 +198,16 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
     public void setCard2merchantCount(Integer card2merchantCount) {
         this.card2merchantCount = card2merchantCount;
     }
-
-    /**
-     * @return the check2cardTotal
-     */
-    public Double getCheck2cardTotal() {
-        return check2cardTotal;
-    }
-     
+ 
 
     /**
      * @param check2cardTotal the check2cardTotal to set
      */
-    public void setCheck2cardTotal(Double check2cardTotal) {
-        this.check2cardTotal =  roundDouble(check2cardTotal);
-    }
-
-    /**
-     * @return the cash2cardTotal
-     */
-    public Double getCash2cardTotal() {
-        return cash2cardTotal;
-    }
-     
-    /**
-     * @param cash2cardTotal the cash2cardTotal to set
-     */
-    public void setCash2cardTotal(Double cash2cardTotal) {
-        this.cash2cardTotal = roundDouble(cash2cardTotal);
-    }
-
-    /**
-     * @return the card2merchantTotal
-     */
-    public Double getCard2merchantTotal() {
-        return card2merchantTotal;
-    }
-     
-    /**
-     * @param card2merchantTotal the card2merchantTotal to set
-     */
-    public void setCard2merchantTotal(Double card2merchantTotal) {
-        this.card2merchantTotal = roundDouble(card2merchantTotal);
-    }
-
-    /**
-     * @return the cashIn
-     */
-    public Double getCashIn() {
-        return cashIn;
-    }
-     
-
-    /**
-     * @param cashIn the cashIn to set
-     */
-    public void setCashIn(Double cashIn) {
-        this.cashIn = roundDouble(cashIn);
-    }
-
-    /**
-     * @return the cashOut
-     */
-    public Double getCashOut() {
-        return cashOut;
-    } 
-    /**
-     * @param cashOut the cashOut to set
-     */
-    public void setCashOut(Double cashOut) {
-        this.cashOut = roundDouble(cashOut);
-    }
-
-    /**
-     * @return the netCash
-     */
-    public Double getNetCash() { 
-        return roundDouble(netCash);
-    }
-     
-    /**
-     * @param netCash the netCash to set
-     */
-    public void setNetCash(Double netCash) { 
-        this.netCash = roundDouble(netCash);
-    }
+   
+      
+    
+    
+ 
 
     /**
      * @return the totalRows
@@ -332,6 +278,93 @@ public class ActivityReportRes extends MainResponseContainer implements IBuilder
     public void setCard2merchantTransactions(Transactions card2merchantTransactions) {
         this.card2merchantTransactions = card2merchantTransactions;
     }
+
+    /**
+     * @return the check2cardTotal
+     */
+    public String getCheck2cardTotal() {
+        return check2cardTotal;
+    }
+
+    /**
+     * @param check2cardTotal the check2cardTotal to set
+     */
+    public void setCheck2cardTotal(String check2cardTotal) {
+        this.check2cardTotal = check2cardTotal;
+    }
+
+   
+
+    /**
+     * @return the cash2cardTotal
+     */
+    public String getCash2cardTotal() {
+        return cash2cardTotal;
+    }
+
+    /**
+     * @param cash2cardTotal the cash2cardTotal to set
+     */
+    public void setCash2cardTotal(String cash2cardTotal) {
+        this.cash2cardTotal = cash2cardTotal;
+    }
+
+    /**
+     * @return the card2merchantTotal
+     */
+    public String getCard2merchantTotal() {
+        return card2merchantTotal;
+    }
+
+    /**
+     * @param card2merchantTotal the card2merchantTotal to set
+     */
+    public void setCard2merchantTotal(String card2merchantTotal) {
+        this.card2merchantTotal = card2merchantTotal;
+    }
+
+    /**
+     * @return the cashIn
+     */
+    public String getCashIn() {
+        return cashIn;
+    }
+
+    /**
+     * @param cashIn the cashIn to set
+     */
+    public void setCashIn(String cashIn) {
+        this.cashIn = cashIn;
+    }
+
+    /**
+     * @return the cashOut
+     */
+    public String getCashOut() {
+        return cashOut;
+    }
+
+    /**
+     * @param cashOut the cashOut to set
+     */
+    public void setCashOut(String cashOut) {
+        this.cashOut = cashOut;
+    }
+
+    /**
+     * @return the netCash
+     */
+    public String getNetCash() {
+        return netCash;
+    }
+
+    /**
+     * @param netCash the netCash to set
+     */
+    public void setNetCash(String netCash) {
+        this.netCash = netCash;
+    }
+ 
  
 
 }

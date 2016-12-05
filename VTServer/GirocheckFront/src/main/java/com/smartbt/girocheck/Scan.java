@@ -54,7 +54,7 @@ public class Scan {
     }
 
     public ActivityReportRes activityReport( final ActivityReportRequest arg0 ) throws Exception { 
-        System.out.println("activityReport... >>> Receiving from terminal");
+        System.out.println("-----activityReport... >>> Receiving from terminal");
         System.out.println("arg0.getStartDate() = " + arg0.getStartDate());
         System.out.println("arg0.getEndDate() = " + arg0.getEndDate());
         Map map = FrontManager.activityReport(arg0);
@@ -118,34 +118,34 @@ public class Scan {
 //
 //    }
     
-    private Double sum(List<Transaction> list){
-        Double sum = 0D;
-        
-        for (Transaction t : list) {
-            sum += t.getAmount();
-        }
-        return sum;
-    }
+//    private Double sum(List<Transaction> list){
+//        Double sum = 0D;
+//        
+//        for (Transaction t : list) {
+//            sum += t.getAmount();
+//        }
+//        return sum;
+//    }
     
-    public static void main(String[] args){
-     Date date = new Date();
-        System.out.println(dateToISOFormat(new Date()));
-    }
-    
-     public static String dateToISOFormat(Date date) {
-        if (date == null) {
-            return "";
-        }
-        try {
-            TimeZone tz = TimeZone.getTimeZone("UTC");
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-            df.setTimeZone(tz);
-            return df.format(new Date());
-        } catch (Exception e) {
-            return date.toString();
-        }
-
-    }
+//    public static void main(String[] args){
+//     Date date = new Date();
+//        System.out.println(dateToISOFormat(new Date()));
+//    }
+//    
+//     public static String dateToISOFormat(Date date) {
+//        if (date == null) {
+//            return "";
+//        }
+//        try {
+//            TimeZone tz = TimeZone.getTimeZone("UTC");
+//            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+//            df.setTimeZone(tz);
+//            return df.format(new Date());
+//        } catch (Exception e) {
+//            return date.toString();
+//        }
+//
+//    }
 
     public TecnicardConfirmationRes tecnicardConfirmation( final TecnicardConfirmationRequest arg0 ) throws Exception {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] FRONT TECNICARD CONFIRMATION ",null );

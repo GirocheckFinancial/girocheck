@@ -289,6 +289,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClientAddress(...) DONE", null);
     }
 
+    //TODO Make sure this is not creating a new Personl Identification
     protected PersonalIdentification fillOutPersonalIdentification(Map transactionMap, Transaction transaction) throws SQLException {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutPersonalIdentification(...) ", null);

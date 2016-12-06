@@ -25,7 +25,9 @@ public class FeeBucketsManager {
     FeeBucketsDAO feeBucketsDAO = FeeBucketsDAO.get();
 
     public Map getFees(String merchantId, String operation, String amountString) {
+        System.out.println("FeeBucketsManager:: getFees() -> amountString = " + amountString);
         float amount = 0;
+        Float calculatedFee = 0F;
         Map responseMap = new HashMap();
         try {
             amount = Float.parseFloat(amountString);
@@ -36,19 +38,22 @@ public class FeeBucketsManager {
 
         FeeBuckets bucket = feeBucketsDAO.getFees(merchantId, operation, amount);
         if (bucket != null) {
+            System.out.println("FeeBucketsManager:: found bucket ");
             responseMap = bucket.toMap();
             Float fee = 0F;
-            if (operation.equals("01")) {  //check 
-                fee = getFeeForChecks(amount);
-            } else {
-                fee = bucket.getFixed() + amount * (bucket.getPercentage() / 100);
-            }
-            BigDecimal bd = new BigDecimal(fee).setScale(2, BigDecimal.ROUND_HALF_UP);
-        
-            responseMap.put(ParameterName.CRDLDF, Float.parseFloat(bd.toString()));
 
-            System.out.println("[FeeBucketsManager] FeeBucketsManager() final fee result: " + responseMap.get(ParameterName.CRDLDF));
+            fee = bucket.getFixed() + amount * (bucket.getPercentage() / 100);
+
+            BigDecimal bd = new BigDecimal(fee).setScale(2, BigDecimal.ROUND_HALF_UP);
+            calculatedFee = Float.parseFloat(bd.toString());
+
+            System.out.println("***[FeeBucketsManager] FeeBucketsManager() final fee result: " + responseMap.get(ParameterName.CRDLDF));
+        } else {
+            System.out.println("FeeBucketsManager:: bucket is NULL");
         }
+        System.out.println("FeeBucketsManager::calculatedFee = " + calculatedFee);
+        responseMap.put(ParameterName.CRDLDF, calculatedFee);
+
         return responseMap;
     }
 
@@ -60,9 +65,9 @@ public class FeeBucketsManager {
             return amount * 0.01F;
         }
     }
-    
-    public static void main(String args[]){
-        float f =  3.1823232F;
+
+    public static void main(String args[]) {
+        float f = 3.1823232F;
         BigDecimal bd = new BigDecimal(f).setScale(2, BigDecimal.ROUND_HALF_UP);
         System.out.println(Float.parseFloat(bd.toString()));
     }

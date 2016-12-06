@@ -13,6 +13,7 @@
 package com.smartbt.girocheck.servercommon.manager;
 
 import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
+import com.smartbt.girocheck.servercommon.model.PersonalIdentification;
 
 /**
  *
@@ -33,5 +34,9 @@ public class PersonalIdentificationManager {
 
     public void removeByClientAndType(int idClient, int idType) {
         dao.removeByClientAndType(idClient, idType);
+    }
+    
+    public PersonalIdentification getByClientId( int idClient) {
+        return dao.getByClientId(idClient);
     }
 }

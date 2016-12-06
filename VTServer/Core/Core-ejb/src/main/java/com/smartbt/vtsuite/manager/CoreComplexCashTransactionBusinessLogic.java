@@ -1,5 +1,6 @@
 package com.smartbt.vtsuite.manager;
 
+import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 import com.smartbt.girocheck.servercommon.email.EmailUtils;
 import com.smartbt.girocheck.servercommon.email.ImagePart;
 import com.smartbt.vtsuite.util.CoreTransactionUtil;
@@ -179,13 +180,25 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             fillOutClient(request.getTransactionData());
             fillOutClientAddress(request.getTransactionData());
-            PersonalIdentification identification = fillOutPersonalIdentification(request.getTransactionData());
-            fillOutCheck(request.getTransactionData());
+ 
 
-            if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY) || personalInfoRequestMap.containsKey(ParameterName.IDSTATE)
-                    || personalInfoRequestMap.containsKey(ParameterName.COUNTRY) || personalInfoRequestMap.containsKey(ParameterName.STATE)) {
-                try {
-                    HibernateUtil.beginTransaction();
+            try {
+                HibernateUtil.beginTransaction();
+
+               PersonalIdentification identification = PersonalIdentificationDAO.get().getByClientId(transaction.getClient().getId());
+                      
+                if (identification != null) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Creating new  PersonalIdentification()", null);
+                    identification = new PersonalIdentification();
+                } else {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] PersonalIdentification already exist.", null);
+                }
+
+                identification = fillOutPersonalIdentification(identification, request.getTransactionData());
+                fillOutCheck(request.getTransactionData());
+
+                if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY) || personalInfoRequestMap.containsKey(ParameterName.IDSTATE)
+                        || personalInfoRequestMap.containsKey(ParameterName.COUNTRY) || personalInfoRequestMap.containsKey(ParameterName.STATE)) {
 
                     if (identification.getIdType() != null) {
                         personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType());
@@ -241,15 +254,8 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                         request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
                     }
 
-                    HibernateUtil.commitTransaction();
-                } catch (Exception e) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error", e.getMessage());
-                    HibernateUtil.rollbackTransaction();
                 }
-            }
 
-            
-            
 //            if (personalInfoRequestMap.containsKey(ParameterName.BORNDATE) || personalInfoRequestMap.containsKey(ParameterName.EXPIRATION_DATE)) {
 //
 //                if (personalInfoRequestMap.get(ParameterName.BORNDATE) != null) {
@@ -271,11 +277,17 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 //                }
 //
 //            }
+                identification.setClient(transaction.getClient());
+                Set set = new HashSet();
+                set.add(identification);
+                transaction.getClient().setData_SD(set);
 
-            identification.setClient(transaction.getClient());
-            Set set = new HashSet();
-            set.add(identification);
-            transaction.getClient().setData_SD(set);
+                HibernateUtil.commitTransaction();
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Error", e.getMessage());
+                HibernateUtil.rollbackTransaction();
+            }
 
             //-------SENT TO  ORDER_EXPRESS ------
             DirexTransactionRequest reqOE = request;
@@ -764,9 +776,9 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         if (transactionMap.containsKey(ParameterName.EMAIL)) {
             transaction.getClient().setEmail((String) transactionMap.get(ParameterName.EMAIL));
         }
-         if (transactionMap.containsKey(ParameterName.BORNDATE_AS_DATE)) {
-                transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE_AS_DATE));
-         }
+        if (transactionMap.containsKey(ParameterName.BORNDATE_AS_DATE)) {
+            transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE_AS_DATE));
+        }
 
         try {
             if (transactionMap.containsKey(ParameterName.ADDRESS_CORRECT)) {
@@ -831,8 +843,8 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         }
     }
 
-    private PersonalIdentification fillOutPersonalIdentification(Map transactionMap) throws SQLException {
-        PersonalIdentification identidication = new PersonalIdentification();
+    private PersonalIdentification fillOutPersonalIdentification(PersonalIdentification identidication, Map transactionMap) throws SQLException {
+
         identidication.setClient(transaction.getClient());
 
         if (transactionMap.containsKey(ParameterName.ID)) {
@@ -854,7 +866,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             identidication.setExpirationDate(date);
         }
-        if (transactionMap.containsKey(ParameterName.IDFRONT) &&  transactionMap.get(ParameterName.IDFRONT) != null) {
+        if (transactionMap.containsKey(ParameterName.IDFRONT) && transactionMap.get(ParameterName.IDFRONT) != null) {
             byte[] idFront = (byte[]) transactionMap.get(ParameterName.IDFRONT);
             java.sql.Blob idFrontBlob = new SerialBlob(idFront);
             identidication.setIdFront(idFrontBlob);
@@ -941,7 +953,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                 }
 
-               if (dlData != null && !dlData.isEmpty()) {
+                if (dlData != null && !dlData.isEmpty()) {
                     try {
                         personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
                     } catch (Exception e) {
@@ -954,9 +966,9 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 if (personalInfoMap != null) {
 
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] ----------------- Printing PersonInfo map  -----------------  ", null);
-                    String ssn = (String)request.getTransactionData().get(ParameterName.SSN);
+                    String ssn = (String) request.getTransactionData().get(ParameterName.SSN);
                     dtr.getTransactionData().put(ParameterName.IDTYPE, CoreTransactionUtil.getIdTypeFromId(ssn));
-                    
+
                     dtr.getTransactionData().put(ParameterName.ID, personalInfoMap.get(ParameterName.ID));
                     NewCoreComplexTransactionBusinessLogic.fixPersonInfoName(personalInfoMap);
                     dtr.getTransactionData().putAll(personalInfoMap);

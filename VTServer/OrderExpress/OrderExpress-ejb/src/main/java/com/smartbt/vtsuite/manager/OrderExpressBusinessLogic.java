@@ -14,6 +14,7 @@ import com.smartbt.vtsuite.boundary.client.impl.LOTEENTRADA;
 import com.smartbt.vtsuite.boundary.client.impl.LOTESALIDA;
 import com.smartbt.vtsuite.boundary.client.impl.ObjectFactory;
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
+import com.smartbt.girocheck.servercommon.enums.EnumCountry;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
@@ -145,7 +146,7 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      * @throws JAXBException
      */
     private Map contrataciones( Map map ) throws Exception {
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] ContratacionesMethod()...",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">>> [OrderExpressBusinessLogic] ContratacionesMethod()...",null);
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -286,12 +287,14 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         client.setZIPCODE( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.ZIPCODE, false ) ) );
         clientB.setZIPCODEB( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.ZIPCODE, false ) ) );
-
-        if ( map.containsKey( ParameterName.IDCOUNTRY ) ) {
+ 
+        System.out.println("OEBusinessLogic -> Setting idCountry = 2");
+        
+//        if ( map.containsKey( ParameterName.IDCOUNTRY ) ) {
             String idCountry = "2";//(String) map.get( ParameterName.IDCOUNTRY );
             client.setIDPAIS( idCountry + "" );
             clientB.setIDPAISB( idCountry + "" );
-        }
+//        }
 
         if ( map.containsKey( ParameterName.OEIDSTATE ) ) {
             String idState = (String) map.get( ParameterName.OEIDSTATE );

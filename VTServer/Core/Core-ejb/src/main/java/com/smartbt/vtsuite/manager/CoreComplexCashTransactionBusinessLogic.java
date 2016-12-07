@@ -240,8 +240,9 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                         }
                     }
 
-                    if (personalInfoRequestMap.containsKey(ParameterName.STATE)) {
-                        String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
+                  
+                    if (personalInfoRequestMap.containsKey(ParameterName.OEIDSTATE)) {
+                        String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.OEIDSTATE);
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] For IDSTATE StateAbbreviation >>> = " + stateAbbreviation, null);
                         State statee = stateManager.getByAbbreviation(stateAbbreviation);
 
@@ -252,9 +253,19 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                             request.getTransactionData().put(ParameterName.STATE, EnumState.FL.getId() + "");
                         }
                         request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
+                   
+                    
                     }
 
+                }else{
+                    System.out.println("Skipping the country/state logic..");
                 }
+                
+                
+                   String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.OEIDSTATE);
+                  System.out.println("CORE sending stateAbbreviation = "+ NomState.valueOf(stateAbbreviation).getId() + " to OE.");
+                   request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
+                   
 
 //            if (personalInfoRequestMap.containsKey(ParameterName.BORNDATE) || personalInfoRequestMap.containsKey(ParameterName.EXPIRATION_DATE)) {
 //

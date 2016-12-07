@@ -45,6 +45,7 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -257,7 +258,17 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.ADDRESS, address.getAddress());
                 direxTransactionRequest.getTransactionData().put(ParameterName.CITY, address.getCity());
                 direxTransactionRequest.getTransactionData().put(ParameterName.STATE, state.getCode());
+                direxTransactionRequest.getTransactionData().put(ParameterName.OEIDSTATE, state.getAbbreviation());
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
+                
+                Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();
+                
+                System.out.println("[CoreTransactionManager] Printing identification Data...");
+                while(it.hasNext()){
+                    Object key = it.next();
+                    System.out.println(key + " - > " + direxTransactionRequest.getTransactionData().get(key));
+                }
+                
 
             }
             /*

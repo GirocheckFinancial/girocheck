@@ -245,7 +245,7 @@ public enum ParameterName {
     SSB,
     SSN,
     START_DATE,
-    STATE,
+    STATE, 
     STATUS,
     STATUS_CODE,
     STATUS_DESCRIPTION,

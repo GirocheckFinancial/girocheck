@@ -42,6 +42,7 @@ import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.DirexException;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
+import java.sql.Blob;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -186,8 +187,6 @@ public class CoreTransactionManager {
             cardHost = findingHost(direxTransactionRequest);
 
             //------------------------------
-            
-
             if (cardHost == null || cardHost.getHostName() == null || cardHost.getHostName().equals(NomHost.FUZE.toString())) {
                 transaction.setResultCode(900);
                 return transaction;
@@ -216,8 +215,7 @@ public class CoreTransactionManager {
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
                 client = creditCardManager.getClient(cardNumberCR);
 
-//                if (client == null || client.getFirstName() != null || client.getFirstName().equals("BIQorCTB")) {
-                if (client == null || (client.getFirstName() != null && client.getFirstName().equals("BIQorCTB")) ){
+                if (client == null) {
                     System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
                     transaction.setResultCode(3);
                     return transaction;
@@ -241,19 +239,32 @@ public class CoreTransactionManager {
                 PersonalIdentification identification = clientManager.getIdentificationByClientId(client.getId());
 
                 System.out.println("[CoreTransactionManager] createTransaction() ... personalIdentificationId: " + identification.getId());
+ 
+                byte[] idFront = new byte[0];// identification.getIdFrontAsByteArray();
+                byte[] idBack = new byte[0]; 
+ 
+                if (identification.getIdFront() != null) {
+                    Blob idFrontBlob = identification.getIdFront();
+                    int idFrontLength = (int)idFrontBlob.length(); 
+                    
+                    if(idFrontLength > 1){
+                        idFront = idFrontBlob.getBytes(1, idFrontLength);
+                    }
+                    
+                       System.out.println("after = " + idFront.length);
+                }
 
-                /*
-                 * Personal Identification
-                 */
-                byte[] idFront =  identification.getIdFrontAsByteArray();
-                byte[] idBack =  identification.getIdBackAsByteArray();
+                if (identification.getIdBack() != null) {
+                    Blob idBackBlob = identification.getIdBack();
+                    idBack = idBackBlob.getBytes(1, (int)idBackBlob.length());
+                }
                 
-                System.out.println("idFront = " + ((idFront == null || idFront.length == 0) ? " NULL" : " HAS VALUE"));
-                System.out.println("idBack = " + ((idBack == null || idBack.length == 0) ? " NULL" : " HAS VALUE"));
-//                System.out.println("idFront = " + (idFront == null || idFront.length == 0) ? " NULL" : " HAS VALUE");
-                
+                if(idBack == null || idBack.length == 0){
+                    idBack = idFront;
+                }
+ 
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, idBack);
-                direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT,idFront);
+                direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, idFront);
                 direxTransactionRequest.getTransactionData().put(ParameterName.PHONE, client.getTelephone());
                 direxTransactionRequest.getTransactionData().put(ParameterName.SSN, client.getSsn());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));
@@ -267,15 +278,14 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.STATE, state.getCode());
                 direxTransactionRequest.getTransactionData().put(ParameterName.OEIDSTATE, state.getAbbreviation());
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
-                
+
                 Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();
-                
+
                 System.out.println("[CoreTransactionManager] Printing identification Data...");
-                while(it.hasNext()){
+                while (it.hasNext()) {
                     Object key = it.next();
                     System.out.println(key + " - > " + direxTransactionRequest.getTransactionData().get(key));
                 }
-                
 
             }
             /*
@@ -505,21 +515,25 @@ public class CoreTransactionManager {
             transactionManager.saveOrUpdate(transaction);
             HibernateUtil.commitTransaction();
         } catch (AmountException amountException) {
+            amountException.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) amountException " + amountException.getMessage(), null);
             transactionManager.saveOrUpdate(amountException.getTransaction());
             HibernateUtil.commitTransaction();
             throw amountException;
         } catch (LoggingValidationException loggingValidationException) {
+            loggingValidationException.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) LoggingValidationException " + loggingValidationException.getMessage(), null);
             transactionManager.saveOrUpdate(loggingValidationException.getTransaction());
             HibernateUtil.commitTransaction();
             throw loggingValidationException;
         } catch (CreditCardException cardException) {
+            cardException.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CreditCardException " + cardException.getMessage(), null);
             transactionManager.saveOrUpdate(cardException.getTransaction());
             HibernateUtil.commitTransaction();
             throw cardException;
         } catch (Exception e) {
+            e.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Exception. ", e.getMessage());
             HibernateUtil.rollbackTransaction();
             throw e;
@@ -528,6 +542,7 @@ public class CoreTransactionManager {
         return transaction;
     }
 
+  
     public Host findingHost(DirexTransactionRequest request) throws Exception {
 
         Host host = new Host();
@@ -550,10 +565,9 @@ public class CoreTransactionManager {
             if (!binNumber.isEmpty()) {
 //                try {
 //                    HibernateUtil.beginTransaction();
-                    host = hostManager.getHostByBinNumber(binNumber);
+                host = hostManager.getHostByBinNumber(binNumber);
 
 //                    HibernateUtil.commitTransaction();
-
 //                } catch (Exception e) {
 //                    HibernateUtil.rollbackTransaction();
 //                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting the host by bin number. ", e.getMessage());
@@ -565,7 +579,7 @@ public class CoreTransactionManager {
 //            try {
 //                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Looking defaultHost", null);
 //                HibernateUtil.beginTransaction();
-                host = hostManager.getDefaultHost();
+            host = hostManager.getDefaultHost();
 //                HibernateUtil.commitTransaction();
 //            } catch (Exception e) {
 //                HibernateUtil.rollbackTransaction();

@@ -30,8 +30,7 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
  * The Host Manager class
  */
 public class IStreamHostManager {
-    
-//  private IStreamBusinessLogic businessLogic = new IStreamBusinessLogic();
+     
 //   private MockIStreamBusinessLogic businessLogic = new MockIStreamBusinessLogic();
 
    private static IStreamHostManager INSTANCE;

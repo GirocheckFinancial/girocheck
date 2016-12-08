@@ -77,36 +77,36 @@ public class PersonalIdentification implements Serializable {
         return idFront;
     }
 
-    public byte[] getIdFrontAsByteArray() throws SQLException {
-        try {
-            if (idFront == null || idFront.length() <= 0) {
-                return null;
-            }
-            int length = (int) idFront.length();
-            return idFront.getBytes(0, length);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
+//    public byte[] getIdFrontAsByteArray() throws SQLException {
+//        try {
+//            if (idFront == null || idFront.length() <= 0) {
+//                return null;
+//            }
+//            int length = (int) idFront.length();
+//            return idFront.getBytes(0, length);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//    }
 
     public void setIdBack(java.sql.Blob value) {
         this.idBack = value;
     }
 
-    public byte[] getIdBackAsByteArray() throws SQLException {
-        try {
-            if (idBack == null || idBack.length() <= 0) {
-                return null;
-            }
-            int length = (int) idBack.length();
-            return idBack.getBytes(0, length);
-        } catch (Exception e) {
-             e.printStackTrace();
-            return null;
-        }
-    }
+//    public byte[] getIdBackAsByteArray() throws SQLException {
+//        try {
+//            if (idBack == null || idBack.length() <= 0) {
+//                return null;
+//            }
+//            int length = (int) idBack.length();
+//            return idBack.getBytes(0, length);
+//        } catch (Exception e) {
+//             e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     public java.sql.Blob getIdBack() {
         return idBack;

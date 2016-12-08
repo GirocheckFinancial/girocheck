@@ -51,13 +51,7 @@ public class PersonalIdentificationDAO extends BaseDAO<PersonalIdentification> {
         criteria.setMaxResults(1);
 
         PersonalIdentification identification = (PersonalIdentification) criteria.uniqueResult();
-
-        byte[] idFront = identification.getIdFrontAsByteArray();
-        byte[] idBack = identification.getIdBackAsByteArray();
-        System.out.println("PersonalIdentificationDAO:: getByClientId");
-        System.out.println("idFront = " + ((idFront == null || idFront.length == 0) ? " NULL" : " HAS VALUE"));
-        System.out.println("idBack = " + ((idBack == null || idBack.length == 0) ? " NULL" : " HAS VALUE"));
-
+ 
         identification.getClient();
         identification.getState();
 

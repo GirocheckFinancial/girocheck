@@ -226,8 +226,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                         } else {
                             request.getTransactionData().put(ParameterName.IDSTATE, EnumState.FL.getId() + "");
                         }
-                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(idStateAbbreviation).getId() + "");
-                    }
+                       }
                     if (personalInfoRequestMap.containsKey(ParameterName.COUNTRY)) {
                         String countryAbbreviation = (String) personalInfoRequestMap.get(ParameterName.COUNTRY);
                         Country country = countryManager.getByAbbreviation(countryAbbreviation);
@@ -251,10 +250,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                             transaction.getClient().getAddress().setState(statee);
                         } else {
                             request.getTransactionData().put(ParameterName.STATE, EnumState.FL.getId() + "");
-                        }
-                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
-                   
-                    
+                        } 
                     }
 
                 }else{
@@ -263,7 +259,9 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                 
                 
                    String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.OEIDSTATE);
-                  System.out.println("CORE sending stateAbbreviation = "+ NomState.valueOf(stateAbbreviation).getId() + " to OE.");
+                 
+                   System.out.println("[CoreComplexCashBL] stateAbbreviation = " + stateAbbreviation);
+                   System.out.println("CORE sending stateAbbreviation = "+ NomState.valueOf(stateAbbreviation).getId() + " to OE.");
                    request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
                    
 

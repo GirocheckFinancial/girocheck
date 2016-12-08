@@ -14,6 +14,7 @@ package com.smartbt.girocheck.servercommon.manager;
 
 import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 import com.smartbt.girocheck.servercommon.model.PersonalIdentification;
+import java.sql.SQLException;
 
 /**
  *
@@ -36,7 +37,7 @@ public class PersonalIdentificationManager {
         dao.removeByClientAndType(idClient, idType);
     }
     
-    public PersonalIdentification getByClientId( int idClient) {
+    public PersonalIdentification getByClientId( int idClient) throws SQLException {
         return dao.getByClientId(idClient);
     }
 }

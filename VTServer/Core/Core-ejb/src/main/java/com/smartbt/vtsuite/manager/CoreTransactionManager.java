@@ -245,8 +245,15 @@ public class CoreTransactionManager {
                 /*
                  * Personal Identification
                  */
-                direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, identification.getIdFrontAsByteArray());
-                direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, identification.getIdBackAsByteArray());
+                byte[] idFront =  identification.getIdFrontAsByteArray();
+                byte[] idBack =  identification.getIdBackAsByteArray();
+                
+                System.out.println("idFront = " + ((idFront == null || idFront.length == 0) ? " NULL" : " HAS VALUE"));
+                System.out.println("idBack = " + ((idBack == null || idBack.length == 0) ? " NULL" : " HAS VALUE"));
+//                System.out.println("idFront = " + (idFront == null || idFront.length == 0) ? " NULL" : " HAS VALUE");
+                
+                direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, idBack);
+                direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT,idFront);
                 direxTransactionRequest.getTransactionData().put(ParameterName.PHONE, client.getTelephone());
                 direxTransactionRequest.getTransactionData().put(ParameterName.SSN, client.getSsn());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));

@@ -146,21 +146,30 @@ public class CheckAuthRequest {
         Identification identificationn = new Identification();
         
         identificationn.setId(MapUtil.getStringValueFromMap( map, ParameterName.ID, false ));
-//        if(map.get(ParameterName.BORNDATE) != null){
-//                String dob = map.get(ParameterName.BORNDATE).toString();             
+       
+        System.out.println("map.get(ParameterName.BORNDATE) " + map.get(ParameterName.BORNDATE));
+        
+        if(map.get(ParameterName.BORNDATE_AS_DATE) != null){
+                Date dob = (Date)map.get(ParameterName.BORNDATE_AS_DATE);             
 //                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE original DATE: "+dob,null);
 //                    Date dobIn = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
-//                    SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
-//                    identificationn.setDob(dobOut.format(dobIn));
-//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE value : "+dobOut.format(dobIn),null);
-//        }
+                    SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
+                    identificationn.setDob(dobOut.format(dob));
+                   
+        }else{
+            identificationn.setDob(MapUtil.getStringValueFromMap( map, ParameterName.BORNDATE, false ));
+        }
         
-        identificationn.setDob(MapUtil.getStringValueFromMap( map, ParameterName.BORNDATE, false ));
+         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckAuthRequest] BORNDATE value : "+ identificationn.getDob(),null);
+        
+//        identificationn.setDob(MapUtil.getStringValueFromMap( map, ParameterName.BORNDATE, false ));
+//        identificationn.setDob(MapUtil.getStringValueFromMap( map, ParameterName.BORNDATE, false ));
         identificationn.setFirstName(MapUtil.getStringValueFromMap( map, ParameterName.FIRST_NAME, false ));
         identificationn.setLastName(MapUtil.getStringValueFromMap( map, ParameterName.LAST_NAME, false ));
         identificationn.setAddress(MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false ));
         identificationn.setCity(MapUtil.getStringValueFromMap( map, ParameterName.CITY, false ));
-        identificationn.setState(MapUtil.getStringValueFromMap( map, ParameterName.STATE, false ));
+        identificationn.setState(MapUtil.getStringValueFromMap( map, ParameterName.OEIDSTATE, false ));
+//        identificationn.setState(MapUtil.getStringValueFromMap( map, ParameterName.STATE, false ));
         identificationn.setZip(MapUtil.getStringValueFromMap( map, ParameterName.ZIPCODE, false ));
         
         this.identification = identificationn;

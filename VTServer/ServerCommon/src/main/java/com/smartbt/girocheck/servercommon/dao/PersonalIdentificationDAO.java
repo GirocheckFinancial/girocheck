@@ -14,6 +14,7 @@ package com.smartbt.girocheck.servercommon.dao;
 
 import com.smartbt.girocheck.servercommon.model.PersonalIdentification;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
+import java.sql.SQLException;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
@@ -31,36 +32,42 @@ public class PersonalIdentificationDAO extends BaseDAO<PersonalIdentification> {
     }
 
     public static PersonalIdentificationDAO get() {
-        if ( dao == null ) {
+        if (dao == null) {
             dao = new PersonalIdentificationDAO();
         }
         return dao;
     }
 
-    public PersonalIdentification getByClientAndType( int idClient, int idType ) {
-        Criteria criteria = HibernateUtil.getSession().createCriteria( PersonalIdentification.class ).
-                createAlias( "client", "client" ).add( Restrictions.eq( "client.id", idClient ) ).add( Restrictions.eq( "idType", idType ) );
+    public PersonalIdentification getByClientAndType(int idClient, int idType) {
+        Criteria criteria = HibernateUtil.getSession().createCriteria(PersonalIdentification.class).
+                createAlias("client", "client").add(Restrictions.eq("client.id", idClient)).add(Restrictions.eq("idType", idType));
         return (PersonalIdentification) criteria.uniqueResult();
     }
-    public PersonalIdentification getByClientId( int idClient) {
-        Criteria criteria = HibernateUtil.getSession().createCriteria( PersonalIdentification.class ).
-                createAlias( "client", "client" ).add( Restrictions.eq( "client.id", idClient ) )
+
+    public PersonalIdentification getByClientId(int idClient) throws SQLException {
+        Criteria criteria = HibernateUtil.getSession().createCriteria(PersonalIdentification.class).
+                createAlias("client", "client").add(Restrictions.eq("client.id", idClient))
                 .addOrder(Order.desc("id"));
         criteria.setMaxResults(1);
-        
+
         PersonalIdentification identification = (PersonalIdentification) criteria.uniqueResult();
-        
+
+        byte[] idFront = identification.getIdFrontAsByteArray();
+        byte[] idBack = identification.getIdBackAsByteArray();
+        System.out.println("PersonalIdentificationDAO:: getByClientId");
+        System.out.println("idFront = " + ((idFront == null || idFront.length == 0) ? " NULL" : " HAS VALUE"));
+        System.out.println("idBack = " + ((idBack == null || idBack.length == 0) ? " NULL" : " HAS VALUE"));
+
         identification.getClient();
         identification.getState();
-        
+
         return identification;
     }
 
-    public void removeByClientAndType( int idClient, int idType ) {
-        String sql = "delete from identification where id_type = "+ idType+" and client = " + idClient;
-         Query query = HibernateUtil.getSession().createSQLQuery(sql);
-            query.executeUpdate();
+    public void removeByClientAndType(int idClient, int idType) {
+        String sql = "delete from identification where id_type = " + idType + " and client = " + idClient;
+        Query query = HibernateUtil.getSession().createSQLQuery(sql);
+        query.executeUpdate();
     }
-    
 
 }

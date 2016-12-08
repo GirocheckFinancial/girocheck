@@ -85,6 +85,7 @@ public class PersonalIdentification implements Serializable {
             int length = (int) idFront.length();
             return idFront.getBytes(0, length);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -102,6 +103,7 @@ public class PersonalIdentification implements Serializable {
             int length = (int) idBack.length();
             return idBack.getBytes(0, length);
         } catch (Exception e) {
+             e.printStackTrace();
             return null;
         }
     }

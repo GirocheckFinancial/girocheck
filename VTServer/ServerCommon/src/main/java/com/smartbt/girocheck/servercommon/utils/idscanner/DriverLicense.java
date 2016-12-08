@@ -343,8 +343,14 @@ public class DriverLicense {
         map.put(ParameterName.COUNTRY, "US");
         map.put(ParameterName.IDCOUNTRY, "US");
         Date bornDate = getDOB().getTime(); 
+       
+        String bornDateString = formatDate(bornDate);
         map.put(ParameterName.BORNDATE_AS_DATE, bornDate);
-        map.put(ParameterName.BORNDATE,  formatDate(bornDate));
+        map.put(ParameterName.BORNDATE,  bornDateString);
+        
+         System.out.println("DriverLicense -> BORNDATE = " + bornDateString);
+         System.out.println( " DriverLicense -> BORNDATE_AS_DATE = " + bornDate);
+         
         return map;
     }
 

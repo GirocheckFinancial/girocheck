@@ -189,7 +189,7 @@ public class ClientManager {
         return response;
     }
         
-        public PersonalIdentification getIdentificationByClientId(int idClient){
+        public PersonalIdentification getIdentificationByClientId(int idClient) throws SQLException{
             
             return personalIdentificationDAO.getByClientId(idClient);
             

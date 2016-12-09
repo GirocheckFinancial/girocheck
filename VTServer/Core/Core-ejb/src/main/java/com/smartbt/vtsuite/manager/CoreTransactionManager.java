@@ -237,8 +237,6 @@ public class CoreTransactionManager {
                 }
 
                 PersonalIdentification identification = clientManager.getIdentificationByClientId(client.getId());
-
-                System.out.println("[CoreTransactionManager] createTransaction() ... personalIdentificationId: " + identification.getId());
  
                 byte[] idFront = new byte[0];// identification.getIdFrontAsByteArray();
                 byte[] idBack = new byte[0]; 
@@ -250,8 +248,7 @@ public class CoreTransactionManager {
                     if(idFrontLength > 1){
                         idFront = idFrontBlob.getBytes(1, idFrontLength);
                     }
-                    
-                       System.out.println("after = " + idFront.length);
+                     
                 }
 
                 if (identification.getIdBack() != null) {
@@ -280,13 +277,7 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
 
                 Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();
-
-                System.out.println("[CoreTransactionManager] Printing identification Data...");
-                while (it.hasNext()) {
-                    Object key = it.next();
-                    System.out.println(key + " - > " + direxTransactionRequest.getTransactionData().get(key));
-                }
-
+ 
             }
             /*
         

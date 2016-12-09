@@ -52,8 +52,8 @@ public class PersonalIdentificationDAO extends BaseDAO<PersonalIdentification> {
 
         PersonalIdentification identification = (PersonalIdentification) criteria.uniqueResult();
  
-        identification.getClient();
-        identification.getState();
+//        identification.getClient();
+//        identification.getState();
 
         return identification;
     }

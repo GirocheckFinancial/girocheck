@@ -21,6 +21,7 @@ import com.smartbt.girocheck.servercommon.manager.TransactionManager;
 import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.model.Address;
 import com.smartbt.girocheck.servercommon.model.Check;
+import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.model.Country;
 import com.smartbt.girocheck.servercommon.model.PersonalIdentification;
 import com.smartbt.girocheck.servercommon.model.State;
@@ -187,7 +188,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
                PersonalIdentification identification = PersonalIdentificationDAO.get().getByClientId(transaction.getClient().getId());
                       
-                if (identification != null) {
+                if (identification == null) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Creating new  PersonalIdentification()", null);
                     identification = new PersonalIdentification();
                 } else {
@@ -853,8 +854,8 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
     }
 
     private PersonalIdentification fillOutPersonalIdentification(PersonalIdentification identidication, Map transactionMap) throws SQLException {
-
-        identidication.setClient(transaction.getClient());
+        Client client = transaction.getClient();
+        identidication.setClient(client);
 
         if (transactionMap.containsKey(ParameterName.ID)) {
             identidication.setIdentification((String) transactionMap.get(ParameterName.ID));
@@ -883,7 +884,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
         if (transactionMap.containsKey(ParameterName.IDBACK) && transactionMap.get(ParameterName.IDBACK) != null) {
             byte[] idBack = (byte[]) transactionMap.get(ParameterName.IDBACK);
             java.sql.Blob idBackBlob = new SerialBlob(idBack);
-            identidication.setIdFront(idBackBlob);
+            identidication.setIdBack(idBackBlob);
         }
 
         return identidication;

@@ -29,7 +29,8 @@ public enum EnumApplicationParameter {
     AMOUNT_MIN_CHECK("amountMinCheck"),
     AMOUNT_MAX_CHECK("amountMaxCheck"),
     AMOUNT_MIN_CASH("amountMinCash"),
-    AMOUNT_MAX_CASH("amountMaxCash");
+    AMOUNT_MAX_CASH("amountMaxCash"),
+    ACTIVATION_FEE("activation_fee");
     
     private String parameter;
 

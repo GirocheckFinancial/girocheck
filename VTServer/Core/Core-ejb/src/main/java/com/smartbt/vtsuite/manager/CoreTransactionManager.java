@@ -320,7 +320,10 @@ public class CoreTransactionManager {
                 if (amountAplicationParameters == null) {
                     amountAplicationParameters = applicationParameterManager.getAmountAplicationParameters();
                 }
-
+                
+                Double activationFeeConfig = amountAplicationParameters.get(EnumApplicationParameter.ACTIVATION_FEE);
+                direxTransactionRequest.getTransactionData().put(ParameterName.ACTIVATION_FEE_CONFIG, activationFeeConfig);
+                        
                 validateAmount(ammount, operation, transaction, amountAplicationParameters);
             }
 
@@ -434,39 +437,7 @@ public class CoreTransactionManager {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CreditCard value from the Terminal is NULL. ", null);
                         throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, "CreditCard Value from Terminal : Is Null. ", transaction);
                     }
-//
-//                CreditCard creditCard;
-//                if ( transactionType == TransactionType.NEW_CARD_LOAD ) {
-//                    creditCard = creditCardManager.getByNumber( cardNumber );
-//
-//                    if ( creditCard == null ) {
-//                        creditCard = new CreditCard();
-//                        creditCard.setCardNumber( cardNumber );
-//                        creditCard.setClient( client );
-//                        creditCard.setCardStatus( CardStatus.UNACTIVE.getId() );
-//                    } else {
-//                        if ( creditCard.getCardStatus() != CardStatus.UNACTIVE.getId() ) {
-//                            throw new LoggingValidationException( ResultCode.CARD_ALREADY_PERSONALIZED, "Credit Card has already been personalized.", transaction );
-//                        }
-//                    }
-//                } else {
-//                    // si no es un NEW_CARD_LOAD, la tarjeta tiene que tener ese numero en la base de datos, 
-//                    // o tiene que existir una tarjeta con status WAITING_OFFICIAL_NUMBER perteneciente a este cliente.
-//                    creditCard = creditCardManager.getByNumber( cardNumber );
-//
-//                    if ( creditCard == null ) {
-//                        if ( transactionType == TransactionType.TECNICARD_BALANCE_INQUIRY ) {
-//                            creditCard = null;
-//                        } else {
-//                            creditCard = creditCardManager.getCardWaitingOfficialNumber( cardNumber );
-//                            if ( creditCard == null ) {//si no existe 
-//                                throw new LoggingValidationException( ResultCode.CARD_NOT_PERSONALIZED, "Credit Card need to be personalized.", transaction );
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                transaction.setData_sc1( creditCard );
+ 
                 }
             }
             // -----------------------------------------------------------------
@@ -504,30 +475,37 @@ public class CoreTransactionManager {
             transaction.setTransactionFinished(false);
 
             transactionManager.saveOrUpdate(transaction);
-            HibernateUtil.commitTransaction();
+//            HibernateUtil.commitTransaction();
         } catch (AmountException amountException) {
             amountException.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) amountException " + amountException.getMessage(), null);
             transactionManager.saveOrUpdate(amountException.getTransaction());
-            HibernateUtil.commitTransaction();
+//            HibernateUtil.commitTransaction();
             throw amountException;
         } catch (LoggingValidationException loggingValidationException) {
             loggingValidationException.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) LoggingValidationException " + loggingValidationException.getMessage(), null);
             transactionManager.saveOrUpdate(loggingValidationException.getTransaction());
-            HibernateUtil.commitTransaction();
+//            HibernateUtil.commitTransaction();
             throw loggingValidationException;
         } catch (CreditCardException cardException) {
             cardException.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CreditCardException " + cardException.getMessage(), null);
             transactionManager.saveOrUpdate(cardException.getTransaction());
-            HibernateUtil.commitTransaction();
+//            HibernateUtil.commitTransaction();
             throw cardException;
         } catch (Exception e) {
             e.printStackTrace();
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Exception. ", e.getMessage());
-            HibernateUtil.rollbackTransaction();
+//            HibernateUtil.rollbackTransaction();
             throw e;
+        }finally{
+            try{
+                HibernateUtil.commitTransaction();
+            }catch(Exception e){
+                 HibernateUtil.rollbackTransaction();
+            }
+            
         }
 
         return transaction;

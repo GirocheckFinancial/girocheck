@@ -13,6 +13,7 @@ public enum ParameterName {
     ACH_FORM,
     ACTION,
     ACTIVATION_FEE,
+    ACTIVATION_FEE_CONFIG,
     ACTUAL_CARD_NUMBER,
     ADDITIONAL_INFO,
     ADDRESS,

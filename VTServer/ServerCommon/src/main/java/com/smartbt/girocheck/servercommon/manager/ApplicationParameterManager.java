@@ -101,6 +101,7 @@ public class ApplicationParameterManager {
           getAmountParameter( map, EnumApplicationParameter.AMOUNT_MAX_CHECK, 5000D);
           getAmountParameter( map, EnumApplicationParameter.AMOUNT_MIN_CASH, 10D);
           getAmountParameter( map, EnumApplicationParameter.AMOUNT_MAX_CASH, 1000D);
+          getAmountParameter( map, EnumApplicationParameter.ACTIVATION_FEE, 4.95D); //4.95 is the default value
           
          return map;
      }

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 import org.hibernate.stat.Statistics;
@@ -55,8 +56,9 @@ public class HibernateUtil {
     }
 
     public static void beginTransaction() {
-        // if (HibernateUtil.getSessionFactory().getCurrentSession()!=null)
-        getSession().beginTransaction();
+//        if (getSession().getTransaction() == null) {
+            getSession().beginTransaction();
+//        }
     }
 
     public static void commitTransaction() throws Exception {

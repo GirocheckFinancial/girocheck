@@ -272,6 +272,8 @@ public class TransactionDAO extends BaseDAO<Transaction> {
 
         if (transactionType != 0) {
             cri.add(Restrictions.eq("transactionType", transactionType));
+        }else{
+            cri.add(Restrictions.ne("transactionType", 5));
         }
 
         if (pending) {

@@ -47,7 +47,7 @@ public class InventoryDAO extends BaseDAO<Merchant> {
         Criteria criteria = HibernateUtil.getSession().createCriteria(Merchant.class);
 
         if (firstResult >= 0) {
-            criteria.setFirstResult(firstResult);
+            criteria.setFirstResult(firstResult * maxResult);
             criteria.setMaxResults(maxResult);
         }
 

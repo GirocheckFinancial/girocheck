@@ -47,8 +47,7 @@ public class FeeBucketsManager {
             BigDecimal bd = new BigDecimal(fee).setScale(2, BigDecimal.ROUND_HALF_UP);
             calculatedFee = Float.parseFloat(bd.toString());
 
-            System.out.println("***[FeeBucketsManager] FeeBucketsManager() final fee result: " + responseMap.get(ParameterName.CRDLDF));
-        } else {
+         } else {
             System.out.println("FeeBucketsManager:: bucket is NULL");
         }
         System.out.println("FeeBucketsManager::calculatedFee = " + calculatedFee);

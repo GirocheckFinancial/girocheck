@@ -231,11 +231,11 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
 //                .createAlias( "check", "check", JoinType.LEFT_OUTER_JOIN )
                 .createAlias( "terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
                 .createAlias( "terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
-                .createAlias( "merchant.agrupation", "customer", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("merchant.address", "merchantAddress", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("merchantAddress.state", "merchantState", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("client.address", "clientAddress", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("clientAddress.state", "clientState", JoinType.LEFT_OUTER_JOIN)
+//                .createAlias( "merchant.agrupation", "customer", JoinType.LEFT_OUTER_JOIN)
+//                .createAlias("merchant.address", "merchantAddress", JoinType.LEFT_OUTER_JOIN)
+//                .createAlias("merchantAddress.state", "merchantState", JoinType.LEFT_OUTER_JOIN)
+//                .createAlias("client.address", "clientAddress", JoinType.LEFT_OUTER_JOIN)
+//                .createAlias("clientAddress.state", "clientState", JoinType.LEFT_OUTER_JOIN)
                 .createAlias( "data_sc1", "creditCard" )
 //                .add( Restrictions.eq( "transactionFinished", true ) )
                 .addOrder( Order.asc("dateTime" ) );
@@ -273,33 +273,23 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
                 .add( Projections.property( "feeAmmount" ).as( "feeAmount" ) )
                 .add( Projections.property( "dateTime" ).as( "dateTime" ) )
                 .add( Projections.property( "resultCode" ).as( "resultCode" ) )
-                .add( Projections.property( "transactionType" ).as( "transactionType" ) )
-//                .add( Projections.property( "check.paymentCheck" ).as( "checkNumber" ) )
-//                .add( Projections.property( "check.makerName" ).as( "makerName" ) )
+                .add( Projections.property( "transactionType" ).as( "transactionType" ) ) 
                 .add( Projections.property( "resultMessage" ).as( "resultMessage" ) )
                 //merchant data
                 .add( Projections.property( "merchant.legalName" ).as( "merchant.legalName" ) )
                 .add( Projections.property( "merchant.phone" ).as( "merchant.phone" ) )
-                .add( Projections.property( "merchantAddress.address" ).as( "merchant.address" ) )
-                .add( Projections.property( "merchantAddress.city" ).as( "merchant.city" ) )
-                .add( Projections.property( "merchantState.name" ).as( "merchant.state" ) )
-                .add( Projections.property( "merchantAddress.zipcode" ).as( "merchant.zipcode" ) )
-                .add( Projections.property( "merchant.sic" ).as( "merchant.sic" ) )
+                 .add( Projections.property( "merchant.sic" ).as( "merchant.sic" ) )
                 .add( Projections.property( "merchant.description" ).as( "merchant.description" ) )
                 .add( Projections.property( "merchant.idPosOrderExp" ).as( "merchant.idPosOrderExp" ) )
                 .add( Projections.property( "merchant.idTellerOrderExp" ).as( "merchant.idTellerOrderExp" ) )
                 .add( Projections.property( "merchant.oEAgentNumber" ).as( "merchant.oEAgentNumber" ) )
-                .add( Projections.property( "customer.name" ).as( "merchant.customerName" ) )
+//                .add( Projections.property( "customer.name" ).as( "merchant.customerName" ) )
                 //terminal data
                 .add( Projections.property( "merchant.legalName" ).as( "terminal.merchantName" ) )
                 .add( Projections.property( "terminal.serialNumber" ).as( "terminal.serialNumber" ) )
                 .add( Projections.property( "terminal.description" ).as( "terminal.description" ) )
                 //client data
-                .add( Projections.property( "clientAddress.address" ).as( "client.address" ) )
-                .add( Projections.property( "clientAddress.city" ).as( "client.city" ) )
-                .add( Projections.property( "clientState.name" ).as( "client.state" ) )
-                .add( Projections.property( "clientAddress.zipcode" ).as( "client.zipcode" ) )
-                .add( Projections.property( "client.firstName" ).as( "client.firstName" ) )
+                 .add( Projections.property( "client.firstName" ).as( "client.firstName" ) )
                 .add( Projections.property( "client.lastName" ).as( "client.lastName" ) )
                 .add( Projections.property( "client.telephone" ).as( "client.telephone" ) );
         cri.setProjection( projectionList );
@@ -323,13 +313,9 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
         try{
         Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class)
                 .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("merchant.address", "merchantAddress", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("merchantAddress.state", "merchantState", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("data_sc1", "creditCard", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
-                .createAlias("client.address", "clientAddress", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)  
+                 .createAlias("data_sc1", "creditCard", JoinType.LEFT_OUTER_JOIN)
+                .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN) 
                 .add(Restrictions.eq("transactionFinished", true))
                 .addOrder(Order.desc("dateTime"));
 
@@ -359,13 +345,9 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
                 .add( Projections.property( "feeAmmount" ).as( "feeAmount" ) )
                 .add( Projections.property( "client.firstName" ).as( "clientFristName" ) )
                 .add( Projections.property( "client.lastName" ).as( "clientLastName" ) )
-                .add( Projections.property( "clientAddress.address" ).as( "clientAddress" ) )
                 .add( Projections.property( "terminal.serialNumber" ).as( "terminalSerialNumber" ) )
                 .add( Projections.property( "dateTime" ).as( "dateTime" ) )
-                .add( Projections.property( "merchant.legalName" ).as( "merchantLegalName" ) )
-                .add( Projections.property( "merchantAddress.address" ).as( "merchantAddress" ) )
-                .add( Projections.property( "merchantAddress.city" ).as( "merchantCity" ) )
-                .add( Projections.property( "merchantState.name" ).as( "merchantState" ) );
+                .add( Projections.property( "merchant.legalName" ).as( "merchantLegalName" ) );
         cri.setProjection( projectionList );
         cri.setResultTransformer( new TransformerComplexBeans( TransactionReportDisplay.class ) );
 

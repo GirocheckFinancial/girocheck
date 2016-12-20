@@ -774,13 +774,14 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
     }
 
     private void fillOutClient(Map transactionMap) throws SQLException, Exception {
+ 
         if (transactionMap.containsKey(ParameterName.FIRST_NAME)) {
             transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.FIRST_NAME));
         }
         if (transactionMap.containsKey(ParameterName.LAST_NAME)) {
             transaction.getClient().setLastName((String) transactionMap.get(ParameterName.LAST_NAME));
         }
-        if (transactionMap.containsKey(ParameterName.TELEPHONE)) {
+        if (transactionMap.containsKey(ParameterName.TELEPHONE)) { 
             transaction.getClient().setTelephone((String) transactionMap.get(ParameterName.TELEPHONE));
         }
         if (transactionMap.containsKey(ParameterName.EMAIL)) {
@@ -864,14 +865,10 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             identidication.setIdType(((IdType) transactionMap.get(ParameterName.IDTYPE)).getId());
         }
 
-        if (transactionMap.containsKey(ParameterName.EXPIRATION_DATE)) {
+        if (transactionMap.containsKey(ParameterName.EXPIRATION_DATE_AS_DATE)) {
 
-            Date date = new Date();
-            try {
-                date = new SimpleDateFormat("MMddyyyy", Locale.ENGLISH).parse((String) transactionMap.get(ParameterName.EXPIRATION_DATE));
-            } catch (ParseException ex) {
-                Logger.getLogger(CoreComplexCashTransactionBusinessLogic.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Date date = (Date)transactionMap.get(ParameterName.EXPIRATION_DATE_AS_DATE);
+            
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] fillOutPersonalIdentification() with EXPIRATION_DATE value: " + date, null);
 
             identidication.setExpirationDate(date);

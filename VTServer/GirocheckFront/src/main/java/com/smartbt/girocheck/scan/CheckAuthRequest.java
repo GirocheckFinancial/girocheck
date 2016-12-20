@@ -156,6 +156,7 @@ public class CheckAuthRequest implements IMap{
         map.put(ParameterName.IDFRONT, idFront);
         map.put(ParameterName.MICR, micr);
         map.put(ParameterName.PHONE, phone);
+        map.put(ParameterName.TELEPHONE, phone);
         map.put(ParameterName.SCANNER_MANUFACTURER, scannerManufacturer);
         map.put(ParameterName.SERIAL, serial);
         map.put(ParameterName.SSN, ssn);
@@ -198,6 +199,7 @@ public class CheckAuthRequest implements IMap{
         map.put(ParameterName.IDFRONT,  ParameterName.IMAGE);
         map.put(ParameterName.MICR, micr);
         map.put(ParameterName.PHONE, phone);
+        map.put(ParameterName.TELEPHONE, phone);
         map.put(ParameterName.SCANNER_MANUFACTURER, scannerManufacturer);
         map.put(ParameterName.SERIAL, serial);
         map.put(ParameterName.SSN, ssn);

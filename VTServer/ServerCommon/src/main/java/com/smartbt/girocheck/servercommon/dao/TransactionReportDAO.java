@@ -228,7 +228,7 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
 
         Criteria cri = HibernateUtil.getSession().createCriteria( Transaction.class )
                 .createAlias( "client", "client", JoinType.LEFT_OUTER_JOIN )
-                .createAlias( "check", "check", JoinType.LEFT_OUTER_JOIN )
+//                .createAlias( "check", "check", JoinType.LEFT_OUTER_JOIN )
                 .createAlias( "terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
                 .createAlias( "terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
                 .createAlias( "merchant.agrupation", "customer", JoinType.LEFT_OUTER_JOIN)
@@ -274,8 +274,8 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
                 .add( Projections.property( "dateTime" ).as( "dateTime" ) )
                 .add( Projections.property( "resultCode" ).as( "resultCode" ) )
                 .add( Projections.property( "transactionType" ).as( "transactionType" ) )
-                .add( Projections.property( "check.paymentCheck" ).as( "checkNumber" ) )
-                .add( Projections.property( "check.makerName" ).as( "makerName" ) )
+//                .add( Projections.property( "check.paymentCheck" ).as( "checkNumber" ) )
+//                .add( Projections.property( "check.makerName" ).as( "makerName" ) )
                 .add( Projections.property( "resultMessage" ).as( "resultMessage" ) )
                 //merchant data
                 .add( Projections.property( "merchant.legalName" ).as( "merchant.legalName" ) )

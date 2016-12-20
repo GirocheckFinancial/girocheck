@@ -262,7 +262,12 @@ public class CoreTransactionManager {
  
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, idBack);
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, idFront);
-                direxTransactionRequest.getTransactionData().put(ParameterName.PHONE, client.getTelephone());
+                
+                String phone = client.getTelephone() != null ? client.getTelephone() : "3055551212";
+              
+                direxTransactionRequest.getTransactionData().put(ParameterName.PHONE, phone);
+                direxTransactionRequest.getTransactionData().put(ParameterName.TELEPHONE, phone);
+                 
                 direxTransactionRequest.getTransactionData().put(ParameterName.SSN, client.getSsn());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));
                 direxTransactionRequest.getTransactionData().put(ParameterName.ID, identification.getIdentification());

@@ -65,14 +65,22 @@ public class InventoryDAO extends BaseDAO<Merchant> {
         
         Criteria counterCriteria = HibernateUtil.getSession().createCriteria(Merchant.class);
         Long total = (Long)counterCriteria.setProjection(Projections.rowCount()).uniqueResult();
-        
         ResponseDataList response = new ResponseDataList();
         response.setData(list);
-        Double totalPages = Math.ceil( total /  maxResult);
-         response.setTotalPages(totalPages.intValue());
+        Integer totalPages = (int) Math.ceil((float) total / (float) maxResult);;
+         response.setTotalPages(totalPages);
         response.setStatus(Constants.CODE_SUCCESS);
         response.setStatusMessage(VTSuiteMessages.SUCCESS);
         return response;
+    }
+    
+    public static void main(String[] args){
+        Long total = 7L;
+         int maxResult = 3;
+         
+        int a = (int) Math.ceil((float) total / (float) maxResult);
+         
+         System.out.println("a = " +a); 
     }
 
     public void saveOrUpdate(InventoryDisplay inventory) {

@@ -211,7 +211,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pIdCountry = MapUtil.getStringValueFromMap( map, ParameterName.IDCOUNTRY, false );
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd");
-        Date date = MapUtil.getDateValueFromMap( map, ParameterName.BORNDATE, false );
+        Date date = MapUtil.getDateValueFromMap( map, ParameterName.BORNDATE_AS_DATE, false );
         String pDateOfBirth = (date != null) ? df.format( date ) : "";
         
         String pAddress = MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false );

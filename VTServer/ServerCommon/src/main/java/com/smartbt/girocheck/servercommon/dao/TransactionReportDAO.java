@@ -103,6 +103,7 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
                 .createAlias( "merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN )
                 .createAlias( "data_sc1", "creaditCard", JoinType.LEFT_OUTER_JOIN )
                 .createAlias( "client", "client", JoinType.LEFT_OUTER_JOIN )
+                .createAlias( "check", "check", JoinType.LEFT_OUTER_JOIN )
                 .add( Restrictions.eq( "transactionFinished", true ) )
                 .addOrder( Order.desc( "dateTime" ) );
 
@@ -133,6 +134,8 @@ public class TransactionReportDAO extends BaseDAO<Transaction>{
                 .add( Projections.property( "resultMessage" ).as( "resultMessage" ) )
                 .add( Projections.property( "merchant.legalName" ).as( "merchant" ) )
                 .add( Projections.property( "terminal.serialNumber" ).as( "terminal" ) )
+                .add( Projections.property( "check.paymentCheck" ).as( "checkNumber" ) )
+                .add( Projections.property( "check.makerName" ).as( "makerName" ) )
                 .add( Projections.property( "client.firstName" ).as( "clientFirstName" ) )
                 .add( Projections.property( "client.lastName" ).as( "clientLastName" ) );
         cri.setProjection( projectionList );

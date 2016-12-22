@@ -253,6 +253,21 @@ public class TransactionDAO extends BaseDAO<Transaction> {
                 .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
                 .addOrder(Order.desc("dateTime"));
 
+        System.out.println("startRangeDate + " + startRangeDate);
+        System.out.println("endRangeDate + " + endRangeDate);
+        
+        if(startRangeDate != null){
+            startRangeDate.setHours(0);
+            startRangeDate.setMinutes(0);
+            startRangeDate.setSeconds(0);
+        }
+        
+        if(endRangeDate != null){
+            endRangeDate.setHours(23);
+            endRangeDate.setMinutes(59);
+            endRangeDate.setSeconds(59);
+        }
+        
         if (firstResult >= 0) {
             cri.setFirstResult(firstResult);
             cri.setMaxResults(maxResult);

@@ -28,7 +28,6 @@ import com.smartbt.vtsuite.vtams.client.gui.window.editor.ProfileEditor;
 import com.smartbt.vtsuite.vtams.client.gui.window.inventory.InventoryWindow;
 import com.smartbt.vtsuite.vtams.client.gui.window.transaction.TransactionWindow;
 import com.smartbt.vtsuite.vtams.client.utils.Utils;
-import static com.smartbt.vtsuite.vtams.client.utils.Utils.debug;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
 import com.smartgwt.client.data.Criteria;
@@ -184,7 +183,7 @@ public class MainWindow extends BaseWindow {
                 }
             });
         }
-
+        // Card Inventory Menu---------------------------------------------------------------------------------------------------------
         if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MANAGE_CARD_INVENTORY)) {
             MenuButtonItem inventoryButton = new MenuButtonItem("Card Inventory");
             inventoryButton.addClickHandler(new MainMenuClickHandler(this) {
@@ -195,6 +194,18 @@ public class MainWindow extends BaseWindow {
             });
             mainMenu.addButton(inventoryButton);
         }
+        //Fee Management Menu Button----------------------------------------------------------------------------------------------
+        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_FEEMANAGEMENT)) {
+            MenuButtonItem feeManagementButton = new MenuButtonItem("Fee Management");
+            feeManagementButton.addClickHandler(new MainMenuClickHandler(this) {
+                @Override
+                public BaseWindow createWindow() {                   
+                    return new FeeManagementWindow();
+                }
+            });
+            mainMenu.addButton(feeManagementButton);
+        }
+        
         mainMenu.addFill();
 
         vLayout = new VLayout();

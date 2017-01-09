@@ -408,8 +408,28 @@ public class Properties {
     
     public static final String ENTITYREPORTS_WS = WS_URL + "searchEntityReport";
     
+    public static final String SEARCH_FEESCHEDULE_WS = WS_URL + "searchFeeSchedule";
+    
+    public static final String UPDATE_FEESCHEDULE_WS = WS_URL + "updateFeeSchedule";
+    
+    public static final String ADD_FEESCHEDULE_WS = WS_URL + "addFeeSchedule";
+    
+    public static final String DELETE_FEESCHEDULE_WS = WS_URL + "deleteFeeSchedule";
+    
+     public static final String SEARCH_TXN_METHOD_WS = WS_URL + "searchTransactionMethod";
+     
+     public static final String SEARCH_FEEBUCKETS_WS = WS_URL + "searchFeeBucket";
+     
+     public static final String ADD_FEEBUCKETS_WS = WS_URL + "addFeeBucket";
+     
+     public static final String UPDATE_FEEBUCKETS_WS = WS_URL + "updateFeeBucket";
+     
+     public static final String DELETE_FEEBUCKETS_WS = WS_URL + "deleteFeeBucket";
+    
+    
     public static String getUrl(String url){
         return WS_URL + url;
-    }
+    } 
+    
 
 }

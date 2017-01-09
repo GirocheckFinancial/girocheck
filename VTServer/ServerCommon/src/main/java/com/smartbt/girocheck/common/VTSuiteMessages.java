@@ -395,6 +395,10 @@ public class VTSuiteMessages {
     public static String ERROR_CLERK_REPEATED = "There is already an clerk with the username: ";
     public static String PASSWORD_EXPIRED = "Password Expired";
     
+    public final static String FEESCHEDULE_DOES_NOT_EXIST = "THIS FEESCHEDULE DOES NOT EXIST ";
+    
+    public final static String ERROR_FEE_SCHEDULE_METHOD = "There is another fee schedule record with the same method.";
+    
     
     /**
      * Get Default Error Message

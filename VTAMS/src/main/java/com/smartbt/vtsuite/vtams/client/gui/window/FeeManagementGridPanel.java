@@ -482,7 +482,7 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
           SC.warn("Percentage Value should not be greater than 100");
       }else{
           if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")>20){            
-            SC.confirm("Fee Bucktes", "Are you sure about the value entered?", new BooleanCallback() {
+            SC.confirm("Fee Buckets", "Are you sure about the value entered?", new BooleanCallback() {
                     public void execute(Boolean value) {
                         if (value == Boolean.TRUE) {
                             DoSave(recordToSave);
@@ -490,7 +490,7 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
                     }
                 });            
           }else if(recordToSave.getAttributeAsFloat("fixed")!=null && recordToSave.getAttributeAsFloat("fixed")>100){            
-            SC.confirm("Fee Bucktes", "Are you sure about the value entered?", new BooleanCallback() {
+            SC.confirm("Fee Buckets", "Are you sure about the value entered?", new BooleanCallback() {
                     public void execute(Boolean value) {
                         if (value == Boolean.TRUE) {
                             DoSave(recordToSave);

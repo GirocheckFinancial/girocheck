@@ -516,8 +516,7 @@ public void DoSave(Record recordToSave){
         if (id == null) {           
             editorFeeBucketsWindow.getDataForm().getDataSource().addData(recordToSave, new DSCallback() {
                
-                public void execute(DSResponse response, Object rawData, DSRequest request) {
-                    // SC.warn("came here for executing");
+                public void execute(DSResponse response, Object rawData, DSRequest request) {                    
                     if (response.getStatus() == Constants.CODE_SUCCESS) {                        
                         Filter(feeScheduleRecord);                       
                         editorFeeBucketsWindow.hide();

@@ -27,6 +27,7 @@ import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.RecordList;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 
@@ -415,22 +416,19 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
        Record recordToSave = editorFeeScheduleWindow.getRecord(); 
 
 
-       String id = recordToSave.getAttribute("id");
-        //SC.warn("came here" +id);
+       String id = recordToSave.getAttribute("id");        
      
-        if (id == null) {
-            //SC.warn("came here");
+        if (id == null) {            
             editorFeeScheduleWindow.getDataForm().getDataSource().addData(recordToSave, new DSCallback() {
                
                 public void execute(DSResponse response, Object rawData, DSRequest request) {
                     if (response.getStatus() == Constants.CODE_SUCCESS) {                        
                         Filter();                       
                         editorFeeScheduleWindow.hide();
-                    } else if (response.getStatus() == Constants.FEE_RECORD_EXISTS) {                        
-                        SC.warn("Fee Schedule", "There is another fee schedule record for the the selected merchant with the same method.Please choose different merchant and try again.");
-                    }else {                        
-                        //SC.warn(I18N.GET.WINDOW_ERROR_TITLE(), I18N.GET.MESSAGE_ERROR_ACTION());
-                         SC.warn("Fee Schedule", "There is another fee schedule record for the the selected merchant with the same method.Please choose different merchant and try again.");
+                    }else if (response.getStatus() == Constants.FEE_RECORD_EXISTS) {                        
+                        SC.warn(I18N.GET.WINDOW_FEE_SCHEDULE_TITLE(),  I18N.GET.FEE_SCHEDULE_MESSAGE_ERROR_ACTION());
+                    }else {
+                        SC.warn(I18N.GET.WINDOW_FEE_SCHEDULE_TITLE(),  I18N.GET.FEE_SCHEDULE_MESSAGE_ERROR_ACTION());
                     }
                 }
             });
@@ -448,11 +446,11 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
                 public void execute(DSResponse response, Object rawData, DSRequest request) {
                     if (response.getStatus() == Constants.CODE_SUCCESS) {
                         Filter();
-                    } else if (response.getStatus() == Constants.FEE_RECORD_EXISTS) {                        
-                        SC.warn("Fee Schedule", "There is another fee schedule record for the the selected merchant with the same method.Please choose different merchant and try again.");
+                    } else if (response.getStatus() == Constants.FEE_RECORD_EXISTS) {    
+                       SC.warn(I18N.GET.WINDOW_FEE_SCHEDULE_TITLE(),  I18N.GET.FEE_SCHEDULE_MESSAGE_ERROR_ACTION());
                     }else {
-                        //SC.warn(I18N.GET.WINDOW_ERROR_TITLE(), I18N.GET.MESSAGE_ERROR_ACTION());
-                        SC.warn("Fee Schedule", "There is another fee schedule record for the the selected merchant with the same method.Please choose different merchant and try again.");
+                       // SC.warn(I18N.GET.WINDOW_ERROR_TITLE(), I18N.GET.MESSAGE_ERROR_ACTION());
+                        SC.warn(I18N.GET.WINDOW_FEE_SCHEDULE_TITLE(),  I18N.GET.FEE_SCHEDULE_MESSAGE_ERROR_ACTION());
                     }
                 }
             });
@@ -468,21 +466,37 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
         // editorFeeBucketsWindow.show();
     }
     
-    public void SaveFeeBuckets() {  
+    public void SaveFeeBuckets() {
+       boolean error=false;
 
-      final Record recordToSave = editorFeeBucketsWindow.getRecord(); 
+      final Record recordToSave = editorFeeBucketsWindow.getRecord();  
+      
+      String id = recordToSave.getAttribute("id");
+      
       
       if(recordToSave.getAttributeAsFloat("minimum")!=null && recordToSave.getAttributeAsFloat("minimum")<0){
-          SC.warn("Value should be positive");
+          SC.warn(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_VALUE_ERROR_ACTION());
       }else if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")<0){
-          SC.warn("Value should be positive");
-      }else if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")<0){
-          SC.warn("Value should be positive");
-      }else if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")>100){
-          SC.warn("Percentage Value should not be greater than 100");
+         SC.warn(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_VALUE_ERROR_ACTION());
+      }else if(recordToSave.getAttributeAsFloat("fixed")!=null && recordToSave.getAttributeAsFloat("fixed")<0){
+          SC.warn(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_VALUE_ERROR_ACTION());
+      }else if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")>100){         
+          SC.warn(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_PERCENTAGE_ERROR_ACTION());
       }else{
-          if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")>20){            
-            SC.confirm("Fee Buckets", "Are you sure about the value entered?", new BooleanCallback() {
+         float minimum=recordToSave.getAttributeAsFloat("minimum");
+         if(id==null){
+             for(ListGridRecord rec : listFeeBucketsGrid.getRecords()){          
+                float minimumRecord= rec.getAttributeAsFloat("minimum");
+                 if(minimumRecord==minimum){
+                    error = true;
+                    SC.warn(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_DUPLICATE_ERROR_ACTION());                    
+                    break;
+             }                      
+           }
+         }         
+         if(!error){
+            if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")>20){            
+            SC.confirm(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_VALUE_CONFIRM_ACTION(), new BooleanCallback() {
                     public void execute(Boolean value) {
                         if (value == Boolean.TRUE) {
                             DoSave(recordToSave);
@@ -490,7 +504,7 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
                     }
                 });            
           }else if(recordToSave.getAttributeAsFloat("fixed")!=null && recordToSave.getAttributeAsFloat("fixed")>100){            
-            SC.confirm("Fee Buckets", "Are you sure about the value entered?", new BooleanCallback() {
+            SC.confirm(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_VALUE_CONFIRM_ACTION(), new BooleanCallback() {
                     public void execute(Boolean value) {
                         if (value == Boolean.TRUE) {
                             DoSave(recordToSave);
@@ -500,7 +514,7 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
           }else{
               DoSave(recordToSave);
           }
-          
+         }         
       }
 }
     

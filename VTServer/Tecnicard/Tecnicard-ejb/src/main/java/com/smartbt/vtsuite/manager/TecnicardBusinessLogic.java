@@ -264,7 +264,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
                 pState+ ", pCity " + pCity+ ", pAddress  " + pAddress+ ", pZipCode " + pZipCode+ ", pEmail " + pEmail+ ", pTelephoneAreaCode " + pTelephoneAreaCode+ ", pTelephone " + pTelephone+ ", pCellphoneAreaCode " + pCellphoneAreaCode+ ", pCellphone " + pCellphone+ ", pWorkphoneAreaCode " + pWorkphoneAreaCode+ ", pWorkphone " + pWorkphone+ ", pFaxAreaCode " + pFaxAreaCode+ ", pFaxphone " + pFaxphone+ ", pRBService " + pRBService+ ", pCurrentAddress " + pCurrentAddress + ")",null);
 
         return port.wmCardPersonalization(
-                pRequestID, pCard, pId, "" + idType, "", pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry,
+                pRequestID, pCard, pId, "" + 1, "", pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry,
                 pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress );
     }
     

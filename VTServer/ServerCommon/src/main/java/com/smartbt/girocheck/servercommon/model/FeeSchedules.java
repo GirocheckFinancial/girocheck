@@ -12,7 +12,7 @@ public class FeeSchedules implements Serializable{
     
     private int id;
     private TransactionMethod method;
-    private Merchant merchant;
+    private int merchant;
     private Boolean isdefault;
     
     public FeeSchedules() {
@@ -35,14 +35,14 @@ public class FeeSchedules implements Serializable{
     /**
      * @return the merchant
      */
-    public Merchant getMerchant() {
+    public int getMerchant() {
         return merchant;
     }
 
     /**
      * @param merchant the merchant to set
      */
-    public void setMerchant(Merchant merchant) {
+    public void setMerchant(int merchant) {
         this.merchant = merchant;
     }
 

@@ -7,7 +7,8 @@
             </generator>
         </id>
         <many-to-one name="method" cascade="all" column="method_id" class="com.smartbt.girocheck.servercommon.model.TransactionMethod" not-null="false" lazy="proxy"/>
-        <many-to-one name="merchant" cascade="all" column="merchant_id" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="false" lazy="proxy"/>
+        <!--<many-to-one name="merchant" cascade="all" column="merchant_id" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="false" lazy="proxy"/>-->
+        <property name="merchant" column="merchant_id" type="integer" length="1" not-null="false" lazy="false"/>
         <property name="isdefault" column="isdefault" type="boolean" length="1" not-null="false" lazy="false"/>
   
     </class>

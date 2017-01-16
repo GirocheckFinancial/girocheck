@@ -45,7 +45,7 @@ public class FeeScheduleEditor extends BaseEditorWindow {
         methodSelect.setDisplayField("description");     
         methodSelect.setEmptyDisplayValue("[No methods to show]");
         methodSelect.setWidth(COMPONENTS_WIDTH);
-        isdefaultCheck = new BaseCheckBoxItem("isdefault","Default",true);
+        isdefaultCheck = new BaseCheckBoxItem("isdefault","Default",false);
         
         dataForm.setDataSource(new FeeSchedulesDS(entityType)); 
         dataForm.setFields(merchantSelect, methodSelect, isdefaultCheck);

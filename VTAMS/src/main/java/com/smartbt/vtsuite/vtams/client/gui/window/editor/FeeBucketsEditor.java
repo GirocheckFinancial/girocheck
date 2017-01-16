@@ -71,7 +71,7 @@ public class FeeBucketsEditor extends BaseEditorWindow {
     
     @Override
     public void updateRecord(Record record) {
-        minimum.setDisabled(true);
+        minimum.setDisabled(false);
         percentage.setDisabled(false);
         fixed.setDisabled(false); 
         super.updateRecord(record);

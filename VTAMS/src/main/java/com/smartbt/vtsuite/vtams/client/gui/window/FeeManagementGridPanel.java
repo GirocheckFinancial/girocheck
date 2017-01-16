@@ -493,7 +493,18 @@ public class FeeManagementGridPanel extends VLayout implements BaseInterface {
                     break;
              }                      
            }
+         }else{                      
+            for(ListGridRecord rec : listFeeBucketsGrid.getRecords()){          
+                float minimumRecord= rec.getAttributeAsFloat("minimum");
+                String recId = rec.getAttributeAsString("id");
+                if(minimumRecord==minimum && !recId.equals(id)){
+                    error = true;
+                    SC.warn(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_DUPLICATE_ERROR_ACTION());                    
+                    break;
+                }
+             }              
          }         
+                  
          if(!error){
             if(recordToSave.getAttributeAsFloat("percentage")!=null && recordToSave.getAttributeAsFloat("percentage")>20){            
             SC.confirm(I18N.GET.WINDOW_FEE_BUCKETS_TITLE(), I18N.GET.FEE_BUCKETS_MESSAGE_VALUE_CONFIRM_ACTION(), new BooleanCallback() {

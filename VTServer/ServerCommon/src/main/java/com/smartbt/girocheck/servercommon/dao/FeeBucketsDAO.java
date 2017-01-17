@@ -48,9 +48,8 @@ public class FeeBucketsDAO extends BaseDAO<FeeBuckets>{
      
             Criteria criteria = HibernateUtil.getSession().createCriteria( FeeBuckets.class ).
                     createAlias( "feeSchedule", "feeSchedule" ).
-                    createAlias( "feeSchedule.method", "method" ).
-                    createAlias( "feeSchedule.merchant", "merchant" ).
-                    add( Restrictions.eq( "merchant.id", idMerchant ) ).
+                    createAlias( "feeSchedule.method", "method" ). 
+                    add( Restrictions.eq( "feeSchedule.merchant", idMerchant ) ).
                     add( Restrictions.eq( "method.operation", operation ) ).
                     add( Restrictions.le( "minimum", amount ) ).
                     addOrder(Order.desc("minimum") );

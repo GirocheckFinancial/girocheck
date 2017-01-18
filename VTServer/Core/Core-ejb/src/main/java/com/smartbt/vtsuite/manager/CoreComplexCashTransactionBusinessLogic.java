@@ -604,7 +604,8 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
-
+            
+            transaction.setTransactionBalanceData(response.getTransactionBalanceData());
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Transaction finished successfully. ", null);

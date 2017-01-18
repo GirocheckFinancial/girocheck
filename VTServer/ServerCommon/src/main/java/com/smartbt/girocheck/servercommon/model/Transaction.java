@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Transaction implements Serializable {
@@ -74,6 +75,8 @@ public class Transaction implements Serializable {
     private java.util.Set<com.smartbt.girocheck.servercommon.model.SubTransaction> sub_Transaction = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.SubTransaction>();
 
     private com.smartbt.girocheck.servercommon.model.Check check;
+    
+    private Map transactionBalanceData;
 
     public void addSubTransaction(SubTransaction subTransaction) {
         if (sub_Transaction.isEmpty()) {
@@ -383,6 +386,14 @@ public class Transaction implements Serializable {
      */
     public void setTransactionFinished(boolean transactionFinished) {
         this.transactionFinished = transactionFinished;
+    }
+    
+    public void setTransactionBalanceData( Map transactionBalanceData ) {
+        this.transactionBalanceData = transactionBalanceData;
+    }
+
+    public Map getTransactionBalanceData() {
+        return transactionBalanceData;
     }
 
 }

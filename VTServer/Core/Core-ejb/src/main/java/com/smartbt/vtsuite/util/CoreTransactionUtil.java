@@ -5,7 +5,9 @@
  */
 package com.smartbt.vtsuite.util;
 
+import com.smartbt.girocheck.servercommen.sms.SMSUtils;
 import com.smartbt.girocheck.servercommon.enums.EmailName;
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
@@ -93,6 +95,9 @@ public class CoreTransactionUtil {
         transaction.setTransactionFinished(true);
         printTransaction(transaction);
         boolean deleteCardBecauseCardPersonalizationFailed = false;
+        boolean sendCardPersonaliseSMS = false;
+        boolean sendCardReloadSMS = false;
+        
         try {
             HibernateUtil.beginTransaction();
 
@@ -159,7 +164,10 @@ public class CoreTransactionUtil {
                                     } else {
                                         System.out.println("[CoreTransactionUtil] Merchant is NULL");
                                     }
-
+                                    sendCardPersonaliseSMS = true;
+                                }else  if (subTransaction.getType() == TransactionType.CARD_RELOAD.getCode()
+                                        && subTransaction.getResultCode() == ResultCode.SUCCESS.getCode()){
+                                    sendCardReloadSMS = true;
                                 }
                             }
                         }
@@ -208,7 +216,40 @@ public class CoreTransactionUtil {
             } catch (Exception emailEx) {
                 emailEx.printStackTrace();
             }
-
+            //to send SMS
+            String smsMessage ="";
+            String cell_phone = client.getTelephone();
+            if(sendCardPersonaliseSMS){                
+                Map balanceMap=transaction.getTransactionBalanceData();
+                Double balance =null;               
+                if(balanceMap!=null){
+                    balance = (Double)balanceMap.get(ParameterName.BALANCE);
+                }
+                if(balance!=null){
+                    smsMessage ="Thanks for activating your VoltCash, available balance is $"+balance+" TEXT STOP to STOP";
+                }else{
+                    smsMessage ="Thanks for activating your VoltCash, available balance is $0.00 TEXT STOP to STOP";
+                }                
+                              
+            }else{
+                Map balanceMap=transaction.getTransactionBalanceData();
+                Double balance =null;               
+                if(balanceMap!=null){
+                    balance = (Double)balanceMap.get(ParameterName.BALANCE);
+                }
+                if(balance!=null){
+                    smsMessage ="Your VoltCash was just loaded, available balance is $"+balance;
+                }else{
+                    smsMessage ="Your VoltCash was just loaded,available balance is $0.00";
+                }         
+            }
+            System.out.println("--------------  SENDING SMS MESSAGE TO: "+cell_phone+" --------------");
+            try{
+                 SMSUtils.sendSMS(cell_phone,smsMessage); 
+            }catch(Exception e){
+                
+            }           
+             
             HibernateUtil.commitTransaction();
         } catch (Exception e) {
             HibernateUtil.rollbackTransaction();

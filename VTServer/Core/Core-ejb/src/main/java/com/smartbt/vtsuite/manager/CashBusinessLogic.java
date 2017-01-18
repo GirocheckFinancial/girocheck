@@ -142,6 +142,7 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
 
             System.out.println("[CashBusinessLogic] Before persistTransaction " + +transaction.getSub_Transaction().size());
+            transaction.setTransactionBalanceData(response.getTransactionBalanceData());
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] Transaction finished successfully. ", null);

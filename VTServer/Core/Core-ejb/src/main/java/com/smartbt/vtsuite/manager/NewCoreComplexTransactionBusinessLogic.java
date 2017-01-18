@@ -585,10 +585,11 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             }
 
             transaction.addSubTransactionList(response.getTransaction().getSub_Transaction());
-
+            
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
-
+            
+            transaction.setTransactionBalanceData(response.getTransactionBalanceData());
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Transaction finished successfully", null);

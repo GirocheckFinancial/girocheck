@@ -38,7 +38,13 @@ public enum NomHost {
      */
     FUZE(4),
     
-    CHOICE(5);
+    CHOICE(5),
+    
+    WESTECH(6),
+    
+    CERTEGY(7),
+    
+    ISTREAM2(8);
 
     private NomHost(int id) {
         this.id = id;

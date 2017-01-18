@@ -263,41 +263,28 @@ public class TransactionWindow extends BaseWindow {
         }, null );
     }
 
-        /**
-     * Report method
-     *
-     */
-    public void report() {
-        Utils.debug( "** report -1 " );
-        DSRequest dsRequestProperties = new DSRequest();  
-                    dsRequestProperties.setExportAs((ExportFormat)EnumUtil.getEnum(ExportFormat.values(), "CSV (Excel)"));  
-                    dsRequestProperties.setExportDisplay(ExportDisplay.WINDOW);
-                    Utils.debug( "** report -2 " );
-//                    ExportDisplay.WINDOW : ExportDisplay.DOWNLOAD
-  
-        transactionPanel.getListGrid().exportData(dsRequestProperties); 
-        Utils.debug( "** report -3" );
-//        Criteria formCriteria = transactionPanel.getFilterForm().getCriteria();
-//        
-//        ReportDS ds = new ReportDS();
-//        
-//        ds.setCustomeFetchDataUrl(Properties.TRANSACTIONREPORTS_WS);
-//
-//        ds.fetchData( formCriteria, new DSCallback() {
-//            
-//            /**
-//             * Callback to invoke on completion
-//             *
-//             * @param response Response sent by the server in response to a
-//             * DataSource request.
-//             * @param rawData data
-//             * @param request Request sent to the server to initiate a
-//             * DataSource operation.
-//             */
-//            public void execute(DSResponse response, Object rawData, DSRequest request) {
-//               sendURL(response);
-//            }
-//        });
+  public void report() {
+        Criteria formCriteria = transactionPanel.getFilterForm().getCriteria();
+        
+        ReportDS ds = new ReportDS();
+        
+        ds.setCustomeFetchDataUrl(Properties.TRANSACTIONREPORTS_WS);
+
+        ds.fetchData( formCriteria, new DSCallback() {
+            
+            /**
+             * Callback to invoke on completion
+             *
+             * @param response Response sent by the server in response to a
+             * DataSource request.
+             * @param rawData data
+             * @param request Request sent to the server to initiate a
+             * DataSource operation.
+             */
+            public void execute(DSResponse response, Object rawData, DSRequest request) {
+               sendURL(response);
+            }
+        });
         
     }
 

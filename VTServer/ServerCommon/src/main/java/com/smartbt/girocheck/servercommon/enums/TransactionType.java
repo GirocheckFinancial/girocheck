@@ -52,7 +52,14 @@ public enum TransactionType {
     
     CHOICE_INSERT_TRANSACTION(NomHost.CHOICE, 36 ),
     CHOICE_CANCELATION_REQUEST(NomHost.CHOICE, 37 ),  
-    CHOICE_NOTIFY_PAYMENT(NomHost.CHOICE, 38 );  
+    CHOICE_NOTIFY_PAYMENT(NomHost.CHOICE, 38 ), 
+    
+    WESTECH_CHECKAUTH(NomHost.CHOICE, 39 ),
+    
+    CERTEGY_AUTHENTICATION(NomHost.CERTEGY, 40),
+    CERTEGY_REVERSE_REQUEST(NomHost.CERTEGY, 41),
+    
+    ISTREAM2_SEND_SINCE_ICL(NomHost.ISTREAM2, 42);
 
     private NomHost host;
 
@@ -153,9 +160,17 @@ public enum TransactionType {
                 return TransactionType.CHOICE_CANCELATION_REQUEST;
             case 38: 
                 return TransactionType.CHOICE_NOTIFY_PAYMENT;
+            case 39: 
+                return TransactionType.WESTECH_CHECKAUTH;
+            case 40: 
+                return TransactionType.CERTEGY_AUTHENTICATION;
+            case 41: 
+                return TransactionType.CERTEGY_REVERSE_REQUEST;
+            case 42: 
+                return TransactionType.ISTREAM2_SEND_SINCE_ICL;
             default:
                   return TransactionType.TRANSACTION_TYPE;
         }
     }
 
-    }
+    } 

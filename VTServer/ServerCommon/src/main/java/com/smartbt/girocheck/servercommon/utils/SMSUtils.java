@@ -1,4 +1,4 @@
- package com.smartbt.girocheck.servercommen.sms;
+ package com.smartbt.girocheck.servercommon.utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

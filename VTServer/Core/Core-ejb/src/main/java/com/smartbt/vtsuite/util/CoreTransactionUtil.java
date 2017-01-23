@@ -5,7 +5,7 @@
  */
 package com.smartbt.vtsuite.util;
 
-import com.smartbt.girocheck.servercommen.sms.SMSUtils;
+import com.smartbt.girocheck.servercommon.utils.SMSUtils;
 import com.smartbt.girocheck.servercommon.enums.EmailName;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;

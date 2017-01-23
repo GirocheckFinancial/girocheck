@@ -33,11 +33,15 @@ public class PersonalIdentificationManager {
         return _this;
     }
 
-    public void removeByClientAndType(int idClient, int idType) {
-        dao.removeByClientAndType(idClient, idType);
+    public void removeByClientAndType(int idClient, int idType, Integer currentIdentificationId) {
+        dao.removeByClientAndType(idClient, idType, currentIdentificationId);
     }
     
     public PersonalIdentification getByClientId( int idClient) throws SQLException {
         return dao.getByClientId(idClient);
+    }
+    
+    public void saveOrUpdate(PersonalIdentification personalIdentification){
+        dao.saveOrUpdate(personalIdentification);
     }
 }

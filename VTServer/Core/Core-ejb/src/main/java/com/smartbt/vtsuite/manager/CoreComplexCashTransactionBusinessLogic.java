@@ -202,7 +202,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                         || personalInfoRequestMap.containsKey(ParameterName.COUNTRY) || personalInfoRequestMap.containsKey(ParameterName.STATE)) {
 
                     if (identification.getIdType() != null) {
-                        personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType());
+                        personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType(), identification.getId());
                     }
 
                     if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY)) {
@@ -288,6 +288,8 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
 //
 //            }
                 identification.setClient(transaction.getClient());
+                personalIdentificationManager.saveOrUpdate(identification);
+                
                 Set set = new HashSet();
                 set.add(identification);
                 transaction.getClient().setData_SD(set);
@@ -547,6 +549,11 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
                     generateNotificationEmail(buffer, null);
                     return;
                 } else {
+                     if(response.getTransactionData() != null
+                    && response.getTransactionData().containsKey(ParameterName.BALANCE)){
+                        transaction.setBalanceAfterLoad((String)response.getTransactionData().get(ParameterName.BALANCE));
+                    }
+                    
                     sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), estimatedPostingTime, hostName);
 
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] Before consuming OEPagowith OE AUTHO_NUMBER : " + responseMap.get(ParameterName.AUTHO_NUMBER), null);
@@ -605,7 +612,6 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
             
-            transaction.setTransactionBalanceData(response.getTransactionBalanceData());
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Transaction finished successfully. ", null);

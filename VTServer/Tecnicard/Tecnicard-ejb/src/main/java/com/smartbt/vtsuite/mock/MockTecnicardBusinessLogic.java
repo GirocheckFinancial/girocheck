@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Mpowa Business Logic Class
@@ -72,7 +73,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         TransactionType transactionType = request.getTransactionType();
 
         IMap response = null;
-        Map responseParameterMap = new HashMap();
+        IMap responseBalance = null;
 
         switch (transactionType) {
             case TECNICARD_CARD_ACTIVATION:
@@ -82,7 +83,8 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
                 response = wmCardPersonalization(transactionData);
                 break;
             case TECNICARD_CARD_LOAD:
-                response = wmCardLoad(transactionData);
+                System.out.println("**MockTecnicardBusinessLogic:: TECNICARD_CARD_LOAD");
+                response = wmCardLoad(transactionData); 
                 break;
             case TECNICARD_BALANCE_INQUIRY:
                 response = wmBalanceInquiry(transactionData);
@@ -114,8 +116,12 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         if (response != null) {
             direxTransactionResponse.setTransactionData(response.toMap());
+
+            if (responseBalance != null) {
+                direxTransactionResponse.getTransactionData().putAll(responseBalance.toMap());
+            }
         } else {
-            direxTransactionResponse.setTransactionData(responseParameterMap);
+            direxTransactionResponse.setTransactionData(new HashMap());
         }
 
         return direxTransactionResponse;
@@ -151,73 +157,71 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     private IMap wmCardPersonalization(Map map) throws Exception {
-      
-        Integer idType = 0; 
-        if(map.containsKey(ParameterName.IDTYPE)){
-            IdType type = (IdType)map.get(ParameterName.IDTYPE);
+
+        Integer idType = 0;
+        if (map.containsKey(ParameterName.IDTYPE)) {
+            IdType type = (IdType) map.get(ParameterName.IDTYPE);
             idType = type.getId();
         }
-        
-        String pId = MapUtil.getStringValueFromMap( map, ParameterName.SSN, true );
+
+        String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
 //        String pId = MapUtil.getStringValueFromMap( map, ParameterName.ID, true );
 
-        String pState = MapUtil.getStringValueFromMap( map, ParameterName.STATE, false );
-        String pCountry = MapUtil.getStringValueFromMap( map, ParameterName.COUNTRY, false );
-        String pIdState = MapUtil.getStringValueFromMap( map, ParameterName.IDSTATE, false );
-        String pIdCountry = MapUtil.getStringValueFromMap( map, ParameterName.IDCOUNTRY, false );
+        String pState = MapUtil.getStringValueFromMap(map, ParameterName.STATE, false);
+        String pCountry = MapUtil.getStringValueFromMap(map, ParameterName.COUNTRY, false);
+        String pIdState = MapUtil.getStringValueFromMap(map, ParameterName.IDSTATE, false);
+        String pIdCountry = MapUtil.getStringValueFromMap(map, ParameterName.IDCOUNTRY, false);
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd");
-        Date date = MapUtil.getDateValueFromMap( map, ParameterName.BORNDATE_AS_DATE, false );
-        String pDateOfBirth = (date != null) ? df.format( date ) : "";
-        
-        String pAddress = MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false );
-        String pCity = MapUtil.getStringValueFromMap( map, ParameterName.CITY, false );
+        Date date = MapUtil.getDateValueFromMap(map, ParameterName.BORNDATE_AS_DATE, false);
+        String pDateOfBirth = (date != null) ? df.format(date) : "";
+
+        String pAddress = MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false);
+        String pCity = MapUtil.getStringValueFromMap(map, ParameterName.CITY, false);
 
 //        String pTelephoneAreaCode = "";// MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE_AREA_CODE, false );
-        String pTelephoneAreaCode = MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE_AREA_CODE, false );
-        String pCellphone = MapUtil.getStringValueFromMap( map, ParameterName.CELL_PHONE, false );
-        String pZipCode = MapUtil.getStringValueFromMap( map, ParameterName.ZIPCODE, false );
-        String pMiddleName = MapUtil.getStringValueFromMap( map, ParameterName.MIDDLE_NAME, false );
+        String pTelephoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.TELEPHONE_AREA_CODE, false);
+        String pCellphone = MapUtil.getStringValueFromMap(map, ParameterName.CELL_PHONE, false);
+        String pZipCode = MapUtil.getStringValueFromMap(map, ParameterName.ZIPCODE, false);
+        String pMiddleName = MapUtil.getStringValueFromMap(map, ParameterName.MIDDLE_NAME, false);
 //        String pTelephone = "";//MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false );
-        String pTelephone = MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false );
-        String pFaxAreaCode =MapUtil.getStringValueFromMap( map, ParameterName.FAX_AREA_CODE, false );
-        String pLastName = MapUtil.getStringValueFromMap( map, ParameterName.LAST_NAME, false );
-        
-        if(pLastName != null && pLastName.contains(" ")){
+        String pTelephone = MapUtil.getStringValueFromMap(map, ParameterName.TELEPHONE, false);
+        String pFaxAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.FAX_AREA_CODE, false);
+        String pLastName = MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false);
+
+        if (pLastName != null && pLastName.contains(" ")) {
             pLastName = pLastName.split(" ")[0];
         }
-        
-        String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, true );
-        String pWorkphoneAreaCode = MapUtil.getStringValueFromMap( map, ParameterName.WORKPHONE_AREA_CODE, false );
+
+        String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, true);
+        String pWorkphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.WORKPHONE_AREA_CODE, false);
 
 //        String pCellphoneAreaCode = "786"; // MapUtil.getStringValueFromMap( map, ParameterName.CELL_PHONE_AREA, false );
-        String pCellphoneAreaCode = MapUtil.getStringValueFromMap( map, ParameterName.CELL_PHONE_AREA, false );
-        String pPersonTitle = MapUtil.getStringValueFromMap( map, ParameterName.PERSON_TITLE, false );
-        String pEmail = MapUtil.getStringValueFromMap( map, ParameterName.EMAIL, false );
+        String pCellphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.CELL_PHONE_AREA, false);
+        String pPersonTitle = MapUtil.getStringValueFromMap(map, ParameterName.PERSON_TITLE, false);
+        String pEmail = MapUtil.getStringValueFromMap(map, ParameterName.EMAIL, false);
 //        String pCurrentAddress = "Y";//MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false );
-        String pCurrentAddress = MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS_CORRECT, false );
+        String pCurrentAddress = MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS_CORRECT, false);
         String pRBService = "0";  // OJO
-        String pFirstName = MapUtil.getStringValueFromMap( map, ParameterName.FIRST_NAME, false );
+        String pFirstName = MapUtil.getStringValueFromMap(map, ParameterName.FIRST_NAME, false);
 
-        String pMaidenName =MapUtil.getStringValueFromMap( map, ParameterName.MAIDEN_NAME, false );
-        String pWorkphone = MapUtil.getStringValueFromMap( map, ParameterName.WORK_PHONE, false );
+        String pMaidenName = MapUtil.getStringValueFromMap(map, ParameterName.MAIDEN_NAME, false);
+        String pWorkphone = MapUtil.getStringValueFromMap(map, ParameterName.WORK_PHONE, false);
 
-        String pFaxphone = MapUtil.getStringValueFromMap( map, ParameterName.FAX_PHONE, false );
-        String pCard = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
-        
-        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE_AS_DATE, false );
+        String pFaxphone = MapUtil.getStringValueFromMap(map, ParameterName.FAX_PHONE, false);
+        String pCard = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
+
+        Date datee = MapUtil.getDateValueFromMap(map, ParameterName.EXPIRATION_DATE_AS_DATE, false);
 //        String pIdExpiration = "";// = (date != null) ? df.format( date ) : "";
-        String pIdExpiration = (datee != null) ? df.format( datee ) : "";
+        String pIdExpiration = (datee != null) ? df.format(datee) : "";
 
 //        String fields = " pRequestID, pCard, pId, pIdType, pIdExpiration, pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry, pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress";
 //        String[] names = fields.split( ",");
-        
 //        printCardPersonalization(names, pRequestID, pCard, "112223333", "1", "", "840", "", "", "John", "", "Smith", "", "19750228", "840",
 //                "11", "Atlanta", "222333 PEACHTREE PLACE", "30318", "girocheck@cardmarte.com", "", "", "786", "4540209", "", "", "", "", "0", "Y"  );
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID " +
-                pRequestID+ ",  pCard " + pCard+ ",  pId " + pId+ ",  pIdType " + idType+ ",  pIdExpiration " + pIdExpiration+ ",  pIdCountry " + pIdCountry+ ",  pIdState " + pIdState+ ",  pPersonTitle " + pPersonTitle+ ",  pFirstName " + pFirstName+ ", pMiddleName " + pMiddleName+ ", pLastName " + pLastName+ ", pMaidenName " + pMaidenName+ ", pDateOfBirth " + pDateOfBirth+ ", pCountry " + pCountry+ ", pState " +
-                pState+ ", pCity " + pCity+ ", pAddress  " + pAddress+ ", pZipCode " + pZipCode+ ", pEmail " + pEmail+ ", pTelephoneAreaCode " + pTelephoneAreaCode+ ", pTelephone " + pTelephone+ ", pCellphoneAreaCode " + pCellphoneAreaCode+ ", pCellphone " + pCellphone+ ", pWorkphoneAreaCode " + pWorkphoneAreaCode+ ", pWorkphone " + pWorkphone+ ", pFaxAreaCode " + pFaxAreaCode+ ", pFaxphone " + pFaxphone+ ", pRBService " + pRBService+ ", pCurrentAddress " + pCurrentAddress + ")",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID "
+                + pRequestID + ",  pCard " + pCard + ",  pId " + pId + ",  pIdType " + idType + ",  pIdExpiration " + pIdExpiration + ",  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
+                + pState + ", pCity " + pCity + ", pAddress  " + pAddress + ", pZipCode " + pZipCode + ", pEmail " + pEmail + ", pTelephoneAreaCode " + pTelephoneAreaCode + ", pTelephone " + pTelephone + ", pCellphoneAreaCode " + pCellphoneAreaCode + ", pCellphone " + pCellphone + ", pWorkphoneAreaCode " + pWorkphoneAreaCode + ", pWorkphone " + pWorkphone + ", pFaxAreaCode " + pFaxAreaCode + ", pFaxphone " + pFaxphone + ", pRBService " + pRBService + ", pCurrentAddress " + pCurrentAddress + ")", null);
 
         CardCreationResponse cardCreationResponse = new CardCreationResponse();
         cardCreationResponse.setCardNumber("CPersonalization: CardNumber");
@@ -235,13 +239,13 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCardLoad(Map map) throws Exception {
-         String pTransAmount = MapUtil.getStringValueFromMap( map, ParameterName.PAYOUT_AMMOUNT, false );
-        String pCheckFee = MapUtil.getStringValueFromMap( map, ParameterName.FEE_AMMOUNT, false );
-        String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
-        String pTerminalCode = MapUtil.getStringValueFromMap( map, ParameterName.TERMINAL_ID_TECNICARD, false );
-        String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardLoad(" + pRequestID+ ","+ pTerminalCode +","+ pCardNumber+", "+ pTransAmount+", "+pCheckFee ,null);
-        
+        String pTransAmount = MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false);
+        String pCheckFee = MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false);
+        String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
+        String pTerminalCode = MapUtil.getStringValueFromMap(map, ParameterName.TERMINAL_ID_TECNICARD, false);
+        String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardLoad(" + pRequestID + "," + pTerminalCode + "," + pCardNumber + ", " + pTransAmount + ", " + pCheckFee, null);
+
         CardLoadResponse response = new CardLoadResponse();
         response.setTransactionNumber("CardLoad: transactionNumber");
         response.setDate(getDate());
@@ -249,7 +253,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         SessionTag sessionTag = buildSessionTag("CardLoad", pRequestID, "0");
 
-        response.setSessionTag(sessionTag); 
+        response.setSessionTag(sessionTag);
         return response;
     }
 
@@ -260,10 +264,10 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         BalanceInquiryResponse response = new BalanceInquiryResponse();
         response.setBalance("120.00");
         response.setInTransitFunds("80.00");
-        
-          String validationResponse = "0";
-        if(map.containsKey(ParameterName.TECNICARD_VALIDATION_RESPONSE)){
-            validationResponse =MapUtil.getStringValueFromMap(map, ParameterName.TECNICARD_VALIDATION_RESPONSE, false);
+
+        String validationResponse = "0";
+        if (map.containsKey(ParameterName.TECNICARD_VALIDATION_RESPONSE)) {
+            validationResponse = MapUtil.getStringValueFromMap(map, ParameterName.TECNICARD_VALIDATION_RESPONSE, false);
         }
 
         response.setSessionTag(buildSessionTag("BalanceInquiry", pRequestID, validationResponse));
@@ -294,13 +298,13 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pAmount = MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-            
+
         String validationResponse = "100011";
-        
-        if(map.containsKey(ParameterName.TECNICARD_VALIDATION_RESPONSE)){
-            validationResponse =MapUtil.getStringValueFromMap(map, ParameterName.TECNICARD_VALIDATION_RESPONSE, false);
+
+        if (map.containsKey(ParameterName.TECNICARD_VALIDATION_RESPONSE)) {
+            validationResponse = MapUtil.getStringValueFromMap(map, ParameterName.TECNICARD_VALIDATION_RESPONSE, false);
         }
-         
+
         System.out.println("MockTecnicardBusinessLogic -> validationResponse = " + validationResponse);
         CardValidationResponse response = new CardValidationResponse();
         response.setSessionTag(buildSessionTag("CActivation", pRequestID, validationResponse));
@@ -308,7 +312,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         return response;
     }
 
-    public IMap wmCardHolderValidation(Map map) throws Exception { 
+    public IMap wmCardHolderValidation(Map map) throws Exception {
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.ID, false);
         String pIdType = MapUtil.getStringValueFromMap(map, ParameterName.IDTYPE, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
@@ -349,11 +353,11 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCashToCard(Map map) throws Exception {
-        String pTransAmount = MapUtil.getStringValueFromMap( map, ParameterName.PAYOUT_AMMOUNT, false );
-        String pCardNumber = MapUtil.getStringValueFromMap( map, ParameterName.CARD_NUMBER, false );
-        String pTerminalCode =MapUtil.getStringValueFromMap( map, ParameterName.TERMINAL_ID_TECNICARD, false );
-        String pRequestID = MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCashToCard("+ pRequestID+ ",  " + pTerminalCode+ ",  " + pCardNumber+ ", " +pTransAmount,null);
+        String pTransAmount = MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false);
+        String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
+        String pTerminalCode = MapUtil.getStringValueFromMap(map, ParameterName.TERMINAL_ID_TECNICARD, false);
+        String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCashToCard(" + pRequestID + ",  " + pTerminalCode + ",  " + pCardNumber + ", " + pTransAmount, null);
 
         CashToCardResponse response = new CashToCardResponse();
         response.setTransactionNumber("Cash2Card: transaction Number");

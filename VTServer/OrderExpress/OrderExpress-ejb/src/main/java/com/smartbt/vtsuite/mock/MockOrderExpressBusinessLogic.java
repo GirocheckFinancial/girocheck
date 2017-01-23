@@ -61,7 +61,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
     @Override
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] processing ...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[MockOrderExpressBusinessLogic] processing ...", null);
 
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
@@ -84,7 +84,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
                 break;
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Proccess finish", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[MockOrderExpressBusinessLogic] Proccess finish", null);
         direxTransactionResponse.setTransactionType(transactionType);
         direxTransactionResponse.setTransactionData(response);
 
@@ -115,7 +115,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      * @throws JAXBException
      */
     private Map contrataciones(Map map) throws Exception {
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] ContratacionesMethod()...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] ContratacionesMethod()...", null);
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -194,14 +194,14 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             input.setPAYMENTCOMISSION(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCOMISSION, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCOMISSION, false)) : "NULL");
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDPOS&IDTELLER", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDPOS&IDTELLER", null);
         if (map.containsKey(ParameterName.IDPOS) && map.get(ParameterName.IDPOS) != null) {
             input.setIDPOS(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDPOS, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.IDPOS, false)) : "NULL");
         }
         if (map.containsKey(ParameterName.IDTELLER) && map.get(ParameterName.IDTELLER) != null) {
             input.setIDTELLER(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) : "NULL");
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDPOS: " + map.get(ParameterName.IDPOS).toString() + " IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDPOS: " + map.get(ParameterName.IDPOS).toString() + " IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
 
         input.setPAYMENTCHECK(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCHECK, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCHECK, false)) : "NULL");
 
@@ -271,7 +271,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             if (map.containsKey(ParameterName.ID) || map.containsKey(ParameterName.ID)) {
 
                 IdType idType = (IdType) map.get(ParameterName.IDTYPE);
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadena with idType: " + idType, null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Proccess cadena with idType: " + idType, null);
                 String id = OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.ID, true));
                 switch (idType) {
                     case VISA:
@@ -308,7 +308,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             }
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadena", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Proccess cadena", null);
         String cadena = OEUtils.processRequest(entry);
 
         String datos = "EX";
@@ -318,7 +318,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         ContratacionesResponse response = new ContratacionesResponse();
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " + cadena, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Printing cadena value: " + cadena, null);
 
         Map responseMap = new HashMap();
 
@@ -342,7 +342,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      */
     private Map reportaPago(Map map) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] reportaPago Method()...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] reportaPago Method()...", null);
 
         // Build ...
         //Entry
@@ -367,13 +367,13 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANTPAGO"));  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO", null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] AUTHO_NUMBER", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDTELLERPAGO", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] AUTHO_NUMBER", null);
 
         input.setIdteller(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLERPAGO, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLERPAGO, false)) : "NULL");
         input.setAutonumber(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) : "NULL");
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO: " + map.get(ParameterName.IDTELLER).toString() + " AUTHO_NUMBER: " + map.get(ParameterName.AUTHO_NUMBER).toString(), null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDTELLERPAGO: " + map.get(ParameterName.IDTELLER).toString() + " AUTHO_NUMBER: " + map.get(ParameterName.AUTHO_NUMBER).toString(), null);
 
         corresponsal.setLogin(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGINPAGO")));
         corresponsal.setPassword(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORDPAGO")));
@@ -409,26 +409,26 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaRP", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Proccess cadenaRP", null);
         String cadena = OEUtils.processRequestRP(entry);
 
         String datos = "EX";
         String corresponsales = "GIRO_CHECK";
         String rutaEjecutar = null;
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaRP value: " + cadena, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Printing cadenaRP value: " + cadena, null);
         Map responseMap = new HashMap();
 
         responseMap.put(ParameterName.AUTHO_NUMBER, "OE: AUTHO_NUMBER");
         responseMap.put(ParameterName.OP_CODE, "001");
         responseMap.put(ParameterName.OP_CODE2, "OE OP_CODE2");
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[MockOrderExpressBusinessLogic] Ready to return.", null);
         return responseMap;
     }
 
     private Map devolucion(Map map) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionMethod()...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] devolucionMethod()...", null);
 
         // Build ...
         //Entry
@@ -450,18 +450,18 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANT"));  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDTELLER", null);
 
         input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) ? MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false) : "NULL");
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
 
         corresponsal.setLogin(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGIN")));
         corresponsal.setPassword(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORD")));
 
         input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) : "NULL");
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaD", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Proccess cadenaD", null);
         String cadena = OEUtils.processRequestD(entry);
 
         String datos = "EX";
@@ -469,7 +469,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         String rutaEjecutar = null;
         String devolucionResult = "";
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaD value: " + cadena, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Printing cadenaD value: " + cadena, null);
         Map responseMap = new HashMap();
 
         responseMap.put(ParameterName.AUTHO_NUMBER, "OE: AUTHO_NUMBER");
@@ -480,7 +480,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
     private Map oElog(Map map) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OELogMethod()...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] OELogMethod()...", null);
 
         // Build ...
         //Entry
@@ -504,14 +504,14 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) ? MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false) : "NULL");
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
 
         corresponsal.setLogin(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGIN")));
         corresponsal.setPassword(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORD")));
 
         input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) : "NULL");
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaL", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Proccess cadenaL", null);
         String cadena = OEUtils.processRequestL(entry);
 
         String datos = "EX";
@@ -519,7 +519,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         String rutaEjecutar = null;
         String logResult = "";
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaL value: " + cadena, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] Printing cadenaL value: " + cadena, null);
 
         Map responseMap = new HashMap();
 
@@ -559,7 +559,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
     private Map OETimerLogExecutor(Map req) throws InterruptedException {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() start processing ...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] OETimerLogExecutor() start processing ...", null);
 
         String temp;
         long period;
@@ -590,17 +590,17 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
                 try {
                     respOELogMethod = oElog(reqOELogMethod);
                 } catch (Exception ex) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() Error calling the OELog Method ", ex.getMessage());
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] OETimerLogExecutor() Error calling the OELog Method ", ex.getMessage());
                     scheduler.shutdownNow();
                     timeOutOELog = false;
                 }
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() Doing verification code.", null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] OETimerLogExecutor() Doing verification code.", null);
 
                 if (oEVerificationCode(respOELogMethod)) {
                     scheduler.shutdownNow();
                     timeOutOELog = false;
                 }
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() ShutdownNow executed: " + !timeOutOELog, null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] OETimerLogExecutor() ShutdownNow executed: " + !timeOutOELog, null);
             }
         };
 
@@ -611,7 +611,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             public void run() {
                 boolean taskDone = timerHandle.cancel(true);
                 scheduler.shutdown();
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() Time finished: " + taskDone, null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] OETimerLogExecutor() Time finished: " + taskDone, null);
             }
         }, delay, SECONDS);//complete time of executions
 
@@ -627,7 +627,7 @@ public class MockOrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         String status = (String) response.get(ParameterName.OESTATUS);
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] oEVerificationCode() status: [" + status + "]", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockOrderExpressBusinessLogic] oEVerificationCode() status: [" + status + "]", null);
 
         if (status != null) {
 

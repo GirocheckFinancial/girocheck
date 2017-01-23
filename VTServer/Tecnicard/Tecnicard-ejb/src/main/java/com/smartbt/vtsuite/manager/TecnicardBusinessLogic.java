@@ -85,7 +85,6 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         IMap response = null;
         IMap responseBalance = null;
-        Map transactionBalanceInqData = new HashMap();
         Map responseParameterMap = new HashMap();
 
         Map map;
@@ -94,36 +93,15 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 //         LogUtil.logAndStore( "TecnicardBL", "                        proccessing:: " + transactionType );
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardBusinessLogic] proccessing:: " + transactionType, null);
 
-
         switch (transactionType) {
             case TECNICARD_CARD_ACTIVATION:
                 response = wmCardActivation(transactionData);
                 break;
             case TECNICARD_CARD_PERSONALIZATION:
                 response = wmCardPersonalization(transactionData);
-                boolean cardPersonisationSuccess = (boolean)response.toMap().get(ParameterName.SUCESSFULL_PROCESSING);
-                if (response != null && cardPersonisationSuccess) {
-                    transactionBalanceInqData.put(ParameterName.USER, transactionData.get(ParameterName.USER));
-                    transactionBalanceInqData.put(ParameterName.PASSWORD, transactionData.get(ParameterName.PASSWORD));
-                    transactionBalanceInqData.put(ParameterName.REQUEST_ID, transactionData.get(ParameterName.REQUEST_ID));
-                    transactionBalanceInqData.put(ParameterName.TERMINAL_ID, transactionData.get(ParameterName.TERMINAL_ID));
-                    transactionBalanceInqData.put(ParameterName.CARD_NUMBER, transactionData.get(ParameterName.CARD_NUMBER));
-                    responseBalance = wmBalanceInquiry(transactionBalanceInqData);
-                }
-
                 break;
             case TECNICARD_CARD_LOAD:
-                response = wmCardLoad(transactionData);
-                boolean cardLoadSucess = (boolean)response.toMap().get(ParameterName.SUCESSFULL_PROCESSING);
-                if (response != null && cardLoadSucess) {
-                    transactionBalanceInqData.put(ParameterName.USER, transactionData.get(ParameterName.USER));
-                    transactionBalanceInqData.put(ParameterName.PASSWORD, transactionData.get(ParameterName.PASSWORD));
-                    transactionBalanceInqData.put(ParameterName.REQUEST_ID, transactionData.get(ParameterName.REQUEST_ID));
-                    transactionBalanceInqData.put(ParameterName.TERMINAL_ID, transactionData.get(ParameterName.TERMINAL_ID));
-                    transactionBalanceInqData.put(ParameterName.CARD_NUMBER, transactionData.get(ParameterName.CARD_NUMBER));
-                    responseBalance = wmBalanceInquiry(transactionBalanceInqData);
-                }
-
+                response = wmCardLoad(transactionData); 
                 break;
             case TECNICARD_BALANCE_INQUIRY:
                 response = wmBalanceInquiry(transactionData);
@@ -184,17 +162,12 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
                 }
             }
             direxTransactionResponse.setTransactionData(map);
-            if (responseBalance != null) {
-                balanceInqMap = responseBalance.toMap();
-                direxTransactionResponse.setTransactionBalanceData(balanceInqMap);
-            } else {
-                balanceInqMap = new HashMap();
-                direxTransactionResponse.setTransactionBalanceData(balanceInqMap);
-            }
-
-
         } else {
-            direxTransactionResponse.setTransactionData(responseParameterMap);
+            direxTransactionResponse.setTransactionData(new HashMap());
+        }
+
+        if (responseBalance != null) {
+            direxTransactionResponse.getTransactionData().putAll(responseBalance.toMap());
         }
 
         return direxTransactionResponse;
@@ -282,13 +255,10 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 //        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE, false );
 //        String pIdExpiration = "";// = (date != null) ? df.format( date ) : "";
 //        String pIdExpiration = (datee != null) ? df.format( datee ) : "";
-
 //        String fields = " pRequestID, pCard, pId, pIdType, pIdExpiration, pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry, pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress";
 //        String[] names = fields.split( ",");
-
 //        printCardPersonalization(names, pRequestID, pCard, "112223333", "1", "", "840", "", "", "John", "", "Smith", "", "19750228", "840",
 //                "11", "Atlanta", "222333 PEACHTREE PLACE", "30318", "girocheck@cardmarte.com", "", "", "786", "4540209", "", "", "", "", "0", "Y"  );
-
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID "
                 + pRequestID + ",  pCard " + pCard + ",  pId " + pId + ",  pIdType " + idType + ",  pIdExpiration,  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
                 + pState + ", pCity " + pCity + ", pAddress  " + pAddress + ", pZipCode " + pZipCode + ", pEmail " + pEmail + ", pTelephoneAreaCode " + pTelephoneAreaCode + ", pTelephone " + pTelephone + ", pCellphoneAreaCode " + pCellphoneAreaCode + ", pCellphone " + pCellphone + ", pWorkphoneAreaCode " + pWorkphoneAreaCode + ", pWorkphone " + pWorkphone + ", pFaxAreaCode " + pFaxAreaCode + ", pFaxphone " + pFaxphone + ", pRBService " + pRBService + ", pCurrentAddress " + pCurrentAddress + ")", null);

@@ -95,9 +95,10 @@ public class CoreTransactionUtil {
         transaction.setTransactionFinished(true);
         printTransaction(transaction);
         boolean deleteCardBecauseCardPersonalizationFailed = false;
-        boolean sendCardPersonaliseSMS = false;
-        boolean sendCardReloadSMS = false;
-        
+        boolean sendCardPersonalizeSMS = false;
+        String smsMessage = null;
+        String cell_phone = "";
+
         try {
             HibernateUtil.beginTransaction();
 
@@ -164,10 +165,7 @@ public class CoreTransactionUtil {
                                     } else {
                                         System.out.println("[CoreTransactionUtil] Merchant is NULL");
                                     }
-                                    sendCardPersonaliseSMS = true;
-                                }else  if (subTransaction.getType() == TransactionType.CARD_RELOAD.getCode()
-                                        && subTransaction.getResultCode() == ResultCode.SUCCESS.getCode()){
-                                    sendCardReloadSMS = true;
+                                    sendCardPersonalizeSMS = true;
                                 }
                             }
                         }
@@ -175,7 +173,7 @@ public class CoreTransactionUtil {
                         //Then look if it was a Card Personalization
                         if (transaction.getSub_Transaction() != null) {
                             for (SubTransaction subTransaction : transaction.getSub_Transaction()) {
-                                if (subTransaction.getType() == TransactionType.TECNICARD_CARD_PERSONALIZATION.getCode()){
+                                if (subTransaction.getType() == TransactionType.TECNICARD_CARD_PERSONALIZATION.getCode()) {
                                     deleteCardBecauseCardPersonalizationFailed = true;
                                 }
                             }
@@ -186,19 +184,19 @@ public class CoreTransactionUtil {
                 clientManager.saveOrUpdate(client);
             }
 
-             CreditCard cardToRemove = null;
-             
-            if(deleteCardBecauseCardPersonalizationFailed){
+            CreditCard cardToRemove = null;
+
+            if (deleteCardBecauseCardPersonalizationFailed) {
                 cardToRemove = transaction.getData_sc1();
                 transaction.setData_sc1(null);
             }
-            
+
             transactionManager.saveOrUpdate(transaction);
 
-            if(cardToRemove != null){
+            if (cardToRemove != null) {
                 CreditCardManager.get().delete(cardToRemove);
             }
-            
+
             System.out.println("**************  TRANSACTION SAVED SUCCESSFULY **************");
 
             try {
@@ -217,39 +215,24 @@ public class CoreTransactionUtil {
                 emailEx.printStackTrace();
             }
             //to send SMS
-            String smsMessage ="";
-            String cell_phone = client.getTelephone();
-            if(sendCardPersonaliseSMS){                
-                Map balanceMap=transaction.getTransactionBalanceData();
-                Double balance =null;               
-                if(balanceMap!=null){
-                    balance = (Double)balanceMap.get(ParameterName.BALANCE);
+            cell_phone = client.getTelephone();
+
+            String balanceAfterLoad = transaction.getBalanceAfterLoad();
+
+            if (sendCardPersonalizeSMS) {
+                if (balanceAfterLoad != null) {
+                    smsMessage = "Thanks for activating your VoltCash card, available balance is $" + balanceAfterLoad + " TEXT STOP to STOP";
                 }
-                if(balance!=null){
-                    smsMessage ="Thanks for activating your VoltCash, available balance is $"+balance+" TEXT STOP to STOP";
-                }else{
-                    smsMessage ="Thanks for activating your VoltCash, available balance is $0.00 TEXT STOP to STOP";
-                }                
-                              
-            }else{
-                Map balanceMap=transaction.getTransactionBalanceData();
-                Double balance =null;               
-                if(balanceMap!=null){
-                    balance = (Double)balanceMap.get(ParameterName.BALANCE);
+            } else {
+                if (transaction.getTransactionType() == TransactionType.CARD_RELOAD.getCode()
+                        || transaction.getTransactionType() == TransactionType.CARD_RELOAD_WITH_DATA.getCode()) {
+                    if (balanceAfterLoad != null) {
+                        smsMessage = "Your VoltCash card was just loaded, available balance is $" + balanceAfterLoad;
+                    }
                 }
-                if(balance!=null){
-                    smsMessage ="Your VoltCash was just loaded, available balance is $"+balance;
-                }else{
-                    smsMessage ="Your VoltCash was just loaded,available balance is $0.00";
-                }         
+
             }
-            System.out.println("--------------  SENDING SMS MESSAGE TO: "+cell_phone+" --------------");
-            try{
-                 SMSUtils.sendSMS(cell_phone,smsMessage); 
-            }catch(Exception e){
-                
-            }           
-             
+
             HibernateUtil.commitTransaction();
         } catch (Exception e) {
             HibernateUtil.rollbackTransaction();
@@ -257,6 +240,18 @@ public class CoreTransactionUtil {
             throw e;
         }
 
+        String sendSMSProperty = System.getProperty("SEND_SMS");
+        Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
+       
+        if (smsMessage != null && sendSMS) {
+            System.out.println("--------------  SENDING SMS MESSAGE TO: " + cell_phone + " --------------");
+            System.out.println("text: " + smsMessage);
+            try {
+                SMSUtils.sendSMS(cell_phone, smsMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void printTransaction(Transaction transaction) {

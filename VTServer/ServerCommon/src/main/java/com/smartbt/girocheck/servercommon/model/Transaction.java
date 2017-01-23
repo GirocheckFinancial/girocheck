@@ -71,12 +71,13 @@ public class Transaction implements Serializable {
 
     private Boolean cancelated;
     private Boolean cancelable = true;
+    
+    private String balanceAfterLoad;
 
     private java.util.Set<com.smartbt.girocheck.servercommon.model.SubTransaction> sub_Transaction = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.SubTransaction>();
 
     private com.smartbt.girocheck.servercommon.model.Check check;
-    
-    private Map transactionBalanceData;
+     
 
     public void addSubTransaction(SubTransaction subTransaction) {
         if (sub_Transaction.isEmpty()) {
@@ -387,13 +388,19 @@ public class Transaction implements Serializable {
     public void setTransactionFinished(boolean transactionFinished) {
         this.transactionFinished = transactionFinished;
     }
-    
-    public void setTransactionBalanceData( Map transactionBalanceData ) {
-        this.transactionBalanceData = transactionBalanceData;
+
+    /**
+     * @return the afterLoadBalance
+     */
+    public String getBalanceAfterLoad() {
+        return balanceAfterLoad;
     }
 
-    public Map getTransactionBalanceData() {
-        return transactionBalanceData;
+    /**
+     * @param afterLoadBalance the afterLoadBalance to set
+     */
+    public void setBalanceAfterLoad(String afterLoadBalance) {
+        this.balanceAfterLoad = afterLoadBalance;
     }
-
+     
 }

@@ -490,7 +490,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                 HibernateUtil.beginTransaction();
 
                 if (identification.getIdType() != null) {
-                    personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType());
+                    personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType(), identification.getId());
                 }
 
                 if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY)) {

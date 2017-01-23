@@ -86,6 +86,7 @@ public class MerchantManager {
         merchant.setRoutingBankNumber(display.getRoutingBankNumber());
         merchant.setPhone( display.getPhone() );
         merchant.setAccount( display.getAccount() );
+        merchant.setInventory(0);
         
         //ADDRESS
         AddressDisplay addressDisplay = display.getAddress();

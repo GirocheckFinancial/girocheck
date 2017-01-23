@@ -213,7 +213,6 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
 
-            transaction.setTransactionBalanceData(response.getTransactionBalanceData());
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Transaction finished successfully", null);

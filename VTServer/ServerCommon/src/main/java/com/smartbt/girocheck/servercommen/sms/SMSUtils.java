@@ -59,10 +59,7 @@ public class SMSUtils {
  
            // System.out.println(entityResponse.toString());
        } catch (Exception e) { 
-           String str = "There is a problem while sending SMS.Please see the error message: "+e.getMessage();
-           StringBuffer buffer= new StringBuffer();
-           buffer.append(str);
-           generateNotificationEmail(buffer) ;      
+           e.printStackTrace();       
         
        } finally {
        if (postRequest != null) {
@@ -70,27 +67,7 @@ public class SMSUtils {
        }
     }  
     }
-    
-    private  static void generateNotificationEmail(StringBuffer buffer) {
-        
-        String server_address = "smtp.cbeyond.com";
-        String server_port = "587";
-        String server_username = "direx@smartbt.com";
-        String server_password = "MiamiRocks12";
-        String server_from_address = "direx@smartbt.com";        
-       
-        
-        String[] recipients = new String[1];
-        recipients[0]="it@girocheck.com";
-        
-        EmailUtils email = new EmailUtils(server_address, server_port, server_username, server_password);
-        
-        email.setMessage(buffer.toString(), "text/html");
-        
-        email.sendEmail(recipients, server_from_address, "General Error", false);
-    }
-    
-    
+     
     public static void main(String s[]){
         sendSMS("917204881557","Thank you for using VoltCash");
     }

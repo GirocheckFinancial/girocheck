@@ -15,6 +15,7 @@
  */
 package com.smartbt.vtsuite.manager;
 
+import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -31,25 +32,39 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
  */
 public class OrderExpressHostManager {
 
+    AbstractBusinessLogicModule bizLogic;
+
     public DirexTransactionResponse processTransaction(DirexTransactionRequest direxTransactionRequest, Integer numberOfAttempts) throws Exception {
-        
-        MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
+
+//        MockOrderExpressBusinessLogic bizLogic = new MockOrderExpressBusinessLogic();
 //       OrderExpressBusinessLogic bizLogic = new OrderExpressBusinessLogic();
         DirexTransactionResponse response;
 
         fixZipCode(direxTransactionRequest);
 
+        String prodProperty = System.getProperty("PROD");
+        Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
+        System.out.println("OrderExpressHostManager() -> isProd = " + isProd);
+
+        if (isProd) {
+            System.out.println("bizLogic = new OrderExpressBusinessLogic();");
+            bizLogic = new OrderExpressBusinessLogic();
+        } else {
+            System.out.println(" bizLogic = new MockOrderExpressBusinessLogic();");
+            bizLogic = new MockOrderExpressBusinessLogic();
+        }
+
         try {
             response = (DirexTransactionResponse) bizLogic.handle(direxTransactionRequest);
         } catch (Exception e) {
-            if( numberOfAttempts > 1){
-                 Thread.sleep(30_000);
-                  return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
-            }else{
+            if (numberOfAttempts > 1) {
+                Thread.sleep(30_000);
+                return processTransaction(direxTransactionRequest, numberOfAttempts - 1);
+            } else {
                 e.printStackTrace();
                 return DirexTransactionResponse.forException(ResultCode.ORDER_EXPRESS_FAILED, ResultMessage.ORDER_EXPRESS_FAILED, " Error description: " + e.getMessage(), "");
             }
-             
+
         }
 
         if (!response.getTransactionType().equals(TransactionType.ORDER_EXPRESS_LOGS)) {

@@ -27,9 +27,7 @@ public class DirexTransaction  implements Serializable {
 
      private static final long serialVersionUID = 1L;
       
-     private Map transactionData;
-     
-     private Map transactionBalanceData;
+     private Map transactionData; 
 
      private TransactionType transactionType;
      
@@ -47,15 +45,7 @@ public class DirexTransaction  implements Serializable {
 
     public Map getTransactionData() {
         return transactionData;
-    }
-    
-    public void setTransactionBalanceData( Map transactionBalanceData ) {
-        this.transactionBalanceData = transactionBalanceData;
-    }
-
-    public Map getTransactionBalanceData() {
-        return transactionBalanceData;
-    }
+    } 
      
     public void setTransactionType( TransactionType transactionType ) {
         this.transactionType = transactionType;

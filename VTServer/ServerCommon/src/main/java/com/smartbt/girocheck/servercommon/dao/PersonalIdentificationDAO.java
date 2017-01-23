@@ -58,8 +58,13 @@ public class PersonalIdentificationDAO extends BaseDAO<PersonalIdentification> {
         return identification;
     }
 
-    public void removeByClientAndType(int idClient, int idType) {
+    public void removeByClientAndType(int idClient, int idType, Integer currentIdentificationId) {
         String sql = "delete from identification where id_type = " + idType + " and client = " + idClient;
+        
+        if(currentIdentificationId != null){
+            sql += " AND id != " + currentIdentificationId;
+        }
+        
         Query query = HibernateUtil.getSession().createSQLQuery(sql);
         query.executeUpdate();
     }

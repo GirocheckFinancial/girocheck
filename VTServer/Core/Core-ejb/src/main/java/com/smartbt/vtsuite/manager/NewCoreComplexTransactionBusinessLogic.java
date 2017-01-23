@@ -237,7 +237,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                     HibernateUtil.beginTransaction();
 
                     if (identification.getIdType() != null) {
-                        personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType());
+                        personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType(), identification.getId());
                     }
 
                     if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY)) {
@@ -409,7 +409,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
                 return;
             }
-
+             
             String estimatedPostingTime = response.getResultMessage();
 
             sendResponseToIStreamFront(true, checkId);
@@ -554,6 +554,12 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
 
                     return;
                 } else {
+                     if(response.getTransactionData() != null
+                    && response.getTransactionData().containsKey(ParameterName.BALANCE)){
+                        transaction.setBalanceAfterLoad((String)response.getTransactionData().get(ParameterName.BALANCE));
+                    }
+                    
+                    
                     String action = "submit";
                     sendIstreamCheckAuthSubmit(request, action);
                     sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.SUCCESS, estimatedPostingTime, hostName);
@@ -589,7 +595,6 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
             
-            transaction.setTransactionBalanceData(response.getTransactionBalanceData());
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[NewCoreComplexTransactionBusinessLogic] Transaction finished successfully", null);

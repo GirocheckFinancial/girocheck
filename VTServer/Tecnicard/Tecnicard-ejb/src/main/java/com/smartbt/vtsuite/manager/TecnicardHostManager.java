@@ -16,6 +16,7 @@
 package com.smartbt.vtsuite.manager;
 
 //import com.smartbt.vtsuite.servercommon.manager.AuditManager;
+import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
@@ -35,9 +36,8 @@ import java.util.Map;
  * The Host Manager class
  */
 public class TecnicardHostManager {
-//       TecnicardBusinessLogic bizLogic = new TecnicardBusinessLogic();
 
-    MockTecnicardBusinessLogic bizLogic = new MockTecnicardBusinessLogic();
+    AbstractBusinessLogicModule bizLogic;
 
     public static Map TRANSACTION_SEQUENCE;
 
@@ -64,9 +64,6 @@ public class TecnicardHostManager {
         TRANSACTION_SEQUENCE.put(CODE_100015, resp_100015);
     }
 
-    public TecnicardHostManager() throws Exception {
-    }
-
     /**
      * Process Direx Transaction Request.
      *
@@ -78,6 +75,16 @@ public class TecnicardHostManager {
 
         transaction = new Transaction();
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardHostManager] Processing req transaction :: " + request.getTransactionType(), null);
+
+        String prodProperty = System.getProperty("PROD");
+        Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
+        System.out.println("TecnicardHostManager() -> isProd = " + isProd);
+        
+        if (isProd) {
+            bizLogic = new TecnicardBusinessLogic();
+        } else {
+            bizLogic = new MockTecnicardBusinessLogic();
+        }
 
         /**
          * Selecting the correct sequence of transaction to do.
@@ -123,9 +130,9 @@ public class TecnicardHostManager {
 
                 try {
                     response = (DirexTransactionResponse) bizLogic.handle(request);
-                 
+
                 } catch (Exception e) {
-                     e.printStackTrace();
+                    e.printStackTrace();
                     return manageExceptionAnswer(TransactionType.TECNICARD_CARD_VALIDATION, e);
                 }
 
@@ -203,9 +210,9 @@ public class TecnicardHostManager {
                     if (CODE_100011.equals(resultCode)
                             || CODE_100012.equals(resultCode)
                             || CODE_100015.equals(resultCode)) {
-                        Double activationFeeConfig = (Double)request.getTransactionData().get(ParameterName.ACTIVATION_FEE_CONFIG);
-                        
-                        response.getTransactionData().put(ParameterName.ACTIVATION_FEE,activationFeeConfig);
+                        Double activationFeeConfig = (Double) request.getTransactionData().get(ParameterName.ACTIVATION_FEE_CONFIG);
+
+                        response.getTransactionData().put(ParameterName.ACTIVATION_FEE, activationFeeConfig);
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] ACTIVATION_FEE = " + activationFeeConfig, null);
                     }
 
@@ -251,9 +258,16 @@ public class TecnicardHostManager {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "--[TecnicardHostManager] success = " + success, null);
 
                     if (success) {
+                        request.setTransactionType(TransactionType.TECNICARD_BALANCE_INQUIRY);
+                        DirexTransactionResponse inquiryResponse = (DirexTransactionResponse) bizLogic.handle(request);
+
+                        if (inquiryResponse.getTransactionData() != null) {
+                            response.getTransactionData().putAll(inquiryResponse.getTransactionData());
+                        }
+
                         response.setResultCode(ResultCode.SUCCESS);
                         response.setResultMessage(ResultMessage.SUCCESS.getMessage());
-                    } else { 
+                    } else {
                         response = DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_RETURN_PROCESSING_FALSE, ResultMessage.TECNICARD_FAILED, "Tecnicard processing failed. Description: " + (String) tagMap.get(ParameterName.RESULT_MESSAGE), (String) tagMap.get(ParameterName.RESULT_CODE));
                     }
 
@@ -264,7 +278,7 @@ public class TecnicardHostManager {
 
                     return response;
                 } catch (Exception e) {
-                     e.printStackTrace();
+                    e.printStackTrace();
                     return DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_ERROR, e);
                 }
         }

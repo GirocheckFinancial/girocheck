@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.smartbt.girocheck.servercommon.model.FiltersReport" table="filters_report" lazy="false">
+        <id name="id" column="id" type="integer" unsaved-value="0">
+            <generator class="native">
+            </generator>
+        </id>
+        <property name="searchFilter" column="search_filter" type="string" length="255" not-null="false" lazy="false"/>
+        <property name="startRangeDate" column="start_range_date" type="timestamp" length="255" not-null="false" lazy="false"/>
+        <property name="endRangeDate" column="end_range_date" type="timestamp" length="255" not-null="false" lazy="false"/>
+        <property name="transactionType" column="transaction_type" type="integer" not-null="false" lazy="false"/>
+        <property name="operation" column="operation" type="string" length="20" not-null="false" lazy="false"/>
+        <property name="filterAmmount" column="filter_ammount" type="boolean"  not-null="false" lazy="false"/>
+        <property name="ammountType" column="ammount_type" type="integer" not-null="false" lazy="false"/>
+        <property name="opType" column="optype" type="integer" not-null="false" lazy="false"/>
+        <property name="ammountString" column="ammount" type="string" not-null="false" lazy="false"/>
+        <property name="pending" column="pending" type="boolean" not-null="false" lazy="false"/>
+        
+  
+    </class>
+</hibernate-mapping>

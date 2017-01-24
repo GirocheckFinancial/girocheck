@@ -69,5 +69,6 @@ License Type: Purchased
     <mapping resource="ormmapping/com/smartbt/girocheck/servercommon/model/FeeSchedules.hbm.xml"/>
     <mapping resource="ormmapping/com/smartbt/girocheck/servercommon/model/FeeBuckets.hbm.xml"/>
     <mapping resource="ormmapping/com/smartbt/girocheck/servercommon/model/Email.hbm.xml"/>
+    <mapping resource="ormmapping/com/smartbt/girocheck/servercommon/model/FiltersReport.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

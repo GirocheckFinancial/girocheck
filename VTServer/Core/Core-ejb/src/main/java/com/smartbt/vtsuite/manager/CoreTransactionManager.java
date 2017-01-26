@@ -480,6 +480,9 @@ public class CoreTransactionManager {
             transaction.setTransactionFinished(false);
 
             transactionManager.saveOrUpdate(transaction);
+            
+            direxTransactionRequest.getTransactionData().put(ParameterName.REQUEST_ID, transaction.getId());
+        
 //            HibernateUtil.commitTransaction();
         } catch (AmountException amountException) {
             amountException.printStackTrace();

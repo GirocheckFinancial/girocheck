@@ -30,6 +30,10 @@ public class SMSUtils {
         String API_KEY = System.getProperty("SMS_API_KEY");
         String API_SECRET = System.getProperty("SMS_API_SECRET");
         
+        System.out.println("SMSUtil -> SMS_URL = " + url);
+        System.out.println("SMSUtil -> SMS_API_KEY = " + API_KEY);
+        System.out.println("SMSUtil -> SMS_API_SECRET = " + API_SECRET);
+        
         HttpPost postRequest = new HttpPost(url);
         ObjectMapper mapper = new ObjectMapper();
  
@@ -73,6 +77,6 @@ public class SMSUtils {
     }
      
     public static void main(String s[]){
-        sendSMS("919886730064","Thank you for using VoltCash");
+        sendSMS("17864540209","Thank you for using VoltCash--------");
     }
 }

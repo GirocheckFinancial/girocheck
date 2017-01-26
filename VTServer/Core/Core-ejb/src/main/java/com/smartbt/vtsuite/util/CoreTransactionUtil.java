@@ -244,10 +244,10 @@ public class CoreTransactionUtil {
         Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
        
         if (smsMessage != null && sendSMS) {
-            System.out.println("--------------  SENDING SMS MESSAGE TO: " + cell_phone + " --------------");
+            System.out.println("--------------  SENDING SMS MESSAGE TO: 1" + cell_phone + " --------------");
             System.out.println("text: " + smsMessage);
             try {
-                SMSUtils.sendSMS(cell_phone, smsMessage);
+                SMSUtils.sendSMS("1" + cell_phone, smsMessage);
             } catch (Exception e) {
                 e.printStackTrace();
             }

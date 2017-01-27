@@ -169,6 +169,8 @@ public class ReportManager {
             System.out.println("jsonData = " + jsonData);
 //            String jsonData = transactionReportDAO.getReport(reportFilters.getStartRangeDate(), reportFilters.getEndRangeDate(), reportFilters.getAmount(), reportType , 0,300,0,null);
             String xmlData = JSON2XMLParser.fromJsonToXml(jsonData, header, footer, filters.getStartRangeDate() + "", filters.getEndRangeDate() + "", reportType);
+            System.out.println("xmlData = " + xmlData);
+            
             stream = new ByteArrayInputStream(xmlData.getBytes());
         } catch (Exception e) {
             e.printStackTrace();

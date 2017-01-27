@@ -236,7 +236,7 @@ public class JSON2XMLParser {
      */
     // protected static String parseJSONTransaction(JsonObject jsonObject, ArrayList<Object[]> originalTxInfoList) {
     protected static String parseJSONTransaction(JsonObject jsonObject) {
-
+        System.out.println("parseJSONTransaction -> jsonObject = " + jsonObject);
         String transactionData = "";
 
         transactionData += tagNum("id", jsonObject.get("id"));
@@ -245,7 +245,17 @@ public class JSON2XMLParser {
         transactionData += tag("idMerchant", parseJSONMerchant(jsonObject.get("merchant")));
         transactionData += tag("idTerminal", parseJSONTerminal(jsonObject.get("terminal")));
 //        transactionData += tag("idClerk", parseJSONClerk(jsonObject.get("clerk")));
-        transactionData += tag("idClient", parseJSONClient(jsonObject.get("client")));
+        
+        JsonValue client = jsonObject.get("client");
+        
+        System.out.println("client = " + client);
+         
+        
+        String clientJSON = parseJSONClient(client);
+        System.out.println("after parsing clientJSON = " + clientJSON);
+        
+        transactionData += clientJSON;
+//        transactionData += tag("idClient", clientJSON);
 //        transactionData += tag("mode", jsonObject.get("mode"));
         transactionData += tag("operation", jsonObject.get("operation"));
         transactionData += tag("requestId", jsonObject.get("requestId"));
@@ -524,22 +534,26 @@ public class JSON2XMLParser {
      */
     protected static String parseJSONClient(JsonValue jsonValue) {
         String id = "0", xmlData = "";
-        if (jsonValue == null || jsonValue.isNull() || jsonValue.asObject().get("id") == null || jsonValue.asObject().get("id").isNull()) {
-            return id;
-        }
+//        if (jsonValue == null || jsonValue.isNull() || jsonValue.asObject().get("id") == null || jsonValue.asObject().get("id").isNull()) {
+//            return id;
+//        }
+        System.out.println("parseJSONClient jsonValue = " + jsonValue);
 
         JsonObject jsonObject = jsonValue.asObject();
+        
+//        id = parseLiteral(jsonObject.get("id"));
 
-        id = parseLiteral(jsonObject.get("id"));
-
-        xmlData += tag("id", id);
+//        xmlData += tag("id", id);
         xmlData += tag("first", jsonObject.get("firstName"));
+        System.out.println("xmlData1 = " + xmlData);
         xmlData += tag("last", jsonObject.get("lastName"));
-        xmlData += tag("phone", jsonObject.get("telephone"));
+         System.out.println("xmlData2 = " + xmlData);
 
-        clientXml.add(tag("Client", xmlData));
+        String clientXML = tag("Client", xmlData);
+        System.out.println("clientXML = " + clientXML);
+        clientXml.add(clientXML);
 
-        return id;
+        return clientXML;
     }
 
     /**

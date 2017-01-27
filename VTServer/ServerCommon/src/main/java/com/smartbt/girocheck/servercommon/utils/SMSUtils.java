@@ -18,28 +18,22 @@ import org.apache.http.util.EntityUtils;
  */
 public class SMSUtils {
     
-    //static String url = "https://go4clients.com:8443/TelintelSms/api/sms/sendmessage"; //http://go4clients.com:3011/TelintelSms/api/sms/sendmessage
+    //static String url = "http://go4clients.com:3011/TelintelSms/api/sms/sendmessage"; //http://go4clients.com:3011/TelintelSms/api/sms/sendmessage
     
-    //static String API_KEY="aec51d9fc4a64bd19639b5b2c2a88e5d";
+    //static String API_KEY="9d71d77a7e1c4a069a9fa51fa28a3244";
     
-    //static String API_SECRET="0086572281";
+    //static String API_SECRET="7600138823729";
  
     public static void sendSMS(String phone, String message) {
         
         String url = System.getProperty("SMS_URL");
         String API_KEY = System.getProperty("SMS_API_KEY");
         String API_SECRET = System.getProperty("SMS_API_SECRET");
-        
-        System.out.println("SMSUtil -> SMS_URL = " + url);
-        System.out.println("SMSUtil -> SMS_API_KEY = " + API_KEY);
-        System.out.println("SMSUtil -> SMS_API_SECRET = " + API_SECRET);
-        
+         
         HttpPost postRequest = new HttpPost(url);
         ObjectMapper mapper = new ObjectMapper();
  
-        try {
-            System.out.println("******** CAME HERE ******************");
- 
+        try { 
             String request = "{\"toList\" :[\""
                     + phone
                     + "\"], \"message\":\""
@@ -54,8 +48,7 @@ public class SMSUtils {
             StringEntity input = new StringEntity(request);
             input.setContentType("application/json");
             postRequest.setEntity(input);
-            System.out.println("********* CAME HERE BEFORE SENDING SMS*******************");
- 
+             
             HttpResponse response = httpClient.execute(postRequest);
             HttpEntity responseEntity = response.getEntity();
             

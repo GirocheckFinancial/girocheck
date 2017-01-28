@@ -87,6 +87,14 @@
           <value>checkNumber,System.String</value>
           <value>makerName,System.String</value>
           <value>resultMessage,System.String</value>
+          <value>clientFirstName,System.String</value>
+          <value>clientLastName,System.String</value>
+          <value>clientPhone,System.String</value>
+          <value>idPosOrderExp,System.String</value>
+          <value>merchantName,System.String</value>
+          <value>terminalSerial,System.String</value> 
+          <value>idTellerOrderExp,System.String</value> 
+          <value>oEAgentNumber,System.String</value> 
         </Columns>
         <Dictionary isRef="1"/>
         <Name>Transaction</Name>
@@ -439,7 +447,7 @@
               <Name>Text2</Name>
               <Page isRef="11"/>
               <Parent isRef="14"/>
-              <Text>OEAgentNumber</Text>
+              <Text>OE #</Text>
               <TextBrush>Black</TextBrush>
               <Type>Expression</Type>
               <VertAlignment>Center</VertAlignment>
@@ -642,7 +650,7 @@
               <Name>Client First Name</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Client.first}</Text>
+              <Text>{Transaction.clientFirstName}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Client_x0020_First_x0020_Name>
@@ -656,7 +664,7 @@
               <Name>Client Last Name</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Client.last}</Text>
+              <Text>{Transaction.clientLastName}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Client_x0020_Last_x0020_Name>
@@ -684,7 +692,7 @@
               <Name>Merchant Legal Name</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Merchant.legalName}</Text>
+              <Text>{Transaction.merchantName}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Merchant_x0020_Legal_x0020_Name>
@@ -698,7 +706,7 @@
               <Name>Terminal Serial Number</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Terminal.serialNumber}</Text>
+              <Text>{Transaction.terminalSerial}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Terminal_x0020_Serial_x0020_Number>
@@ -712,7 +720,7 @@
               <Name>Client Phone</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Client.phone}</Text>
+              <Text>{Transaction.clientPhone}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </Client_x0020_Phone>
@@ -726,7 +734,7 @@
               <Name>ID Pos</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Merchant.idPosOrderExp}</Text>
+              <Text>{Transaction.idPosOrderExp}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </ID_x0020_Pos>
@@ -740,7 +748,7 @@
               <Name>ID Teller</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Merchant.idTellerOrderExp}</Text>
+              <Text>{Transaction.idTellerOrderExp}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </ID_x0020_Teller>
@@ -768,7 +776,7 @@
               <Name>OEAgentNumber</Name>
               <Page isRef="11"/>
               <Parent isRef="38"/>
-              <Text>{Transaction.Merchant.oEAgentNumber}</Text>
+              <Text>{Transaction.oEAgentNumber}</Text>
               <TextBrush>Black</TextBrush>
               <Type>DataColumn</Type>
             </OEAgentNumber>

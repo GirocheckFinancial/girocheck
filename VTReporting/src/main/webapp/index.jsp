@@ -47,12 +47,16 @@ response.setDateHeader ("Expires", -1);
     <body>
         <%
             try {
+                System.out.println("Printing from index.JSP...");
+                
                 InputStream xmlData, xmlSchema;
 
                 ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
                 InputStream inputMRT = null;
                 String reportType = request.getParameter("reportType");
                 String reportXMLDataBase = "";
+                
+                System.out.println("reportType = " + reportType);
                 
                 if (reportType.equalsIgnoreCase("Details")) {
                     inputMRT = classLoader.getResourceAsStream("DetailsReport.mrt");

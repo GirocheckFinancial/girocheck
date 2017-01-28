@@ -32,20 +32,29 @@ public class TransactionDetailReportDisplay implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-     
+
     private Integer transactionType;
     private String maskCardNumber;
     private String operation;
     private Double payoutAmount;
     private Double feeAmount;
-    private Double amount;  
+    private Double amount;
     private String requestId;
-//    private String clientName;
-//    private String clientLastName;
-    private Integer resultCode; 
+    private Integer resultCode;
     private String resultMessage;
     private Date dateTime;
-    private ClientReportDisplay client;
+    private String clientFirstName;
+    private String clientLastName;
+    private String clientPhone;
+
+    private String idPosOrderExp;
+    private String merchantName;
+    private String terminalSerial;
+    private String idTellerOrderExp;
+    private String oEAgentNumber;
+    private String checkNumber;
+    private String makerName;
+
     /**
      * The default constructor
      */
@@ -65,12 +74,15 @@ public class TransactionDetailReportDisplay implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
- 
+
     /**
      * @return the maskCardNumber
      */
     public String getMaskCardNumber() {
-        return maskCardNumber;
+        if (maskCardNumber != null && maskCardNumber.length() >= 4) {
+            return  "********" + maskCardNumber.substring(maskCardNumber.length() - 4);
+        }
+        return "";
     }
 
     /**
@@ -146,10 +158,10 @@ public class TransactionDetailReportDisplay implements Serializable {
     /**
      * @param requestId the requestId to set
      */
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public void setRequestId(Integer requestId) {
+        this.requestId = requestId + "";
     }
- 
+
     /**
      * @return the resultCode
      */
@@ -207,17 +219,143 @@ public class TransactionDetailReportDisplay implements Serializable {
     }
 
     /**
-     * @return the client
+     * @return the clientFirstName
      */
-    public ClientReportDisplay getClient() {
-        return client;
+    public String getClientFirstName() {
+        return clientFirstName;
     }
 
     /**
-     * @param client the client to set
+     * @param clientFirstName the clientFirstName to set
      */
-    public void setClient(ClientReportDisplay client) {
-        this.client = client;
+    public void setClientFirstName(String clientFirstName) {
+        this.clientFirstName = clientFirstName;
+    }
+
+    /**
+     * @return the clientLastName
+     */
+    public String getClientLastName() {
+        return clientLastName;
+    }
+
+    /**
+     * @param clientLastName the clientLastName to set
+     */
+    public void setClientLastName(String clientLastName) {
+        this.clientLastName = clientLastName;
+    }
+
+    /**
+     * @return the idPosOrderExp
+     */
+    public String getIdPosOrderExp() {
+        return idPosOrderExp;
+    }
+
+    /**
+     * @param idPosOrderExp the idPosOrderExp to set
+     */
+    public void setIdPosOrderExp(String idPosOrderExp) {
+        this.idPosOrderExp = idPosOrderExp;
+    }
+
+    /**
+     * @return the merchantName
+     */
+    public String getMerchantName() {
+        return merchantName;
+    }
+
+    /**
+     * @param merchantName the merchantName to set
+     */
+    public void setMerchantName(String merchantName) {
+        this.merchantName = merchantName;
+    }
+
+    /**
+     * @return the terminalSerial
+     */
+    public String getTerminalSerial() {
+        return terminalSerial;
+    }
+
+    /**
+     * @param terminalSerial the terminalSerial to set
+     */
+    public void setTerminalSerial(String terminalSerial) {
+        this.terminalSerial = terminalSerial;
+    }
+
+    /**
+     * @return the idTellerOrderExp
+     */
+    public String getIdTellerOrderExp() {
+        return idTellerOrderExp;
+    }
+
+    /**
+     * @param idTellerOrderExp the idTellerOrderExp to set
+     */
+    public void setIdTellerOrderExp(String idTellerOrderExp) {
+        this.idTellerOrderExp = idTellerOrderExp;
+    }
+
+    /**
+     * @return the clientPhone
+     */
+    public String getClientPhone() {
+        return clientPhone;
+    }
+
+    /**
+     * @param clientPhone the clientPhone to set
+     */
+    public void setClientPhone(String clientPhone) {
+        this.clientPhone = clientPhone;
+    }
+
+    /**
+     * @return the oEAgentNumber
+     */
+    public String getoEAgentNumber() {
+        return oEAgentNumber;
+    }
+
+    /**
+     * @param oEAgentNumber the oEAgentNumber to set
+     */
+    public void setoEAgentNumber(String oEAgentNumber) {
+        this.oEAgentNumber = oEAgentNumber;
+    }
+
+    /**
+     * @return the checkNumber
+     */
+    public String getCheckNumber() {
+        return checkNumber;
+    }
+
+    /**
+     * @param checkNumber the checkNumber to set
+     */
+    public void setCheckNumber(String checkNumber) {
+        this.checkNumber = checkNumber;
+    }
+
+    /**
+     * @return the makerName
+     */
+    public String getMakerName() {
+        return makerName;
+    }
+
+    /**
+     * @param makerName the makerName to set
+     */
+    public void setMakerName(String makerName) {
+        this.makerName = makerName;
     }
 
 }

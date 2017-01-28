@@ -89,11 +89,11 @@ public class TransactionReportController {
         
         String url;
         System.out.println("TransactionReportController with filters id = " + id);
-//        if (reportType) {
-//            url = "/VTReporting/index.jsp?reportType=DetailsListing&id=" + reportFiltersId;
-//        } else {
+        if (reportType) {
+            url = "/VTReporting/index.jsp?reportType=DetailsListing&id=" + id;
+        } else {
             url = "/VTReporting/index.jsp?reportType=Details&id=" + id;
-//        }
+        }
         reportDisplay.setUrl(url);
         response.setData(reportDisplay);
         

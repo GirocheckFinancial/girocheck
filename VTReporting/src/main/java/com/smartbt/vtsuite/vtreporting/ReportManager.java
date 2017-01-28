@@ -7,6 +7,7 @@ import com.smartbt.girocheck.servercommon.model.FiltersReport;
 import com.smartbt.girocheck.servercommon.model.ReportFilters;
 import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.girocheck.servercommon.dao.ReportDAO;
+import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil; 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -33,78 +34,7 @@ public class ReportManager {
      */
     private static final String USER_NAME = "USER_NAME";
 
-    /**
-     * Gets report data from data base.
-     *
-     * @param reportId
-     * @param cookies
-     * @param token
-     * @return Report data as InputStream.
-     */
-//    public static InputStream getData(String reportId, String cookies, String token, String header, String footer, String fromDate, String toDate) {
-//    public static InputStream getData(String startRangeDate, String endRangeDateStr, String amount, String reportType, String token, String cookies) {
-//        System.out.println("[VTREPORTING] ReportManager.getData() with amount: " + amount);
-//        System.out.println("[VTREPORTING] ReportManager.getData() with startRangeDate: " + startRangeDate);
-//        System.out.println("[VTREPORTING] ReportManager.getData() with endRangeDateStr: " + endRangeDateStr);
-//        System.out.println("[VTREPORTING] ReportManager.getData() with token: " + token);
-//        System.out.println("[VTREPORTING] ReportManager.getData() with cookies: " + cookies);
-//        InputStream stream = null;
-////        String userEmail = "";
-//        
-//        String header = "Transaction Report";
-//        String footer = "Report";
-//        String userName="";
-////         Get user name
-////        try {
-////            cookies = cookies.replace(";", "\n");
-////            Properties propAttrs = new Properties();
-////            propAttrs.load(new StringReader(cookies));
-////            userName = propAttrs.getProperty(USER_NAME).replace("\"", "");
-////            System.out.println("[VTREPORTING] ReportManager.getData() with userName from cookies: " + userName);
-////        } catch (Exception e) {
-////        e.printStackTrace();
-////        }
-//
-//        String crc = userName;
-//        if(startRangeDate != null && !startRangeDate.isEmpty() && !"null".equals(startRangeDate)){
-//            crc+=startRangeDate;
-//        }
-//        
-//        if(endRangeDateStr != null && !endRangeDateStr.isEmpty() && !"null".equals(endRangeDateStr)){
-//            crc+=endRangeDateStr;
-//        }
-//        
-//        if(amount !=null && !amount.isEmpty() && !"null".equals(amount)){
-//            crc+=amount;
-//        }
-//        
-//        if(!crc.isEmpty()){
-//            
-//            if(!token.equals(Utils.MD5(crc))){
-//                return stream;
-//            }
-//            
-//        }
-//        
-//        try {
-//            HibernateUtil.beginTransaction();
-//            String jsonData = transactionReportDAO.getReport(startRangeDate, endRangeDateStr, amount, reportType , 0,300,0,null);
-//            String xmlData = JSON2XMLParser.fromJsonToXml(jsonData, header, footer, startRangeDate, endRangeDateStr);
-//            System.out.println("xmlData = " + xmlData);
-//            stream = new ByteArrayInputStream(xmlData.getBytes());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                HibernateUtil.commitTransaction();
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//                HibernateUtil.rollbackTransaction();
-//            }
-//        }
-//        System.out.println("[VTREPORTING] ReportManager.getData() END");
-//        return stream;
-//    }
+
     
     public static InputStream processRequest(String id, String reportType){
         
@@ -127,7 +57,7 @@ public class ReportManager {
         
         return stream;
     }
-    
+    //Working!!
        public static InputStream getDataTransaction(String id, String reportType) {
 
         System.out.println("[VTREPORTING] ReportManager.getDataTransaction() with id: " + id);
@@ -164,10 +94,16 @@ public class ReportManager {
         
         try {
             HibernateUtil.beginTransaction();
-            String jsonData = ReportDAO.get().detailTransactionReport(filters);
+            String jsonData = "";
+            
+            if(reportType.equals("Details")){
+                jsonData = ReportDAO.get().detailTransactionReport(filters);
+            }else{
+                jsonData = ReportDAO.get().detailListingTransactionReport(filters);
+            }
             
             System.out.println("jsonData = " + jsonData);
-//            String jsonData = transactionReportDAO.getReport(reportFilters.getStartRangeDate(), reportFilters.getEndRangeDate(), reportFilters.getAmount(), reportType , 0,300,0,null);
+
             String xmlData = JSON2XMLParser.fromJsonToXml(jsonData, header, footer, filters.getStartRangeDate() + "", filters.getEndRangeDate() + "", reportType);
             System.out.println("xmlData = " + xmlData);
             
@@ -229,7 +165,9 @@ public class ReportManager {
 //        try {
 //            HibernateUtil.beginTransaction();
 //            String jsonData = transactionReportDAO.getReport(reportFilters.getStartRangeDate(), reportFilters.getEndRangeDate(), reportFilters.getAmount(), reportType , 0,300,0,null);
+//            System.out.println("jsonData = " + jsonData);
 //            String xmlData = JSON2XMLParser.fromJsonToXml(jsonData, header, footer, reportFilters.getStartRangeDate(), reportFilters.getEndRangeDate(), reportType);
+//           System.out.println("xmlData = " + xmlData);
 //            stream = new ByteArrayInputStream(xmlData.getBytes());
 //        } catch (Exception e) {
 //            e.printStackTrace();
@@ -248,7 +186,7 @@ public class ReportManager {
     
     public static InputStream getDataMerchant(String idReport, String reportType) {
 
-        System.out.println("[VTREPORTING] ReportManager.getDataMerchant() with idReport: " + idReport);
+//        System.out.println("[VTREPORTING] ReportManager.getDataMerchant() with idReport: " + idReport);
         InputStream stream = null;
 //        String userEmail = "";
         

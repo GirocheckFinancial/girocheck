@@ -1,21 +1,15 @@
 package com.smartbt.vtsuite.vtreporting;
 
 import com.eclipsesource.json.*;
-import com.smartbt.vtsuite.vtcommon.enums.ClientTransactionType;
+import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.vtsuite.vtreporting.totals.MerchantTotals;
 import java.io.BufferedReader;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Locale;
 import java.util.Set;
-import javax.xml.bind.JAXBContext;
-/*
- * @author Christopher Perez, Maite Gonzalez
- */
+
 
 public class JSON2XMLParser {
 
@@ -23,9 +17,9 @@ public class JSON2XMLParser {
      * The report header
      */
     protected static String HEADER = "", FOOTER = "";
-    
+
     protected static String HEADERMerchant = "", FOOTERMerchant = "";
-    
+
     protected static String HEADERTerminal = "", FOOTERTerminal = "";
 
     static BufferedReader readJson;
@@ -34,7 +28,7 @@ public class JSON2XMLParser {
      * The xml that describes the transaction
      */
     protected static String transactionXml = "",
-                strMerchantXml = "",strTerminalXml = "", entityId = "";
+            strMerchantXml = "", strTerminalXml = "", entityId = "";
 
     /**
      * The xml that describes the merchant
@@ -44,10 +38,10 @@ public class JSON2XMLParser {
              * The xml that describes the terminal
              */
             terminalXml,
-//            /**
-//             * The xml that describes the clerk
-//             */
-//            clerkXml,
+            //            /**
+            //             * The xml that describes the clerk
+            //             */
+            //            clerkXml,
             /**
              * The xml that describes the client
              */
@@ -68,14 +62,14 @@ public class JSON2XMLParser {
      * @throws Exception
      */
     public static String fromJsonToXml(String jsonData, String header, String footer, String fromDate, String toDate, String reportType) throws Exception {
-        System.out.println("[VTREPORTING] JSON2XMLParser.fromJsonToXml() Start...");
- 
+//        System.out.println("[VTREPORTING] JSON2XMLParser.fromJsonToXml() Start...");
+
         JsonArray jsonArray = JsonArray.readFrom(jsonData);
         String response = "";
 
         merchantTotalsList = new ArrayList<>();
-        
-        switch(reportType){
+
+        switch (reportType) {
             case "DetailsListing":
             case "Details":
                 HEADER = "<?xml version=\"1.0\"?><Report xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"TransactionFK.xsd\">";
@@ -93,8 +87,8 @@ public class JSON2XMLParser {
                 response = HEADERTerminal + parseJSONTerminalArray(jsonArray, header, footer, fromDate, toDate) + FOOTERTerminal;
                 break;
 
-        } 
-              
+        }
+
         return response;
 
     }
@@ -111,19 +105,18 @@ public class JSON2XMLParser {
 
         merchantXml.add(tag("Merchant", tag("id", "0") /*+ nullTag("number")*/
                 + nullTag("legalName") + nullTag("description") /*+ nullTag("acitve") + nullTag("monitor")
-                + nullTag("parameter")*/ + nullTag("sic") /*+ nullTag("activationDate") + nullTag("deactivationDate")*/
-                + nullTag("address") + nullTag("phone")+ nullTag("zipcode")+ nullTag("state")+ nullTag("city")
-                + nullTag("idPosOrderExp")+ nullTag("idTellerOrderExp") + nullTag("oEAgentNumber") + nullTag("customerName")));
+                 + nullTag("parameter")*/ + nullTag("sic") /*+ nullTag("activationDate") + nullTag("deactivationDate")*/
+                + nullTag("address") + nullTag("phone") + nullTag("zipcode") + nullTag("state") + nullTag("city")
+                + nullTag("idPosOrderExp") + nullTag("idTellerOrderExp") + nullTag("oEAgentNumber") + nullTag("customerName")));
 
         terminalXml.add(tag("Terminal", tag("id", "0") + /*nullTag("terminalId")
-                + */nullTag("serialNumber") + nullTag("description")
+                 + */ nullTag("serialNumber") + nullTag("description")
                 /*+ nullTag("active") + nullTag("parameter") + nullTag("activationDate") + nullTag("deactivationDate")
-                + nullTag("customerName") */+ nullTag("merchantName")));
+                 + nullTag("customerName") */ + nullTag("merchantName")));
 
 //        clerkXml.add(tag("Clerk", tag("id", "0") + nullTag("role")
 //                + nullTag("username") + nullTag("lastName") + nullTag("firstName")
 //                + nullTag("active") + nullTag("password")));
-
         clientXml.add(tag("Client", tag("id", "0") + nullTag("first") + nullTag("last") + nullTag("phone")));
     }
 
@@ -172,55 +165,55 @@ public class JSON2XMLParser {
      * @return
      */
     protected static String parseJSONTransactionArray(JsonArray jsonArray, String header, String footer, String fromDate, String toDate) throws java.text.ParseException {
-        try{
-        generalXml = new HashSet<>();
-        initEntities();
+        try {
+            generalXml = new HashSet<>();
+            initEntities();
 
-        for (JsonValue jsonValue : jsonArray) {
-            if (jsonValue.isObject()) {
-                //  transactionXml += tag("Transaction", parseJSONTransaction(jsonValue.asObject(), secundaryTxInfoList));
-                transactionXml += tag("Transaction", parseJSONTransaction(jsonValue.asObject()));
+            for (JsonValue jsonValue : jsonArray) {
+                if (jsonValue.isObject()) {
+                    //  transactionXml += tag("Transaction", parseJSONTransaction(jsonValue.asObject(), secundaryTxInfoList));
+                    transactionXml += tag("Transaction", parseJSONTransaction(jsonValue.asObject()));
+                }
             }
-        }
-        transactionXml = transactionXml + concatEntities(merchantTotalsList);
-        generalXml.add(tag("General", tag("header", header) + tag("footer", footer) + tag("fromDate", fromDate) + tag("toDate", toDate)));
+            transactionXml = transactionXml + concatEntities(merchantTotalsList);
+            generalXml.add(tag("General", tag("header", header) + tag("footer", footer) + tag("fromDate", fromDate) + tag("toDate", toDate)));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return generalXml + transactionXml;
     }
-    
+
     protected static String parseJSONMerchantArray(JsonArray jsonArray, String header, String footer, String fromDate, String toDate) throws java.text.ParseException {
-        try{
-        generalXml = new HashSet<>();
-        strMerchantXml = "";
-        
-        for (JsonValue jsonValue : jsonArray) {
-            if (jsonValue.isObject()) {
-                strMerchantXml += tag("Merchant", parseJSONMerchantEntity(jsonValue.asObject()));
+        try {
+            generalXml = new HashSet<>();
+            strMerchantXml = "";
+
+            for (JsonValue jsonValue : jsonArray) {
+                if (jsonValue.isObject()) {
+                    strMerchantXml += tag("Merchant", parseJSONMerchantEntity(jsonValue.asObject()));
+                }
             }
-        }
 //        strMerchantXml = strMerchantXml + concatEntities(merchantTotalsList);
-        generalXml.add(tag("General", tag("header", header) + tag("footer", footer) + tag("fromDate", fromDate) + tag("toDate", toDate)));
+            generalXml.add(tag("General", tag("header", header) + tag("footer", footer) + tag("fromDate", fromDate) + tag("toDate", toDate)));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return generalXml + strMerchantXml;
     }
-    
+
     protected static String parseJSONTerminalArray(JsonArray jsonArray, String header, String footer, String fromDate, String toDate) throws java.text.ParseException {
-        try{
-        generalXml = new HashSet<>();
-        strTerminalXml = "";
-        
-        for (JsonValue jsonValue : jsonArray) {
-            if (jsonValue.isObject()) {
-                strTerminalXml += tag("Terminal", parseJSONTerminalEntity(jsonValue.asObject()));
+        try {
+            generalXml = new HashSet<>();
+            strTerminalXml = "";
+
+            for (JsonValue jsonValue : jsonArray) {
+                if (jsonValue.isObject()) {
+                    strTerminalXml += tag("Terminal", parseJSONTerminalEntity(jsonValue.asObject()));
+                }
             }
-        }
-        generalXml.add(tag("General", tag("header", header) + tag("footer", footer) + tag("fromDate", fromDate) + tag("toDate", toDate)));
+            generalXml.add(tag("General", tag("header", header) + tag("footer", footer) + tag("fromDate", fromDate) + tag("toDate", toDate)));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -236,89 +229,80 @@ public class JSON2XMLParser {
      */
     // protected static String parseJSONTransaction(JsonObject jsonObject, ArrayList<Object[]> originalTxInfoList) {
     protected static String parseJSONTransaction(JsonObject jsonObject) {
-        System.out.println("parseJSONTransaction -> jsonObject = " + jsonObject);
+//        System.out.println("parseJSONTransaction -> jsonObject = " + jsonObject);
         String transactionData = "";
 
         transactionData += tagNum("id", jsonObject.get("id"));
-        
-        // transactionData += tag("idMerchant", parseJSONMerchant(jsonObject.get("merchant"), jsonObject, originalTxInfoList));
-        transactionData += tag("idMerchant", parseJSONMerchant(jsonObject.get("merchant")));
-        transactionData += tag("idTerminal", parseJSONTerminal(jsonObject.get("terminal")));
-//        transactionData += tag("idClerk", parseJSONClerk(jsonObject.get("clerk")));
-        
-        JsonValue client = jsonObject.get("client");
-        
-        System.out.println("client = " + client);
-         
-        
-        String clientJSON = parseJSONClient(client);
-        System.out.println("after parsing clientJSON = " + clientJSON);
-        
-        transactionData += clientJSON;
-//        transactionData += tag("idClient", clientJSON);
-//        transactionData += tag("mode", jsonObject.get("mode"));
-        transactionData += tag("operation", jsonObject.get("operation"));
+
+//        transactionData += tag("idMerchant", parseJSONMerchant(jsonObject.get("merchant")));
+//        transactionData += tag("idTerminal", parseJSONTerminal(jsonObject.get("terminal")));
+
+        transactionData += tag("clientFirstName", jsonObject.get("clientFirstName"));
+        transactionData += tag("clientLastName", jsonObject.get("clientLastName"));
+        transactionData += parseJSONOperation(jsonObject);
         transactionData += tag("requestId", jsonObject.get("requestId"));
-//        transactionData += tag("cardBrand", jsonObject.get("cardBrand"));
         transactionData += tag("maskCardNumber", jsonObject.get("maskCardNumber"));
         transactionData += tagNum("payoutAmount", jsonObject.get("payoutAmount"));
-//        transactionData += tagNum("tipAmount", jsonObject.get("tipAmount"));
         transactionData += tagNum("feeAmount", jsonObject.get("feeAmount"));
         transactionData += tagNum("amount", jsonObject.get("amount"));
-        transactionData += tagNum("type", jsonObject.get("type"));
-        transactionData += tagNum("checkNumber", jsonObject.get("checkNumber"));
-        transactionData += tagNum("makerName", jsonObject.get("makerName"));
+        transactionData += parseJSONType(jsonObject);
+//        transactionData += tagNum("type", jsonObject.get("type"));
+        transactionData += tag("checkNumber", jsonObject.get("checkNumber"));
+        transactionData += tag("makerName", jsonObject.get("makerName"));
         transactionData += tagNum("resultCode", jsonObject.get("resultCode"));
-        transactionData += tagNum("resultMessage", jsonObject.get("resultMessage"));
-//        transactionData += tag("cvv", jsonObject.get("cvv"));
-//        transactionData += tag("xxxclient", jsonObject.get("xxxclient"));
-//        transactionData += tag("cardHolderEmail", jsonObject.get("cardHolderEmail"));
-//        transactionData += tag("geoLocation", jsonObject.get("geoLocation"));
-//        transactionData += tag("signature", jsonObject.get("signature"));
-//        transactionData += tag("account", jsonObject.get("account"));
-//        transactionData += tag("allowPartialAuth", jsonObject.get("allowPartialAuth"));
-//        transactionData += tag("formatID", jsonObject.get("formatID"));
-//        transactionData += tag("ksn", jsonObject.get("ksn"));
-//        transactionData += tag("encTrack1AndTrack2", jsonObject.get("encTrack1AndTrack2"));
-//        transactionData += tag("track1Length", jsonObject.get("track1Length"));
-//        transactionData += tag("track2Length", jsonObject.get("track2Length"));
-//        transactionData += tag("maskedPAN", jsonObject.get("maskedPAN"));
-//        transactionData += tag("swipe", jsonObject.get("swipe"));
-//        transactionData += tag("pin", jsonObject.get("pin"));
-//        transactionData += tag("authNumber", jsonObject.get("authNumber"));
-//        transactionData += tag("disposition", jsonObject.get("disposition"));
-//        transactionData += tagNum("sequence", jsonObject.get("sequence"));
-//        transactionData += tag("approvalNumber", jsonObject.get("approvalNumber"));
-//        transactionData += tagNum("approvalCode", jsonObject.get("approvalCode"));
-//        transactionData += tagNum("accountSuffix", jsonObject.get("accountSuffix"));
-//        transactionData += tag("voided", jsonObject.get("voided"));
-//        transactionData += tag("poNumber", jsonObject.get("poNumber"));
-//        transactionData += tag("invoiceNumber", jsonObject.get("invoiceNumber"));
+        transactionData += tag("resultMessage", jsonObject.get("resultMessage"));
         transactionData += tagDateTime("dateTime", jsonObject.get("dateTime"));
-//        transactionData += tag("finalized", jsonObject.get("finalized"));
-//        transactionData += tag("hostCapture", jsonObject.get("hostCapture"));
-//        transactionData += tagNum("retrievalData", jsonObject.get("retrievalData"));
-//        transactionData += tagNum("batchNumber", jsonObject.get("batchNumber"));
-//        transactionData += tag("cvvResult", jsonObject.get("cvvResult"));
-//        transactionData += tag("entryMethod", jsonObject.get("entryMethod"));
-//        transactionData += tag("debugMessage", jsonObject.get("debugMessage"));
-//        transactionData += tagNum("amountAuthorized", jsonObject.get("amountAuthorized"));
-//        transactionData += tag("originalSequenceNumber", jsonObject.get("originalSequenceNumber"));
-//        transactionData += tag("originalApprovalNumber", jsonObject.get("originalApprovalNumber"));
-//        transactionData += tag("originalRetrievalData", jsonObject.get("originalRetrievalData"));
-//        transactionData += tag("originalCVVResult", jsonObject.get("originalCVVResult"));
-//        transactionData += tagNum("clientStartTime", jsonObject.get("clientStartTime"));
-//        transactionData += tagNum("frontStartTime", jsonObject.get("frontStartTime"));
-//        transactionData += tag("debug", jsonObject.get("debug"));
-//        transactionData += tag("idOriginalTransaction", jsonObject.get("idOriginalTransaction"));
-//        transactionData += tag("saveClient", jsonObject.get("saveClient"));
-//        transactionData += tag("saveAccount", jsonObject.get("saveAccount"));
-//        transactionData += tag("saveAsRecurringPayment", jsonObject.get("saveAsRecurringPayment"));
-//        transactionData += tag("emailReceipt", jsonObject.get("emailReceipt"));
-//        transactionData += tag("host", jsonObject.get("host"));
-//        transactionData += tag("approved", jsonObject.get("approved"));
-
+         
+         transactionData += tag("idPosOrderExp", jsonObject.get("idPosOrderExp"));
+         transactionData += tag("terminalSerial",  jsonObject.get("terminalSerial"));
+         transactionData += tag("merchantName", jsonObject.get("merchantName"));
+         transactionData += tag("idTellerOrderExp", jsonObject.get("idTellerOrderExp"));
+         transactionData += tag("clientPhone", jsonObject.get("clientPhone"));
+         transactionData += tag("oEAgentNumber", jsonObject.get("oEAgentNumber"));
+        
         return transactionData;
+    }
+
+    public static String parseJSONType(JsonObject jsonObject) {
+        JsonValue typeJSONValue = jsonObject.get("transactionType");
+
+        String type = typeJSONValue == null ? "" : typeJSONValue.toString();
+
+        if (!type.isEmpty()) {
+            Integer typeInt = 0;
+            try {
+                typeInt = Integer.parseInt(type);
+                TransactionType transactionType = TransactionType.get(typeInt);
+
+                if (transactionType != null && transactionType != TransactionType.TRANSACTION_TYPE) {
+                    type = transactionType.toString().replaceAll("TECNICARD_", "").replaceAll("_", " ");
+                }
+            } catch (NumberFormatException e) {
+            }
+        }
+
+        return tag("type", type.trim());
+    }
+
+    public static String parseJSONOperation(JsonObject jsonObject) {
+        JsonValue op = jsonObject.get("operation");
+
+        String operation = op == null ? "" : jsonObject.get("operation").toString();
+
+        String operationResult = "";
+        System.out.println("parseJSONOperation operation = " + operation);
+        if (operation != null) {
+            if (operation.trim().contains("01")) {
+                operationResult = "Check";
+            } else {
+                if (operation.trim().contains("02")) {
+                    operationResult = "Cash";
+                }
+            }
+        }
+
+        System.out.println("**parseJSONOperation operationResult = " + operationResult);
+        return tag("operation", operationResult);
     }
 
     /**
@@ -415,7 +399,7 @@ public class JSON2XMLParser {
 
         return id;
     }
-    
+
     protected static String parseJSONMerchantEntity(JsonValue jsonMerchant) {
         String id = "0", xmlData = "";
 
@@ -441,7 +425,6 @@ public class JSON2XMLParser {
         xmlData += tag("customerName", jsonObject.get("customerName"));
 
 //        merchantXml.add(tag("Merchant", xmlData));
-
         return xmlData;
     }
 
@@ -478,7 +461,7 @@ public class JSON2XMLParser {
 
         return id;
     }
-    
+
     protected static String parseJSONTerminalEntity(JsonValue jsonValue) {
         String id = "0", xmlData = "";
         if (jsonValue == null || jsonValue.isNull() || jsonValue.asObject().get("id") == null || jsonValue.asObject().get("id").isNull()) {
@@ -525,7 +508,6 @@ public class JSON2XMLParser {
 //
 //        return id;
 //    }
-
     /**
      * Gets XMLClient from JSONClient
      *
@@ -537,20 +519,19 @@ public class JSON2XMLParser {
 //        if (jsonValue == null || jsonValue.isNull() || jsonValue.asObject().get("id") == null || jsonValue.asObject().get("id").isNull()) {
 //            return id;
 //        }
-        System.out.println("parseJSONClient jsonValue = " + jsonValue);
+//        System.out.println("parseJSONClient jsonValue = " + jsonValue);
 
         JsonObject jsonObject = jsonValue.asObject();
-        
-//        id = parseLiteral(jsonObject.get("id"));
 
+//        id = parseLiteral(jsonObject.get("id"));
 //        xmlData += tag("id", id);
         xmlData += tag("first", jsonObject.get("firstName"));
-        System.out.println("xmlData1 = " + xmlData);
+//        System.out.println("xmlData1 = " + xmlData);
         xmlData += tag("last", jsonObject.get("lastName"));
-         System.out.println("xmlData2 = " + xmlData);
+//         System.out.println("xmlData2 = " + xmlData);
 
         String clientXML = tag("Client", xmlData);
-        System.out.println("clientXML = " + clientXML);
+//        System.out.println("clientXML = " + clientXML);
         clientXml.add(clientXML);
 
         return clientXML;
@@ -629,13 +610,22 @@ public class JSON2XMLParser {
      * @return XML String
      */
     protected static String tag(String elementName, JsonValue elementValue) {
-        if (elementValue == null || elementValue.isNull()) {
-            return "\n<" + elementName + "/>";
-        } else {
-            return "\n<" + elementName + ">" + parseLiteral(elementValue) + "</" + elementName + ">";
+        String val = "";
+        if (!(elementValue == null || elementValue.isNull())) {
+            val = parseLiteral(elementValue);
         }
+
+        return "\n<" + elementName + ">" + val + "</" + elementName + ">";
+
     }
 
+//    protected static String tag(String elementName, JsonValue elementValue) {
+//        if (elementValue == null || elementValue.isNull()) {
+//            return "\n<" + elementName + "/>";
+//        } else {
+//            return "\n<" + elementName + ">" + parseLiteral(elementValue) + "</" + elementName + ">";
+//        }
+//    }
     /**
      * Return XML format for a tag element
      *

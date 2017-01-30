@@ -98,7 +98,8 @@ public class CoreTransactionUtil {
         boolean sendCardPersonalizeSMS = false;
         String smsMessage = null;
         String cell_phone = "";
-
+        Client client = null;
+        
         try {
             HibernateUtil.beginTransaction();
 
@@ -107,7 +108,7 @@ public class CoreTransactionUtil {
             transaction.setTerminal(persistentTerminal);
             // transaction.getClient().getTransaction().add( transaction );
 
-            Client client = transaction.getClient();
+            client = transaction.getClient();
             if (transaction.getClient() != null) {
 
                 //if is Check or Cash
@@ -214,8 +215,6 @@ public class CoreTransactionUtil {
             } catch (Exception emailEx) {
                 emailEx.printStackTrace();
             }
-            //to send SMS
-            cell_phone = client.getTelephone();
 
             String balanceAfterLoad = transaction.getBalanceAfterLoad();
 
@@ -242,8 +241,8 @@ public class CoreTransactionUtil {
 
         String sendSMSProperty = System.getProperty("SEND_SMS");
         Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
-       
-        if (smsMessage != null && sendSMS) {
+
+        if (smsMessage != null && sendSMS && client != null && client.getTelephone() != null) {
             System.out.println("--------------  SENDING SMS MESSAGE TO: 1" + cell_phone + " --------------");
             System.out.println("text: " + smsMessage);
             try {

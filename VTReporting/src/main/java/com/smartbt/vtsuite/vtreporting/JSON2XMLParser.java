@@ -62,8 +62,7 @@ public class JSON2XMLParser {
      * @throws Exception
      */
     public static String fromJsonToXml(String jsonData, String header, String footer, String fromDate, String toDate, String reportType) throws Exception {
-//        System.out.println("[VTREPORTING] JSON2XMLParser.fromJsonToXml() Start...");
-
+ 
         JsonArray jsonArray = JsonArray.readFrom(jsonData);
         String response = "";
 
@@ -229,14 +228,11 @@ public class JSON2XMLParser {
      */
     // protected static String parseJSONTransaction(JsonObject jsonObject, ArrayList<Object[]> originalTxInfoList) {
     protected static String parseJSONTransaction(JsonObject jsonObject) {
-//        System.out.println("parseJSONTransaction -> jsonObject = " + jsonObject);
+ 
         String transactionData = "";
 
         transactionData += tagNum("id", jsonObject.get("id"));
-
-//        transactionData += tag("idMerchant", parseJSONMerchant(jsonObject.get("merchant")));
-//        transactionData += tag("idTerminal", parseJSONTerminal(jsonObject.get("terminal")));
-
+ 
         transactionData += tag("clientFirstName", jsonObject.get("clientFirstName"));
         transactionData += tag("clientLastName", jsonObject.get("clientLastName"));
         transactionData += parseJSONOperation(jsonObject);
@@ -290,7 +286,7 @@ public class JSON2XMLParser {
         String operation = op == null ? "" : jsonObject.get("operation").toString();
 
         String operationResult = "";
-        System.out.println("parseJSONOperation operation = " + operation);
+      
         if (operation != null) {
             if (operation.trim().contains("01")) {
                 operationResult = "Check";
@@ -300,8 +296,7 @@ public class JSON2XMLParser {
                 }
             }
         }
-
-        System.out.println("**parseJSONOperation operationResult = " + operationResult);
+ 
         return tag("operation", operationResult);
     }
 
@@ -516,22 +511,15 @@ public class JSON2XMLParser {
      */
     protected static String parseJSONClient(JsonValue jsonValue) {
         String id = "0", xmlData = "";
-//        if (jsonValue == null || jsonValue.isNull() || jsonValue.asObject().get("id") == null || jsonValue.asObject().get("id").isNull()) {
-//            return id;
-//        }
-//        System.out.println("parseJSONClient jsonValue = " + jsonValue);
-
+ 
         JsonObject jsonObject = jsonValue.asObject();
-
-//        id = parseLiteral(jsonObject.get("id"));
-//        xmlData += tag("id", id);
+ 
         xmlData += tag("first", jsonObject.get("firstName"));
-//        System.out.println("xmlData1 = " + xmlData);
+ 
         xmlData += tag("last", jsonObject.get("lastName"));
-//         System.out.println("xmlData2 = " + xmlData);
-
+ 
         String clientXML = tag("Client", xmlData);
-//        System.out.println("clientXML = " + clientXML);
+ 
         clientXml.add(clientXML);
 
         return clientXML;

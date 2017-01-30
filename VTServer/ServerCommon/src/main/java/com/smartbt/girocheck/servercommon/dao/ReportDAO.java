@@ -348,12 +348,15 @@ public class ReportDAO extends BaseDAO<Transaction> {
         return filters.getId();
     }
 
-    public FiltersReport getFiltersReport(int id) {
-        System.out.println("ReportDAO -> getFiltersReport()");
-
-        return (FiltersReport) HibernateUtil.getSession().createCriteria(FiltersReport.class)
+    public FiltersReport getFiltersReport(int id) { 
+        FiltersReport filter = (FiltersReport) HibernateUtil.getSession().createCriteria(FiltersReport.class)
                 .add(Restrictions.eq("id", id)).uniqueResult();
 
+        if(filter != null){
+            HibernateUtil.getSession().delete(filter);
+        }
+        
+        return filter;
     }
 
 }

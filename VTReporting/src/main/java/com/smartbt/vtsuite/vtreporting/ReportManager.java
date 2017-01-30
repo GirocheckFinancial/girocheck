@@ -5,16 +5,11 @@ import com.smartbt.girocheck.servercommon.dao.TerminalReportDAO;
 import com.smartbt.girocheck.servercommon.dao.TransactionReportDAO;
 import com.smartbt.girocheck.servercommon.model.FiltersReport;
 import com.smartbt.girocheck.servercommon.model.ReportFilters;
-import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.girocheck.servercommon.dao.ReportDAO;
-import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil; 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.util.Date;
-import java.util.Properties;
 
 /*
  * @author Christopher Perez, Maite Gonzalez
@@ -102,10 +97,7 @@ public class ReportManager {
                 jsonData = ReportDAO.get().detailListingTransactionReport(filters);
             }
             
-            System.out.println("jsonData = " + jsonData);
-
             String xmlData = JSON2XMLParser.fromJsonToXml(jsonData, header, footer, filters.getStartRangeDate() + "", filters.getEndRangeDate() + "", reportType);
-            System.out.println("xmlData = " + xmlData);
             
             stream = new ByteArrayInputStream(xmlData.getBytes());
         } catch (Exception e) {
@@ -118,7 +110,7 @@ public class ReportManager {
                 HibernateUtil.rollbackTransaction();
             }
         }
-        System.out.println("[VTREPORTING] ReportManager.getDataTransaction() END");
+       
         return stream;
     }
     

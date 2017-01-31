@@ -105,7 +105,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
 
             HibernateUtil.beginTransaction();
 
-            hasAch = achManager.existAchCard(terminalId, cardNumber);
+            hasAch = achManager.existAchCard(cardNumber);
              
             client = creditCardManager.getClient(cardNumber);
             if(client != null){
@@ -264,7 +264,7 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
                 achManager.save(achCard);
                 HibernateUtil.commitTransaction();
             } catch (Exception e) {
-//                log.debug(e);
+                e.printStackTrace();
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Error", e.getMessage());
                 HibernateUtil.rollbackTransaction();
             }

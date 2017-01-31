@@ -15,6 +15,7 @@ public class AchCard implements Serializable{
     private Merchant merchant;
     private String cardNumber;
     private Blob achform;
+    private com.smartbt.girocheck.servercommon.model.CreditCard data_sc1;
     
     public AchCard(){}
     
@@ -72,6 +73,20 @@ public class AchCard implements Serializable{
      */
     public void setAchform(Blob achform) {
         this.achform = achform;
+    }
+
+    /**
+     * @return the data_sc1
+     */
+    public com.smartbt.girocheck.servercommon.model.CreditCard getData_sc1() {
+        return data_sc1;
+    }
+
+    /**
+     * @param data_sc1 the data_sc1 to set
+     */
+    public void setData_sc1(com.smartbt.girocheck.servercommon.model.CreditCard data_sc1) {
+        this.data_sc1 = data_sc1;
     }
 
     

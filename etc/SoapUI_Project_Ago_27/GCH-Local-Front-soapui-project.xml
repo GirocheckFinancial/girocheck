@@ -752,7 +752,9 @@
             <!--Optional:-->
             <terminalId>soapui</terminalId>
             <!--Optional:-->
-            <cardNumber>5448353884100084</cardNumber>
+            <cardNumber>5448353884100096</cardNumber>
+
+            <amount>5</amount>
          </arg0>
       </scan:cardToBank>
    </soapenv:Body>
@@ -771,9 +773,9 @@
             <!--Optional:-->
             <terminalId>soapui</terminalId>
             <!--Optional:-->
-            <achForm></achForm>
+            <achForm>form here</achForm>
             <!--Optional:-->
-            <existAch>true</existAch>
+            <existAch>false</existAch>
             <!--Optional:-->
             <amount>18</amount>
          </arg0>

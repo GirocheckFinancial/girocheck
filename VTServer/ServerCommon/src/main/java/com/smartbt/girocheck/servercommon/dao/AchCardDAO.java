@@ -34,14 +34,24 @@ public class AchCardDAO extends BaseDAO<AchCard>{
         return dao;
     }
     
-    public Boolean existAchCard(String terminalId, String cardNumber){ 
+    public Boolean existAchCard(String cardNumber){ 
             Criteria criteria = HibernateUtil.getSession().createCriteria( AchCard.class )
-                    .add( Restrictions.eq( "cardNumber", cardNumber ) );
+                    .createAlias("data_sc1", "card")
+                    .add( Restrictions.eq( "card.cardNumber", cardNumber ) );
 
             criteria.setMaxResults( 1 );
  
             return criteria.uniqueResult() != null;
     }
+    
+//    public Boolean existAchCard(String terminalId, String cardNumber){ 
+//            Criteria criteria = HibernateUtil.getSession().createCriteria( AchCard.class )
+//                    .add( Restrictions.eq( "cardNumber", cardNumber ) );
+//
+//            criteria.setMaxResults( 1 );
+// 
+//            return criteria.uniqueResult() != null;
+//    }
     
     public Merchant getMerchantByTerminalId(String serialNumber){
         

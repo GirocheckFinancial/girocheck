@@ -1,8 +1,7 @@
 INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(2, 'patch_3_1', now(), 'Add_Inventory_fields_to_Merchant_table');
 
-alter table merchant add column inventory integer;
-alter table merchant add column threshold integer;
+alter table ach_card add column creditcard integer;
 
 
-update merchant set inventory = 0;
-update merchant set threshold = 0;
+update ach_card ac set creditcard = (select id from card c where ac.card_number = (select SHA1( AES_DECRYPT(FROM_BASE64(c.data_s), SHA2(SHA2(CONCAT((SELECT concat(c.mode, c.reference, c.sessions, c.types) FROM configs c), 'SELECT * FROM configs'), 512), 512)))));
+

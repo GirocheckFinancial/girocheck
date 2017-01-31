@@ -106,9 +106,9 @@ public class IStreamBusinessLogic{
             case ISTREAM_CHECK_AUTH:
                 CheckAuthRequest checkAuthRequest = new CheckAuthRequest().build(transactionData);
                
-                String checkAuthRequestAsString = checkAuthRequest.getAsXML();
-                
-                CustomeLogger.Output(CustomeLogger.OutputStates.Info, checkAuthRequestAsString,null);
+//                String checkAuthRequestAsString = checkAuthRequest.getAsXML();
+//                
+//                CustomeLogger.Output(CustomeLogger.OutputStates.Info, checkAuthRequestAsString,null);
                 
                 response = port.checkAuth(checkAuthRequest);
                

@@ -144,7 +144,7 @@ public class TransactionDisplay implements Serializable {
      */
     public void setAccountSuffix( String accountSuffix ) {
         if ( accountSuffix != null && accountSuffix.length() > 4 ) {
-            this.accountSuffix = accountSuffix.substring( accountSuffix.length() - 4, accountSuffix.length() );
+            this.accountSuffix = accountSuffix.substring(accountSuffix.length() - 4);
         } else {
             this.accountSuffix = accountSuffix;
         }

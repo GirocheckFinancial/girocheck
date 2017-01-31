@@ -363,15 +363,15 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         ContratacionesResponse response = new ContratacionesResponse();
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " +cadena,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " +cadena,null);
         String contratacionesResult = port.contrataciones( cadena, datos, corresponsales, rutaEjecutar );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing contratacionesResult.lenght(): " + contratacionesResult.length(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing contratacionesResult.lenght(): " + contratacionesResult.length(),null);
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] contratacionesResult value: " + contratacionesResult,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] contratacionesResult value: " + contratacionesResult,null);
         response.setContratacionesResult( contratacionesResult );
 
         Map responseMap = new HashMap();
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding contratacionesResult data",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding contratacionesResult data",null);
         try{
         LOTESALIDA lotesalida = (LOTESALIDA) OEUtils.unMarshallResponse( JAXBContext.newInstance( LOTESALIDA.class
         ), OEUtils.decodeBase64String( response.getContratacionesResult() ) );
@@ -427,13 +427,13 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         
         corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANTPAGO") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO",null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] AUTHO_NUMBER",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] AUTHO_NUMBER",null);
         
         input.setIdteller(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLERPAGO, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.IDTELLERPAGO, false ) ) : "NULL" );
         input.setAutonumber(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false ) ) : "NULL" );
          
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO: " +map.get(ParameterName.IDTELLER).toString() + " AUTHO_NUMBER: "+map.get(ParameterName.AUTHO_NUMBER).toString(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO: " +map.get(ParameterName.IDTELLER).toString() + " AUTHO_NUMBER: "+map.get(ParameterName.AUTHO_NUMBER).toString(),null);
 
         corresponsal.setLogin(OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGINPAGO") ) );
         corresponsal.setPassword(OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORDPAGO") ) );
@@ -469,29 +469,29 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaRP",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaRP",null);
         String cadena = OEUtils.processRequestRP( entry );
 
         String datos = "EX";
         String corresponsales = "GIRO_CHECK";
         String rutaEjecutar = null;
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaRP value: " +cadena,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaRP value: " +cadena,null);
         String reportaPagoResult = port.reportaPago(cadena, datos, corresponsales, rutaEjecutar );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing reportaPagoResult.lenght(): " + reportaPagoResult.length(),null);
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] reportaPagoResult value: " + reportaPagoResult,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing reportaPagoResult.lenght(): " + reportaPagoResult.length(),null);
+//
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] reportaPagoResult value: " + reportaPagoResult,null);
 
         Map responseMap = new HashMap();
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding reportaPagoResult data",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding reportaPagoResult data",null);
         try{
         LOTESALIDARP lotesalida = (LOTESALIDARP) OEUtils.unMarshallResponseRP( JAXBContext.newInstance( LOTESALIDARP.class
         ), OEUtils.decodeBase64String( reportaPagoResult) );
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] reportaPagoResult data decoded.",null);
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] reportaPagoResult autho number value3: "+lotesalida.getTransacciono().getReportapagooutput().getAuthonumber(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] reportaPagoResult data decoded.",null);
+//
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] reportaPagoResult autho number value3: "+lotesalida.getTransacciono().getReportapagooutput().getAuthonumber(),null);
         
         responseMap.put( ParameterName.AUTHO_NUMBER, lotesalida.getTransacciono().getReportapagooutput().getAuthonumber() );
         responseMap.put( ParameterName.OP_CODE, lotesalida.getTransacciono().getReportapagooutput().getOpcode() );
@@ -507,7 +507,7 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
     
     private Map devolucion(Map map)throws Exception{
         
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionMethod()...",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionMethod()...",null);
 
         // Build ...
         //Entry
@@ -529,18 +529,18 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER",null);
 
         input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false )) ? MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false ) : "NULL" );
          
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
 
         corresponsal.setLogin(OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGIN") ) );
         corresponsal.setPassword(OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORD") ) );
 
         input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false ))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false )) : "NULL" );
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaD",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaD",null);
         String cadena = OEUtils.processRequestD( entry );
 
         String datos = "EX";
@@ -548,25 +548,25 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         String rutaEjecutar = null;
         String devolucionResult="";
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaD value: " +cadena,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaD value: " +cadena,null);
         try{
         devolucionResult = port.devolucion( cadena, datos, corresponsales, rutaEjecutar );
         }catch(Exception e){
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Devolucion Exception from port.devolucion(...).",null);
             e.printStackTrace();
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing devolucionResult.lenght(): " + devolucionResult.length(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing devolucionResult.lenght(): " + devolucionResult.length(),null);
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionResult value: " + devolucionResult,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionResult value: " + devolucionResult,null);
 
         Map responseMap = new HashMap();
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding devolucionResult data",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding devolucionResult data",null);
         try{
         LOTESALIDAD lotesalida = (LOTESALIDAD) OEUtils.unMarshallResponseD( JAXBContext.newInstance( LOTESALIDAD.class
         ), OEUtils.decodeBase64String( devolucionResult ) );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult data decoded.",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult data decoded.",null);
         
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult authoNumber value: " + lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult authoNumber value: " + lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber(),null);
         responseMap.put( ParameterName.AUTHO_NUMBER, lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber() );
         responseMap.put( ParameterName.OP_CODE, lotesalida.getTransacciono().getDevolucionoutput().getOpcode() );
         responseMap.put( ParameterName.OP_CODE2, lotesalida.getTransacciono().getDevolucionoutput().getOpcode2() );
@@ -575,7 +575,7 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaD.",null);
             e.printStackTrace();
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
         return responseMap;
     }
     
@@ -605,14 +605,14 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false )) ? MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false ) : "NULL" );
          
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
 
         corresponsal.setLogin(OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGIN") ) );
         corresponsal.setPassword(OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORD") ) );
 
         input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false ))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false )) : "NULL" );
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaL",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaL",null);
         String cadena = OEUtils.processRequestL( entry );
 
         String datos = "EX";
@@ -620,23 +620,23 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         String rutaEjecutar = null;
         String logResult="";
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaL value: " +cadena,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaL value: " +cadena,null);
         try{
         logResult = port.logs( cadena, datos, corresponsales, rutaEjecutar );
         }catch(Exception e){
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Log Exception from port.logs(...).",null);
             e.printStackTrace();
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing logResult.lenght(): " + logResult.length(),null);
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] logResult value: " + logResult,null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing logResult.lenght(): " + logResult.length(),null);
+//
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] logResult value: " + logResult,null);
 
         Map responseMap = new HashMap();
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding logResult data",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding logResult data",null);
         try{
         LOTESALIDAL lotesalida = (LOTESALIDAL) OEUtils.unMarshallResponseL( JAXBContext.newInstance( LOTESALIDAL.class
         ), OEUtils.decodeBase64String( logResult ) );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] logResult data decoded.",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] logResult data decoded.",null);
         
         responseMap = lotesalida.toMap();
 
@@ -644,7 +644,7 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaL.",null);
             e.printStackTrace();
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
         return responseMap;
     }
     

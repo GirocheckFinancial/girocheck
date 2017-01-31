@@ -52,6 +52,7 @@ public class ReportDAO extends BaseDAO<Transaction> {
                 .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN) 
                 .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
                 .createAlias( "check", "check", JoinType.LEFT_OUTER_JOIN )
+                .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
                 .addOrder(Order.desc("dateTime"));
 
         Date startRangeDate = filters.getStartRangeDate();
@@ -143,11 +144,9 @@ public class ReportDAO extends BaseDAO<Transaction> {
         }
 
         if (searchFilter != null && !searchFilter.isEmpty()) {
-            Disjunction disjunction = (Disjunction) Restrictions.disjunction()
-                    //  .add( Restrictions.like( "resultCode", searchFilter, MatchMode.ANYWHERE ).ignoreCase() )
+            Disjunction disjunction = (Disjunction) Restrictions.disjunction() 
                     .add(Restrictions.like("resultMessage", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("account", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("cardNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("merchant.legalName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
@@ -169,8 +168,8 @@ public class ReportDAO extends BaseDAO<Transaction> {
                 .add(Projections.property("id").as("id"))
                 .add(Projections.property("transactionType").as("transactionType"))
                 .add(Projections.property("dateTime").as("dateTime"))
-                .add(Projections.property("operation").as("operation"))
-                .add(Projections.property("cardNumber").as("maskCardNumber"))
+                .add(Projections.property("operation").as("operation")) 
+                .add(Projections.property("data_sc1.maskCardNumber").as("maskCardNumber"))
                 .add(Projections.property("ammount").as("amount"))
                 .add(Projections.property("feeAmmount").as("feeAmount"))
                 .add(Projections.property("payoutAmmount").as("payoutAmount"))
@@ -198,7 +197,7 @@ public class ReportDAO extends BaseDAO<Transaction> {
         Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class)
                 .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN) 
-                // .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
+                 .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
                 .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
                 .addOrder(Order.desc("dateTime"));
 
@@ -292,10 +291,8 @@ public class ReportDAO extends BaseDAO<Transaction> {
 
         if (searchFilter != null && !searchFilter.isEmpty()) {
             Disjunction disjunction = (Disjunction) Restrictions.disjunction()
-                    //  .add( Restrictions.like( "resultCode", searchFilter, MatchMode.ANYWHERE ).ignoreCase() )
-                    .add(Restrictions.like("resultMessage", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+                     .add(Restrictions.like("resultMessage", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("account", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("cardNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("merchant.legalName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
@@ -318,7 +315,7 @@ public class ReportDAO extends BaseDAO<Transaction> {
                 .add(Projections.property("transactionType").as("transactionType"))
                 .add(Projections.property("dateTime").as("dateTime"))
                 .add(Projections.property("operation").as("operation"))
-                .add(Projections.property("cardNumber").as("maskCardNumber"))
+                .add(Projections.property("data_sc1.maskCardNumber").as("maskCardNumber")) 
                 .add(Projections.property("ammount").as("amount"))
                 .add(Projections.property("feeAmmount").as("feeAmount"))
                 .add(Projections.property("payoutAmmount").as("payoutAmount"))

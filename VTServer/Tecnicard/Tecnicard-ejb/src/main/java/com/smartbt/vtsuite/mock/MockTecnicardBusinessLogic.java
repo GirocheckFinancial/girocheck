@@ -189,9 +189,9 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pFaxAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.FAX_AREA_CODE, false);
         String pLastName = MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false);
 
-        if (pLastName != null && pLastName.contains(" ")) {
-            pLastName = pLastName.split(" ")[0];
-        }
+//        if (pLastName != null && pLastName.contains(" ")) {
+//            pLastName = pLastName.split(" ")[0];
+//        }
 
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, true);
         String pWorkphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.WORKPHONE_AREA_CODE, false);
@@ -219,8 +219,8 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 //        String[] names = fields.split( ",");
 //        printCardPersonalization(names, pRequestID, pCard, "112223333", "1", "", "840", "", "", "John", "", "Smith", "", "19750228", "840",
 //                "11", "Atlanta", "222333 PEACHTREE PLACE", "30318", "girocheck@cardmarte.com", "", "", "786", "4540209", "", "", "", "", "0", "Y"  );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID "
-                + pRequestID + ",  pCard " + pCard + ",  pId " + pId + ",  pIdType " + idType + ",  pIdExpiration " + pIdExpiration + ",  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
+      CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID "
+                + pRequestID + ",  pCard ************" + pCard.substring(pCard.length() - 4) + ",  pId " + pId + ",  pIdType " + idType + ",  pIdExpiration,  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
                 + pState + ", pCity " + pCity + ", pAddress  " + pAddress + ", pZipCode " + pZipCode + ", pEmail " + pEmail + ", pTelephoneAreaCode " + pTelephoneAreaCode + ", pTelephone " + pTelephone + ", pCellphoneAreaCode " + pCellphoneAreaCode + ", pCellphone " + pCellphone + ", pWorkphoneAreaCode " + pWorkphoneAreaCode + ", pWorkphone " + pWorkphone + ", pFaxAreaCode " + pFaxAreaCode + ", pFaxphone " + pFaxphone + ", pRBService " + pRBService + ", pCurrentAddress " + pCurrentAddress + ")", null);
 
         CardCreationResponse cardCreationResponse = new CardCreationResponse();
@@ -244,8 +244,9 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pTerminalCode = MapUtil.getStringValueFromMap(map, ParameterName.TERMINAL_ID_TECNICARD, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardLoad(" + pRequestID + "," + pTerminalCode + "," + pCardNumber + ", " + pTransAmount + ", " + pCheckFee, null);
-
+       
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardLoad(" + pRequestID + "," + pTerminalCode + ", ************" + pCardNumber.substring(pCardNumber.length() - 4)+ ", " + pTransAmount + ", " + pCheckFee, null);
+        
         CardLoadResponse response = new CardLoadResponse();
         response.setTransactionNumber("CardLoad: transactionNumber");
         response.setDate(getDate());
@@ -357,7 +358,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pTerminalCode = MapUtil.getStringValueFromMap(map, ParameterName.TERMINAL_ID_TECNICARD, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCashToCard(" + pRequestID + ",  " + pTerminalCode + ",  " + pCardNumber + ", " + pTransAmount, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCashToCard(" + pRequestID + ",  " + pTerminalCode + ",   ************" + pCardNumber.substring(pCardNumber.length() - 4) + ", " + pTransAmount, null);
 
         CashToCardResponse response = new CashToCardResponse();
         response.setTransactionNumber("Cash2Card: transaction Number");

@@ -1,4 +1,4 @@
-INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(2, 'patch_3_1', now(), 'Add_Inventory_fields_to_Merchant_table');
+INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(6, 'patch_6_1', now(), 'Add_Inventory_fields_to_Merchant_table');
 
 alter table ach_card add column creditcard integer;
 

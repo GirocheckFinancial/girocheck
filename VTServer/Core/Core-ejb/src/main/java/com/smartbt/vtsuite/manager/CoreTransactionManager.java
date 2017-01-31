@@ -411,9 +411,8 @@ public class CoreTransactionManager {
                     && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                     String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Getting creditCard with cardNumber: [" + cardNumber + "]", null);
-                    if (!cardNumber.equals("")) {
-                        transaction.setCardNumber(cardNumber);
+                     if (!cardNumber.equals("")) {
+//                        transaction.setCardNumber(cardNumber);
                         CreditCard creditCard = null;
 
                         if (transactionType == TransactionType.NEW_CARD_LOAD || transactionType == TransactionType.CARD_RELOAD || transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {

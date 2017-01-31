@@ -249,7 +249,7 @@ public class TransactionDAO extends BaseDAO<Transaction> {
                 .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN)
-                // .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
+                 .createAlias( "data_sc1", "data_sc1", JoinType.LEFT_OUTER_JOIN )
                 .createAlias("client", "client", JoinType.LEFT_OUTER_JOIN)
                 .addOrder(Order.desc("dateTime"));
 
@@ -340,7 +340,7 @@ public class TransactionDAO extends BaseDAO<Transaction> {
                     //  .add( Restrictions.like( "resultCode", searchFilter, MatchMode.ANYWHERE ).ignoreCase() )
                     .add(Restrictions.like("resultMessage", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("account", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("cardNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
+//                    .add(Restrictions.like("cardNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("merchant.legalName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
@@ -369,7 +369,7 @@ public class TransactionDAO extends BaseDAO<Transaction> {
                 .add(Projections.property("transactionType").as("transactionType"))
                 .add(Projections.property("dateTime").as("createdAt"))
                 .add(Projections.property("operation").as("operation"))
-                .add(Projections.property("cardNumber").as("accountSuffix"))
+                .add(Projections.property("data_sc1.maskCardNumber").as("accountSuffix"))
                 .add(Projections.property("ammount").as("ammount"))
                 .add(Projections.property("feeAmmount").as("feeAmmount"))
                 .add(Projections.property("payoutAmmount").as("payoutAmmount"))

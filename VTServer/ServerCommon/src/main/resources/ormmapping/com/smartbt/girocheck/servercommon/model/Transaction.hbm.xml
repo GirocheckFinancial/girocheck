@@ -33,7 +33,7 @@ License Type: Evaluation
                 <property name="truncatedCheck" column="truncated_check" type="blob" not-null="false" lazy="false"/>
 		<property name="feeAmmount" column="fee_ammount" type="double"  not-null="false" lazy="false"/>
 		<property name="payoutAmmount" column="payout_ammount" type="double"  not-null="false" lazy="false"/>
-		<property name="cardNumber" column="card_number"  length="16" type="string"  not-null="false" lazy="false"/>
+		<!--<property name="cardNumber" column="card_number"  length="16" type="string"  not-null="false" lazy="false"/>-->
                 <property name="cancelated" column="cancelated" type="boolean" length="1" not-null="false" lazy="false"/>
                 <property name="cancelable" column="cancelable" type="boolean" length="1" not-null="false" lazy="false"/>
 		<set name="sub_Transaction" lazy="true" cascade="save-update,lock" inverse="true">

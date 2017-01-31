@@ -67,7 +67,7 @@ public class Transaction implements Serializable {
     private Double ammount;
     private Double feeAmmount;
     private Double payoutAmmount;
-    private String cardNumber;
+//    private String cardNumber;
 
     private Boolean cancelated;
     private Boolean cancelable = true;
@@ -166,13 +166,13 @@ public class Transaction implements Serializable {
         return id;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
+//    public void setCardNumber(String cardNumber) {
+//        this.cardNumber = cardNumber;
+//    }
+//
+//    public String getCardNumber() {
+//        return cardNumber;
+//    }
 
     public int getORMID() {
         return getId();

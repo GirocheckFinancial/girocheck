@@ -235,7 +235,8 @@ public class JSON2XMLParser {
  
         transactionData += tag("clientFirstName", jsonObject.get("clientFirstName"));
         transactionData += tag("clientLastName", jsonObject.get("clientLastName"));
-        transactionData += parseJSONOperation(jsonObject);
+        transactionData += tag("operation", jsonObject.get("operation"));
+    
         transactionData += tag("requestId", jsonObject.get("requestId"));
         transactionData += tag("maskCardNumber", jsonObject.get("maskCardNumber"));
         transactionData += tagNum("payoutAmount", jsonObject.get("payoutAmount"));
@@ -280,25 +281,25 @@ public class JSON2XMLParser {
         return tag("type", type.trim());
     }
 
-    public static String parseJSONOperation(JsonObject jsonObject) {
-        JsonValue op = jsonObject.get("operation");
-
-        String operation = op == null ? "" : jsonObject.get("operation").toString();
-
-        String operationResult = "";
-      
-        if (operation != null) {
-            if (operation.trim().contains("01")) {
-                operationResult = "Check";
-            } else {
-                if (operation.trim().contains("02")) {
-                    operationResult = "Cash";
-                }
-            }
-        }
- 
-        return tag("operation", operationResult);
-    }
+//    public static String parseJSONOperation(JsonObject jsonObject) {
+//        JsonValue op = jsonObject.get("operation");
+//
+//        String operation = op == null ? "" : jsonObject.get("operation").toString();
+//
+//        String operationResult = "";
+//      
+//        if (operation != null) {
+//            if (operation.trim().contains("01")) {
+//                operationResult = "Check";
+//            } else {
+//                if (operation.trim().contains("02")) {
+//                    operationResult = "Cash";
+//                }
+//            }
+//        }
+// 
+//        return tag("operation", operationResult);
+//    }
 
     /**
      * Gets XMLMerchant from JSONMerchant

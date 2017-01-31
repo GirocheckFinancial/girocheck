@@ -178,13 +178,14 @@ public class ReportDAO extends BaseDAO<Transaction> {
                 .add(Projections.property("resultCode").as("resultCode"))
                 .add(Projections.property("merchant.legalName").as("merchantName"))
                 .add(Projections.property("merchant.idTellerOrderExp").as("idTellerOrderExp"))
-                .add(Projections.property("orderExpressId").as("oEAgentNumber"))
+                .add(Projections.property("merchant.oEAgentNumber").as("oEAgentNumber"))
                 .add(Projections.property("terminal.serialNumber").as("terminalSerial"))
                 .add(Projections.property("merchant.idPosOrderExp").as("idPosOrderExp"))
                 .add(Projections.property("client.firstName").as("clientFirstName"))
                 .add(Projections.property("client.lastName").as("clientLastName"))
                 .add(Projections.property("client.telephone").as("clientPhone"))
                 .add(Projections.property("check.paymentCheck").as("checkNumber"))
+                .add(Projections.property("resultMessage").as("resultMessage"))
                 .add(Projections.property("check.makerName").as("makerName"));
         cri.setProjection(projectionList);
 
@@ -298,12 +299,6 @@ public class ReportDAO extends BaseDAO<Transaction> {
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("errorCode", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("merchant.legalName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("merchant.idTecnicardCheck", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("merchant.idTecnicardCash", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("merchant.idIstreamTecnicardCash", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("merchant.idIstreamTecnicardCheck", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("merchant.idIstreamFuzeCash", searchFilter, MatchMode.ANYWHERE).ignoreCase())
-                    .add(Restrictions.like("merchant.idIstreamFuzeCheck", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("terminal.serialNumber", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("client.firstName", searchFilter, MatchMode.ANYWHERE).ignoreCase())
                     .add(Restrictions.like("client.ssn", searchFilter, MatchMode.ANYWHERE).ignoreCase())

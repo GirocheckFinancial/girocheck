@@ -237,37 +237,37 @@ public class CoreTransactionManager {
                 }
 
                 PersonalIdentification identification = clientManager.getIdentificationByClientId(client.getId());
- 
+
                 byte[] idFront = new byte[0];// identification.getIdFrontAsByteArray();
-                byte[] idBack = new byte[0]; 
- 
+                byte[] idBack = new byte[0];
+
                 if (identification.getIdFront() != null) {
                     Blob idFrontBlob = identification.getIdFront();
-                    int idFrontLength = (int)idFrontBlob.length(); 
-                    
-                    if(idFrontLength > 1){
+                    int idFrontLength = (int) idFrontBlob.length();
+
+                    if (idFrontLength > 1) {
                         idFront = idFrontBlob.getBytes(1, idFrontLength);
                     }
-                     
+
                 }
 
                 if (identification.getIdBack() != null) {
                     Blob idBackBlob = identification.getIdBack();
-                    idBack = idBackBlob.getBytes(1, (int)idBackBlob.length());
+                    idBack = idBackBlob.getBytes(1, (int) idBackBlob.length());
                 }
-                
-                if(idBack == null || idBack.length == 0){
+
+                if (idBack == null || idBack.length == 0) {
                     idBack = idFront;
                 }
- 
+
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDBACK, idBack);
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDFRONT, idFront);
-                
+
                 String phone = client.getTelephone() != null ? client.getTelephone() : "3055551212";
-              
+
                 direxTransactionRequest.getTransactionData().put(ParameterName.PHONE, phone);
                 direxTransactionRequest.getTransactionData().put(ParameterName.TELEPHONE, phone);
-                 
+
                 direxTransactionRequest.getTransactionData().put(ParameterName.SSN, client.getSsn());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));
                 direxTransactionRequest.getTransactionData().put(ParameterName.ID, identification.getIdentification());
@@ -282,7 +282,7 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
 
                 Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();
- 
+
             }
             /*
         
@@ -325,10 +325,10 @@ public class CoreTransactionManager {
                 if (amountAplicationParameters == null) {
                     amountAplicationParameters = applicationParameterManager.getAmountAplicationParameters();
                 }
-                
+
                 Double activationFeeConfig = amountAplicationParameters.get(EnumApplicationParameter.ACTIVATION_FEE);
                 direxTransactionRequest.getTransactionData().put(ParameterName.ACTIVATION_FEE_CONFIG, activationFeeConfig);
-                        
+
                 validateAmount(ammount, operation, transaction, amountAplicationParameters);
             }
 
@@ -402,46 +402,46 @@ public class CoreTransactionManager {
                 transaction.setAccount((String) direxTransactionRequest.getTransactionData().get(ParameterName.ACCOUNT_NUMBER));
             }
 
-            // ---------------------  CREDIT CARD LOGIC --------   ( not used in this verssion )   ----------------
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] transactionType = " + transactionType.toString(), null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] transactionType = " + transactionType, null);
-
-            if (transactionType != TransactionType.TECNICARD_BALANCE_INQUIRY
-                    && transactionType != TransactionType.TECNICARD_CARD_TO_BANK
+            // ---------------------  CREDIT CARD LOGIC -------
+          
+            if (transactionType != TransactionType.TECNICARD_CARD_TO_BANK
                     && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                     String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
-                     if (!cardNumber.equals("")) {
-//                        transaction.setCardNumber(cardNumber);
+                    if (cardNumber != null && !cardNumber.isEmpty()) {
+//                      
                         CreditCard creditCard = null;
-
-                        if (transactionType == TransactionType.NEW_CARD_LOAD || transactionType == TransactionType.CARD_RELOAD || transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {
-                            try {
-                                creditCard = creditCardManager.createOrGet(cardNumber, client, terminal.getMerchant());
-                            } catch (Exception e) {
-                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Error in creditCardManager.createOrGet(...) ", null);
-                                e.printStackTrace();
-                                throw new CreditCardException(ResultCode.CORE_ERROR, " CreditCard obtainment operation problem. ", transaction);
+                        try {
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Obtaining Card for transactionType = " + transactionType.toString(), null);
+                            
+                            switch (transactionType) {
+                                case NEW_CARD_LOAD:
+                                case CARD_RELOAD:
+                                case CARD_RELOAD_WITH_DATA:
+                                    creditCard = creditCardManager.createOrGet(cardNumber, client, terminal.getMerchant());
+                                    break;
+                                case TECNICARD_BALANCE_INQUIRY:
+                                    creditCard = creditCardManager.getCardByNumber(cardNumber);
+                                    if (creditCard != null) {
+                                        transaction.setClient(creditCard.getClient());
+                                    }
                             }
-                        } else {
-//                        creditCard = creditCardManager.get(cardNumber);
-                            Client client1 = new Client();
-                            client1.setFirstName("BIQorCTB");
-                            creditCard = creditCardManager.createOrGet(cardNumber, client1, terminal.getMerchant());
-
+                        } catch (Exception e) {
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Error in creditCardManager.createOrGet(...) ", null);
+                            e.printStackTrace();
+                            throw new CreditCardException(ResultCode.CORE_ERROR, " CreditCard obtainment operation problem. ", transaction);
                         }
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Before ask if creditcard from database is null.", null);
-                        if (creditCard == null) {
-                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CREDIT CARD FROM DATABASE IS NULL !!!", null);
-                            throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, " CreditCard value is null. ", transaction);
-                        } else {
+
+                        if (creditCard != null) {
                             transaction.setData_sc1(creditCard);
+                        } else {
+                            throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, " CreditCard value is null. ", transaction);
                         }
                     } else {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CreditCard value from the Terminal is NULL. ", null);
                         throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, "CreditCard Value from Terminal : Is Null. ", transaction);
                     }
- 
+
                 }
             }
             // -----------------------------------------------------------------
@@ -479,9 +479,9 @@ public class CoreTransactionManager {
             transaction.setTransactionFinished(false);
 
             transactionManager.saveOrUpdate(transaction);
-            
+
             direxTransactionRequest.getTransactionData().put(ParameterName.REQUEST_ID, transaction.getId());
-        
+
 //            HibernateUtil.commitTransaction();
         } catch (AmountException amountException) {
             amountException.printStackTrace();
@@ -506,19 +506,18 @@ public class CoreTransactionManager {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) Exception. ", e.getMessage());
 //            HibernateUtil.rollbackTransaction();
             throw e;
-        }finally{
-            try{
+        } finally {
+            try {
                 HibernateUtil.commitTransaction();
-            }catch(Exception e){
-                 HibernateUtil.rollbackTransaction();
+            } catch (Exception e) {
+                HibernateUtil.rollbackTransaction();
             }
-            
+
         }
 
         return transaction;
     }
 
-  
     public Host findingHost(DirexTransactionRequest request) throws Exception {
 
         Host host = new Host();

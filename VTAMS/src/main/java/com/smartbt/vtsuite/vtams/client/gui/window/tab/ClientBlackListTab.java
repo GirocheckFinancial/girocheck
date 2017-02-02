@@ -36,15 +36,12 @@ import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 /**
  * The Client Tab
  *
- * @author Ariel Saavedra
+ * @author Roberto Rodriguez
  */
-public class ClientTab extends BaseTab {
+public class ClientBlackListTab extends BaseTab {
 
     private ClientFilterForm filterForm;
-    private ClientListGrid listGrid;
-//    private ClientEditor editorWindow;
-    private int idEntity;
-    private EntityType entityType;
+    private ClientListGrid listGrid; 
 
     /**
      * Constructor
@@ -52,18 +49,12 @@ public class ClientTab extends BaseTab {
      * @param type
      * @param idEntity
      */
-    public ClientTab(EntityType type, int idEntity) {
-        this(type);
-        this.idEntity = idEntity;
-    }
-
-    public ClientTab(EntityType type) {
-        super(I18N.GET.TAB_CLIENT_TITLE());
-
-        this.entityType = type;
-
-        filterForm = new ClientFilterForm(entityType);
-        listGrid = new ClientListGrid(entityType);
+ 
+    public ClientBlackListTab() {
+        super("Card to Bank Black List");
+ 
+        filterForm = new ClientFilterForm(null);
+        listGrid = new ClientListGrid(null);
 //
 //        editorWindow = new ClientEditor();
 
@@ -183,9 +174,6 @@ public class ClientTab extends BaseTab {
 
         Criteria formCriteria = paginationForm.getLastLinkPressed() == null ? filterForm.getValuesAsCriteria() : paginationForm.getCriteria();
         paginationForm.setCriteria(formCriteria);
-
-        formCriteria.addCriteria("idEntity", idEntity);
-        formCriteria.addCriteria("entityType", entityType.toString());
 
         formCriteria.addCriteria("pageNumber", paginationForm.getRequestPageNumber());
         formCriteria.addCriteria("rowsPerPage", paginationForm.getRowsPerPage());

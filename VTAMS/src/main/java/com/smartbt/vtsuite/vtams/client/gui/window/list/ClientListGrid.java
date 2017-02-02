@@ -66,7 +66,6 @@ public class ClientListGrid extends BaseListGrid {
 //                return record.getAttributeAsBoolean("active") ? "Active" : "Inactive";
 //            }
 //        });
-
         setEmptyMessage(I18N.GET.MESSAGE_EMPTY_CLIENT_LIST());
 //        setInitialSort(new SortSpecifier[]{
 //            new SortSpecifier("firstName", SortDirection.DESCENDING)
@@ -75,11 +74,13 @@ public class ClientListGrid extends BaseListGrid {
         setGroupStartOpen(GroupStartOpen.ALL);
         addDataArrivedHandler(new DataArrivedHandler() {
             public void onDataArrived(DataArrivedEvent event) {
-                switch (entityType) {
-                    case CUSTOMER:
-                        groupBy("merchant");
-                        break;
-                }
+                if (entityType != null) {
+                    switch (entityType) {
+                        case CUSTOMER:
+                            groupBy("merchant");
+                            break;
+                    }
+                } 
             }
         });
 
@@ -87,9 +88,9 @@ public class ClientListGrid extends BaseListGrid {
         setFields(firstNameField,
                 lastField,
                 telephoneField,
-//                companyField,
+                //                companyField,
                 addressField,
-//                address2Field,
+                //                address2Field,
                 cityField,
                 stateField,
                 zipField,

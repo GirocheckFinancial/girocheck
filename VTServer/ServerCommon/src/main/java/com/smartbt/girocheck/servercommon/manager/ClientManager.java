@@ -21,6 +21,7 @@ import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 import com.smartbt.girocheck.servercommon.dao.StateDAO;
 import com.smartbt.girocheck.servercommon.dao.TerminalDAO;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
+import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.model.Country;
@@ -176,11 +177,11 @@ public class ClientManager {
 //        clientDAO.merge(client );
 //    }
     
-        public ResponseDataList searchClients(String searchFilter, int pageNumber, int rowsPerPage, NomApplication application) throws Exception {
+        public ResponseDataList searchClients(String searchFilter, int pageNumber, int rowsPerPage, Boolean blackList) throws Exception {
         ResponseDataList response = new ResponseDataList();
         
-        response.setData(clientDAO.searchClients(searchFilter, pageNumber * rowsPerPage, rowsPerPage, application));
-        int totalTrans = clientDAO.searchClients(searchFilter, -1, -1, application).size();
+        response.setData(clientDAO.searchClients(searchFilter, pageNumber * rowsPerPage, rowsPerPage, blackList));
+        int totalTrans = clientDAO.searchClients(searchFilter, -1, -1, blackList).size();
         response.setTotalPages((int) Math.ceil((float) totalTrans / (float) rowsPerPage));
         
         response.setStatus(Constants.CODE_SUCCESS);
@@ -194,5 +195,9 @@ public class ClientManager {
             return personalIdentificationDAO.getByClientId(idClient);
             
         }
+
+    public ResponseData updateClientBlackList(ClientDisplay clientDisplay) {
+        return clientDAO.updateClientBlackList(clientDisplay);
+    }
         
 }

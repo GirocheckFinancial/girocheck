@@ -15,14 +15,18 @@
  */
 package com.smartbt.vtsuite.vtams.client.gui.window.tab;
 
-
+import com.smartbt.vtsuite.vtams.client.classes.Properties;
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseTab;
+import com.smartbt.vtsuite.vtams.client.gui.component.datasource.ClientDS;
 import com.smartbt.vtsuite.vtams.client.gui.listener.FilterListenerImp;
 import com.smartbt.vtsuite.vtams.client.gui.listener.ListListener;
 import com.smartbt.vtsuite.vtams.client.gui.listener.PaginationListener;
 import com.smartbt.vtsuite.vtams.client.gui.window.filter.ClientFilterForm;
+import com.smartbt.vtsuite.vtams.client.gui.window.filter.SearchClientWindow;
 import com.smartbt.vtsuite.vtams.client.gui.window.list.ClientListGrid;
+import com.smartbt.vtsuite.vtams.client.utils.Utils;
+import com.smartbt.vtsuite.vtcommon.Constants;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
@@ -30,6 +34,9 @@ import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.RecordList;
+import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.form.fields.CheckboxItem;
+import com.smartgwt.client.widgets.form.fields.FormItem;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
@@ -41,7 +48,9 @@ import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 public class ClientBlackListTab extends BaseTab {
 
     private ClientFilterForm filterForm;
-    private ClientListGrid listGrid; 
+    private ClientListGrid listGrid;
+    private Integer selectedId = 0; 
+    CheckboxItem blackListCheckbox = new CheckboxItem("blackList", "In Black List");
 
     /**
      * Constructor
@@ -49,14 +58,18 @@ public class ClientBlackListTab extends BaseTab {
      * @param type
      * @param idEntity
      */
- 
     public ClientBlackListTab() {
         super("Card to Bank Black List");
- 
-        filterForm = new ClientFilterForm(null);
+
+        blackListCheckbox.setValue(true);
+
+        filterForm = new ClientFilterForm() {
+            public FormItem[] getFormFields() {
+                return new FormItem[]{searchText, blackListCheckbox, filterButton, addButton, deleteButton};
+            }
+        };
+
         listGrid = new ClientListGrid(null);
-//
-//        editorWindow = new ClientEditor();
 
         addTabSelectedHandler(new TabSelectedHandler() {
             /**
@@ -77,7 +90,7 @@ public class ClientBlackListTab extends BaseTab {
 
             @Override
             public void AddActionExecuted() {
-//                Add();
+                Add();
             }
 
             @Override
@@ -92,7 +105,7 @@ public class ClientBlackListTab extends BaseTab {
 
             @Override
             public void DeleteActionExecuted() {
-//                Delete();
+                Delete();
             }
 
             @Override
@@ -112,34 +125,19 @@ public class ClientBlackListTab extends BaseTab {
         });
 
         listGrid.addListener(new ListListener() {
-            /**
-             * Method to execute when a Select event is fired.
-             *
-             */
+
             public void SelectActionExecuted(Record record) {
-//                if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_UPDATE)) {
-                    Update(record);
-//                }
+
             }
 
-            /**
-             * Method to execute when a Selection Change event is fired.
-             *
-             */
             public void SelectionChangeActionExecuted(Record record) {
-//                filterForm.getDeleteButton().setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_DELETE)
-//                        || record == null || !record.getAttributeAsBoolean("active"));
-//                filterForm.getUpdateButton().setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_UPDATE)
-//                        || record == null);
+                Update(record);
             }
 
-            /**
-             * Method to execute when a Data Arrive event is fired.
-             *
-             */
             public void DataArrivedHandlerExecuted() {
                 filterForm.getDeleteButton().setDisabled(true);
-                filterForm.getUpdateButton().setDisabled(true);
+                filterForm.getAddButton().setDisabled(true);
+                selectedId = 0;
             }
         });
 
@@ -160,10 +158,10 @@ public class ClientBlackListTab extends BaseTab {
 //                editorWindow.hide();
 //            }
 //        });
-
         filterLayout.addMember(filterForm);
         filterLayout.addMember(paginationForm);
         listLayout.addMember(listGrid);
+
     }
 
     /**
@@ -178,6 +176,11 @@ public class ClientBlackListTab extends BaseTab {
         formCriteria.addCriteria("pageNumber", paginationForm.getRequestPageNumber());
         formCriteria.addCriteria("rowsPerPage", paginationForm.getRowsPerPage());
 
+        Boolean blackList = blackListCheckbox.getValueAsBoolean();
+        blackList = blackList != null ? blackList : false;
+
+        formCriteria.addCriteria("blackList", blackList);
+
         filterForm.setDisabled(true);
 
         listGrid.invalidateCache();
@@ -190,14 +193,8 @@ public class ClientBlackListTab extends BaseTab {
         }, null);
     }
 
-    /**
-     * Add method
-     *
-     */
-    public void Add() {
-//        editorWindow.updateRecord(null);
-//        editorWindow.show();
-    }
+    
+ 
 
     /**
      * Update method
@@ -205,105 +202,47 @@ public class ClientBlackListTab extends BaseTab {
      * @param record the record to update
      */
     public void Update(Record record) {
-//        editorWindow.updateRecord(record);
-//        editorWindow.show();
+        Utils.debug("Update..");
+
+        Boolean blackList = record.getAttributeAsBoolean("blackList");
+        blackList = blackList != null ? blackList : false;
+        Utils.debug("blackList = " + blackList);
+
+        Integer id = record.getAttributeAsInt("id");
+        Utils.debug("id = " + id);
+        selectedId = id;
+
+        filterForm.getDeleteButton().setDisabled(!blackList);
+        filterForm.getAddButton().setDisabled(blackList); 
+
     }
 
-    /**
-     * Delete method
-     *
-     */
+    
+     public void Add() {
+        updateBlackListStatus(true);
+    }
+    
     public void Delete() {
-//        filterForm.setDisabled(true);
-//        Record clientRecord = new Record();
-//        clientRecord.setAttribute("id", listGrid.getSelectedRecord().getAttribute("id"));
-//        listGrid.getDataSource().removeData(clientRecord, new DSCallback() {
-//            /**
-//             * Callback to invoke on completion
-//             *
-//             * @param response Response sent by the server in response to a
-//             * DataSource request.
-//             * @param rawData data
-//             * @param request Request sent to the server to initiate a
-//             * DataSource operation.
-//             */
-//            public void execute(DSResponse response, Object rawData, DSRequest request) {
-//                Filter();
-//                filterForm.setDisabled(false);
-//            }
-//        });
+         updateBlackListStatus(false);
     }
 
-    /**
-     * Delete All method
-     *
-     */
-    public void DeleteAll() {
-//        Criteria deleteAllcriteria = new Criteria();
-//
-//        deleteAllcriteria.addCriteria("idEntity", idEntity);
-//        deleteAllcriteria.addCriteria("entityType", entityType.toString());
-//
-//        filterForm.setDisabled(true);
-//
-//        BaseDatasource datasource = new BaseDatasource();
-//        datasource.setFetchDataURL(Properties.DELETE_ALL_CLIENT_WS);
-//
-//        datasource.fetchData(deleteAllcriteria, new DSCallback() {
-//            public void execute(DSResponse response, Object rawData, DSRequest request) {
-//                Filter();
-//                filterForm.setDisabled(false);
-//            }
-//        });
-    }
+   private void updateBlackListStatus(Boolean blackList){
+       ClientDS clientDS = new ClientDS();
+        Record record = new Record();
+        record.setAttribute("id", selectedId);
+        record.setAttribute("blackList", blackList);
 
-    /**
-     * Save method
-     *
-     */
-    public void Save() {
-//        //editorWindow.saveRecord(idEntity);
-//        editorWindow.getDataForm().getDataSource().addData(editorWindow.getRecord(idEntity), new DSCallback() {
-//            /**
-//             * Callback to invoke on completion
-//             *
-//             * @param response Response sent by the server in response to a
-//             * DataSource request.
-//             * @param rawData data
-//             * @param request Request sent to the server to initiate a
-//             * DataSource operation.
-//             */
-//            public void execute(DSResponse response, Object rawData, DSRequest request) {
-//                if (response.getStatus() == Constants.CODE_SUCCESS) {
-//                    editorWindow.hide();
-//                    Filter();
-//                } else {
-//                    SC.warn(I18N.GET.WINDOW_ERROR_TITLE(), I18N.GET.MESSAGE_ERROR_ACTION());
-//                }
-//            }
-//        });
-    }
-
-    public void importClients() {
-//        final UploadFileEditor uploadFileEditor = new UploadFileEditor(idEntity,
-//                Properties.IMPORT_CLIENTS_WS,
-//                I18N.GET.WINDOW_UPLOAD_CSVFILE_BOX_TITLE(),
-//                "Select a csv file");
-//        uploadFileEditor.addListener(new EditorListener() {
-//            public void SaveActionExecuted() {
-//                JavaScriptMethodHelper.addUploadFileCallback(new JavaScriptMethodCallback() {
-//                    public void execute(String obj) {
-//                        Filter();
-//                    }
-//                });
-//                uploadFileEditor.submitForm();
-//                uploadFileEditor.hide();
-//            }
-//
-//            public void CloseActionExecuted() {
-//                uploadFileEditor.hide();
-//            }
-//        });
-//        uploadFileEditor.show();
-    }
+        clientDS.setAddDataURL(Properties.UPDATE_CLIENT_BLACK_LIST_WS);
+        
+        clientDS.addData(record, new DSCallback() {
+            public void execute(DSResponse response, Object rawData, DSRequest request) {
+                
+                if (response.getStatus() == Constants.CODE_SUCCESS) {
+                    Filter();
+                } else {
+                    Utils.debug("updateBlackListStatus :: comeBack -> failed");
+                }
+            }
+        });
+   }
 }

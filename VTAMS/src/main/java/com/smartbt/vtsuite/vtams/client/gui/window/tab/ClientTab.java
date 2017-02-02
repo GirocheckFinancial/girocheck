@@ -62,7 +62,7 @@ public class ClientTab extends BaseTab {
 
         this.entityType = type;
 
-        filterForm = new ClientFilterForm(entityType);
+        filterForm = new ClientFilterForm();
         listGrid = new ClientListGrid(entityType);
 //
 //        editorWindow = new ClientEditor();

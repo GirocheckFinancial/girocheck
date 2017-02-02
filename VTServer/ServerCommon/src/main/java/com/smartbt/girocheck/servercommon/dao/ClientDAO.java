@@ -13,12 +13,14 @@
 package com.smartbt.girocheck.servercommon.dao;
 
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
+import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.utils.CryptoUtils;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.utils.bd.TransformerComplexBeans;
+import com.smartbt.vtsuite.vtcommon.Constants;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomApplication;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -57,15 +59,9 @@ public class ClientDAO extends BaseDAO<Client> {
         if(ssn!= null && ssn.length() >= 9){
             maskSSN = ssn.substring(5, 9);
         }
-        
-//        try {
-//            //encrypting cardNumber
-////            encryptedSSN = CryptoUtils.encrypt(ssn);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
+       
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ClientDAO] createOrGet getting client with ssn = " + ssn ,null);
-//        Criteria criteria = HibernateUtil.getSession().createCriteria( Client.class ).add( Restrictions.eq( "hashSSN", encryptedSSN ) );
+
         Client client = (Client)HibernateUtil.getSession().createCriteria( Client.class )
                 .add( Restrictions.eq( "ssn", ssn ))
                 .setMaxResults(1)
@@ -97,7 +93,7 @@ public class ClientDAO extends BaseDAO<Client> {
         return client;
     }
     
-    public List<ClientDisplay> searchClients(String searchFilter, int firstResult, int maxResult, NomApplication application) {
+    public List<ClientDisplay> searchClients(String searchFilter, int firstResult, int maxResult, Boolean blackList) {
         
         List<ClientDisplay> clients;
         
@@ -109,12 +105,11 @@ public class ClientDAO extends BaseDAO<Client> {
         ProjectionList projectionList = Projections.projectionList()
                 .add(Projections.property("id").as("id"))
                 .add(Projections.property("firstName").as("firstName"))
+                .add(Projections.property("blacklistCard2bank").as("blackList"))
                 .add(Projections.property("lastName").as("lastName"))
                 .add(Projections.property("telephone").as("telephone"))     
-                .add(Projections.property("email").as("email"))
-//                .add(Projections.property("ssn").as("maskSS"))
-                .add(Projections.property("maskSSN").as("maskSS"))
-
+                .add(Projections.property("email").as("email")) 
+                .add(Projections.property("maskSSN").as("maskSS")) 
                 .add(Projections.property("address.address").as("address"))
                 .add(Projections.property("address.city").as("city"))
                 .add(Projections.property("address.zipcode").as("zipcode"))
@@ -142,6 +137,10 @@ public class ClientDAO extends BaseDAO<Client> {
             criteria.setMaxResults(maxResult);
         }
         
+        if(blackList != null){
+            criteria.add(Restrictions.eq("blacklistCard2bank", blackList));
+        }
+        
         criteria.setProjection(projectionList);
         criteria.setResultTransformer(new TransformerComplexBeans(ClientDisplay.class));
         
@@ -153,6 +152,22 @@ public class ClientDAO extends BaseDAO<Client> {
         
         return clients;
         }
+
+    public ResponseData updateClientBlackList(ClientDisplay clientDisplay) {
+        System.out.println("ClientDAO -> updateClientBlackList ");
+        System.out.println("ClientDAO -> updateClientBlackList :: clientDisplay.getId()  = " + clientDisplay.getId() );
+        System.out.println("ClientDAO -> updateClientBlackList :: clientDisplay.getBlackList()   = " + clientDisplay.getBlackList() );
+        
+       if(clientDisplay != null && clientDisplay.getId() != null && clientDisplay.getBlackList() != null){
+           Client client = findById(clientDisplay.getId());
+           client.setBlacklistCard2bank(clientDisplay.getBlackList());
+           saveOrUpdate(client);
+       }
+       ResponseData response = new ResponseData(clientDisplay);
+       
+       response.setStatus(Constants.CODE_SUCCESS);
+       return response;
+    }
         
     
    

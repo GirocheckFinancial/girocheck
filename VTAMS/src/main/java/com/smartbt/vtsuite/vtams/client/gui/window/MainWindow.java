@@ -205,6 +205,17 @@ public class MainWindow extends BaseWindow {
             });
             mainMenu.addButton(feeManagementButton);
         }
+        //Fee Management Menu Button----------------------------------------------------------------------------------------------
+//        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_FEEMANAGEMENT)) {
+            MenuButtonItem clientBlacklistButton = new MenuButtonItem("Black List");
+            clientBlacklistButton.addClickHandler(new MainMenuClickHandler(this) {
+                @Override
+                public BaseWindow createWindow() {                   
+                    return new ClientBlackListWindow();
+                }
+            });
+            mainMenu.addButton(clientBlacklistButton);
+//        }
         
         mainMenu.addFill();
 

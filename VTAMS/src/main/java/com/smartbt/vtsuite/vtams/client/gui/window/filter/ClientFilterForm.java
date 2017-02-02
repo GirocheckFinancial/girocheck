@@ -37,30 +37,13 @@ public class ClientFilterForm extends BaseFilterForm {
      *
      * @param entityType
      */
-    public ClientFilterForm(EntityType entityType) {
+    public ClientFilterForm() {
         super();
-//        CheckboxItem activityFilter = new CheckboxItem("activityFilter");
-//        activityFilter.setTitle("Active");
-//        activityFilter.setAllowEmptyValue(true);
-//        activityFilter.setDefaultValue(ActivityFilter.ACTIVE.toString());
-//
-//        LinkedHashMap valueMap = new LinkedHashMap();
-//        valueMap.put(ActivityFilter.ACTIVE.toString(), true);
-//        valueMap.put(ActivityFilter.INACTIVE.toString(), false);
-//        activityFilter.setValueMap(valueMap);
-
-//        checkPrivileges();
-        setFields(new FormItem[]{searchText, filterButton});
-//        switch (entityType) {
-//            case CUSTOMER: {
-//                setFields(new FormItem[]{activityFilter, searchText, filterButton, new SpacerItem(), updateButton, deleteButton, deleteAllButton});
-//                break;
-//            }
-//            case MERCHANT: {
-//                setFields(new FormItem[]{activityFilter, searchText, filterButton, new SpacerItem(), addButton, updateButton, importButton, deleteButton, deleteAllButton});
-//                break;
-//            }
-//        }
+        setFields( getFormFields());
+    }
+    
+    public FormItem[] getFormFields(){
+        return new FormItem[]{searchText, filterButton};
     }
 
     private void checkPrivileges() {

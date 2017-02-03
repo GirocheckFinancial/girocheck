@@ -426,6 +426,10 @@ public class Properties {
      public static final String UPDATE_FEEBUCKETS_WS = WS_URL + "updateFeeBucket";
      
      public static final String DELETE_FEEBUCKETS_WS = WS_URL + "deleteFeeBucket";
+     
+     public static final String SEARCH_CHECK_DETAILS_WS = WS_URL + "searchCheckDetails";
+     
+     public static final String RESEND_CHECK_WS = WS_URL + "resendCheck";
     
     
     public static String getUrl(String url){

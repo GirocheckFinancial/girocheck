@@ -216,6 +216,18 @@ public class MainWindow extends BaseWindow {
             });
             mainMenu.addButton(clientBlacklistButton);
 //        }
+            
+         //Check Resend Button------------------------------------------------------------------------------------------------------
+        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_CHECKRESEND)) {
+            MenuButtonItem checkResendButton = new MenuButtonItem("Check Resend");
+            checkResendButton.addClickHandler(new MainMenuClickHandler(this) {
+                @Override
+                public BaseWindow createWindow() {                   
+                    return new CheckResendWindow();
+                }
+            });
+            mainMenu.addButton(checkResendButton);
+        }   
         
         mainMenu.addFill();
 

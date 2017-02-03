@@ -1,26 +1,17 @@
-/**
- * "Visual Paradigm: DO NOT MODIFY THIS FILE!"
- *
- * This is an automatic generated file. It will be regenerated every time you
- * generate persistence class.
- *
- * Modifying its content may cause the program not work, or your work may lost.
- */
-/**
- * Licensee: License Type: Evaluation
- */
-package com.smartbt.girocheck.servercommon.model;
+package com.smartbt.girocheck.servercommon.display;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class Check implements Serializable {
+/**
+ *
+ * @author suresh
+ */
+public class CheckDisplay implements Serializable {
 
-    public Check() {
+    public CheckDisplay() {
     }
-    private int id;
-    private com.smartbt.girocheck.servercommon.model.Client client1;
-    private com.smartbt.girocheck.servercommon.model.Transaction transaction;
+    private int id;    
     private String code;
     private java.sql.Blob checkBack;
     private java.sql.Blob checkFront;
@@ -38,13 +29,15 @@ public class Check implements Serializable {
     private String status;
     private Date creationDate;
     private Date processingDate;
-
-    private void setId(int value) {
-        this.id = value;
-    }
+    private Double amount;
+    
 
     public int getId() {
         return id;
+    }
+
+    private void setId(int value) {
+        this.id = value;
     }
 
     public int getORMID() {
@@ -153,23 +146,7 @@ public class Check implements Serializable {
 
     public String getLocationId() {
         return locationId;
-    }
-
-    public void setClient1(com.smartbt.girocheck.servercommon.model.Client value) {
-        this.client1 = value;
-    }
-
-    public com.smartbt.girocheck.servercommon.model.Client getClient1() {
-        return client1;
-    }
-
-    public void setTransaction(com.smartbt.girocheck.servercommon.model.Transaction value) {
-        this.transaction = value;
-    }
-
-    public com.smartbt.girocheck.servercommon.model.Transaction getTransaction() {
-        return transaction;
-    }
+    }   
 
     public String toString() {
         return String.valueOf(getId());
@@ -229,5 +206,13 @@ public class Check implements Serializable {
      */
     public void setProcessingDate(Date processingDate) {
         this.processingDate = processingDate;
+    }
+    
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+    
+    public Double getAmount() {
+        return amount;
     }
 }

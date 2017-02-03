@@ -42,8 +42,8 @@ public class ClientListGrid extends BaseListGrid {
     private TextListGridField cityField = new TextListGridField("city", I18N.GET.LIST_FIELD_CITY_TITLE(), false);
     private TextListGridField stateField = new TextListGridField("state", I18N.GET.LIST_FIELD_STATE_TITLE(), false);
     private TextListGridField zipField = new TextListGridField("zipcode", I18N.GET.LIST_FIELD_ZIP_TITLE(), false);
-    private TextListGridField emailField = new TextListGridField("email", I18N.GET.LIST_FIELD_EMAIL_TITLE(), false);
     private TextListGridField maskSSField = new TextListGridField("maskSS", I18N.GET.LIST_FIELD_MSSN_TITLE(), false);
+    private TextListGridField blackListField = new TextListGridField("blackList", "Black List", false);
 //    private TextListGridField statusField = new TextListGridField("active", I18N.GET.LIST_FIELD_ACTIVE_TITLE(), false);
 //    private TextListGridField merchantField = new TextListGridField("merchant", I18N.GET.LIST_FIELD_MERCHANT_TITLE(), true);
 
@@ -66,7 +66,6 @@ public class ClientListGrid extends BaseListGrid {
 //                return record.getAttributeAsBoolean("active") ? "Active" : "Inactive";
 //            }
 //        });
-
         setEmptyMessage(I18N.GET.MESSAGE_EMPTY_CLIENT_LIST());
 //        setInitialSort(new SortSpecifier[]{
 //            new SortSpecifier("firstName", SortDirection.DESCENDING)
@@ -75,11 +74,13 @@ public class ClientListGrid extends BaseListGrid {
         setGroupStartOpen(GroupStartOpen.ALL);
         addDataArrivedHandler(new DataArrivedHandler() {
             public void onDataArrived(DataArrivedEvent event) {
-                switch (entityType) {
-                    case CUSTOMER:
-                        groupBy("merchant");
-                        break;
-                }
+                if (entityType != null) {
+                    switch (entityType) {
+                        case CUSTOMER:
+                            groupBy("merchant");
+                            break;
+                    }
+                } 
             }
         });
 
@@ -87,15 +88,13 @@ public class ClientListGrid extends BaseListGrid {
         setFields(firstNameField,
                 lastField,
                 telephoneField,
-//                companyField,
+                //                companyField,
                 addressField,
-//                address2Field,
+                //                address2Field,
                 cityField,
                 stateField,
-                zipField,
-                emailField,
-                maskSSField);
-//                statusField,
-//                merchantField);
+                zipField, 
+                maskSSField,
+                blackListField); 
     }
 }

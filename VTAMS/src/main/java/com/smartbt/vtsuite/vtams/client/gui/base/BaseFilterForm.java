@@ -162,7 +162,7 @@ public class BaseFilterForm extends DynamicForm {
         });
 
         deleteButton = new BaseButtonItem("deleteButton", I18N.GET.BUTTON_DELETE_TITLE());
-        deleteButton.setDisabled(true);
+//        deleteButton.setDisabled(true);
         deleteButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 SC.confirm(I18N.GET.MESSAGE_CONFIRM_DELETE(), new BooleanCallback() {

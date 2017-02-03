@@ -17,6 +17,7 @@ License Type: Evaluation
 		<property name="telephone" column="telephone" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="email" column="email" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="active" column="active" type="boolean" length="1" not-null="false" lazy="false"/>
+		<property name="blacklistCard2bank" column="blacklist_card2bank" type="boolean" length="1" not-null="false" lazy="false"/>
 		<property name="createdAt" column="created_at" type="timestamp" not-null="false" lazy="false"/>
 		<property name="addressForm" column="address_form" type="blob" not-null="false" lazy="false"/>
 		<property name="successfulLoads" column="successful_loads" type="integer"/>

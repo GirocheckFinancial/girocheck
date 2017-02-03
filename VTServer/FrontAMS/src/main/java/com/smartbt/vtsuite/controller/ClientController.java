@@ -19,6 +19,7 @@ import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
+import com.smartbt.girocheck.servercommon.display.MerchantDisplay;
 import com.smartbt.girocheck.servercommon.manager.ClientManager;
 import com.smartbt.vtsuite.utils.AuditLogMessage;
 import com.smartbt.vtsuite.vtcommon.enums.ActivityFilter;
@@ -71,18 +72,28 @@ public class ClientController {
      * @return
      * @throws java.lang.Exception
      */
+    //@FormParam("idEntity") int idEntity,
+    // @FormParam("entityType") EntityType entityType,
     @POST
     @Path("searchClients")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseDataList searchClients(@FormParam("idEntity") int idEntity, @FormParam("entityType") EntityType entityType,
-          @FormParam("searchFilter") String searchFilter, @FormParam("activityFilter") ActivityFilter activityFilter,
+    public ResponseDataList searchClients(
+          @FormParam("searchFilter") String searchFilter, 
+          @FormParam("blackList") Boolean blackList, 
           @FormParam("pageNumber") int pageNumber, @FormParam("rowsPerPage") int rowsPerPage) throws Exception {
-//        log.info("Incoming parameters : \n idEntity: " + idEntity + " \n EntityType: " + entityType.toString() + " \n searchFilter: " + searchFilter
-//                + " \n activityFilter: " + (activityFilter == null ? "null" : activityFilter.toString()) + "\n pageNumber: " + pageNumber + "\n rowsPerPage: " + rowsPerPage);
-//        return manager.searchClients(idEntity, entityType, searchFilter, activityFilter, pageNumber, rowsPerPage, NomApplication.VT_AMS);
-          return manager.searchClients(searchFilter, pageNumber, rowsPerPage, NomApplication.VT_AMS);
+//       
+          return manager.searchClients(searchFilter, pageNumber, rowsPerPage, blackList);
     }
 
+        @PUT
+    @Path("updateClientBlackList")
+    @Consumes("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseData updateClientBlackList(ClientDisplay clientDisplay) throws Exception {
+ 
+        return manager.updateClientBlackList(clientDisplay);
+        
+    }
    
     /**
      * set client to given ClientDisplay

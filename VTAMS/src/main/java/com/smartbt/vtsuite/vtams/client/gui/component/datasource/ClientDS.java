@@ -36,30 +36,18 @@ public class ClientDS extends BaseDatasource {
 
         DataSourceTextField firstNameField = new DataSourceTextField("firstName");
         DataSourceTextField lastNameField = new DataSourceTextField("lastName");
-//        DataSourceTextField companyField = new DataSourceTextField("company");
-
+ 
         DataSourceTextField addressField = new DataSourceTextField("address");
         DataSourceTextField stateField = new DataSourceTextField("state");
         DataSourceTextField cityField = new DataSourceTextField("city");
         DataSourceTextField zipcodeField = new DataSourceTextField("zipcode");
-        
-//        DataSourceField addressField = new DataSourceField("clientAddressList", FieldType.ANY);
-//        addressField.setMultiple(Boolean.TRUE);
-//        addressField.setTypeAsDataSource(new AddressDS());
-
+         
         DataSourceTextField telephoneField = new DataSourceTextField("telephone");
-        
-//        DataSourceField telephonesField = new DataSourceField("clientTelephoneList", FieldType.ANY);
-//        telephonesField.setMultiple(Boolean.TRUE);
-//        telephonesField.setTypeAsDataSource(new TelephoneDS());
-
+         
         DataSourceTextField emailField = new DataSourceTextField("email");
         DataSourceTextField maskSSField = new DataSourceTextField("maskSS");
-//        DataSourceBooleanField activeField = new DataSourceBooleanField("active");
-//
-//        DataSourceField merchantField = new DataSourceField("merchant", FieldType.ANY);
-//        merchantField.setTypeAsDataSource(new MerchantDS());
-
+        DataSourceBooleanField blackListField = new DataSourceBooleanField("blackList");
+ 
         setFetchDataURL(Properties.SEARCH_CLIENTS_WS);
         setAddDataURL(Properties.SAVE_OR_UPDATE_CLIENT_WS);
         setUpdateDataURL(Properties.SAVE_OR_UPDATE_CLIENT_WS);
@@ -73,7 +61,8 @@ public class ClientDS extends BaseDatasource {
                 stateField,
                 zipcodeField,
                 emailField,
-                maskSSField
+                maskSSField,
+                blackListField
                 );
     }
 }

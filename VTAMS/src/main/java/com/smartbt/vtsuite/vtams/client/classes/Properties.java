@@ -144,6 +144,7 @@ public class Properties {
      * Parameters: getClient
      */
     public static final String GET_CLIENT_WS = WS_URL + "getClient";
+    public static final String UPDATE_CLIENT_BLACK_LIST_WS = WS_URL + "updateClientBlackList";
     public static final String GET_USER_WS = WS_URL + "getUser";
     /**
      * Web Service for search all transactions that match the filter.

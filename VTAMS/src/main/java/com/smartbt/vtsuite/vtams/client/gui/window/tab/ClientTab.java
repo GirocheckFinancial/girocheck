@@ -16,31 +16,20 @@
 package com.smartbt.vtsuite.vtams.client.gui.window.tab;
 
 
-import com.smartbt.vtsuite.vtams.client.classes.Properties;
-import com.smartbt.vtsuite.vtams.client.classes.Settings;
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
-import com.smartbt.vtsuite.vtams.client.gui.base.BaseDatasource;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseTab;
-import com.smartbt.vtsuite.vtams.client.gui.listener.EditorListener;
 import com.smartbt.vtsuite.vtams.client.gui.listener.FilterListenerImp;
 import com.smartbt.vtsuite.vtams.client.gui.listener.ListListener;
 import com.smartbt.vtsuite.vtams.client.gui.listener.PaginationListener;
-import com.smartbt.vtsuite.vtams.client.gui.window.editor.ClientEditor;
-import com.smartbt.vtsuite.vtams.client.gui.window.editor.UploadFileEditor;
 import com.smartbt.vtsuite.vtams.client.gui.window.filter.ClientFilterForm;
 import com.smartbt.vtsuite.vtams.client.gui.window.list.ClientListGrid;
-import com.smartbt.vtsuite.vtams.client.helpers.JavaScriptMethodCallback;
-import com.smartbt.vtsuite.vtams.client.helpers.JavaScriptMethodHelper;
-import com.smartbt.vtsuite.vtcommon.Constants;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
-import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.RecordList;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
@@ -73,7 +62,7 @@ public class ClientTab extends BaseTab {
 
         this.entityType = type;
 
-        filterForm = new ClientFilterForm(entityType);
+        filterForm = new ClientFilterForm();
         listGrid = new ClientListGrid(entityType);
 //
 //        editorWindow = new ClientEditor();

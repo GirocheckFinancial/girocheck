@@ -31,6 +31,8 @@ public class Client implements Serializable {
 	private String email;
 	
 	private Boolean active;
+        
+	private Boolean blacklistCard2bank;
 	
 	private java.util.Date createdAt;
 	
@@ -244,5 +246,20 @@ public class Client implements Serializable {
     public void setSuccessfulLoads(Integer successfulLoads) {
         this.successfulLoads = successfulLoads;
     }
+
+    /**
+     * @return the blacklistCard2bank
+     */
+    public Boolean getBlacklistCard2bank() {
+        return blacklistCard2bank;
+    }
+
+    /**
+     * @param blacklistCard2bank the blacklistCard2bank to set
+     */
+    public void setBlacklistCard2bank(Boolean blacklistCard2bank) {
+        this.blacklistCard2bank = blacklistCard2bank;
+    }
+
         	
 }

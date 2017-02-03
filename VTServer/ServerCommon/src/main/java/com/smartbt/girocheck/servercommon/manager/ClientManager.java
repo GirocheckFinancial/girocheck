@@ -178,16 +178,9 @@ public class ClientManager {
 //    }
     
         public ResponseDataList searchClients(String searchFilter, int pageNumber, int rowsPerPage, Boolean blackList) throws Exception {
-        ResponseDataList response = new ResponseDataList();
-        
-        response.setData(clientDAO.searchClients(searchFilter, pageNumber * rowsPerPage, rowsPerPage, blackList));
-        int totalTrans = clientDAO.searchClients(searchFilter, -1, -1, blackList).size();
-        response.setTotalPages((int) Math.ceil((float) totalTrans / (float) rowsPerPage));
-        
-        response.setStatus(Constants.CODE_SUCCESS);
-        response.setStatusMessage(VTSuiteMessages.SUCCESS);
-
-        return response;
+      
+        return clientDAO.searchClients(searchFilter, pageNumber * rowsPerPage, rowsPerPage, blackList);
+      
     }
         
         public PersonalIdentification getIdentificationByClientId(int idClient) throws SQLException{

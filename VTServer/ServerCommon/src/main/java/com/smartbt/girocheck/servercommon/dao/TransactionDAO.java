@@ -4,6 +4,7 @@ import com.smartbt.girocheck.servercommon.display.ActivityReportTransactionDispl
 import com.smartbt.girocheck.servercommon.display.AddressImageFormDisplay;
 import com.smartbt.girocheck.servercommon.display.SubTransactionImageDisplay;
 import com.smartbt.girocheck.servercommon.display.TransactionDisplay;
+import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.model.Client;
@@ -11,7 +12,9 @@ import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.ImgConvTiffToPng;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.utils.bd.TransformerComplexBeans;
+import com.smartbt.vtsuite.common.VTSuiteMessages;
 import com.smartbt.vtsuite.servercommon.utils.DateUtils;
+import com.smartbt.vtsuite.vtcommon.Constants;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -243,9 +246,58 @@ public class TransactionDAO extends BaseDAO<Transaction> {
         }
     }
 
-    public List<TransactionDisplay> searchTransactions(String searchFilter, Date startRangeDate, Date endRangeDate, int firstResult, int maxResult, int transactionType, String operation,
+    public ResponseDataList searchTransactions(String searchFilter, Date startRangeDate, Date endRangeDate, int firstResult, int maxResult, int transactionType, String operation,
             boolean filterAmmount, int ammountType, int opType, String ammountString, boolean pending) {
-        Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class)
+        Criteria cri = getSearchCriteria( searchFilter,  startRangeDate,  endRangeDate,  firstResult,  maxResult,  transactionType,  operation,
+             filterAmmount,  ammountType,  opType,  ammountString,  pending);
+        
+        if (firstResult >= 0) {
+            cri.setFirstResult(firstResult);
+            cri.setMaxResults(maxResult);
+        }
+ 
+        ProjectionList projectionList = Projections.projectionList()
+                .add(Projections.property("id").as("id"))
+                .add(Projections.property("transactionType").as("transactionType"))
+                .add(Projections.property("dateTime").as("createdAt"))
+                .add(Projections.property("operation").as("operation"))
+                .add(Projections.property("data_sc1.maskCardNumber").as("accountSuffix"))
+                .add(Projections.property("ammount").as("ammount"))
+                .add(Projections.property("feeAmmount").as("feeAmmount"))
+                .add(Projections.property("payoutAmmount").as("payoutAmmount"))
+                .add(Projections.property("single").as("single"))
+                .add(Projections.property("resultCode").as("resultCode"))
+                .add(Projections.property("resultMessage").as("resultMessage"))
+                .add(Projections.property("merchant.legalName").as("merchant"))
+                .add(Projections.property("terminal.serialNumber").as("terminal"))
+                .add(Projections.property("client.firstName").as("clientFirstName"))
+                .add(Projections.property("client.lastName").as("clientLastName"))
+                .add(Projections.property("transactionFinished").as("transactionFinished"));
+        cri.setProjection(projectionList);
+        cri.setResultTransformer(new TransformerComplexBeans(TransactionDisplay.class));
+
+        List<TransactionDisplay>  list = cri.list();
+        
+        Criteria countCriteria = getSearchCriteria(searchFilter, startRangeDate, endRangeDate, firstResult, maxResult, transactionType, operation, filterAmmount, ammountType, opType, ammountString, pending);
+        countCriteria.setProjection(Projections.rowCount());
+        Long total = (Long)countCriteria.uniqueResult();
+        
+        
+        ResponseDataList response = new ResponseDataList();
+
+        response.setData(list);
+
+        response.setTotalPages((int) Math.ceil((float) total / (float) maxResult));
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(VTSuiteMessages.SUCCESS);
+        
+        return response;
+    }
+    
+    private Criteria getSearchCriteria(String searchFilter, Date startRangeDate, Date endRangeDate, int firstResult, int maxResult, int transactionType, String operation,
+            boolean filterAmmount, int ammountType, int opType, String ammountString, boolean pending){
+        
+         Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class)
                 .createAlias("terminal", "terminal", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("terminal.merchant", "merchant", JoinType.LEFT_OUTER_JOIN)
                 .createAlias("merchant.agrupation", "agrupation", JoinType.LEFT_OUTER_JOIN)
@@ -267,12 +319,7 @@ public class TransactionDAO extends BaseDAO<Transaction> {
             endRangeDate.setMinutes(59);
             endRangeDate.setSeconds(59);
         }
-        
-        if (firstResult >= 0) {
-            cri.setFirstResult(firstResult);
-            cri.setMaxResults(maxResult);
-        }
-
+         
         if (startRangeDate != null) {
             cri.add(Restrictions.ge("dateTime", startRangeDate));
         }
@@ -363,54 +410,14 @@ public class TransactionDAO extends BaseDAO<Transaction> {
             cri.add(disjunction);
 
         }
-
-        ProjectionList projectionList = Projections.projectionList()
-                .add(Projections.property("id").as("id"))
-                .add(Projections.property("transactionType").as("transactionType"))
-                .add(Projections.property("dateTime").as("createdAt"))
-                .add(Projections.property("operation").as("operation"))
-                .add(Projections.property("data_sc1.maskCardNumber").as("accountSuffix"))
-                .add(Projections.property("ammount").as("ammount"))
-                .add(Projections.property("feeAmmount").as("feeAmmount"))
-                .add(Projections.property("payoutAmmount").as("payoutAmmount"))
-                .add(Projections.property("single").as("single"))
-                .add(Projections.property("resultCode").as("resultCode"))
-                .add(Projections.property("resultMessage").as("resultMessage"))
-                .add(Projections.property("merchant.legalName").as("merchant"))
-                .add(Projections.property("terminal.serialNumber").as("terminal"))
-                .add(Projections.property("client.firstName").as("clientFirstName"))
-                .add(Projections.property("client.lastName").as("clientLastName"))
-                .add(Projections.property("transactionFinished").as("transactionFinished"));
-        cri.setProjection(projectionList);
-        cri.setResultTransformer(new TransformerComplexBeans(TransactionDisplay.class));
-
-        return cri.list();
+        
+        return cri;
     }
 
     public SubTransactionImageDisplay getTransactionImage(int idTransaction) throws SQLException {
 
         SubTransactionImageDisplay subTransactionImage = new SubTransactionImageDisplay();
-//        System.out.println("getTransactionImage() > id transaction to find: " + idTransaction);
-//            Transaction transaction = findById(idTransaction);
-//            System.out.println("getTransactionImage() > Transaction from db date_time value: "+ transaction.getDateTime().toString());
-//            subTransactionImage.setId(idTransaction);
-//
-//            if ( transaction != null ) {
-//                if ( transaction.getAchForm() != null ) {
-//                    System.out.println("IN THE TRANSACTION IMAGE CONVERTOR TO BASE64");
-//                    byte[] bdata = transaction.getAchForm().getBytes( 1, (int) transaction.getAchForm().length() );
-//                    String base64bytes = DatatypeConverter.printBase64Binary( bdata );
-//                    if(base64bytes.startsWith("data:image/png;base64,")){
-//                        subTransactionImage.setImage(base64bytes);
-//                    }else{
-//                        subTransactionImage.setImage("data:image/png;base64," + base64bytes );
-//                    }
-//                }else
-//                    System.out.println("Transaction.getAchForm() is null");
-//                    
-//            }
-//        System.out.println("getTransactionImage() > result image " + subTransactionImage.getImage());
-        return subTransactionImage;
+       return subTransactionImage;
 
     }
 

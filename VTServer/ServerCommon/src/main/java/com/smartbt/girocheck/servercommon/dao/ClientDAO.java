@@ -12,8 +12,10 @@
  */
 package com.smartbt.girocheck.servercommon.dao;
 
+import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
+import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.utils.CryptoUtils;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
@@ -93,16 +95,18 @@ public class ClientDAO extends BaseDAO<Client> {
         return client;
     }
     
-    public List<ClientDisplay> searchClients(String searchFilter, int firstResult, int maxResult, Boolean blackList) {
+    public ResponseDataList searchClients(String searchFilter, int firstResult, int maxResult, Boolean blackList) {
         
         List<ClientDisplay> clients;
         
-        Criteria criteria = HibernateUtil.getSession().createCriteria(Client.class);
-
-        criteria.createAlias("address", "address", JoinType.LEFT_OUTER_JOIN);
-        criteria.createAlias("address.state", "state", JoinType.LEFT_OUTER_JOIN);
-
-        ProjectionList projectionList = Projections.projectionList()
+        Criteria criteria = getSearchCriteria(searchFilter, blackList);
+        
+        if (firstResult >= 0) {
+            criteria.setFirstResult(firstResult);
+            criteria.setMaxResults(maxResult);
+        }
+         
+          ProjectionList projectionList = Projections.projectionList()
                 .add(Projections.property("id").as("id"))
                 .add(Projections.property("firstName").as("firstName"))
                 .add(Projections.property("blacklistCard2bank").as("blackList"))
@@ -115,6 +119,31 @@ public class ClientDAO extends BaseDAO<Client> {
                 .add(Projections.property("address.zipcode").as("zipcode"))
                 .add(Projections.property("state.name").as("state"));
         
+        criteria.setProjection(projectionList);
+        criteria.setResultTransformer(new TransformerComplexBeans(ClientDisplay.class));
+        
+        clients = criteria.list();
+        
+        Criteria countCriteria = getSearchCriteria(searchFilter, blackList);
+        countCriteria.setProjection(Projections.rowCount());
+        Long totalTrans = (Long)countCriteria.uniqueResult();
+        
+        ResponseDataList response = new ResponseDataList();
+        
+        response.setData(clients);
+        response.setTotalPages((int) Math.ceil((float) totalTrans / (float) maxResult));
+        
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(VTSuiteMessages.SUCCESS);
+        return response;
+        }
+    
+    private Criteria getSearchCriteria(String searchFilter, Boolean blackList){
+         Criteria criteria = HibernateUtil.getSession().createCriteria(Client.class);
+
+        criteria.createAlias("address", "address", JoinType.LEFT_OUTER_JOIN);
+        criteria.createAlias("address.state", "state", JoinType.LEFT_OUTER_JOIN);
+ 
         if (searchFilter != null && !searchFilter.isEmpty()) {
             
             Disjunction disjunction = (Disjunction) Restrictions.disjunction()
@@ -132,26 +161,12 @@ public class ClientDAO extends BaseDAO<Client> {
             criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         }
         
-        if (firstResult >= 0) {
-            criteria.setFirstResult(firstResult);
-            criteria.setMaxResults(maxResult);
-        }
-        
         if(blackList != null){
             criteria.add(Restrictions.eq("blacklistCard2bank", blackList));
         }
         
-        criteria.setProjection(projectionList);
-        criteria.setResultTransformer(new TransformerComplexBeans(ClientDisplay.class));
-        
-        clients = criteria.list();
-        
-        for (ClientDisplay client : clients) {
-            client.setMaskSS("*****"+client.getMaskSS());
-        }
-        
-        return clients;
-        }
+        return criteria;
+    }
 
     public ResponseData updateClientBlackList(ClientDisplay clientDisplay) {
         System.out.println("ClientDAO -> updateClientBlackList ");

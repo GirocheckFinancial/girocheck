@@ -88,6 +88,7 @@ public enum ResultMessage {
     OE_LOG_TIME_OUT("OE Log Time Out","Transaction Declined by OE Time Out. Please try again in 5 minutes."),
     
     CARD_RELOAD_DATA_CANCELED("No client data to execute the reload data. Full Data Card Reload needed.","Transaction Declined. Common Card Reload Needed."),
+    CLIENT_IN_CARD2BANK_BLACKLIST("Client in Card2Bank Black List.","Client in Card2Bank Black List."),
     
      /*****************************Tecnicard Codes START**********************************/
     

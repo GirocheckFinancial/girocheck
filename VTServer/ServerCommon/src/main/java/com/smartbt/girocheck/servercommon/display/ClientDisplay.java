@@ -189,7 +189,7 @@ public class ClientDisplay implements Serializable {
      * @return the maskSS
      */
     public String getMaskSS() {
-        return maskSS;
+        return "*****" + maskSS;
     }
 
     /**

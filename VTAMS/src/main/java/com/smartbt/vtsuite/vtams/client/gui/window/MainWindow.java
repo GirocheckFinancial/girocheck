@@ -205,8 +205,8 @@ public class MainWindow extends BaseWindow {
             });
             mainMenu.addButton(feeManagementButton);
         }
-        //Fee Management Menu Button----------------------------------------------------------------------------------------------
-//        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_FEEMANAGEMENT)) {
+        //CLIENT_BLACK_LIST Menu Button----------------------------------------------------------------------------------------------
+        if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_CLIENT_BLACK_LIST)) {
             MenuButtonItem clientBlacklistButton = new MenuButtonItem("Black List");
             clientBlacklistButton.addClickHandler(new MainMenuClickHandler(this) {
                 @Override
@@ -215,7 +215,7 @@ public class MainWindow extends BaseWindow {
                 }
             });
             mainMenu.addButton(clientBlacklistButton);
-//        }
+        }
             
          //Check Resend Button------------------------------------------------------------------------------------------------------
         if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_CHECKRESEND)) {

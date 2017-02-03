@@ -278,6 +278,12 @@ public class CoreCardToBankBusinessLogic extends CoreAbstractTransactionBusiness
                 e.printStackTrace();
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] Error", e.getMessage());
                 HibernateUtil.rollbackTransaction();
+                
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreCardToBankBL::] AchForm from the transaction IS NULL", null);
+                direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.CREDIT_CARD_NOT_EXIST, ResultMessage.CREDIT_CARD_NOT_EXIST);
+                direxTransactionResponse.setTransactionType(TransactionType.get(transaction.getTransactionType()));
+                CoreTransactionUtil.subTransactionFailed(transaction, direxTransactionResponse, jmsManager.getCoreOutQueue(), direxTransactionRequest.getCorrelation());
+                return;
             }
         }
         //send to tecnicard host

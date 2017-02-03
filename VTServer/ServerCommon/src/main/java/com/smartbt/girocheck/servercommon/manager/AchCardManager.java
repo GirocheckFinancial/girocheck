@@ -23,26 +23,28 @@ public class AchCardManager {
         return achCardDAO.findById(id);
     }
 
-    public void save(AchCard achCard) {
+    public void save(AchCard achCard) throws Exception {
         AchCard ach = new AchCard();
         ach.setAchform(achCard.getAchform());
 
         CreditCard card = null;
-        try {
-            System.out.println("Looking card by number: " + achCard.getCardNumber());
-            
+        try { 
             card = CreditCardDAO.get().getCard(achCard.getCardNumber());
-            
+
             System.out.println("card = " + (card != null));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        ach.setData_sc1(card);
-        ach.setCardNumber("");
- 
-        ach.setMerchant(achCard.getMerchant());
-        achCardDAO.save(ach);
+
+        if (card != null) {
+            ach.setData_sc1(card);
+            ach.setCardNumber("");
+
+            ach.setMerchant(achCard.getMerchant());
+            achCardDAO.save(ach);
+        }else{
+            throw new Exception("Credit card does not exist.");
+        } 
     }
 
     public Boolean existAchCard(String cardNumber) {

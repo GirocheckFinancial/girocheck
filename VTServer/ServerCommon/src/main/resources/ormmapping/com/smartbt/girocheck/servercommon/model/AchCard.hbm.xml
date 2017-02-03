@@ -15,8 +15,7 @@
 		<many-to-one name="merchant" cascade="lock" column="id_merchant" class="com.smartbt.girocheck.servercommon.model.Merchant" not-null="true" lazy="proxy">
 		</many-to-one>
 		<property name="achform" column="ach_form" type="blob" not-null="false" lazy="false"/>
-		<property name="cardNumber" column="card_number" type="string" length="255" not-null="false" lazy="false"/>
-                <many-to-one name="data_sc1" cascade="save-update,lock" column="creditcard" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="false" lazy="proxy">
+		<many-to-one name="data_sc1" cascade="save-update,lock" column="creditcard" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="false" lazy="proxy">
 		</many-to-one>
 	</class>
 

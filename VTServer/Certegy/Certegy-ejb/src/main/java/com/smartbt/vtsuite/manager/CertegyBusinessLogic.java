@@ -22,6 +22,9 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.vtsuite.boundary.PCA;
+import com.smartbt.vtsuite.boundary.PCARequest;
+import com.smartbt.vtsuite.boundary.PCAService;
 import java.util.Map;
 
 /**
@@ -30,6 +33,9 @@ import java.util.Map;
 public class CertegyBusinessLogic {
 
     private static CertegyBusinessLogic INSTANCE;
+    
+    private PCAService service;
+    private PCA port;
 
     public static synchronized CertegyBusinessLogic get() {
         if (INSTANCE == null) {
@@ -45,27 +51,8 @@ public class CertegyBusinessLogic {
      * Constructor
      */
     public CertegyBusinessLogic() {
-//        service = new IStreamSrvHostWS();
-//        port = service.getIStreamSrvHostWSSoap();
-//        
-//        String url= "";
-//        try {
-//            
-//            url = System.getProperty("WS_TECNICARD_PRODUCTION_URL");
-//
-//            if(url == null){
-//                url = "https://bizsrv.tcmsystem.net/IStreamWS/iStreamSrvHost.asmx?WSDL";
-//            }
-//            
-//            BindingProvider bindingProvider = (BindingProvider) port;
-//            bindingProvider.getRequestContext().put(
-//                    BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-//                    url);
-//
-//        } catch (Exception ex) {
-//            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] Error", ex.getMessage());
-//        }
-
+        service = new PCAService();
+        port = service.getPCAPort(); 
     }
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
@@ -96,7 +83,8 @@ public class CertegyBusinessLogic {
         return direxTransactionResponse;
     }
 
-    public void combinedEnrollmentAuthentication(Map params) { 
+    public void combinedEnrollmentAuthentication(Map params) {  
+        port.authorize(new PCARequest(params));
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CertegyBusinessLogic] Calling method insertTransaction", null);
     }
 

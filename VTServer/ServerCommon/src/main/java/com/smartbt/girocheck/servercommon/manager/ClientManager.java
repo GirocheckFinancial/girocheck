@@ -60,7 +60,7 @@ public class ClientManager {
     }
      
     public void saveOrUpdate( Client client ) {
-
+        client.setBlacklistCard2bank(false);
         if ( client.getAddress() != null ) {
             if ( client.getAddress().getCountry() != null && client.getAddress().getCountry().getAbbreviation() != null ) {
                 Country country = countryDAO.getByAbbreviation( client.getAddress().getCountry().getAbbreviation() );

@@ -162,7 +162,15 @@ public class ClientDAO extends BaseDAO<Client> {
         }
         
         if(blackList != null){
-            criteria.add(Restrictions.eq("blacklistCard2bank", blackList));
+            if(blackList){
+                criteria.add(Restrictions.eq("blacklistCard2bank", blackList));
+            }else{//if is false, include also nulls
+                
+                criteria.add(Restrictions.disjunction()
+                        .add(Restrictions.eq("blacklistCard2bank", blackList))
+                        .add(Restrictions.isNull("blacklistCard2bank")));
+            }
+            
         }
         
         return criteria;

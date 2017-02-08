@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="PCAService" targetNamespace="http://fis.certegy.pca.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://fis.certegy.pca.com/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import namespace="http://fis.certegy.pca.com/" schemaLocation="PCAService_schema1.xsd"/>
+    </xsd:schema>
+  </types>
+  <message name="postMIRResponse">
+    <part name="parameters" element="tns:AuthorizeResponse">
+    </part>
+  </message>
+  <message name="echoResponse">
+    <part name="parameters" element="tns:EchoResponse">
+    </part>
+  </message>
+  <message name="reverse">
+    <part name="parameters" element="tns:ReverseRequest">
+    </part>
+  </message>
+  <message name="authorize">
+    <part name="parameters" element="tns:AuthorizeRequest">
+    </part>
+  </message>
+  <message name="authorizeResponse">
+    <part name="parameters" element="tns:AuthorizeResponse">
+    </part>
+  </message>
+  <message name="postMIR">
+    <part name="parameters" element="tns:PostMIRRequest">
+    </part>
+  </message>
+  <message name="reverseResponse">
+    <part name="parameters" element="tns:ReverseResponse">
+    </part>
+  </message>
+  <message name="SOAPException">
+    <part name="fault" element="tns:SOAPException">
+    </part>
+  </message>
+  <message name="echo">
+    <part name="parameters" element="tns:EchoRequest">
+    </part>
+  </message>
+  <portType name="PCA">
+    <operation name="authorize">
+      <input message="tns:authorize">
+    </input>
+      <output message="tns:authorizeResponse">
+    </output>
+      <fault name="SOAPException" message="tns:SOAPException">
+    </fault>
+    </operation>
+    <operation name="reverse">
+      <input message="tns:reverse">
+    </input>
+      <output message="tns:reverseResponse">
+    </output>
+      <fault name="SOAPException" message="tns:SOAPException">
+    </fault>
+    </operation>
+    <operation name="echo">
+      <input message="tns:echo">
+    </input>
+      <output message="tns:echoResponse">
+    </output>
+    </operation>
+    <operation name="postMIR">
+      <input message="tns:postMIR">
+    </input>
+      <output message="tns:postMIRResponse">
+    </output>
+      <fault name="SOAPException" message="tns:SOAPException">
+    </fault>
+    </operation>
+  </portType>
+  <binding name="PCAPortBinding" type="tns:PCA">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="authorize">
+      <soap:operation soapAction="authorize"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="SOAPException">
+        <soap:fault name="SOAPException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="reverse">
+      <soap:operation soapAction="reverse"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="SOAPException">
+        <soap:fault name="SOAPException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="echo">
+      <soap:operation soapAction="echo"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="postMIR">
+      <soap:operation soapAction="postMIR"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="SOAPException">
+        <soap:fault name="SOAPException" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="PCAService">
+    <port name="PCAPort" binding="tns:PCAPortBinding">
+      <soap:address location="https://transtest2.certegy.com:443/mepca2/PCAService"/>
+    </port>
+  </service>
+</definitions>

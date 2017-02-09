@@ -58,10 +58,12 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
     // WAITING TIMES
     protected static final long TECNICARD_CONFIRMATION_WAIT_TIME = 180000;//3min
     protected static final long ISTREAM_HOST_WAIT_TIME = 30000;//30sec
+    protected static final long WESTECH_HOST_WAIT_TIME = 30000;//30sec
     protected static final long PERSONAL_INFO_WAIT_TIME = 420000;//7min 
     protected static final long CHOICE_WAIT_TIME = 300000;//5min 
     public static final long GENERIC_VALIDATION_WAIT_TIME = 60000;//1min
     protected static final long GENERIC_CARD_LOAD_WAIT_TIME = 60000;//1min 
+    protected static final long CERTEGY_WAIT_TIME = 30000;//30sec
     protected static final long CERTEGY_INFO_WAIT_TIME = 420000;//7min
 
     protected static CountryManager countryManager = CountryManager.get();
@@ -102,7 +104,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
         jmsManager.sendWithProps(request, jmsManager.getHostInQueue(), request.getCorrelation(), props);
-
+         //TODO change this for IStream.sendSingleICL (and add an else logic for it)
         if (request.getTransactionType() != TransactionType.ISTREAM_CHECK_AUTH_SUBMIT) {
             direxTransactionResponse = receiveMessageFromHost(request.getTransactionType(), host, waitTime, request.getCorrelation());
             transaction.addSubTransactionList(direxTransactionResponse.getTransaction().getSub_Transaction());
@@ -165,7 +167,18 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         choiceRequest.setTransactionType(TransactionType.CHOICE_CANCELATION_REQUEST);
 
         sendMessageToHost(choiceRequest, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Response from CHOICE, TRANSACTION FINISHED. ", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Response from CHOICE, subTRANSACTION FINISHED. ", null);
+
+    }
+
+    protected void certegyReverseRequest(DirexTransactionRequest request, Transaction transaction) throws Exception {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic]  Sending  CertegyReverseRequest", null);
+        DirexTransactionRequest certegyRequest = request.clone();
+        certegyRequest.setTransactionType(TransactionType.CERTEGY_REVERSE_REQUEST);
+
+        sendMessageToHost(certegyRequest, NomHost.CERTEGY, CERTEGY_WAIT_TIME, transaction);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Response from CERTEGY, subTRANSACTION FINISHED. ", null);
 
     }
 

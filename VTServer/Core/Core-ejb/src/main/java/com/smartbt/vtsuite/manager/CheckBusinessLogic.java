@@ -46,9 +46,11 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         Queue currentQueue = jmsManager.getCoreOutQueue();
 
         //This variables will control the behavior in Exceptional cases
-        boolean sendChoiceCancelationRequest = false;
-        boolean sendIstreamCheckAuthSubmit = false;
-        boolean sendResponseToIStreamFront = false;
+        boolean sendChoiceCancelationRequestIfFails = false;
+       // boolean sendIstreamCheckAuthSubmit = false;
+        boolean sendCertegyReverseRequestIfFails = false;
+        boolean sendWesttechSendSingleICL = false;
+        boolean sendResponseToIStreamFrontIfFails = false;
 
         try {
 
@@ -77,10 +79,10 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] Value of MICR from POS: " + request.getTransactionData().get(ParameterName.MICR), null);
             }
 
-            //-------  go to HOST ISTREAM (checkAuth) -------
-            request.setTransactionType(TransactionType.ISTREAM_CHECK_AUTH);
+            //-------  go to HOST WEST TECH (checkAuth) -------
+            request.setTransactionType(TransactionType.WESTECH_CHECKAUTH);
 
-            response = sendMessageToHost(request, NomHost.ISTREAM, ISTREAM_HOST_WAIT_TIME, transaction);
+            response = sendMessageToHost(request, NomHost.WESTECH, WESTECH_HOST_WAIT_TIME, transaction);
 
             //-----  WAIT PERSONAL INFO MESSAGE -------------- 
             checkId = (String) response.getTransactionData().get(ParameterName.CHECK_ID);
@@ -101,7 +103,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             feeCalculator(request, transaction);
 
-            sendResponseToIStreamFront = true;
+            sendResponseToIStreamFrontIfFails = true;
 
             if (personalInfoRequestMap.containsKey(ParameterName.ID) && personalInfoRequestMap.get(ParameterName.ID).equals("0")) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ParameterName.ID from personal info: " + personalInfoRequestMap.get(ParameterName.ID), null);
@@ -111,16 +113,22 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             //------ PROCESS PERSONAL INFO  ------
             processPersonalInfo(transaction, request, personalInfoRequestMap);
 
-            //-------SENT TO CHOICE ------
-            DirexTransactionRequest reqCHOICE = request;
-            reqCHOICE.setTransactionType(TransactionType.CHOICE_INSERT_TRANSACTION);
+            //-------SEND TO CHOICE ------ 
+            request.setTransactionType(TransactionType.CHOICE_INSERT_TRANSACTION);
 
-            response = sendMessageToHost(reqCHOICE, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
+            response = sendMessageToHost(request, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
 
-            sendChoiceCancelationRequest = true;
-
+            sendChoiceCancelationRequestIfFails = true;
+             
             //---- if CHOICE Success ------- 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] CHOICE Success", null);
+
+            //-------SEND TO CERTEGY ------
+            request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION);
+
+            response = sendMessageToHost(request, NomHost.CERTEGY, CERTEGY_WAIT_TIME, transaction);
+            
+            sendCertegyReverseRequestIfFails = true;
 
             //----------  TECNICARD VALIDATON ------------------
             String hostName = (String) request.getTransactionData().get(ParameterName.HOSTNAME);
@@ -135,54 +143,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             sendResponseToIStreamFront(true, checkId);
 
-            sendResponseToIStreamFront = false;
-
-            DirexTransactionRequest certegyRequest = receiveMessageFromFront(TransactionType.CERTEGY_INFO, transaction, checkId, correlationId);
-
-            Map certegyInfoRequestMap = certegyRequest.getTransactionData();
-
-            //send response to certegy
-            DirexTransactionResponse certegyResponse;
-
-            if (certegyInfoRequestMap.get(TransactionType.TRANSACTION_TYPE) == TransactionType.CERTEGY_INFO) {
-                certegyResponse = DirexTransactionResponse.forSuccess();
-            } else {
-                certegyResponse = DirexTransactionResponse.forException(ResultCode.ISTREAM_FRONT_CERTEGY_INFO_NOT_RECEIVED, ResultMessage.ISTREAM_FRONT_CERTEGY_INFO_NOT_RECEIVED);
-            }
-            jmsManager.send(certegyResponse, jmsManager.getFrontIStreamInQueue(), checkId);
-
-            request.getTransactionData().putAll(certegyInfoRequestMap);
-
-            boolean certegySuccess = false;
-            String certegyCode = "EMPTY";
-            //----
-            //Verify if Certegy success here  ---------
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Checking Certegy for success", null);
-            if (certegyInfoRequestMap.containsKey(ParameterName.CERTEGY_CODE)) {
-                certegyCode = (String) certegyInfoRequestMap.get(ParameterName.CERTEGY_CODE);
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] Certegy code: [" + certegyCode + "]", null);
-                if (certegyCode.trim().equalsIgnoreCase("00")) {
-                    certegySuccess = true;
-                }
-            } 
-            
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] Certegy value: " + certegySuccess, null);
-
-            if (certegySuccess) {
-                sendAnswerToTerminal(originalTransaction, ResultCode.SUCCESS, estimatedPostingTime, hostName, correlationId);
-
-                //------ CREATE CERTEGY INFO SUBTRANSACRTION ------
-                addSuccessfulSubTransaction(transaction, TransactionType.CERTEGY_INFO);
-
-                if (certegyInfoRequestMap.containsKey(ParameterName.DEPOSIT_ID)) {
-                    String depositId = (String) certegyInfoRequestMap.get(ParameterName.DEPOSIT_ID);
-                    transaction.setIstream_id(depositId);
-                }
-            } else {
-                throw new TransactionalException(ResultCode.CERTEGY_DENY, TransactionType.CERTEGY_INFO, ResultMessage.CERTEGY_DENY.getMessage());
-            }
-
-            sendIstreamCheckAuthSubmit = true;
+            sendResponseToIStreamFrontIfFails = false;
 
             //-------------- WAIT CONFIRMATION FROM TERMINAL -------------
             DirexTransactionRequest confirmationRequest;
@@ -203,11 +164,9 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             response = sendMessageToHost(request, NomHost.valueOf(hostName), GENERIC_CARD_LOAD_WAIT_TIME, transaction);
 
             if (response.wasApproved()) {
-                String action = "submit";
-                sendIstreamCheckAuthSubmit(request, action, transaction, checkId);
                 sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.SUCCESS, estimatedPostingTime, hostName, correlationId);
-                choiceNotifyPayment(request, transaction);
-
+                choiceNotifyPayment(request, transaction); 
+                sendWesttechSendSingleICL = true;
             }
 
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
@@ -223,17 +182,18 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         } catch (TransactionalException transactionalException) {
             System.out.println("*********** TransactionalException ************");
             
-            if (sendResponseToIStreamFront) {
+            if (sendResponseToIStreamFrontIfFails) {
                 System.out.println("sendResponseToIStreamFront = true");
                 sendResponseToIStreamFront(false, checkId);
             }
-            if (sendChoiceCancelationRequest) {
+            if (sendChoiceCancelationRequestIfFails) {
                 choiceCancellationRequest(request, transaction);
             }
-            if (sendIstreamCheckAuthSubmit) {
-                sendIstreamCheckAuthSubmit(request, "decline", transaction, checkId);
+            
+            if(sendCertegyReverseRequestIfFails){
+                certegyReverseRequest(request, transaction);
             }
-
+             
             if (transactionalException.getResponse() != null) {// this is when  !response.approved()
                 System.out.println("Sending subTransactionFailed 1");
                 CoreTransactionUtil.subTransactionFailed(transaction, transactionalException.getResponse(), currentQueue, correlationId);

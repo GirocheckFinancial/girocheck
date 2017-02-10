@@ -49,7 +49,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         boolean sendChoiceCancelationRequestIfFails = false;
        // boolean sendIstreamCheckAuthSubmit = false;
         boolean sendCertegyReverseRequestIfFails = false;
-        boolean sendWesttechSendSingleICL = false;
+        boolean sendWestechSendSingleICL = false;
         boolean sendResponseToIStreamFrontIfFails = false;
 
         try {
@@ -93,8 +93,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             Map personalInfoRequestMap = personalInfoRequest.getTransactionData();
 
-            //dont take the last name sent by iStream,
-            //because when it is composed it will be trimed
+            //TODO check is this is necessay (if Westech not trim the last name)
             if (idScanSuccess && personalInfoRequestMap.containsKey(ParameterName.LAST_NAME)) {
                 personalInfoRequestMap.remove(ParameterName.LAST_NAME);
             }
@@ -120,7 +119,6 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             sendChoiceCancelationRequestIfFails = true;
              
-            //---- if CHOICE Success ------- 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] CHOICE Success", null);
 
             //-------SEND TO CERTEGY ------
@@ -158,7 +156,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             request.setCorrelation(correlationId);
             currentQueue = jmsManager.getCore2OutQueue();
 
-            //-----  SEND TO GENERIC HOST -----------    GENERIC_HOST_CARD_LOAD
+            //-----  SEND TO GENERIC HOST -------  GENERIC_HOST_CARD_LOAD
             request.setTransactionType(TransactionType.GENERIC_HOST_CARD_LOAD);
 
             response = sendMessageToHost(request, NomHost.valueOf(hostName), GENERIC_CARD_LOAD_WAIT_TIME, transaction);
@@ -166,7 +164,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             if (response.wasApproved()) {
                 sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.SUCCESS, estimatedPostingTime, hostName, correlationId);
                 choiceNotifyPayment(request, transaction); 
-                sendWesttechSendSingleICL = true;
+                sendWestechSendSingleICL = true;
             }
 
             transaction.setResultCode(ResultCode.SUCCESS.getCode());

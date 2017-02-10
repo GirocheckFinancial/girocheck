@@ -6,6 +6,7 @@
 package com.smartbt.girocheck.servercommon.utils;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.utils.idscanner.DriverLicense;
 
 import java.text.SimpleDateFormat;
@@ -65,10 +66,9 @@ public class IDScanner {
 //        
 //        validateOutput(map);
 //    }
-
     public static void main(String[] args) throws Exception {
-        testParseID();
-       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QU5TSSA2MzYwMTAwMTAyREwwMDM5MDE3MVpGMDIxMDAwNDdETERBQURFIExBIE5VRVosUEVEUk8sTFVJUw0KREFHNzAxOSBQT01FTE8gRFINCkRBSU9STEFORE8NCkRBSkZMDQpEQUszMjgxOS0wMDAwIA0KREFRRDQ1MjY3Mjc3MTM1MA0KREFSRSANCkRBU05PTkUNCkRBVE5PTkUNCkRCQTIwMjUwNDE1DQpEQkIxOTc3MDQxNQ0KREJDMQ0KREJEMjAxNjA2MjENCkRCSE4NCkRBVTUxMA0KWkZaRkENClpGQg0KWkZDRzgxMTYwNjIxMDA5Mw0KWkZEDQpaRkUwNi0wMS0xNA0KWkZG");
+//        testParseID();
+        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QU5TSSA2MzYwMTAwMTAyREwwMDM5MDE3MVpGMDIxMDAwNDdETERBQURFIExBIE5VRVosUEVEUk8sTFVJUw0KREFHNzAxOSBQT01FTE8gRFINCkRBSU9STEFORE8NCkRBSkZMDQpEQUszMjgxOS0wMDAwIA0KREFRRDQ1MjY3Mjc3MTM1MA0KREFSRSANCkRBU05PTkUNCkRBVE5PTkUNCkRCQTIwMjUwNDE1DQpEQkIxOTc3MDQxNQ0KREJDMQ0KREJEMjAxNjA2MjENCkRCSE4NCkRBVTUxMA0KWkZaRkENClpGQg0KWkZDRzgxMTYwNjIxMDA5Mw0KWkZEDQpaRkUwNi0wMS0xNA0KWkZG");
 //       Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
 //        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxNzBaRjAyMDkwMDY1RExEQUFKQVJBTUlMTE8sSkFJTUUsIEEKREFHMjkzNSBTVyAzMFRIIENUCkRBSUNPQ09OVVQgR1JPVkUKREFKRkwKREFLMzMxMzMtMzYxNSAKREFRSjY1NDQyMTc2MTc3MApEQVJFICAgCkRBU05PTkUKREFUTk9ORQpEQkEyMDIyMDUxNwpEQkIxOTc2MDUxNwpEQkMxCkRCRDIwMTQwNTEzCkRBVTUxMA1aRlpGQVJFUExBQ0VEOiAwMDAwMDAwMApaRkIKWkZDWDYzMTQwNTEzMTI2NgpaRkQKWkZFMDktMDEtMTIKWkZGDQ==");
 //        Map map = parseID("48fa49a3-8ca4-4fc5-9a60-93271739969d", "QAoeDUFOU0kgNjM2MDEwMDEwMkRMMDAzOTAxOTJaRjAyMzEwMDYzRExEQUFST0xEQU4gQU5EUklOTyxTQUlSQSxMCkRBRzI5MjYwIFNXIDE0MiBBVkUKREFJSE9NRVNURUFECkRBSkZMCkRBSzMzMDMzLTMwMTcgCkRBUVI0MzU3OTI2MTY4ODYKREFSRSAgIApEQVMgICAgICAgICAgCkRBVCAgICAgCkRCQTIwMTgwNTI4CkRCQjE5NjEwNTI4CkRCQzIKREJEMjAxMDA2MjMKREJITiAgICAgICAgIApEQVU1MDMNWkZaRkFSRVBMQUNFRDogMDAwMDAwMDAKWkZCIApaRkNUMDYxMDA2MjMwMTgzClpGRCAKWkZFMDgtMzEtMDk=");
@@ -96,14 +96,14 @@ public class IDScanner {
     public static Map<ParameterName, Object> parseID(String authKey, String text) throws Exception {
         Map<ParameterName, Object> map = null;
         try {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally...", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally", null);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
             map = parseIdLocally(text);
         } catch (Exception e) {
         }
 
         if (!validateOutput(map)) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... FAILED", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally FAILED", null);
             try {
                 map = parseIDRemotely(authKey, text, 5);
             } catch (Exception e) {
@@ -165,20 +165,25 @@ public class IDScanner {
                     map.put(ParameterName.ADDRESS, getString(dl, "Address1"));
                     map.put(ParameterName.GENDER, getString(dl, "Gender"));
                     map.put(ParameterName.CITY, getString(dl, "City"));
-                    map.put(ParameterName.STATE, getString(dl, "IssuedBy")); 
+                    map.put(ParameterName.STATE, getString(dl, "IssuedBy"));
                     map.put(ParameterName.LAST_NAME, getString(dl, "LastName"));
                     map.put(ParameterName.ZIPCODE, getString(dl, "PostalCode"));
                     map.put(ParameterName.FIRST_NAME, getString(dl, "FirstName"));
                     map.put(ParameterName.MIDDLE_NAME, getString(dl, "MiddleName"));
-                   
+
                     map.put(ParameterName.IDSTATE, getString(dl, "IssuedBy"));
 
                     map.put(ParameterName.COUNTRY, "US");
                     map.put(ParameterName.IDCOUNTRY, "US");
 
-                     formatDate(ParameterName.BORNDATE, ParameterName.BORNDATE_AS_DATE, getString(dl, "Birthdate"), map);
-                     formatDate(ParameterName.EXPIRATION_DATE, ParameterName.EXPIRATION_DATE_AS_DATE, getString(dl, "ExpirationDate"), map);
-                     
+                    formatDate(ParameterName.BORNDATE, ParameterName.BORNDATE_AS_DATE, getString(dl, "Birthdate"), map);
+                    formatDate(ParameterName.EXPIRATION_DATE, ParameterName.EXPIRATION_DATE_AS_DATE, getString(dl, "ExpirationDate"), map);
+
+                    if(map.get(ParameterName.EXPIRATION_DATE_AS_DATE) == null){
+                        System.out.println("IDScan -> ID is Matricula Consular, seting IDTYPE = 1");
+                        map.put(ParameterName.IDTYPE, IdType.SSN);
+                    }
+                    
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Scan was Success", null);
                     return map;
                 }
@@ -215,18 +220,28 @@ public class IDScanner {
     }
 
     public static String getString(JSONObject json, String key) {
-        if (json.has(key)) {
-            return json.getString(key);
+        if (json.has(key) && !json.isNull(key)) {
+            try{
+                return (String) json.get(key);    
+            }catch(Exception e){
+                System.out.println("IDScanner failed to get value for " + key);
+            } 
         }
         return "";
     }
 
     public static void formatDate(ParameterName parameter, ParameterName parameterAsDate, String date, Map map) {
         try {
-            Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-            map.put(parameterAsDate, d);
-            SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
-            map.put(parameter, dobOut.format(d));
+            if (!date.isEmpty()) {
+                Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+                map.put(parameterAsDate, d);
+                SimpleDateFormat dobOut = new SimpleDateFormat("MM-dd-yyyy");
+                map.put(parameter, dobOut.format(d));
+            } else {
+                map.put(parameterAsDate, null);
+                map.put(parameter, "");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

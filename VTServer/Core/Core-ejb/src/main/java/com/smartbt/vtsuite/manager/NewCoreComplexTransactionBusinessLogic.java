@@ -911,8 +911,8 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             identidication.setIdType(((IdType) transactionMap.get(ParameterName.IDTYPE)).getId());
         }
 
-        if (transactionMap.containsKey(ParameterName.EXPIRATION_DATE)) {
-            identidication.setExpirationDate(((Date) transactionMap.get(ParameterName.EXPIRATION_DATE)));
+        if (transactionMap.containsKey(ParameterName.EXPIRATION_DATE_AS_DATE)) {
+            identidication.setExpirationDate(((Date) transactionMap.get(ParameterName.EXPIRATION_DATE_AS_DATE)));
         }
         if (transactionMap.containsKey(ParameterName.IDFRONT) && transactionMap.get(ParameterName.IDFRONT) != null) {
             byte[] idFront = (byte[]) transactionMap.get(ParameterName.IDFRONT);

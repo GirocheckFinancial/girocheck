@@ -155,22 +155,24 @@ public class TransactionDAO extends BaseDAO<Transaction> {
 
     }
 
+    //TODO this method is not longer required
     public boolean isCanceled(String requestId, boolean cancelable) {
-        Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class).add(Restrictions.eq("requestId", requestId));
-
-        cri.setMaxResults(1);
-
-        Transaction transaction = (Transaction) cri.uniqueResult();
-
-        if (transaction == null) {
-            return false;
-        }
-
-        if (!cancelable) {
-            transaction.setCancelable(cancelable);
-            saveOrUpdate(transaction);
-        }
-        return transaction.isCancelated() == null ? false : transaction.isCancelated();
+//        Criteria cri = HibernateUtil.getSession().createCriteria(Transaction.class).add(Restrictions.eq("requestId", requestId));
+//
+//        cri.setMaxResults(1);
+//
+//        Transaction transaction = (Transaction) cri.uniqueResult();
+//
+//        if (transaction == null) {
+//            return false;
+//        }
+//
+//        if (!cancelable) {
+//            transaction.setCancelable(cancelable);
+//            saveOrUpdate(transaction);
+//        }
+//        return transaction.isCancelated() == null ? false : transaction.isCancelated();
+        return false;
     }
 
     public AddressImageFormDisplay getAddressImageFromClientByTerminalSerialNumber(String serialNumber, boolean rotate) throws Exception {

@@ -20,6 +20,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
+import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 
 /**
@@ -59,9 +60,11 @@ public class IStream2HostManager {
             response = iStream2BusinessLogic.process(request);
 
             if (response.wasApproved()) {
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction executed successfully",null);
                 subTransaction.setResultCode(response.getResultCode().getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             } else {
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction failed",null);
                 subTransaction.setResultCode(ResultCode.ISTREAM2_HOST_ERROR.getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             }

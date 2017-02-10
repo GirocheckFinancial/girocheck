@@ -26,7 +26,7 @@ public class CheckDisplay implements Serializable {
     private String makerPhone;
     private String locationId;
     private String paymentCheck;
-    private String status;
+    private String status_iStream;
     private Date creationDate;
     private Date processingDate;
     private Double amount;
@@ -169,15 +169,15 @@ public class CheckDisplay implements Serializable {
     /**
      * @return the status
      */
-    public String getStatus() {
-        return status;
+    public String getStatus_iStream() {
+        return status_iStream;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus_iStream(String status) {
+        this.status_iStream = status;
     }
 
     /**

@@ -141,7 +141,7 @@ public class CheckResendWindow extends BaseWindow {
     }
 
     public void SelectActionExcecuted(final Record record) {
-        checkResendPanel.getFilterForm().getResendButton().setDisabled(record == null ? true : !record.getAttribute("status").equalsIgnoreCase("H"));
+        checkResendPanel.getFilterForm().getResendButton().setDisabled(record == null ? true : !record.getAttribute("status_iStream").equalsIgnoreCase("H"));
     }
 
     public void ResendButtonActionExecuted() {

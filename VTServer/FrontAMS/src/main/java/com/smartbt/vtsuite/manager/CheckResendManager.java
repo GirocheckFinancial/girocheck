@@ -5,12 +5,14 @@ import com.smartbt.girocheck.servercommon.display.CheckDisplay;
 import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.jms.JMSManager;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
+import com.smartbt.girocheck.servercommon.model.Check;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.io.Serializable;
@@ -51,9 +53,20 @@ public class CheckResendManager {
         DirexTransactionRequest direxTransactionRequest = new DirexTransactionRequest();
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckResendManager] processTransaction " + checkId, null);
         try {
+            Check check = checkResendDAO.getCheckDetails(id);
             Map map = new HashMap();
             map.put(TransactionType.TRANSACTION_TYPE, TransactionType.ISTREAM2_SEND_SINCE_ICL);
-
+            map.put(ParameterName.USER, "GCTLS");
+            map.put(ParameterName.PASSWORD, "sts283");
+            //map.put(ParameterName.LOCATION_ID, check.getLocationId());
+            map.put(ParameterName.LOCATION_ID, "4769778");
+            map.put(ParameterName.AMMOUNT, "4");
+            map.put(ParameterName.DEPOSIT, "4pm Deposit");
+            map.put(ParameterName.MICR, check.getMicr());
+            map.put(ParameterName.CHECK_ID, check.getId());
+            map.put(ParameterName.CHECK_FRONT, check.getCheckFront());
+            map.put(ParameterName.CHECK_BACK, check.getCheckBack());            
+            
             direxTransactionRequest.setTransactionData(map);
             direxTransactionRequest.setCorrelation(checkId);
             direxTransactionRequest.setTransactionType(TransactionType.ISTREAM2_SEND_SINCE_ICL);

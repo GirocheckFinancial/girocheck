@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!--
 Licensee: 
 License Type: Evaluation
 -->
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="com.smartbt.girocheck.servercommon.model.Check" table="`Check`" lazy="false">
-		<id name="id" column="id" type="integer" unsaved-value="0">
-			<generator class="native">
+  <class lazy="false" name="com.smartbt.girocheck.servercommon.model.Check" table="`Check`">
+    <id column="id" name="id" type="integer" unsaved-value="0">
+      <generator class="native">
 			</generator>
-		</id>
-		<many-to-one name="client1" cascade="lock" column="client" class="com.smartbt.girocheck.servercommon.model.Client" not-null="true" lazy="proxy">
+    </id>
+    <many-to-one cascade="lock" class="com.smartbt.girocheck.servercommon.model.Client" column="client" lazy="proxy" name="client1" not-null="true">
 		</many-to-one>
-		<many-to-one name="transaction" column="`transaction`" class="com.smartbt.girocheck.servercommon.model.Transaction" cascade="save-update,lock" unique="true" not-null="true" lazy="proxy">
+    <many-to-one cascade="save-update,lock" class="com.smartbt.girocheck.servercommon.model.Transaction" column="`transaction`" lazy="proxy" name="transaction" not-null="true" unique="true">
 		</many-to-one>
-		<property name="code" column="data_s" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="checkBack" column="check_back" type="blob" not-null="false" lazy="false"/>
-		<property name="checkFront" column="check_front" type="blob" not-null="false" lazy="false"/>
-		<property name="micr" column="micr" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="crc" column="crc" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="key" column="`key`" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="makerName" column="makerName" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="makerAddress" column="makerAddress" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="makerCity" column="makerCity" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="makerState" column="makerState" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="makerZip" column="makerZip" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="makerPhone" column="makerPhone" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="locationId" column="locationId" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="paymentCheck" column="paymentCheck" type="string" length="255" not-null="false" lazy="false"/>
-                <property name="status" column="status" type="string" length="45" not-null="false" lazy="false"/>
-                <property name="creationDate" column="creation_date" type="timestamp" not-null="false" lazy="false"/>
-                <property name="processingDate" column="processing_date" type="timestamp" not-null="false" lazy="false"/>
-	</class>
+    <property column="data_s" lazy="false" length="255" name="code" not-null="false" type="string"/>
+    <property column="check_back" lazy="false" name="checkBack" not-null="false" type="blob"/>
+    <property column="check_front" lazy="false" name="checkFront" not-null="false" type="blob"/>
+    <property column="micr" lazy="false" length="255" name="micr" not-null="false" type="string"/>
+    <property column="crc" lazy="false" length="255" name="crc" not-null="false" type="string"/>
+    <property column="`key`" lazy="false" length="255" name="key" not-null="false" type="string"/>
+    <property column="makerName" lazy="false" length="255" name="makerName" not-null="false" type="string"/>
+    <property column="makerAddress" lazy="false" length="255" name="makerAddress" not-null="false" type="string"/>
+    <property column="makerCity" lazy="false" length="255" name="makerCity" not-null="false" type="string"/>
+    <property column="makerState" lazy="false" length="255" name="makerState" not-null="false" type="string"/>
+    <property column="makerZip" lazy="false" length="255" name="makerZip" not-null="false" type="string"/>
+    <property column="makerPhone" lazy="false" length="255" name="makerPhone" not-null="false" type="string"/>
+    <property column="locationId" lazy="false" length="255" name="locationId" not-null="false" type="string"/>
+    <property column="paymentCheck" lazy="false" length="255" name="paymentCheck" not-null="false" type="string"/>
+    <property column="status_iStream" lazy="false" length="45" name="status_iStream" not-null="false" type="string"/>
+    <property column="creation_date" lazy="false" name="creationDate" not-null="false" type="timestamp"/>
+    <property column="processing_date" lazy="false" name="processingDate" not-null="false" type="timestamp"/>
+  </class>
 </hibernate-mapping>

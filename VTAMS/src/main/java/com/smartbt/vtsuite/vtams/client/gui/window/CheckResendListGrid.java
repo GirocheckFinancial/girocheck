@@ -22,7 +22,7 @@ public class CheckResendListGrid extends BaseListGrid {
     private TextListGridField checkID;
     private TextListGridField dateInserted;
     private TextListGridField dateProcessed;
-    private TextListGridField status;
+    private TextListGridField status_iStream;
     private CurrencyListGridField amount = new CurrencyListGridField("amount", "Amount", false);
 
     /**
@@ -36,7 +36,7 @@ public class CheckResendListGrid extends BaseListGrid {
         checkID = new TextListGridField("id", "Check ID", false);
         dateInserted = new TextListGridField("creationDate", "Date Inserted", false);
         dateProcessed = new TextListGridField("processingDate", "Date Processed", false);
-        status = new TextListGridField("status", "Status", false);
+        status_iStream = new TextListGridField("status_iStream", "Status iStream", false);
 
         checkID.setSortNormalizer(new SortNormalizer() {
             @Override
@@ -45,10 +45,10 @@ public class CheckResendListGrid extends BaseListGrid {
             }
         });
 
-        status.setCellFormatter(new CellFormatter() {
+        status_iStream.setCellFormatter(new CellFormatter() {
             @Override
             public String format(Object value, ListGridRecord record, int rowNum, int colNum) {
-                String checkStatus = record.getAttribute("status");
+                String checkStatus = record.getAttribute("status_iStream");
                 if (checkStatus.equalsIgnoreCase("H")) {
                     return "Hold";
                 }
@@ -94,6 +94,6 @@ public class CheckResendListGrid extends BaseListGrid {
                 amount,
                 dateInserted,
                 dateProcessed,
-                status);
+                status_iStream);
     }
 }

@@ -87,7 +87,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             //-----  WAIT PERSONAL INFO MESSAGE -------------- 
             checkId = (String) response.getTransactionData().get(ParameterName.CHECK_ID);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ISTREAM checkId value: " + checkId, null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] WESTECH checkId value: " + checkId, null);
 
             DirexTransactionRequest personalInfoRequest = receiveMessageFromFront(TransactionType.PERSONAL_INFO, transaction, checkId, correlationId);
 

@@ -16,12 +16,14 @@
 package com.smartbt.vtsuite.manager;
 
 import com.smartbt.girocheck.common.VTSuiteMessages;
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.utils.IMap;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import java.util.HashMap;
 import java.util.Map;
 
  
@@ -47,14 +49,13 @@ public class WestechBusinessLogic {
 
         TransactionType transactionType = request.getTransactionType();
 
-        IMap response = null;
-        Map map;
+        IMap response = null; 
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[WestechBusinessLogic] proccessing:: " + transactionType, null);
 
         switch (transactionType) {
             case WESTECH_CHECKAUTH:
-                checkAuth(transactionData);
+                response = checkAuth(transactionData);
                 break; 
         }
 
@@ -62,12 +63,24 @@ public class WestechBusinessLogic {
 
         direxTransactionResponse.setResultCode(ResultCode.SUCCESS);
         direxTransactionResponse.setResultMessage(VTSuiteMessages.SUCCESS);
+        direxTransactionResponse.getTransactionData().putAll(response.toMap());
 
         return direxTransactionResponse;
     }
 
-    public void checkAuth(Map params) { 
+    public IMap checkAuth(Map params) { 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[WestechBusinessLogic] Calling method insertTransaction", null);
+      final Map map = new HashMap();
+      map.put(ParameterName.CHECK_ID, "1");
+      
+      return new IMap() {
+
+            @Override
+            public Map toMap() {
+                return map;
+            }
+        };
+      
     }
  
 }

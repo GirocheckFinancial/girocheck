@@ -55,7 +55,7 @@ import java.util.Map;
  */
 public class CoreTransactionManager {
 
-    private boolean useChoice = false;
+    private boolean useChoice = true;
 
     private static CoreAbstractTransactionBusinessLogic businessLogic;
     public static List SINGLE_TRANSACTION_LIST;

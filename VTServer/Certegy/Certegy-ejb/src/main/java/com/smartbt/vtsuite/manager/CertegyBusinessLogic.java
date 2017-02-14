@@ -84,7 +84,8 @@ public class CertegyBusinessLogic {
     }
 
     public void combinedEnrollmentAuthentication(Map params) {  
-        port.authorize(new PCARequest(params));
+        PCARequest request = new PCARequest();
+        port.authorize(request);
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CertegyBusinessLogic] Calling method insertTransaction", null);
     }
 

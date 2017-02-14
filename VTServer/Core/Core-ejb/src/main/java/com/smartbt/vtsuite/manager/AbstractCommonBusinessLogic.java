@@ -403,12 +403,12 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                 if (request.getTransactionData().get(ParameterName.DLDATASCAN) != null && !request.getTransactionData().get(ParameterName.DLDATASCAN).equals("")) {
 
                     dlData = (String) request.getTransactionData().get(ParameterName.DLDATASCAN);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] getPersonalInfoFromIDReader(...) with xmlStringfrom DLDATASCAN: [" + dlData + "]", null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] getPersonalInfoFromIDReader(...) with xmlStringfrom DLDATASCAN", null);
 
                 } else {
 
                     dlData = (String) request.getTransactionData().get(ParameterName.DLDATASWIPE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] getPersonalInfoFromIDReader(...) with xmlString from DLDATASWIPE: [" + dlData + "]", null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] getPersonalInfoFromIDReader(...) with xmlString from DLDATASWIPE", null);
 
                 }
 

@@ -28,7 +28,7 @@ License Type: Evaluation
     <property column="makerPhone" lazy="false" length="255" name="makerPhone" not-null="false" type="string"/>
     <property column="locationId" lazy="false" length="255" name="locationId" not-null="false" type="string"/>
     <property column="paymentCheck" lazy="false" length="255" name="paymentCheck" not-null="false" type="string"/>
-    <property column="status_iStream" lazy="false" length="45" name="status_iStream" not-null="false" type="string"/>
+    <property column="status" lazy="false" length="45" name="status" not-null="false" type="string"/>
     <property column="creation_date" lazy="false" name="creationDate" not-null="false" type="timestamp"/>
     <property column="processing_date" lazy="false" name="processingDate" not-null="false" type="timestamp"/>
   </class>

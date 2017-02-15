@@ -21,7 +21,7 @@ public class CheckResendDS extends BaseDatasource {
 
         DataSourceDateField dateProcessed = new DataSourceDateField("processingDate");
 
-        DataSourceTextField status_iStream = new DataSourceTextField("status_iStream");
+        DataSourceTextField status = new DataSourceTextField("status");
         
         DataSourceFloatField amount = new DataSourceFloatField("amount");
 
@@ -33,6 +33,6 @@ public class CheckResendDS extends BaseDatasource {
                 amount,
                 dateInserted,
                 dateProcessed,
-                status_iStream);
+                status);
     }
 }

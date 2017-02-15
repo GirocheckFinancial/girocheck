@@ -61,13 +61,13 @@ public class CheckResendDAO extends BaseDAO<Check> {
                 .add(Projections.property("makerPhone").as("makerPhone"))
                 .add(Projections.property("locationId").as("locationId"))
                 .add(Projections.property("paymentCheck").as("paymentCheck"))
-                .add(Projections.property("status_iStream").as("status_iStream"))
+                .add(Projections.property("status").as("status"))
                 .add(Projections.property("creationDate").as("creationDate"))
                 .add(Projections.property("processingDate").as("processingDate"));
 
         System.out.println("startRangeDate + " + startRangeDateStr);
         System.out.println("endRangeDate + " + startRangeDateStr);
-        System.out.println("status_iStream + " + status);
+        System.out.println("status + " + status);
 
         if (startRangeDateStr != null) {
             startRangeDateStr.setHours(0);
@@ -85,15 +85,15 @@ public class CheckResendDAO extends BaseDAO<Check> {
             criteria.add(Restrictions.ge("processingDate", startRangeDateStr));
             endRangeDateStr.setHours(24);
             criteria.add(Restrictions.le("processingDate", endRangeDateStr));
-            criteria.add(Restrictions.eq("status_iStream", status));
+            criteria.add(Restrictions.eq("status", status));
         } else if (startRangeDateStr != null && endRangeDateStr != null) {
             criteria.add(Restrictions.ge("processingDate", startRangeDateStr));
             endRangeDateStr.setHours(24);
             criteria.add(Restrictions.le("processingDate", endRangeDateStr));
         } else if (status != null && !status.isEmpty()) {
-            criteria.add(Restrictions.eq("status_iStream", status));
+            criteria.add(Restrictions.eq("status", status));
         } else {
-            criteria.add(Restrictions.eq("status_iStream", "H").ignoreCase());
+            criteria.add(Restrictions.eq("status", "H").ignoreCase());
         }
 
         criteria.setProjection(projectionList);
@@ -115,7 +115,7 @@ public class CheckResendDAO extends BaseDAO<Check> {
 
     public CheckDisplay resendCheck(int id) {
         Check check = dao.findById(id);
-        check.setStatus_iStream("C");
+        check.setStatus("C");
         System.out.println("[CheckResendDAO] resendCheck()");
         HibernateUtil.getSession().saveOrUpdate(check);
         CheckDisplay display = new CheckDisplay();

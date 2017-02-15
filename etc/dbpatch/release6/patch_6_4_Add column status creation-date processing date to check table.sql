@@ -11,3 +11,8 @@ CHANGE COLUMN `status` `status_iStream` VARCHAR(45) NULL DEFAULT NULL ;
 
 ALTER TABLE `girocheck`.`check` 
 ADD COLUMN `status_Certegy` VARCHAR(45) NULL AFTER `processing_date`;
+
+
+ALTER TABLE `girocheck`.`check` 
+DROP COLUMN `status_Certegy`,
+CHANGE COLUMN `status_iStream` `status` VARCHAR(45) NULL DEFAULT NULL ;

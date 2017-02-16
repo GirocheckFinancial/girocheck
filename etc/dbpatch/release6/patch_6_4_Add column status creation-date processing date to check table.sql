@@ -5,14 +5,4 @@ ADD COLUMN `status` VARCHAR(45) NULL DEFAULT NULL AFTER `locationId`,
 ADD COLUMN `creation_date` DATETIME NULL DEFAULT NULL AFTER `status`,
 ADD COLUMN `processing_date` DATETIME NULL DEFAULT NULL AFTER `creation_date`;
 
-ALTER TABLE `girocheck`.`check` 
-CHANGE COLUMN `status` `status_iStream` VARCHAR(45) NULL DEFAULT NULL ;
-
-
-ALTER TABLE `girocheck`.`check` 
-ADD COLUMN `status_Certegy` VARCHAR(45) NULL AFTER `processing_date`;
-
-
-ALTER TABLE `girocheck`.`check` 
-DROP COLUMN `status_Certegy`,
-CHANGE COLUMN `status_iStream` `status` VARCHAR(45) NULL DEFAULT NULL ;
+ 

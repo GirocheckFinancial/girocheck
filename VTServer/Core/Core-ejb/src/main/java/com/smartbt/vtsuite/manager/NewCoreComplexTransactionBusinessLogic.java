@@ -1138,15 +1138,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 name = aux[0];
                 middleName = aux[1];
             }
-            if (name != null && name.length() > 15) {
-                name = name.substring(0, 15);
-            }
-            if (middleName != null && middleName.length() > 15) {
-                middleName = middleName.substring(0, 15);
-            }
-            if (lastName != null && lastName.length() > 15) {
-                lastName = lastName.substring(0, 15);
-            }
+            
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fixPersonalInfoName fixed with name: " + name, null);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fixPersonalInfoName fixed with Middle name: " + middleName, null);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] fixPersonalInfoName fixed with last name: " + lastName, null);

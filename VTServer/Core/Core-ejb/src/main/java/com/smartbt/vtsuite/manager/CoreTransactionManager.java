@@ -55,7 +55,7 @@ import java.util.Map;
  */
 public class CoreTransactionManager {
 
-    private boolean useChoice = false;
+    private boolean version2 = false;
 
     private static CoreAbstractTransactionBusinessLogic businessLogic;
     public static List SINGLE_TRANSACTION_LIST;
@@ -91,6 +91,10 @@ public class CoreTransactionManager {
      */
     public void processTransaction(DirexTransactionRequest direxTransactionRequest) throws Exception {
 
+        String prodProperty = System.getProperty("VERSION");
+        Boolean version2 = prodProperty != null && prodProperty.equalsIgnoreCase("2");
+        System.out.println("CoreTransactionManager -> version2 = " + version2);
+        
         try {
             if (direxTransactionRequest.getTransactionData() != null && direxTransactionRequest.getTransactionData().containsKey(TransactionType.TRANSACTION_TYPE)) {
 
@@ -124,7 +128,7 @@ public class CoreTransactionManager {
 //                        direxTransactionRequest.getTransactionData().put(ParameterName.CARDLOADTYPE, 1);
                         if (transaction.getOperation().contains("02")) {
 
-                            if (useChoice) {
+                            if (version2) {
                                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new CashBusinessLogic", null);
                                 businessLogic = new CashBusinessLogic();
                             } else {
@@ -134,7 +138,7 @@ public class CoreTransactionManager {
 
                         } else {
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] businessLogic = new NewCoreComplexTransactionBusinessLogic(logger);", null);
-                            if (useChoice) {
+                            if (version2) {
                                 businessLogic = new CheckBusinessLogic();
                             } else {
                                 businessLogic = new NewCoreComplexTransactionBusinessLogic();

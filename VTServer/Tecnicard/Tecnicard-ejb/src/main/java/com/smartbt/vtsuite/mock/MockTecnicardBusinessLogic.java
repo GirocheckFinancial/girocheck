@@ -17,7 +17,6 @@ package com.smartbt.vtsuite.mock;
 
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
-import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.log.LogUtil;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
@@ -30,7 +29,6 @@ import com.smartbt.vtsuite.boundary.client.CardActivationResponse;
 import com.smartbt.vtsuite.boundary.client.CardCreationResponse;
 import com.smartbt.vtsuite.boundary.client.CardHolderValidationResponse;
 import com.smartbt.vtsuite.boundary.client.CardLoadResponse;
-import com.smartbt.vtsuite.boundary.client.CardToBankConfirmationResponse;
 import com.smartbt.vtsuite.boundary.client.CardToBankResponse;
 import com.smartbt.vtsuite.boundary.client.CardValidationResponse;
 import com.smartbt.vtsuite.boundary.client.CashToCardResponse;
@@ -38,7 +36,6 @@ import com.smartbt.vtsuite.boundary.client.EchoResponse;
 import com.smartbt.vtsuite.boundary.client.LastTransactionsResponse;
 import com.smartbt.vtsuite.boundary.client.SessionTag;
 import com.smartbt.vtsuite.boundary.util.MapUtil;
-import com.smartbt.vtsuite.manager.*;
 import com.smartbt.vtsuite.util.TecnicardConstantValues;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,7 +43,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Mpowa Business Logic Class
@@ -301,6 +297,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
 
         String validationResponse = "100011";
+//        String validationResponse = "100017"; //Negative Case
 
         if (map.containsKey(ParameterName.TECNICARD_VALIDATION_RESPONSE)) {
             validationResponse = MapUtil.getStringValueFromMap(map, ParameterName.TECNICARD_VALIDATION_RESPONSE, false);
@@ -308,7 +305,12 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         System.out.println("MockTecnicardBusinessLogic -> validationResponse = " + validationResponse);
         CardValidationResponse response = new CardValidationResponse();
-        response.setSessionTag(buildSessionTag("CActivation", pRequestID, validationResponse));
+        SessionTag sessionTag = buildSessionTag("CActivation", pRequestID, validationResponse);
+        //Negative Case
+//        sessionTag.setResultMessage("Card was already replaced");
+//        sessionTag.setSucessfullProcessing(false);
+        
+        response.setSessionTag(sessionTag);
 
         return response;
     }

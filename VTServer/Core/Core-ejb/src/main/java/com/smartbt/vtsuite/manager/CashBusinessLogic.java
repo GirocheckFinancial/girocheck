@@ -111,7 +111,7 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
             String estimatedPostingTime = response.getResultMessage();
 
             //Send response to the terminal of reload or new cardload 
-            sendAnswerToTerminal(originalTransaction, response.getResultCode(), estimatedPostingTime, hostName, correlationId);
+            sendAnswerToTerminal(originalTransaction, response.getResultCode(), estimatedPostingTime, correlationId);
 
             //-------------- WAIT CONFIRMATION FROM TERMINAL -------------
             DirexTransactionRequest confirmationRequest = null;
@@ -130,7 +130,7 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
 
             response = sendMessageToHost(request, NomHost.valueOf(hostName), GENERIC_CARD_LOAD_WAIT_TIME, transaction);
 
-            sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), estimatedPostingTime, hostName, correlationId);
+            sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, response.getResultCode(), estimatedPostingTime, correlationId);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CashBusinessLogic] Before consuming choiceNotifyPayment " + transaction.getSub_Transaction().size(), null);
 

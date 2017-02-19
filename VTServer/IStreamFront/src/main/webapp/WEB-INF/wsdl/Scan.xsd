@@ -6,8 +6,6 @@
     <xs:element name="personalInfo" type="tns:personalInfo"/>
     <xs:element name="personalInfoResponse" type="tns:personalInfoResponse"/>
     
-  
-    
     <xs:complexType name="personalInfo">
         <xs:sequence>
             <xs:element name="arg0" type="tns:personalInfoRequest" minOccurs="0"/>
@@ -62,6 +60,74 @@
             <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
+          
+          
+          
+          
+   <xs:element name="checkInfo" type="tns:checkInfo"/>
+    <xs:element name="checkInfoResponse" type="tns:checkInfoResponse"/>
+    
+    <xs:complexType name="checkInfo">
+        <xs:sequence>
+            <xs:element name="arg0" type="tns:checkInfoRequest" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="checkInfoRequest">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string" minOccurs="0"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+            <xs:element name="id" type="xs:string" minOccurs="0"/>
+            <xs:element name="telephone" type="xs:string" minOccurs="0"/>
+            <xs:element name="email" type="xs:string" minOccurs="0"/>
+            <xs:element name="address" type="xs:string" minOccurs="0"/>
+            <xs:element name="city" type="xs:string" minOccurs="0"/>
+            <xs:element name="state" type="xs:string" minOccurs="0"/>
+            <xs:element name="idState" type="xs:string" minOccurs="0"/>
+            <xs:element name="zipCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="country" type="xs:string" minOccurs="0"/>
+            <xs:element name="idCountry" type="xs:string" minOccurs="0"/>
+            <xs:element name="firstName" type="xs:string" minOccurs="0"/>
+            <xs:element name="lastName" type="xs:string" minOccurs="0"/>
+            <xs:element name="bornDate" type="xs:date" minOccurs="0" />
+            <xs:element name="expirationDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="feeAmount" type="xs:string" minOccurs="0"/>
+            <xs:element name="payoutAmount" type="xs:string" minOccurs="0"/>
+            <xs:element name="micr" type="xs:string" minOccurs="0"/>
+            <xs:element name="makerName" type="xs:string" minOccurs="0"/>
+            <xs:element name="makerCity" type="xs:string" minOccurs="0"/>
+            <xs:element name="makerState" type="xs:string" minOccurs="0"/>
+            <xs:element name="makerZip" type="xs:string" minOccurs="0"/>
+            <xs:element name="makerPhone" type="xs:string" minOccurs="0"/>
+            <xs:element name="makerAddress" type="xs:string" minOccurs="0"/>
+            <xs:element name="locationId" type="xs:string" minOccurs="0"/>
+            <xs:element name="paymentCheck" type="xs:string" minOccurs="0"/> 
+            <xs:element name="checkIssueDate" type="xs:string" minOccurs="0"/>
+            <xs:element name="checkType" type="xs:string" minOccurs="0"/>
+            <xs:element name="expansionType" type="xs:string" minOccurs="0"/>
+            <xs:element name="entryType" type="xs:string" minOccurs="0"/> 
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="checkInfoResponse">
+        <xs:sequence>
+            <xs:element name="return" type="tns:CheckInfoRes" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CheckInfoRes">
+        <xs:sequence>
+            <xs:element name="checkId" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+          
+          
+          
+          
+          
           
 
 

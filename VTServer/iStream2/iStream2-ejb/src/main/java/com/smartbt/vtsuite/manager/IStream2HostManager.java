@@ -21,6 +21,7 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.vtsuite.mock.MockIStream2BusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 
 /**
@@ -29,7 +30,6 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 public class IStream2HostManager {
 
     private static IStream2HostManager INSTANCE;
-    private IStream2BusinessLogic iStream2BusinessLogic;
 
     public static synchronized IStream2HostManager get() {
         if (INSTANCE == null) {
@@ -39,7 +39,6 @@ public class IStream2HostManager {
     }
 
     public IStream2HostManager() {
-        iStream2BusinessLogic = iStream2BusinessLogic.get();
     }
 
     /**
@@ -56,15 +55,22 @@ public class IStream2HostManager {
         subTransaction.setType(request.getTransactionType().getCode());
         subTransaction.setHost(NomHost.ISTREAM2.getId());
 
-        try {
-            response = iStream2BusinessLogic.process(request);
+        String prodProperty = System.getProperty("PROD");
+        Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
 
+        if (isProd) {
+            response = IStream2BusinessLogic.get().process(request);
+        } else {
+            response = MockIStream2BusinessLogic.get().process(request);
+        }
+
+        try { 
             if (response.wasApproved()) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction executed successfully",null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction executed successfully", null);
                 subTransaction.setResultCode(response.getResultCode().getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             } else {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction failed",null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction failed", null);
                 subTransaction.setResultCode(ResultCode.ISTREAM2_HOST_ERROR.getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             }

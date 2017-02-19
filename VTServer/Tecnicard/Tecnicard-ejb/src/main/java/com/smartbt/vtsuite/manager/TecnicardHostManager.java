@@ -289,6 +289,7 @@ public class TecnicardHostManager {
         String resultCode = (String) sessionTagMap.get(ParameterName.RESULT_CODE);
         String resultMessage = (String) sessionTagMap.get(ParameterName.RESULT_MESSAGE);
 
+        System.out.println("TecnicardHostManager -> manageUnexpectedAnswer:: resultMessage = " + resultMessage);
         return manageUnexpectedAnswer(resultCode, resultMessage, transactionType);
     }
 
@@ -307,7 +308,7 @@ public class TecnicardHostManager {
                 exRsp = DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_UNEXPECTED_RESULT_CODE, ResultMessage.TECNICARD_PERSONALIZATION_INFO_FAILED, message, resultCode);
                 break;
             default:
-                exRsp = DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_UNEXPECTED_RESULT_CODE, ResultMessage.TECNICARD_FAILED, message, resultCode);
+                exRsp = DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_UNEXPECTED_RESULT_CODE, resultMessage);
         }
 
         exRsp.getTransaction().addSubTransactionList(transaction.getSub_Transaction());

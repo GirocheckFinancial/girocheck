@@ -13,7 +13,7 @@
  ** written permission of Smart Business Technology, Inc.
  **
  */
-package com.smartbt.vtsuite.manager;
+package com.smartbt.vtsuite.mock;
 
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -21,39 +21,23 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
-import com.smartbt.vtsuite.boundary.PCA;
 import com.smartbt.vtsuite.boundary.PCARequest;
-import com.smartbt.vtsuite.boundary.PCAResponse;
 import com.smartbt.vtsuite.boundary.PCAReverseRequest;
-import com.smartbt.vtsuite.boundary.PCAReverseResponse;
-import com.smartbt.vtsuite.boundary.PCAService;
-import java.math.BigDecimal; 
 import java.util.Map;
 
 /**
  * Mpowa Business Logic Class
  */
-public class CertegyBusinessLogic {
-
-    public static final String CERTEGY_SITE_ID = "2897891071345202";
-    public static final BigDecimal CERTEGY_VERSION = new BigDecimal("1.2");
-
-    private static CertegyBusinessLogic INSTANCE;
-
-    private PCAService service;
-    private PCA port;
-
-    public static synchronized CertegyBusinessLogic get() {
+public class MockCertegyBusinessLogic {
+ 
+    private static MockCertegyBusinessLogic INSTANCE;
+ 
+    public static synchronized MockCertegyBusinessLogic get() {
         if (INSTANCE == null) {
-            INSTANCE = new CertegyBusinessLogic();
+            INSTANCE = new MockCertegyBusinessLogic();
         }
         return INSTANCE;
-    }
-
-    public CertegyBusinessLogic() {
-        service = new PCAService();
-        port = service.getPCAPort();
-    }
+    } 
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
         Map transactionData = request.getTransactionData();
@@ -91,18 +75,16 @@ public class CertegyBusinessLogic {
 
         PCARequest request = PCARequest.build(params);
         
-        System.out.println(request.toString());
+        System.out.println(request.toString()); 
         
-        PCAResponse response = port.authorize(request);
-        return response != null ? response.getResponseCode() : "";
+        return "00";
     }
 
     public String reverseRequest(Map params) {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CertegyBusinessLogic] Calling method cancelationRequest", null);
 
         PCAReverseRequest request = PCAReverseRequest.build(params);
-        PCAReverseResponse response = port.reverse(request);
-        return response != null ? response.getResponseCode() : "";
+        return "00";
     }
 
 }

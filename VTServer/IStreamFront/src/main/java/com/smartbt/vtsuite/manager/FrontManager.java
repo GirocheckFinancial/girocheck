@@ -19,8 +19,7 @@ import java.util.Map;
  */
 public class FrontManager {
 
-      public static FrontBusinessLogic businessLogic = new FrontBusinessLogic();
-   // public static TestBusinessLogic businessLogic = new TestBusinessLogic();
+      public static FrontBusinessLogic businessLogic = new FrontBusinessLogic(); 
 
     public FrontManager() {
     }

@@ -49,16 +49,10 @@ import java.util.Map;
  */
 public class MockIStreamBusinessLogic extends AbstractBusinessLogicModule {
 
-    private Scan_Service service = new Scan_Service();
-    private Scan port = service.getScanPort();
-
-//    private static MpowaCommunicator mpowaComms = new MpowaCommunicator();
-
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MockIStreamBusinessLogic.class);
 
-    /**
-     * MpowaTansactionRequestFactory
-     */
+    private static MockIStreamBusinessLogic INSTANCE;
+     
     /**
      * Constructor
      */

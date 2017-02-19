@@ -33,6 +33,15 @@ public interface Scan {
         @WebParam(name = "arg0", targetNamespace = "")
         PersonalInfoRequest arg0);
 
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "checkInfo", targetNamespace = "http://scan.girocheck.smartbt.com/", className = "com.smartbt.girocheck.scan.CheckInfo")
+    @ResponseWrapper(localName = "checkInfoResponse", targetNamespace = "http://scan.girocheck.smartbt.com/", className = "com.smartbt.girocheck.scan.CheckInfoResponse")
+    @Action(input = "http://scan.girocheck.smartbt.com/Scan/checkInfoRequest", output = "http://scan.girocheck.smartbt.com/Scan/checkInfoResponse")
+    public CheckInfoRes checkInfo(
+        @WebParam(name = "arg0", targetNamespace = "")
+        CheckInfoRequest arg0);
+
 
 
     @WebMethod

@@ -28,6 +28,10 @@ public class ObjectFactory {
     private final static QName _PersonalInfoResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "personalInfoResponse");
     private final static QName _PersonalInfoRequest_QNAME = new QName("http://scan.girocheck.smartbt.com/", "personalInfoRequest");
 
+    private final static QName _CheckInfo_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkInfo");
+    private final static QName _CheckInfoResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkInfoResponse");
+    private final static QName _CheckInfoRequest_QNAME = new QName("http://scan.girocheck.smartbt.com/", "checkInfoRequest");
+
     private final static QName _CertegyInfo_QNAME = new QName("http://scan.girocheck.smartbt.com/", "certegyInfo");
     private final static QName _CertegyInfoResponse_QNAME = new QName("http://scan.girocheck.smartbt.com/", "certegyInfoResponse");
     private final static QName _CertegyInfoRequest_QNAME = new QName("http://scan.girocheck.smartbt.com/", "certegyInfoRequest");
@@ -45,10 +49,7 @@ public class ObjectFactory {
      * 
      */
     
-    /**
-     * Create an instance of {@link CheckAuthSubmit}
-     * @return
-     */
+   //PersonalInfo
     public PersonalInfo createPersonalInfo() {
         return new PersonalInfo();
     }
@@ -64,8 +65,29 @@ public class ObjectFactory {
      public PersonalInfoRes createPersonalInfoRes() {
         return new PersonalInfoRes();
     }
+     
+     
+     
+    //Check Info 
+    public CheckInfo createCheckInfo() {
+        return new CheckInfo();
+    }
     
+    public CheckInfoRequest createCheckInfoRequest() {
+        return new CheckInfoRequest();
+    }
     
+    public CheckInfoResponse createCheckInfoResponse() {
+        return new CheckInfoResponse();
+    }
+    
+     public CheckInfoRes createCheckInfoRes() {
+        return new CheckInfoRes();
+    }
+    
+     
+    
+    //--Certegy
     public CertegyInfo createCertegyInfo() {
         return new CertegyInfo();
     }
@@ -111,6 +133,37 @@ public class ObjectFactory {
     public JAXBElement<PersonalInfoRequest> createPersonalInfoRequest(PersonalInfoRequest value) {
         return new JAXBElement<PersonalInfoRequest>(_PersonalInfoRequest_QNAME, PersonalInfoRequest.class, null, value);
     }
+    
+    
+    
+    
+    
+     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link PersonalInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://scan.girocheck.smartbt.com/", name = "checkInfo")
+    public JAXBElement<CheckInfo> createCheckInfo(CheckInfo value) {
+        return new JAXBElement<CheckInfo>(_CheckInfo_QNAME, CheckInfo.class, null, value);
+    } 
+    
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CheckAuthPollResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://scan.girocheck.smartbt.com/", name = "checkInfoResponse")
+    public JAXBElement<CheckInfoResponse> createCheckInfoResponse(CheckInfoResponse value) {
+        return new JAXBElement<CheckInfoResponse>(_CheckInfoResponse_QNAME, CheckInfoResponse.class, null, value);
+    } 
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link CheckAuthPollResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://scan.girocheck.smartbt.com/", name = "checkInfoRequest")
+    public JAXBElement<CheckInfoRequest> createCheckInfoRequest(CheckInfoRequest value) {
+        return new JAXBElement<CheckInfoRequest>(_CheckInfoRequest_QNAME, CheckInfoRequest.class, null, value);
+    }
+    
     
     
     /**

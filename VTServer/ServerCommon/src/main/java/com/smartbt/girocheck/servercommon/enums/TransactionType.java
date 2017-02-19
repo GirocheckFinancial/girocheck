@@ -59,7 +59,8 @@ public enum TransactionType {
     CERTEGY_AUTHENTICATION(NomHost.CERTEGY, 40),
     CERTEGY_REVERSE_REQUEST(NomHost.CERTEGY, 41),
     
-    ISTREAM2_SEND_SINCE_ICL(NomHost.ISTREAM2, 42);
+    ISTREAM2_SEND_SINCE_ICL(NomHost.ISTREAM2, 42),
+    CHECK_INFO(null, 43);
 
     private NomHost host;
 

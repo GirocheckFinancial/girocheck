@@ -11,6 +11,12 @@
     <message name="personalInfoResponse">
         <part name="parameters" element="tns:personalInfoResponse"/>
     </message>
+    <message name="checkInfo">
+        <part name="parameters" element="tns:checkInfo"/>
+    </message>
+    <message name="checkInfoResponse">
+        <part name="parameters" element="tns:checkInfoResponse"/>
+    </message>
     <message name="certegyInfo">
         <part name="parameters" element="tns:certegyInfo"/>
     </message>
@@ -23,6 +29,10 @@
             <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/personalInfoRequest" message="tns:personalInfo"/>
             <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/personalInfoResponse" message="tns:personalInfoResponse"/>
         </operation>
+        <operation name="checkInfo">
+            <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkInfoRequest" message="tns:checkInfo"/>
+            <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/checkInfoResponse" message="tns:checkInfoResponse"/>
+        </operation>
         <operation name="certegyInfo">
             <input wsam:Action="http://scan.girocheck.smartbt.com/Scan/certegyInfoRequest" message="tns:certegyInfo"/>
             <output wsam:Action="http://scan.girocheck.smartbt.com/Scan/certegyInfoResponse" message="tns:certegyInfoResponse"/>
@@ -31,6 +41,15 @@
     <binding name="ScanPortBinding" type="tns:Scan">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <operation name="personalInfo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="checkInfo">
             <soap:operation soapAction=""/>
             <input>
                 <soap:body use="literal"/>

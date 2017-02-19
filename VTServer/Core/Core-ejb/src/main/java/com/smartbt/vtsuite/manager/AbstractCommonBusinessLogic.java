@@ -7,6 +7,7 @@ robertoSoftwareEngineer@gmail.com
 */
 package com.smartbt.vtsuite.manager;
 
+import com.smartbt.girocheck.servercommon.enums.CheckStatus;
 import com.smartbt.vtsuite.util.CoreTransactionUtil;
 import com.smartbt.girocheck.servercommon.enums.EnumCountry;
 import com.smartbt.girocheck.servercommon.enums.EnumState;
@@ -70,28 +71,29 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
     protected static StateManager stateManager = StateManager.get();
     protected PersonalIdentificationManager personalIdentificationManager = PersonalIdentificationManager.get();
 
-    protected void sendAnswerToTerminal(TransactionType transactionType, ResultCode resultCode, String estimated_posting_time, String host, String correlationId) throws JMSException {
+    protected void sendAnswerToTerminal(TransactionType transactionType, ResultCode resultCode, String estimated_posting_time, String correlationId) throws JMSException {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Send answer to TERMINAL", null);
 
         DirexTransactionResponse provissionalResponse = new DirexTransactionResponse();
         provissionalResponse.setResultCode(resultCode);
-        provissionalResponse.setResultMessage(estimated_posting_time);
+        
+        if(!estimated_posting_time.isEmpty()){
+            provissionalResponse.setResultMessage(estimated_posting_time);
+        }else{
+            provissionalResponse.setResultMessage(ResultMessage.SUCCESS.getMessage());
+        } 
 
         Queue queue;
 
-        if (transactionType == TransactionType.TECNICARD_CONFIRMATION) {
-            if (host.equals("FUZE")) {
-                provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "02");
-            } else {
+        if (transactionType == TransactionType.TECNICARD_CONFIRMATION) { 
                 provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "01");
-            }
             queue = jmsManager.getCore2OutQueue();
         } else {
             queue = jmsManager.getCoreOutQueue();
         }
 
-        provissionalResponse.getTransactionData().put("host", host);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Send message to TERMINAL", null);
+        //provissionalResponse.getTransactionData().put("host", host);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Send message to TERMINAL:: queue = " + queue.getQueueName() + ", correlationId = " + correlationId, null);
         JMSManager.get().send(provissionalResponse, queue, correlationId);
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Send message to TERMINAL Done.", null);
     }
@@ -141,7 +143,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             throw new TransactionalException(ResultCode.getFromHost(host), transactionType, "Message received is null.");
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Message received", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Message received:: response.wasApproved() = " + response.wasApproved(), null);
 
         return response;
     }
@@ -380,6 +382,9 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             java.sql.Blob checkFrontBlob = new SerialBlob(checkFront);
             check.setCheckFront(checkFrontBlob);
         }
+        
+        check.setStatus(CheckStatus.PROCESSING.getStatus());
+        check.setCreationDate(new Date());
 
         check.setTransaction(transaction);
         check.setClient1(transaction.getClient());

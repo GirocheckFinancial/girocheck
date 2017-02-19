@@ -13,8 +13,9 @@
  ** written permission of Smart Business Technology, Inc.
  **
  */
-package com.smartbt.vtsuite.manager;
+package com.smartbt.vtsuite.mock;
 
+import com.smartbt.vtsuite.manager.*;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -37,59 +38,28 @@ import javax.xml.ws.BindingProvider;
 /**
  * Mpowa Business Logic Class
  */
-public class IStream2BusinessLogic {
+public class MockIStream2BusinessLogic {
 
-    private static IStream2BusinessLogic INSTANCE;
+    private static MockIStream2BusinessLogic INSTANCE;
 
-    public static synchronized IStream2BusinessLogic get() {
+    public static synchronized MockIStream2BusinessLogic get() {
         if (INSTANCE == null) {
-            INSTANCE = new IStream2BusinessLogic();
+            INSTANCE = new MockIStream2BusinessLogic();
         }
         return INSTANCE;
-    }
-    private TLS_Service service;
-    private TLS port;
-//    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger( iStream2BusinessLogic.class );
-
-    /**
-     * Constructor
-     */
-    public IStream2BusinessLogic() {
-
-        String url = "";
-        try {
-
-            service = new TLS_Service();
-            port = service.getTLSPort();
-
-            url = "https://stable-1.istreamdeposit.com/TLS?wsdl";
-
-//            if(url == null){
-//                url = "https://bizsrv.tcmsystem.net/IStreamWS/iStreamSrvHost.asmx?WSDL";
-//            }
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStream2BusinessLogic] URL: " + url, null);
-
-            BindingProvider bindingProvider = (BindingProvider) port;
-            bindingProvider.getRequestContext().put(
-                    BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                    url);
-
-        } catch (Exception ex) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStream2BusinessLogic] Error", ex.getMessage());
-        }
-
     }
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
       try{
         Map transactionData = request.getTransactionData();
-        DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();       
+        DirexTransactionResponse direxTransactionResponse = DirexTransactionResponse.forSuccess();
         String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);        
         String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
-        Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
+//TODO what is locationId ??
+//        Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
         String ammount =  MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
-        String depositName =  MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
+   //TODO what is DEPOSIT ??
+        //   String depositName =  MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
         String micr =  MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
         String cutomerItemId =  MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
         Image tiffImage =new Image();
@@ -108,44 +78,23 @@ public class IStream2BusinessLogic {
 
         switch (transactionType) {
             case ISTREAM2_SEND_SINCE_ICL:
-                response = (IMap) port.sendSingleICL(userName, password, locationId, ammount, depositName, micr, cutomerItemId, tiffImage, highQualityImage,auxFields );
-                break;
+                transactionResponseMap = new HashMap(); 
+                 break;
         }
-
-        if (response != null) {
-            transactionResponseMap = response.toMap();
-        }
+ 
         direxTransactionResponse.setTransactionData(transactionResponseMap);
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Finish " + transactionType, null);
 
         return direxTransactionResponse;
+//        return DirexTransactionResponse.forException(ResultCode.ISTREAM2_HOST_RETURN_PROCESSING_FALSE , ResultMessage.ISTREAM_RETURN_CHECK_ID_NULL);
       }catch(Exception e){ 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Host connection failed",null);
             e.printStackTrace();
-            return DirexTransactionResponse.forException( ResultCode.ISTREAM2_HOST_ERROR, ResultMessage.ISTREAM_FAILED, "IStream2 failed all attempts to connect.", "0" );
+            return DirexTransactionResponse.forException( ResultCode.ISTREAM2_HOST_ERROR, ResultMessage.ISTREAM_FAILED, e.getMessage(), "0" );
             
         } 
     }
-    
-     private String requestToString(String userName, String password, String locationId, String ammount, String depositName, String micr, String cutomerItemId, String tiffImage, String highQualityImage, String auxFields ){
-       StringBuilder s = new StringBuilder();
-       s.append("<SendSingleICL>").append('\n');
-       s.append("    <userName>").append(userName).append("</userName>").append('\n');
-       s.append("    <password>").append(password).append("</password>").append('\n');
-       s.append("    <locationId>").append(locationId).append("</locationId>").append('\n');
-       s.append("    <ammount>").append(ammount).append("</ammount>").append('\n');
-       s.append("    <depositName>").append(depositName).append("</depositName>").append('\n');
-       s.append("    <micr>").append(micr).append("</micr>").append('\n');
-       s.append("    <cutomerItemId>").append(cutomerItemId).append("</cutomerItemId>").append('\n');
-       
-       if(tiffImage != null && !tiffImage.isEmpty()){
-           s.append("    <tiffImage>").append(" HAS IMAGE").append("</tiffImage>").append('\n');
-       }
-       
-       s.append("    <highQualityImage>").append(highQualityImage).append("</highQualityImage>").append('\n');
-       s.append("    <auxFields>").append(auxFields).append("</auxFields>").append('\n');
-       s.append("</SendSingleICL>").append('\n');
-       
-       return s.toString();
-    }
+//    public void sendSingleICL(Map params) {
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Calling method sendSingleICL", null);
+//    }
 }

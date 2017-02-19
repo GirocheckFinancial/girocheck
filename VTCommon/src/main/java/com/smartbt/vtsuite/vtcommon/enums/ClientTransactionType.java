@@ -84,6 +84,14 @@ public class ClientTransactionType {
                 return "Choice Cancelation Request";
             case 38: 
                 return "Choice Notify Payment";
+            case 39: 
+                return "Westech CheckAuth";
+            case 40: 
+                return "Certegy Auth";
+            case 41: 
+                return "Certegy Reverse";
+            case 42: 
+                return "iStream Send Single ICL";
            
             default:
                 return "Unknown";

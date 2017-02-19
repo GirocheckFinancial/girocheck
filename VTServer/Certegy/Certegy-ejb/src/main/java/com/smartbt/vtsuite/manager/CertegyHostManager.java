@@ -20,6 +20,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
+import com.smartbt.vtsuite.mock.MockCertegyBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 
 /**
@@ -27,8 +28,7 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
  */
 public class CertegyHostManager {
 
-    private static CertegyHostManager INSTANCE;
-    private CertegyBusinessLogic certegyBusinessLogic;
+    private static CertegyHostManager INSTANCE; 
 
     public static synchronized CertegyHostManager get() {
         if (INSTANCE == null) {
@@ -36,10 +36,7 @@ public class CertegyHostManager {
         }
         return INSTANCE;
     }
-
-    public CertegyHostManager() {
-        certegyBusinessLogic = certegyBusinessLogic.get();
-    }
+ 
 
     /**
      * Process Direx Transaction Request.
@@ -54,16 +51,24 @@ public class CertegyHostManager {
         SubTransaction subTransaction = new SubTransaction();
         subTransaction.setType(request.getTransactionType().getCode());
         subTransaction.setHost(NomHost.CERTEGY.getId());
+        
+        String prodProperty = System.getProperty("PROD");
+        Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
 
-        try {
-            response = certegyBusinessLogic.process(request);
+        if (isProd) {
+            response = CertegyBusinessLogic.get().process(request);
+        } else {
+            response = MockCertegyBusinessLogic.get().process(request);
+        }
 
+        try {  
             if (response.wasApproved()) {
                 subTransaction.setResultCode(response.getResultCode().getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             } else {
                 subTransaction.setResultCode(ResultCode.CERTEGY_HOST_ERROR.getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
+                subTransaction.setErrorCode(response.getErrorCode());
             }
         } catch (Exception e) {
             e.printStackTrace();

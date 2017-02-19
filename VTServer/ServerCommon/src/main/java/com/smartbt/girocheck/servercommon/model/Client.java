@@ -215,8 +215,15 @@ public class Client implements Serializable {
     public void setMaskSSN(String maskSSN) {
         this.maskSSN = maskSSN;
     }
+    
+    public static void main(String[] args){
+        Client c = new Client();
+        c.ssn = "922916668";
+        
+        System.out.println("has ITIN = " + c.hasITIN());
+    }
  
-    public boolean hasITIN(){
+    public  boolean hasITIN(){
         if(this.ssn == null) return false;
         long auxSsn = Long.parseLong(this.ssn);
         int aux = Integer.parseInt(this.ssn.substring(3, 5));

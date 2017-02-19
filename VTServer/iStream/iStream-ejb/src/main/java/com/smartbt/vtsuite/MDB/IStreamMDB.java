@@ -61,9 +61,7 @@ public class IStreamMDB implements MessageListener {
      */
     @Override
     @SuppressWarnings("null")
-    public void onMessage(Message message) {
-//        LogUtil.log("IStream MDB", "            Recived a Mesage.");
-//        log.info("[IStreamMDB] Recived a Mesage");
+    public void onMessage(Message message) { 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamMDB] Recived a Mesage",null);
 
         JMSManager jmsManager = JMSManager.get();
@@ -84,20 +82,17 @@ public class IStreamMDB implements MessageListener {
             } else {
                 direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.ISTREAM_HOST_RECEIVED_NULL, ResultMessage.HOST_RECEIVED_NULL);
             }
-
-//            LogUtil.log("IStream MDB", "            Sent Mesage to Core.");
-//            log.info("[IStreamMDB] Sent Mesage to Core.");
+ 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamMDB] Sent Mesage to Core.",null);
             
             jmsManager.send(direxTransactionResponse, jmsManager.getHostOutQueue(), direxTransactionRequest.getCorrelation());
 
         } catch (Exception e) {
+            e.printStackTrace();
             try {
                 direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.ISTREAM_HOST_ERROR, e);
                 jmsManager.send(direxTransactionResponse, jmsManager.getHostOutQueue(), direxTransactionRequest.getCorrelation());
-            } catch (Exception ex) {
-//                LogUtil.logAndStore("IStream MDB", "            Catch Excetion " + e.getMessage());
-//                log.debug("[IStreamMDB] Catch Excetion " + e.getMessage(),e);
+            } catch (Exception ex) { 
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IStreamMDB] Error. ",e.getMessage());
             }
         }

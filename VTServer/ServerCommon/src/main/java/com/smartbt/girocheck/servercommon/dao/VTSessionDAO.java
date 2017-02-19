@@ -124,4 +124,6 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
         
         System.out.println("Deleted " + updatedRows + " sessions..");
     }
+    
+     
 }

@@ -67,7 +67,6 @@ public class IStream2BusinessLogic {
 //            if(url == null){
 //                url = "https://bizsrv.tcmsystem.net/IStreamWS/iStreamSrvHost.asmx?WSDL";
 //            }
-
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">[IStream2BusinessLogic] URL: " + url, null);
 
             BindingProvider bindingProvider = (BindingProvider) port;
@@ -82,70 +81,90 @@ public class IStream2BusinessLogic {
     }
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
-      try{
-        Map transactionData = request.getTransactionData();
-        DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();       
-        String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);        
-        String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
-        Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
-        String ammount =  MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
-        String depositName =  MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
-        String micr =  MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
-        String cutomerItemId =  MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
-        Image tiffImage =new Image();
-        tiffImage.setImgBackBinary((byte[])transactionData.get(ParameterName.CHECK_BACK));
-        tiffImage.setImgFrontBinary((byte[])transactionData.get(ParameterName.CHECK_FRONT));
-        Image highQualityImage = new Image();
-        highQualityImage.setImgBackBinary((byte[])transactionData.get(ParameterName.CHECK_BACK));
-        highQualityImage.setImgFrontBinary((byte[])transactionData.get(ParameterName.CHECK_FRONT));
-        List<AuxField> auxFields = new ArrayList();
-        TransactionType transactionType = request.getTransactionType();
-
-        IMap response = null;
-        Map transactionResponseMap = new HashMap();
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] proccessing:: " + transactionType, null);
-
-        switch (transactionType) {
-            case ISTREAM2_SEND_SINCE_ICL:
-                response = (IMap) port.sendSingleICL(userName, password, locationId, ammount, depositName, micr, cutomerItemId, tiffImage, highQualityImage,auxFields );
-                break;
-        }
-
-        if (response != null) {
-            transactionResponseMap = response.toMap();
-        }
-        direxTransactionResponse.setTransactionData(transactionResponseMap);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Finish " + transactionType, null);
-
-        return direxTransactionResponse;
-      }catch(Exception e){ 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Host connection failed",null);
-            e.printStackTrace();
-            return DirexTransactionResponse.forException( ResultCode.ISTREAM2_HOST_ERROR, ResultMessage.ISTREAM_FAILED, "IStream2 failed all attempts to connect.", "0" );
+        try {
+            Map transactionData = request.getTransactionData();
+            DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
+            String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);
+            String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
+            Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
+            String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
+            String depositName = MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
+            String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
+            String cutomerItemId = MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
+           
+            byte[] checkBack = (byte[]) transactionData.get(ParameterName.CHECK_BACK);
+            byte[] checkFront = (byte[]) transactionData.get(ParameterName.CHECK_FRONT);
             
-        } 
+            Image tiffImage = new Image();
+            tiffImage.setImgBackBinary(checkBack);
+            tiffImage.setImgFrontBinary(checkFront);
+            Image highQualityImage = new Image();
+            
+            highQualityImage.setImgBackBinary(checkBack);
+            highQualityImage.setImgFrontBinary(checkFront);
+            List<AuxField> auxFields = new ArrayList();
+            TransactionType transactionType = request.getTransactionType();
+
+            IMap response = null;
+            Map transactionResponseMap = new HashMap();
+
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] proccessing:: " + transactionType, null);
+
+            switch (transactionType) {
+                case ISTREAM2_SEND_SINCE_ICL:
+                    String log = requestToString(userName, password, "" + locationId, ammount, depositName, micr, cutomerItemId,  checkBack, checkFront, null);
+                    System.out.println("----------- IStrean -> SendSingleICL -----------");
+                    System.out.println(log);
+                    response = (IMap) port.sendSingleICL(userName, password, locationId, ammount, depositName, micr, cutomerItemId, tiffImage, highQualityImage, auxFields);
+                    break;
+            }
+
+            if (response != null) {
+                transactionResponseMap = response.toMap();
+            }
+            direxTransactionResponse.setTransactionData(transactionResponseMap);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Finish " + transactionType, null);
+
+            return direxTransactionResponse;
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Host connection failed", null);
+            e.printStackTrace();
+            return DirexTransactionResponse.forException(ResultCode.ISTREAM2_HOST_ERROR, ResultMessage.ISTREAM_FAILED, "IStream2 failed all attempts to connect.", "0");
+
+        }
     }
-    
-     private String requestToString(String userName, String password, String locationId, String ammount, String depositName, String micr, String cutomerItemId, String tiffImage, String highQualityImage, String auxFields ){
-       StringBuilder s = new StringBuilder();
-       s.append("<SendSingleICL>").append('\n');
-       s.append("    <userName>").append(userName).append("</userName>").append('\n');
-       s.append("    <password>").append(password).append("</password>").append('\n');
-       s.append("    <locationId>").append(locationId).append("</locationId>").append('\n');
-       s.append("    <ammount>").append(ammount).append("</ammount>").append('\n');
-       s.append("    <depositName>").append(depositName).append("</depositName>").append('\n');
-       s.append("    <micr>").append(micr).append("</micr>").append('\n');
-       s.append("    <cutomerItemId>").append(cutomerItemId).append("</cutomerItemId>").append('\n');
-       
-       if(tiffImage != null && !tiffImage.isEmpty()){
-           s.append("    <tiffImage>").append(" HAS IMAGE").append("</tiffImage>").append('\n');
-       }
-       
-       s.append("    <highQualityImage>").append(highQualityImage).append("</highQualityImage>").append('\n');
-       s.append("    <auxFields>").append(auxFields).append("</auxFields>").append('\n');
-       s.append("</SendSingleICL>").append('\n');
-       
-       return s.toString();
+
+    public static String requestToString(String userName, String password, String locationId, String ammount, String depositName, String micr, String cutomerItemId,   byte[] CHECK_BACK, byte[] CHECK_FRONT, String auxFields) {
+        StringBuilder s = new StringBuilder();
+        s.append("<SendSingleICL>").append('\n');
+        s.append("    <userName>").append(userName).append("</userName>").append('\n');
+        s.append("    <password>").append(password).append("</password>").append('\n');
+        s.append("    <locationId>").append(locationId).append("</locationId>").append('\n');
+        s.append("    <ammount>").append(ammount).append("</ammount>").append('\n');
+        s.append("    <depositName>").append(depositName).append("</depositName>").append('\n');
+        s.append("    <micr>").append(micr).append("</micr>").append('\n');
+        s.append("    <cutomerItemId>").append(cutomerItemId).append("</cutomerItemId>").append('\n');
+ 
+        s.append("    <highQualityImage>").append('\n');
+        if (CHECK_BACK != null && CHECK_BACK.length != 0) {
+            s.append("    <CHECK_BACK>").append("AN IMAGE").append("</CHECK_BACK>").append('\n');
+        }
+        if (CHECK_FRONT != null && CHECK_FRONT.length != 0) {
+            s.append("    <CHECK_FRONT>").append("AN IMAGE").append("</CHECK_FRONT>").append('\n');
+        } 
+        s.append("    </highQualityImage>").append('\n');
+ 
+        s.append("    <tiffImage>").append('\n');
+        if (CHECK_BACK != null && CHECK_BACK.length != 0) {
+            s.append("    <CHECK_BACK>").append("AN IMAGE").append("</CHECK_BACK>").append('\n');
+        }
+        if (CHECK_FRONT != null && CHECK_FRONT.length != 0) {
+            s.append("    <CHECK_FRONT>").append("AN IMAGE").append("</CHECK_FRONT>").append('\n');
+        } 
+        s.append("    </tiffImage>").append('\n');
+      //  s.append("    <auxFields>").append(auxFields).append("</auxFields>").append('\n');
+        s.append("</SendSingleICL>").append('\n');
+
+        return s.toString();
     }
 }

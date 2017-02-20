@@ -29,6 +29,7 @@ import com.smartbt.vtsuite.boundary.ws.AuxField;
 import com.smartbt.vtsuite.boundary.ws.Image;
 import com.smartbt.vtsuite.boundary.ws.TLS;
 import com.smartbt.vtsuite.boundary.ws.TLS_Service;
+import static com.smartbt.vtsuite.manager.IStream2BusinessLogic.requestToString;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,49 +51,55 @@ public class MockIStream2BusinessLogic {
     }
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
-      try{
-        Map transactionData = request.getTransactionData();
-        DirexTransactionResponse direxTransactionResponse = DirexTransactionResponse.forSuccess();
-        String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);        
-        String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
-//TODO what is locationId ??
-//        Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
-        String ammount =  MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
-   //TODO what is DEPOSIT ??
-        //   String depositName =  MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
-        String micr =  MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
-        String cutomerItemId =  MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
-        Image tiffImage =new Image();
-        tiffImage.setImgBackBinary((byte[])transactionData.get(ParameterName.CHECK_BACK));
-        tiffImage.setImgFrontBinary((byte[])transactionData.get(ParameterName.CHECK_FRONT));
-        Image highQualityImage = new Image();
-        highQualityImage.setImgBackBinary((byte[])transactionData.get(ParameterName.CHECK_BACK));
-        highQualityImage.setImgFrontBinary((byte[])transactionData.get(ParameterName.CHECK_FRONT));
-        List<AuxField> auxFields = new ArrayList();
-        TransactionType transactionType = request.getTransactionType();
+        try {
+            Map transactionData = request.getTransactionData();
+            DirexTransactionResponse direxTransactionResponse = DirexTransactionResponse.forSuccess();
+            String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);
+            String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
+            Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
+            String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
+            String depositName = MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
+            String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
+            String cutomerItemId = MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
 
-        IMap response = null;
-        Map transactionResponseMap = new HashMap();
+            byte[] checkBack = (byte[]) transactionData.get(ParameterName.CHECK_BACK);
+            byte[] checkFront = (byte[]) transactionData.get(ParameterName.CHECK_FRONT);
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] proccessing:: " + transactionType, null);
+            Image tiffImage = new Image();
+            tiffImage.setImgBackBinary(checkBack);
+            tiffImage.setImgFrontBinary(checkFront);
+            Image highQualityImage = new Image();
 
-        switch (transactionType) {
-            case ISTREAM2_SEND_SINCE_ICL:
-                transactionResponseMap = new HashMap(); 
-                 break;
-        }
- 
-        direxTransactionResponse.setTransactionData(transactionResponseMap);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Finish " + transactionType, null);
+            highQualityImage.setImgBackBinary(checkBack);
+            highQualityImage.setImgFrontBinary(checkFront);
+            List<AuxField> auxFields = new ArrayList();
+            TransactionType transactionType = request.getTransactionType();
 
-        return direxTransactionResponse;
+            IMap response = null;
+            Map transactionResponseMap = new HashMap();
+
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] proccessing:: " + transactionType, null);
+
+            switch (transactionType) {
+                case ISTREAM2_SEND_SINCE_ICL:
+                    String log = requestToString(userName, password, "" + locationId, ammount, depositName, micr, cutomerItemId, checkBack, checkFront, null);
+                    System.out.println("----------- IStrean -> SendSingleICL -----------");
+                    System.out.println(log);
+                    transactionResponseMap = new HashMap();
+                    break;
+            }
+
+            direxTransactionResponse.setTransactionData(transactionResponseMap);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Finish " + transactionType, null);
+
+            return direxTransactionResponse;
 //        return DirexTransactionResponse.forException(ResultCode.ISTREAM2_HOST_RETURN_PROCESSING_FALSE , ResultMessage.ISTREAM_RETURN_CHECK_ID_NULL);
-      }catch(Exception e){ 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Host connection failed",null);
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Host connection failed", null);
             e.printStackTrace();
-            return DirexTransactionResponse.forException( ResultCode.ISTREAM2_HOST_ERROR, ResultMessage.ISTREAM_FAILED, e.getMessage(), "0" );
-            
-        } 
+            return DirexTransactionResponse.forException(ResultCode.ISTREAM2_HOST_ERROR, ResultMessage.ISTREAM_FAILED, e.getMessage(), "0");
+
+        }
     }
 //    public void sendSingleICL(Map params) {
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] Calling method sendSingleICL", null);

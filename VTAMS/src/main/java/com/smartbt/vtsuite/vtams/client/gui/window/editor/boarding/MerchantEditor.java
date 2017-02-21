@@ -35,11 +35,15 @@ import com.smartbt.vtsuite.vtcommon.validator.Constants;
 import com.smartbt.vtsuite.vtcommon.validator.RegExp;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.DateDisplayFormat;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
+import com.smartgwt.client.widgets.form.fields.DateItem;
 import com.smartgwt.client.widgets.form.fields.RowSpacerItem;
 import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
+import com.smartgwt.client.widgets.form.validator.DateRangeValidator;
 import com.smartgwt.client.widgets.form.validator.RegExpValidator;
+import java.util.Date;
 
 /**
  *
@@ -87,6 +91,8 @@ public class MerchantEditor extends BaseBoardingEditor {
     private BaseSelectItem distributionChanelCombo;
     private BaseSelectItem riskCombo;
     private BaseSelectItem merchantTypeCombo;
+    public DateItem activationdate;
+    
     /*  Row 8*/
     private CheckboxItem independentOwnerCheckbox;
     private CheckboxItem moneyTransmissionCheckbox;
@@ -97,19 +103,24 @@ public class MerchantEditor extends BaseBoardingEditor {
     private CheckboxItem atmCheckbox;
     private CheckboxItem otherFinancialProviderCheckbox;
     private CheckboxItem trainingCheckbox;
+    private CheckboxItem activeCheckbox;
+        
     /*  Row 10*/
     private BaseTextAreaItem documentNotesTextArea;
     /*  Row 11*/
     private BaseTextAreaItem descriptionTextArea;
     private BaseTextItem authFeePText;
     private BaseTextItem oEAgentNumberText;
+    
+    
 
     public MerchantEditor( int id, int idParent ) {
         super( id, idParent, EntityType.MERCHANT );
-
+        
         acceptButton.setDisabled(true);
         if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_BOARDING_MANAGEMENT_MERCHANT_ADD)) {
             acceptButton.setDisabled(false);
+           
         }
         
         actionForm.setFields( spacerItem, reportButton, acceptButton, addChildButton );
@@ -224,15 +235,30 @@ public class MerchantEditor extends BaseBoardingEditor {
         riskCombo = new BaseSelectItem( 29, "risk", "Risk", "Select the risk for this merchant.", DataSourceBuilder.getRiskDS(), false );
         riskCombo.setTextAlign( Alignment.LEFT );
         riskCombo.setWidth( 115 );
-
+        
         merchantTypeCombo = new BaseSelectItem( 30, "merchantType", "Merchant Type", "Select the merchant type.", DataSourceBuilder.getMerchantTypeDS(), false );
         merchantTypeCombo.setWidth( 115 );
-        merchantTypeCombo.setEndRow( true );
         
+        activationdate = new DateItem("activationdate",I18N.GET.LIST_FIELD_ACTIVATION_DATE_TITLE());
+        activationdate.setWidth(90);
+        activationdate.setDateFormatter( DateDisplayFormat.TOUSSHORTDATETIME );
+        activationdate.setUseMask( true );
+        activationdate.setUseTextField( true );
+        activationdate.setValidateOnChange( true );
+        final DateRangeValidator maxValidator = new DateRangeValidator();
+        Date maxDate = new Date();
+        maxDate.setHours( 24 );
+        maxValidator.setMax( maxDate );
+        
+        activationdate.setEndRow( true );
+        
+        
+              
         authFeePText = new BaseTextItem( 31, "authFeeP", "Auth FeeP", "Enter the Auth FeeP.", false );
         authFeePText.setTextAlign( Alignment.LEFT );
-
+       
         /* Row 8*/
+        
         independentOwnerCheckbox = new CheckboxItem( "independentOwner", "Independent Owner" );
 
         independentOwnerCheckbox.setTextAlign( Alignment.LEFT );
@@ -263,14 +289,16 @@ public class MerchantEditor extends BaseBoardingEditor {
         trainingCheckbox = new CheckboxItem( "training", "Training" );
 
         trainingCheckbox.setTextAlign( Alignment.LEFT );
-
+                
         otherFinancialProviderCheckbox = new CheckboxItem( "otherFinancialProvider", "Financial Provider" );
 
         otherFinancialProviderCheckbox.setTextAlign( Alignment.LEFT );
-
-        otherFinancialProviderCheckbox.setEndRow(
-                true );
-
+        
+        activeCheckbox = new CheckboxItem( "active", "Active" );
+        activeCheckbox.setTextAlign( Alignment.LEFT );
+                    
+        activeCheckbox.setEndRow(true );
+        
         /* Row 10*/
         documentNotesTextArea = new BaseTextAreaItem( 32, "documentNotes", "Document Notes", "Enter the document notes.", false );
 
@@ -345,13 +373,14 @@ public class MerchantEditor extends BaseBoardingEditor {
                 idTecnicardCheck, idTecnicardCash, iStreamUser, iStreamPassword, idIstreamFuzeCash, idIstreamFuzeCheck, idIstreamTecnicardCash, idIstreamTecnicardCheck,
                 idTellerOrderExp, idTellerPagoOrderExp, idPosOrderExp, sicText, cardInventoryText, bankNameText,
                 routingBankNumberText, oEAgentNumberText, cardProgramCombo, authFeePText,
-                distributorCombo, distributionChanelCombo, riskCombo, merchantTypeCombo,
+                distributorCombo, distributionChanelCombo, riskCombo, merchantTypeCombo,activationdate,
                 independentOwnerCheckbox, moneyTransmissionCheckbox, billPaymentCheckbox, checkCashingCheckbox,
-                documentApprovedCheckbox, atmCheckbox, trainingCheckbox, otherFinancialProviderCheckbox,
+                documentApprovedCheckbox, atmCheckbox, trainingCheckbox, otherFinancialProviderCheckbox, activeCheckbox,
                 new RowSpacerItem(),
                 documentNotesTextArea,
                 new RowSpacerItem(),
                 descriptionTextArea
+                
         );
 
     }
@@ -430,6 +459,7 @@ public class MerchantEditor extends BaseBoardingEditor {
         record.setAttribute( "training", trainingCheckbox.getValueAsBoolean() );
         record.setAttribute( "otherFinancialProvider", otherFinancialProviderCheckbox.getValueAsBoolean() );
         record.setAttribute( "authFeeP", authFeePText.getValueAsString());
+        record.setAttribute( "active", activeCheckbox.getValueAsBoolean() );
         
         record.setAttribute( "documentNotes", documentNotesTextArea.getValueAsString() );
         record.setAttribute( "description", descriptionTextArea.getValueAsString() );

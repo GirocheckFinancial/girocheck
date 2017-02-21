@@ -16,6 +16,7 @@
 package com.smartbt.girocheck.servercommon.display;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -73,6 +74,7 @@ public class MerchantDisplay implements Serializable {
     private Boolean checkCashing;
     private Boolean documentApproved;
     private Boolean atm;
+    private Boolean active;
     private Boolean training;
     private Boolean validate;
     private Boolean otherFinancialProvider;
@@ -85,7 +87,10 @@ public class MerchantDisplay implements Serializable {
     private double authFeeP;
 
     private boolean hasTransaction;
+    
+    private java.util.Date activationDate;
 
+    
     public MerchantDisplay() {
 
     }
@@ -413,6 +418,19 @@ public class MerchantDisplay implements Serializable {
     public void setAtm( Boolean atm ) {
         this.atm = atm;
     }
+    /**
+     * @return the active
+     */
+    public Boolean getActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive( Boolean active ) {
+        this.active = active;
+    }
 
     /**
      * @return the training
@@ -706,6 +724,14 @@ public class MerchantDisplay implements Serializable {
      */
     public void setValidate(Boolean validate) {
         this.validate = validate;
+    }
+    
+    public Date getActivationDate() {
+        return activationDate;
+    }
+
+    public void setActivationDate(Date activationDate) {
+        this.activationDate = activationDate;
     }
 
 }

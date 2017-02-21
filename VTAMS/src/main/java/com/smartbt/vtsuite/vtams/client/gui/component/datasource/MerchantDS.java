@@ -19,7 +19,6 @@ import com.smartbt.vtsuite.vtams.client.classes.Properties;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseDatasource;
 import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.fields.DataSourceBooleanField;
-import com.smartgwt.client.data.fields.DataSourceImageField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
 import com.smartgwt.client.types.FieldType;
 
@@ -70,7 +69,8 @@ public class MerchantDS extends BaseDatasource {
         cardProgramField.setMultiple(Boolean.TRUE);
         cardProgramField.setTypeAsDataSource(new CardProgramDS());
            
-        DataSourceTextField merchantTypeField = new DataSourceTextField("merchantType");        
+        DataSourceTextField merchantTypeField = new DataSourceTextField("merchantType");
+        DataSourceTextField activationdateField = new DataSourceTextField("activationdate");
         DataSourceTextField distributorField = new DataSourceTextField("distributor");        
         DataSourceTextField distributionChanelField = new DataSourceTextField("distributionChanel");        
         DataSourceTextField riskField = new DataSourceTextField("risk");        
@@ -81,6 +81,7 @@ public class MerchantDS extends BaseDatasource {
         DataSourceBooleanField checkCashingField = new DataSourceBooleanField("checkCashing");
         DataSourceBooleanField documentApprovedField = new DataSourceBooleanField("documentApproved");
         DataSourceBooleanField atmField = new DataSourceBooleanField("atm");
+        DataSourceBooleanField activeField = new DataSourceBooleanField("active");
         DataSourceBooleanField trainingField = new DataSourceBooleanField("training");
         DataSourceBooleanField otherFinancialProviderField = new DataSourceBooleanField("otherFinancialProvider");
         
@@ -128,6 +129,7 @@ public class MerchantDS extends BaseDatasource {
                 distributionChanelField,
                 riskField,
                 merchantTypeField,
+                activationdateField,
                 
                 independentOwnerField,
                 moneyTransmissionField,
@@ -136,6 +138,7 @@ public class MerchantDS extends BaseDatasource {
                 documentApprovedField,
                 atmField,
                 trainingField,
+                activeField,
                 otherFinancialProviderField,
                 
                 documentNotesField,

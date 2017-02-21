@@ -25,6 +25,7 @@ import com.smartbt.girocheck.servercommon.model.State;
 import com.smartbt.girocheck.servercommon.model.Transaction;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.display.TransactionDisplay;
+import java.sql.Date;
 import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -156,6 +157,8 @@ public class MerchantDAO extends BaseDAO<Merchant> {
             display.setDocumentApproved( merchant.isDocumentApproved() );
             display.setAtm( merchant.isAtm() );
             display.setTraining( merchant.isTraining() );
+            display.setActive( merchant.isActive() );
+            display.setActivationDate(merchant.getActivationDate());
             display.setOtherFinancialProvider( merchant.isOtherFinancialProvider() );
             display.setAuthFeeP(merchant.getAuthFeeP());
 

@@ -32,8 +32,10 @@ import com.smartbt.girocheck.servercommon.model.CardProgram;
 import com.smartbt.girocheck.servercommon.model.Country;
 import com.smartbt.girocheck.servercommon.model.State;
 import com.smartbt.vtsuite.vtcommon.Constants;
+import java.awt.Window;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -146,6 +148,8 @@ public class MerchantManager {
         merchant.setCheckCashing( display.getCheckCashing());
         merchant.setDocumentApproved( display.getDocumentApproved());
         merchant.setAtm( display.getAtm());
+        merchant.setActive( display.getActive());
+        merchant.setActivationDate(new Date());
         merchant.setTraining(display.getTraining());
         merchant.setOtherFinancialProvider(display.getOtherFinancialProvider());
         

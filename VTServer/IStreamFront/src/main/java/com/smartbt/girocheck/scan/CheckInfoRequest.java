@@ -43,10 +43,7 @@ import javax.xml.bind.annotation.XmlType;
     "locationId",
     "paymentCheck",
     
-    "checkIssueDate",
-    "checkType",
-    "expansionType",
-    "entryType"
+    "checkIssueDate" 
 })
 public class CheckInfoRequest implements IMap {
     
@@ -77,9 +74,7 @@ public class CheckInfoRequest implements IMap {
     private String locationId;
     private String paymentCheck;
     private String checkIssueDate;  // date format should be yyyyMMdd
-    private String checkType;
-    private String expansionType;
-    private String entryType;
+   
     
     @Override
     public Map toMap() {
@@ -128,10 +123,7 @@ public class CheckInfoRequest implements IMap {
             map.put(ParameterName.PAYMENTCHECK, getPaymentCheck());
             
             map.put(ParameterName.CHECK_ISSUE_DATE, getCheckIssueDate());
-            map.put(ParameterName.CHECK_TYPE, getCheckType());
-            map.put(ParameterName.CHECK_EXPANSION_TYPE, getExpansionType());
-            map.put(ParameterName.CHECK_ENTRY_TYPE, getEntryType());
-          
+           
         return map;
     }
     
@@ -506,54 +498,5 @@ public class CheckInfoRequest implements IMap {
     public String getCheckIssueDate() {
         return checkIssueDate;
     }
-
-    /**
-     * @param checkIssueDate the checkIssueDate to set
-     */
-    public void setCheckIssueDate(String checkIssueDate) {
-        this.checkIssueDate = checkIssueDate;
-    }
-
-    /**
-     * @return the checkType
-     */
-    public String getCheckType() {
-        return checkType;
-    }
-
-    /**
-     * @param checkType the checkType to set
-     */
-    public void setCheckType(String checkType) {
-        this.checkType = checkType;
-    }
-
-    /**
-     * @return the expansionType
-     */
-    public String getExpansionType() {
-        return expansionType;
-    }
-
-    /**
-     * @param expansionType the expansionType to set
-     */
-    public void setExpansionType(String expansionType) {
-        this.expansionType = expansionType;
-    }
-
-    /**
-     * @return the entryType
-     */
-    public String getEntryType() {
-        return entryType;
-    }
-
-    /**
-     * @param entryType the entryType to set
-     */
-    public void setEntryType(String entryType) {
-        this.entryType = entryType;
-    }
-
+ 
 }

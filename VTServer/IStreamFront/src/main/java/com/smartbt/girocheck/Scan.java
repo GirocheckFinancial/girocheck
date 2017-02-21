@@ -33,7 +33,10 @@ public class Scan {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] checkInfo", null);
  
-        return new CheckInfoRes().build(FrontManager.processTransaction(arg0));
+        String user = arg0.getUser();
+        String passw = arg0.getPassword();
+        return new CheckInfoRes().mock(user, passw);
+//        return new CheckInfoRes().build(FrontManager.processTransaction(arg0));
     }
 
     public CertegyInfoRes certegyInfo(CertegyInfoRequest arg0) throws Exception {

@@ -198,16 +198,10 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
     private IMap wmCardPersonalization(Map map) throws Exception {
 
-        Integer idType = 0;
-
-        if (map.containsKey(ParameterName.IDTYPE)) {
-            IdType type = (IdType) map.get(ParameterName.IDTYPE);
-            idType = type.getId();
-        }
-
+        Integer idType = 1;
+ 
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
-//        String pId = MapUtil.getStringValueFromMap( map, ParameterName.ID, true );
-
+ 
         String pState = MapUtil.getStringValueFromMap(map, ParameterName.STATE, false);
         String pCountry = MapUtil.getStringValueFromMap(map, ParameterName.COUNTRY, false);
         String pIdState = MapUtil.getStringValueFromMap(map, ParameterName.IDSTATE, false);
@@ -230,18 +224,12 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pFaxAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.FAX_AREA_CODE, false);
         String pLastName = MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false);
 
-//        if (pLastName != null && pLastName.contains(" ")) {
-//            pLastName = pLastName.split(" ")[0];
-//        }
-
+ 
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, true);
         String pWorkphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.WORKPHONE_AREA_CODE, false);
-
-//        String pCellphoneAreaCode = "786"; // MapUtil.getStringValueFromMap( map, ParameterName.CELL_PHONE_AREA, false );
         String pCellphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.CELL_PHONE_AREA, false);
         String pPersonTitle = MapUtil.getStringValueFromMap(map, ParameterName.PERSON_TITLE, false);
         String pEmail = MapUtil.getStringValueFromMap(map, ParameterName.EMAIL, false);
-//        String pCurrentAddress = "Y";//MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false );
         String pCurrentAddress = MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS_CORRECT, false);
         String pRBService = "0";  // OJO
         String pFirstName = MapUtil.getStringValueFromMap(map, ParameterName.FIRST_NAME, false);
@@ -252,13 +240,6 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pFaxphone = MapUtil.getStringValueFromMap(map, ParameterName.FAX_PHONE, false);
         String pCard = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
 
-//        Date datee = MapUtil.getDateValueFromMap( map, ParameterName.EXPIRATION_DATE, false );
-//        String pIdExpiration = "";// = (date != null) ? df.format( date ) : "";
-//        String pIdExpiration = (datee != null) ? df.format( datee ) : "";
-//        String fields = " pRequestID, pCard, pId, pIdType, pIdExpiration, pIdCountry, pIdState, pPersonTitle, pFirstName, pMiddleName, pLastName, pMaidenName, pDateOfBirth, pCountry, pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress";
-//        String[] names = fields.split( ",");
-//        printCardPersonalization(names, pRequestID, pCard, "112223333", "1", "", "840", "", "", "John", "", "Smith", "", "19750228", "840",
-//                "11", "Atlanta", "222333 PEACHTREE PLACE", "30318", "girocheck@cardmarte.com", "", "", "786", "4540209", "", "", "", "", "0", "Y"  );
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] -> port.wmCardPersonalization( pRequestID "
                 + pRequestID + ",  pCard ************" + pCard.substring(pCard.length() - 4) + ",  pId " + pId + ",  pIdType " + idType + ",  pIdExpiration,  pIdCountry " + pIdCountry + ",  pIdState " + pIdState + ",  pPersonTitle " + pPersonTitle + ",  pFirstName " + pFirstName + ", pMiddleName " + pMiddleName + ", pLastName " + pLastName + ", pMaidenName " + pMaidenName + ", pDateOfBirth " + pDateOfBirth + ", pCountry " + pCountry + ", pState "
                 + pState + ", pCity " + pCity + ", pAddress  " + pAddress + ", pZipCode " + pZipCode + ", pEmail " + pEmail + ", pTelephoneAreaCode " + pTelephoneAreaCode + ", pTelephone " + pTelephone + ", pCellphoneAreaCode " + pCellphoneAreaCode + ", pCellphone " + pCellphone + ", pWorkphoneAreaCode " + pWorkphoneAreaCode + ", pWorkphone " + pWorkphone + ", pFaxAreaCode " + pFaxAreaCode + ", pFaxphone " + pFaxphone + ", pRBService " + pRBService + ", pCurrentAddress " + pCurrentAddress + ")", null);
@@ -306,17 +287,12 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCardHolderValidation(Map map) throws Exception {
-//        String pIdType = IdType.SSN.getId() + "";
-//        String pIdType = MapUtil.getStringValueFromMap( map, ParameterName.SENSITIVEIDTYPE, true );
-        IdType idType = (IdType) map.get(ParameterName.IDTYPE);
-
-        // String pIdType = MapUtil.getStringValueFromMap( map, ParameterName.SENSITIVEIDTYPE, true );
+        
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
-
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardHolderValidation(" + pRequestID + ",   ************" + pCardNumber.substring(pCardNumber.length() - 4) + ",  " + pId + ",  " + idType.getId() + ")", null);
-        return port.wmCardHolderValidation(pRequestID, pCardNumber, pId, idType.getId() + "");
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardHolderValidation(" + pRequestID + ",   ************" + pCardNumber.substring(pCardNumber.length() - 4) + ",  " + pId + ",  " + "1" + ")", null);
+        return port.wmCardHolderValidation(pRequestID, pCardNumber, pId, "1");
     }
 
     public IMap wmEcho(Map map) throws Exception {

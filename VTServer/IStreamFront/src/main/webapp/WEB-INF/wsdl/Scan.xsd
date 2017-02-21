@@ -103,10 +103,7 @@
             <xs:element name="makerAddress" type="xs:string" minOccurs="0"/>
             <xs:element name="locationId" type="xs:string" minOccurs="0"/>
             <xs:element name="paymentCheck" type="xs:string" minOccurs="0"/> 
-            <xs:element name="checkIssueDate" type="xs:string" minOccurs="0"/>
-            <xs:element name="checkType" type="xs:string" minOccurs="0"/>
-            <xs:element name="expansionType" type="xs:string" minOccurs="0"/>
-            <xs:element name="entryType" type="xs:string" minOccurs="0"/> 
+            <xs:element name="checkIssueDate" type="xs:string" minOccurs="0"/> 
         </xs:sequence>
     </xs:complexType>
     

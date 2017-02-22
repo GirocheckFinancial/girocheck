@@ -106,7 +106,44 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>         
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jax-ws-commons</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+<!--                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFiles>
+                                <wsdlFile>Westech_WSDL.xml.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <packageName>com.smartbt.vtsuite.boundary</packageName>
+                            <wsdlLocation>file:/C:/REPO/Dev/girocheck/VTServer/Westech/Westech-ejb/src/main/java/com/smartbt/vtsuite/boundary/Westech_WSDL.xml</wsdlLocation>
+                            <staleFile>${project.build.directory}/jaxws/stale/Westech_WSDL.xml.stale</staleFile>
+                        </configuration>
+                        <id>wsimport-generate-Westech_WSDL.xml</id>
+                        <phase>generate-sources</phase>
+                    </execution>-->
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.xml</groupId>
+                        <artifactId>webservices-api</artifactId>
+                        <version>2.0</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sourceDestDir>${project.build.directory}/generated-sources/jaxws-wsimport</sourceDestDir>
+                    <xnocompile>true</xnocompile>
+                    <verbose>true</verbose>
+                    <extension>true</extension>
+                    <catalog>${basedir}/src/jax-ws-catalog.xml</catalog>
+                    <target>2.0</target>
+                </configuration>
+            </plugin>
         </plugins>          
     </build>
 </project>

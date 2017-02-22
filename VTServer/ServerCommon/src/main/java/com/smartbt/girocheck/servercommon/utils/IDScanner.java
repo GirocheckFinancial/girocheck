@@ -118,13 +118,16 @@ public class IDScanner {
     }
 
     public static Map<ParameterName, Object> parseIdLocally(String text) {
-
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
+           
         String decoded = new String(Base64.decodeBase64(text));
         return new DriverLicense(decoded).toMap();
     }
 
     public static Map<ParameterName, Object> parseIDRemotely(String authKey, String text, Integer attempts) throws Exception {
-        if (attempts == 0) {
+        
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID Remotely...", null);if (attempts == 0) {
             return null;
         }
 

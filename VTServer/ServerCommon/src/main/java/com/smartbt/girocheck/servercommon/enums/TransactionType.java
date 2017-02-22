@@ -54,7 +54,7 @@ public enum TransactionType {
     CHOICE_CANCELATION_REQUEST(NomHost.CHOICE, 37 ),  
     CHOICE_NOTIFY_PAYMENT(NomHost.CHOICE, 38 ), 
     
-    WESTECH_CHECKAUTH(NomHost.CHOICE, 39 ),
+    WESTECH_CHECK_PROCESS(NomHost.WESTECH, 39 ),
     
     CERTEGY_AUTHENTICATION(NomHost.CERTEGY, 40),
     CERTEGY_REVERSE_REQUEST(NomHost.CERTEGY, 41),
@@ -162,7 +162,7 @@ public enum TransactionType {
             case 38: 
                 return TransactionType.CHOICE_NOTIFY_PAYMENT;
             case 39: 
-                return TransactionType.WESTECH_CHECKAUTH;
+                return TransactionType.WESTECH_CHECK_PROCESS;
             case 40: 
                 return TransactionType.CERTEGY_AUTHENTICATION;
             case 41: 

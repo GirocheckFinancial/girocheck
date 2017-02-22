@@ -79,7 +79,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             }
 
             //-------  go to HOST WEST TECH (checkAuth) -------
-            request.setTransactionType(TransactionType.WESTECH_CHECKAUTH);
+            request.setTransactionType(TransactionType.WESTECH_CHECK_PROCESS);
 
             response = sendMessageToHost(request, NomHost.WESTECH, WESTECH_HOST_WAIT_TIME, transaction);
 

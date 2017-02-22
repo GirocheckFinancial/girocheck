@@ -13,18 +13,19 @@
  ** written permission of Smart Business Technology, Inc.
  **
  */
-package com.smartbt.vtsuite.manager;
+package com.smartbt.vtsuite.mock;
 
 import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
-import com.smartbt.girocheck.servercommon.utils.IMap;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.boundary.CheckService;
 import com.smartbt.vtsuite.boundary.CheckServiceSoap;
+import static com.smartbt.vtsuite.manager.WestechBusinessLogic.WT_PASSWORD;
+import static com.smartbt.vtsuite.manager.WestechBusinessLogic.WT_USERNAME;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,25 +33,16 @@ import java.util.HashMap;
 import java.util.Map;
 import javaxt.utils.Base64;
 
-public class WestechBusinessLogic {
-    public static final String WT_USERNAME = "";
-    public static final  String WT_PASSWORD = "";
-    private static WestechBusinessLogic INSTANCE;
-
-    private CheckService service;
-    private CheckServiceSoap port;
-
-    public static synchronized WestechBusinessLogic get() {
+public class MockWestechBusinessLogic { 
+    private static MockWestechBusinessLogic INSTANCE;
+ 
+    public static synchronized MockWestechBusinessLogic get() {
         if (INSTANCE == null) {
-            INSTANCE = new WestechBusinessLogic();
+            INSTANCE = new MockWestechBusinessLogic();
         }
         return INSTANCE;
     }
-
-    public WestechBusinessLogic() {
-        service = new CheckService();
-        port = service.getCheckServiceSoap();
-    }
+ 
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
         Map transactionData = request.getTransactionData();
@@ -92,11 +84,9 @@ public class WestechBusinessLogic {
         
         String log = printRequest(checkFront,checkBack,idProof, idProofXML);
         System.out.println(log);
-        
-        String checkId = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProof2dBarcode);
-
+         
         Map map = new HashMap();
-        map.put(ParameterName.CHECK_ID, checkId);
+        map.put(ParameterName.CHECK_ID, "1");
         return map;
     }
 

@@ -20,6 +20,7 @@ import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
+import com.smartbt.vtsuite.mock.MockWestechBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 
 /**
@@ -28,17 +29,12 @@ import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
 public class WestechHostManager {
 
     private static WestechHostManager INSTANCE;
-    private WestechBusinessLogic westechBusinessLogic;
 
     public static synchronized WestechHostManager get() {
         if (INSTANCE == null) {
             INSTANCE = new WestechHostManager();
         }
         return INSTANCE;
-    }
-
-    public WestechHostManager() {
-        westechBusinessLogic = westechBusinessLogic.get();
     }
 
     /**
@@ -56,8 +52,15 @@ public class WestechHostManager {
         subTransaction.setHost(NomHost.WESTECH.getId());
 
         try {
-            response = westechBusinessLogic.process(request);
+            String prodProperty = System.getProperty("PROD");
+            Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
 
+            if (isProd) {
+                response = WestechBusinessLogic.get().process(request);
+            } else {
+                response = MockWestechBusinessLogic.get().process(request);
+            }
+ 
             if (response.wasApproved()) {
                 subTransaction.setResultCode(response.getResultCode().getCode());
                 subTransaction.setResultMessage(response.getResultMessage());

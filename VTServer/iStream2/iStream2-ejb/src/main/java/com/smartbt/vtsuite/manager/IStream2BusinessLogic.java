@@ -62,7 +62,8 @@ public class IStream2BusinessLogic {
             service = new TLS_Service();
             port = service.getTLSPort();
 
-            url = "https://stable-1.istreamdeposit.com/TLS?wsdl";
+          // url = "https://stable-1.istreamdeposit.com/TLS?wsdl";
+             url = "https://stable-1.istreamdeposit.com/TLS";
 
 //            if(url == null){
 //                url = "https://bizsrv.tcmsystem.net/IStreamWS/iStreamSrvHost.asmx?WSDL";

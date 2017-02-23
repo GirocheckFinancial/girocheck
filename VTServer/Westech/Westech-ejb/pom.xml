@@ -127,6 +127,21 @@
                         <id>wsimport-generate-Westech_WSDL.xml</id>
                         <phase>generate-sources</phase>
                     </execution>-->
+<!--                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFiles>
+                                <wsdlFile>61.12.87.130/eFraudAPI/CheckService.asmx.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <packageName>com.smartbt.vtsuite.ws</packageName>
+                            <wsdlLocation>http://61.12.87.130/eFraudAPI/CheckService.asmx?WSDL</wsdlLocation>
+                            <staleFile>${project.build.directory}/jaxws/stale/CheckService.asmx.stale</staleFile>
+                        </configuration>
+                        <id>wsimport-generate-CheckService.asmx</id>
+                        <phase>generate-sources</phase>
+                    </execution>-->
                 </executions>
                 <dependencies>
                     <dependency>

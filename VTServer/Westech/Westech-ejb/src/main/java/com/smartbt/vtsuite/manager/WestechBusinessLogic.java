@@ -33,8 +33,8 @@ import java.util.Map;
 import javaxt.utils.Base64;
 
 public class WestechBusinessLogic {
-    public static final String WT_USERNAME = "";
-    public static final  String WT_PASSWORD = "";
+    public static final String WT_USERNAME = "jacky";
+    public static final  String WT_PASSWORD = "12345";
     private static WestechBusinessLogic INSTANCE;
 
     private CheckService service;
@@ -90,7 +90,7 @@ public class WestechBusinessLogic {
         String idProofXML = buildIdProofXML(params);
         byte[] idProof2dBarcode = Base64.decode(idProofXML);
         
-        String log = printRequest(checkFront,checkBack,idProof, idProofXML);
+        String log = printRequest(checkFront,checkBack,idProof, idProofXML, idProof2dBarcode);
         System.out.println(log);
         
         String checkId = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProof2dBarcode);
@@ -104,6 +104,7 @@ public class WestechBusinessLogic {
     public String buildIdProofXML(Map map){
         StringBuilder sb = new StringBuilder();
         sb.append("<IdProofInformation>").append('\n');
+        sb.append("<IdNo>").append(map.get(ParameterName.ID)).append("</IdNo>").append('\n');
         sb.append("<Firstname>").append(map.get(ParameterName.FIRST_NAME)).append("</Firstname>").append('\n');
         sb.append("<Lastname>").append(map.get(ParameterName.LAST_NAME)).append("</Lastname>").append('\n');
         
@@ -116,12 +117,18 @@ public class WestechBusinessLogic {
          sb.append("<City>").append(map.get(ParameterName.CITY)).append("</City>").append('\n');
          sb.append("<State>").append(map.get(ParameterName.STATE)).append("</State>").append('\n');
          sb.append("<ZipCode>").append(map.get(ParameterName.ZIPCODE)).append("</ZipCode>").append('\n');
+         
+         Date expirationDate = (Date)map.get(ParameterName.ACCOUNTNUM.EXPIRATION_DATE_AS_DATE);
+         
+         if(expirationDate != null){
+          sb.append("<ExpirationDate>").append(df.format(expirationDate)).append("</ExpirationDate>").append('\n');   
+         }
          sb.append("</IdProofInformation>").append('\n');
         
         return sb.toString();
     }
     
-    public static  String printRequest(byte[] checkFront,byte[]  checkBack,byte[]  idProof, String idProof2dBarcode){
+    public static  String printRequest(byte[] checkFront,byte[]  checkBack,byte[]  idProof, String idProof2dBarcode, byte[] base64){
          StringBuilder sb = new StringBuilder();
         sb.append("<WestechRequest>").append('\n');
         sb.append("<Username>").append(WT_USERNAME).append("</Username>").append('\n');
@@ -140,6 +147,7 @@ public class WestechBusinessLogic {
         }
         
         sb.append(idProof2dBarcode);
+                 sb.append("<base64>").append(base64).append("</base64>").append('\n');
          sb.append("</WestechRequest>").append('\n');
         return sb.toString();
     }

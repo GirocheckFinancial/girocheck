@@ -170,6 +170,9 @@ public class CoreTransactionManager {
         } catch (LoggingValidationException lve) {
             DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, lve.getResultCode() + lve.getMessage(), "");
             JMSManager.get().send(response, JMSManager.get().getCoreOutQueue(), direxTransactionRequest.getCorrelation());
+        } catch (CreditCardException ccException) {
+            DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ccException.getMessage());
+            JMSManager.get().send(response, JMSManager.get().getCoreOutQueue(), direxTransactionRequest.getCorrelation());
         } catch (Exception ex) {
             DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ex);
             JMSManager.get().send(response, JMSManager.get().getCoreOutQueue(), direxTransactionRequest.getCorrelation());
@@ -217,6 +220,7 @@ public class CoreTransactionManager {
             if (transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {
                 System.out.println("[CoreTransactionManager] transactionType == TransactionType.CARD_RELOAD_WITH_DATA");
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
+                 
                 client = creditCardManager.getClient(cardNumberCR);
 
                 if (client == null) {
@@ -412,6 +416,10 @@ public class CoreTransactionManager {
                     && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                     String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
+                    
+                    System.out.println("[CoreTransactionManager] cardNumberCR == " + cardNumber);
+                
+                    
                     if (cardNumber != null && !cardNumber.isEmpty()) {
 //                      
                         CreditCard creditCard = null;
@@ -439,7 +447,7 @@ public class CoreTransactionManager {
                         if (creditCard != null) {
                             transaction.setData_sc1(creditCard);
                         } else {
-                            throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, " CreditCard value is null. ", transaction);
+                            throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, "Card does not exist. ", transaction);
                         }
                     } else {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CreditCard value from the Terminal is NULL. ", null);

@@ -49,7 +49,7 @@ public class MICR {
     public static MICR build(Map map){
         MICR _this = new MICR();
         _this.setExpansionType((String)map.get(ParameterName.CHECK_EXPANSION_TYPE));
-        _this.setEntryType((String)map.get(ParameterName.CHECK_ENTRY_TYPE));
+        _this.setEntryType("TOAD");
         _this.setLine((String)map.get(ParameterName.MICR));
         
         return _this;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ <hibernate-mapping>
+    <class name="com.smartbt.girocheck.servercommon.model.MobileClient" table="mobile_client" lazy="false">
+                <id name="id" column="id" type="integer" unsaved-value="0">
+		<generator class="native">
+		</generator>
+		</id>
+                <property name="registrationDate" column="registration_date" type="timestamp" not-null="false" lazy="false"/>
+                 <property name="keyExpirationTime" column="key_expiration_time" type="timestamp" not-null="false" lazy="false"/>
+                 <property name="forgotPasswordKey" column="forgot_password_key" type="string" length="45" not-null="false" lazy="false"/>
+                 <property name="deviceType" column="device_type" type="string" length="45" not-null="false" lazy="false"/>
+                <many-to-one name="client" cascade="lock" column="client" class="com.smartbt.girocheck.servercommon.model.Client" not-null="true" lazy="proxy">
+		</many-to-one>
+                <many-to-one name="card" cascade="lock" column="card" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="true" lazy="proxy">
+		</many-to-one>
+            </class>      
+  
+    </hibernate-mapping>

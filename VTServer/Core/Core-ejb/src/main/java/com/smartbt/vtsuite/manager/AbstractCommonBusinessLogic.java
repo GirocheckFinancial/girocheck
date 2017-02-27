@@ -1,10 +1,10 @@
 
 /*
 
-@Author Roberto Rodriguez
-robertoSoftwareEngineer@gmail.com
+ @Author Roberto Rodriguez
+ robertoSoftwareEngineer@gmail.com
 
-*/
+ */
 package com.smartbt.vtsuite.manager;
 
 import com.smartbt.girocheck.servercommon.enums.CheckStatus;
@@ -76,17 +76,17 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
         DirexTransactionResponse provissionalResponse = new DirexTransactionResponse();
         provissionalResponse.setResultCode(resultCode);
-        
-        if(!estimated_posting_time.isEmpty()){
+
+        if (!estimated_posting_time.isEmpty()) {
             provissionalResponse.setResultMessage(estimated_posting_time);
-        }else{
+        } else {
             provissionalResponse.setResultMessage(ResultMessage.SUCCESS.getMessage());
-        } 
+        }
 
         Queue queue;
 
-        if (transactionType == TransactionType.TECNICARD_CONFIRMATION) { 
-                provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "01");
+        if (transactionType == TransactionType.TECNICARD_CONFIRMATION) {
+            provissionalResponse.getTransactionData().put(ParameterName.PRINTLOGO, "01");
             queue = jmsManager.getCore2OutQueue();
         } else {
             queue = jmsManager.getCoreOutQueue();
@@ -106,7 +106,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
         jmsManager.sendWithProps(request, jmsManager.getHostInQueue(), request.getCorrelation(), props);
-         //TODO change this for IStream.sendSingleICL (and add an else logic for it)
+        //TODO change this for IStream.sendSingleICL (and add an else logic for it)
         if (request.getTransactionType() != TransactionType.ISTREAM_CHECK_AUTH_SUBMIT) {
             direxTransactionResponse = receiveMessageFromHost(request.getTransactionType(), host, waitTime, request.getCorrelation());
             transaction.addSubTransactionList(direxTransactionResponse.getTransaction().getSub_Transaction());
@@ -222,66 +222,66 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
             HibernateUtil.commitTransaction();
         } catch (Exception e) {
-             
+
             HibernateUtil.rollbackTransaction();
             throw new TransactionalException(ResultCode.CORE_FEE_CALCULATION_ERROR, request.getTransactionType(), e);
-        } 
+        }
     }
 
     protected void fillOutClient(Map transactionMap, Transaction transaction) throws SQLException, Exception {
-        
-            if (transactionMap.containsKey(ParameterName.FIRST_NAME)) {
-                transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.FIRST_NAME));
-            }
-            if (transactionMap.containsKey(ParameterName.LAST_NAME)) {
-                transaction.getClient().setLastName((String) transactionMap.get(ParameterName.LAST_NAME));
-            }
-            if (transactionMap.containsKey(ParameterName.MIDDLE_NAME)) {
-                if (transaction.getClient().getFirstName() == null) {
-                    transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.MIDDLE_NAME));
-                } else {
-                    transaction.getClient().setFirstName(transaction.getClient().getFirstName() + " " + ((String) transactionMap.get(ParameterName.MIDDLE_NAME)));
-                }
-            }
-            if (transactionMap.containsKey(ParameterName.MAIDEN_NAME)) { //in case the last name comes in the maiden name
-                if (transaction.getClient().getLastName() == null || transaction.getClient().getLastName().isEmpty()) {
-                    transaction.getClient().setLastName((String) transactionMap.get(ParameterName.MAIDEN_NAME));
-                }
-            }
-            if (transactionMap.containsKey(ParameterName.TELEPHONE)) {
-                transaction.getClient().setTelephone((String) transactionMap.get(ParameterName.TELEPHONE));
-            }
-            if (transactionMap.containsKey(ParameterName.EMAIL)) {
-                transaction.getClient().setEmail((String) transactionMap.get(ParameterName.EMAIL));
-            }
-            if (transactionMap.containsKey(ParameterName.BORNDATE_AS_DATE)) {
-                transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE_AS_DATE));
-            }
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) transaction.getClient().getBornDate() = " + transaction.getClient().getBornDate(), null);
+        if (transactionMap.containsKey(ParameterName.FIRST_NAME)) {
+            transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.FIRST_NAME));
+        }
+        if (transactionMap.containsKey(ParameterName.LAST_NAME)) {
+            transaction.getClient().setLastName((String) transactionMap.get(ParameterName.LAST_NAME));
+        }
+        if (transactionMap.containsKey(ParameterName.MIDDLE_NAME)) {
+            if (transaction.getClient().getFirstName() == null) {
+                transaction.getClient().setFirstName((String) transactionMap.get(ParameterName.MIDDLE_NAME));
+            } else {
+                transaction.getClient().setFirstName(transaction.getClient().getFirstName() + " " + ((String) transactionMap.get(ParameterName.MIDDLE_NAME)));
+            }
+        }
+        if (transactionMap.containsKey(ParameterName.MAIDEN_NAME)) { //in case the last name comes in the maiden name
+            if (transaction.getClient().getLastName() == null || transaction.getClient().getLastName().isEmpty()) {
+                transaction.getClient().setLastName((String) transactionMap.get(ParameterName.MAIDEN_NAME));
+            }
+        }
+        if (transactionMap.containsKey(ParameterName.TELEPHONE)) {
+            transaction.getClient().setTelephone((String) transactionMap.get(ParameterName.TELEPHONE));
+        }
+        if (transactionMap.containsKey(ParameterName.EMAIL)) {
+            transaction.getClient().setEmail((String) transactionMap.get(ParameterName.EMAIL));
+        }
+        if (transactionMap.containsKey(ParameterName.BORNDATE_AS_DATE)) {
+            transaction.getClient().setBornDate((Date) transactionMap.get(ParameterName.BORNDATE_AS_DATE));
+        }
 
-            if (transactionMap.containsKey(ParameterName.ADDRESS_CORRECT) && transactionMap.get(ParameterName.ADDRESS_CORRECT) != null) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) ADDRESS_CORRECT != null: true.", null);
-                if ((((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("n")) || ((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("N")) {
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) transaction.getClient().getBornDate() = " + transaction.getClient().getBornDate(), null);
 
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) ADDRESS_CORRECT = [" + transactionMap.get(ParameterName.ADDRESS_CORRECT) + "]", null);
-                    if (transactionMap.containsKey(ParameterName.ADDRESS_FORM) && transactionMap.get(ParameterName.ADDRESS_FORM) != null) {
-                        byte[] addressForm = (byte[]) transactionMap.get(ParameterName.ADDRESS_FORM);
-                        if (addressForm != null) {
-                            if (addressForm.length > 0) {
-                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) addressForm.length > 0", null);
-                                java.sql.Blob addressFormBlob = new SerialBlob(addressForm);
-                                transaction.getClient().setAddressForm(addressFormBlob);
-                            } else {
-                                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) addressForm.length = 0", null);
-                            }
+        if (transactionMap.containsKey(ParameterName.ADDRESS_CORRECT) && transactionMap.get(ParameterName.ADDRESS_CORRECT) != null) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) ADDRESS_CORRECT != null: true.", null);
+            if ((((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("n")) || ((String) transactionMap.get(ParameterName.ADDRESS_CORRECT)).contains("N")) {
 
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) ADDRESS_CORRECT = [" + transactionMap.get(ParameterName.ADDRESS_CORRECT) + "]", null);
+                if (transactionMap.containsKey(ParameterName.ADDRESS_FORM) && transactionMap.get(ParameterName.ADDRESS_FORM) != null) {
+                    byte[] addressForm = (byte[]) transactionMap.get(ParameterName.ADDRESS_FORM);
+                    if (addressForm != null) {
+                        if (addressForm.length > 0) {
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) addressForm.length > 0", null);
+                            java.sql.Blob addressFormBlob = new SerialBlob(addressForm);
+                            transaction.getClient().setAddressForm(addressFormBlob);
                         } else {
-                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) addressForm is null", null);
+                            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) addressForm.length = 0", null);
                         }
+
+                    } else {
+                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutClient(...) addressForm is null", null);
                     }
                 }
-            } 
+            }
+        }
     }
 
     protected void fillOutClientAddress(Map transactionMap, Transaction transaction) {
@@ -382,7 +382,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             java.sql.Blob checkFrontBlob = new SerialBlob(checkFront);
             check.setCheckFront(checkFrontBlob);
         }
-        
+
         check.setStatus(CheckStatus.PROCESSING.getStatus());
         check.setCreationDate(new Date());
 
@@ -392,7 +392,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutCheck(...) DONE", null);
     }
 
-    protected DirexTransactionResponse getPersonalInfoFromIDReader(DirexTransactionRequest request) throws TransactionalException{
+    protected DirexTransactionResponse getPersonalInfoFromIDReader(DirexTransactionRequest request) throws TransactionalException {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Into the method getPersonalInfoFromIDReader(...)", null);
 
@@ -417,11 +417,11 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
                 }
 
-                if (dlData != null && !dlData.isEmpty()) { 
-                        personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
-                 }
+                if (dlData != null && !dlData.isEmpty()) {
+                    personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
+                }
 
-                if (personalInfoMap != null) { 
+                if (personalInfoMap != null) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] ----------------- Printing PersonInfo map  -----------------  ", null);
                     String ssn = (String) request.getTransactionData().get(ParameterName.SSN);
                     dtr.getTransactionData().put(ParameterName.IDTYPE, CoreTransactionUtil.getIdTypeFromId(ssn));
@@ -432,15 +432,15 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     dtr.setResultMessage(ResultMessage.SUCCESS.getMessage());
                     dtr.setTerminalResultMessage(ResultMessage.SUCCESS.getMessage());
                 } else {
-                   throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, "IDReader failed");
+                    throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, "IDReader failed");
                 }
 
             } else {
                 throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, " The request doesn't contain DLDATASCAN or DLDATASWIPE ");
             }
-            
+
         } catch (Exception e) {
-            throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO,e);
+            throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, e);
         }
 
         return dtr;
@@ -461,7 +461,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             name = aux[0];
             middleName = aux[1];
         }
-          
+
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fixPersonalInfoName fixed with name: " + name, null);
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fixPersonalInfoName fixed with Middle name: " + middleName, null);
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fixPersonalInfoName fixed with last name: " + lastName, null);
@@ -488,10 +488,10 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         fillOutClient(request.getTransactionData(), transaction);
         fillOutClientAddress(request.getTransactionData(), transaction);
         PersonalIdentification identification = fillOutPersonalIdentification(request.getTransactionData(), transaction);
-        
-        if(transaction.getOperation().equals("01")){
-           fillOutCheck(request.getTransactionData(), transaction);  
-        } 
+
+        if (transaction.getOperation().equals("01")) {
+            fillOutCheck(request.getTransactionData(), transaction);
+        }
 
         if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY) || personalInfoRequestMap.containsKey(ParameterName.IDSTATE)
                 || personalInfoRequestMap.containsKey(ParameterName.COUNTRY) || personalInfoRequestMap.containsKey(ParameterName.STATE)) {
@@ -502,16 +502,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     personalIdentificationManager.removeByClientAndType(transaction.getClient().getId(), identification.getIdType(), identification.getId());
                 }
 
-                if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY)) {
-                    String idCountryAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDCOUNTRY);
-                    Country country = countryManager.getByAbbreviation(idCountryAbbreviation);
-
-                    if (country != null) {
-                        request.getTransactionData().put(ParameterName.IDCOUNTRY, country.getCode() + "");
-                    } else {
-                        request.getTransactionData().put(ParameterName.IDCOUNTRY, EnumCountry.EUA.getCode() + "");
-                    }
-                }
+                request.getTransactionData().put(ParameterName.IDCOUNTRY, EnumCountry.EUA.getCode() + "");
 
                 if (personalInfoRequestMap.containsKey(ParameterName.IDSTATE)) {
                     String idStateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDSTATE);
@@ -524,19 +515,9 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     } else {
                         request.getTransactionData().put(ParameterName.IDSTATE, EnumState.FL.getId() + "");
                     }
-
                 }
-                if (personalInfoRequestMap.containsKey(ParameterName.COUNTRY)) {
-                    String countryAbbreviation = (String) personalInfoRequestMap.get(ParameterName.COUNTRY);
-                    Country country = countryManager.getByAbbreviation(countryAbbreviation);
 
-                    if (country != null) {
-                        request.getTransactionData().put(ParameterName.COUNTRY, country.getCode() + "");
-                        transaction.getClient().getAddress().setCountry(country);
-                    } else {
-                        request.getTransactionData().put(ParameterName.COUNTRY, EnumCountry.EUA.getCode() + "");
-                    }
-                }
+                request.getTransactionData().put(ParameterName.COUNTRY, EnumCountry.EUA.getCode() + "");
 
                 if (personalInfoRequestMap.containsKey(ParameterName.STATE)) {
                     String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
@@ -557,14 +538,13 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
                     String cell_phone = (String) request.getTransactionData().get(ParameterName.PHONE);
                     request.getTransactionData().put(ParameterName.CELL_PHONE, cell_phone.substring(3));
-
-                 }
+                    }
 
                 HibernateUtil.commitTransaction();
             } catch (Exception e) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] Error 2 ", e.getMessage());
                 HibernateUtil.rollbackTransaction();
-                 
+
                 throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, e);
             }
         }
@@ -619,8 +599,8 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             }
         } catch (Exception e) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName() Error fixing full name.", null);
-             
+
             throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, e);
         }
-     }
+    }
 }

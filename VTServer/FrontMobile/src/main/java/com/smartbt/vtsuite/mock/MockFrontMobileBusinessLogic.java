@@ -15,6 +15,7 @@
  */
 package com.smartbt.vtsuite.mock;
 
+import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.utils.IMap;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
@@ -26,7 +27,9 @@ import java.util.HashMap;
 import java.util.Map;
 import com.smartbt.vtsuite.boundary.client.LastTransactionsResponse;
 import com.smartbt.vtsuite.boundary.client.SessionTag;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Mpowa Business Logic Class
@@ -42,75 +45,34 @@ public class MockFrontMobileBusinessLogic {
         return INSTANCE;
     }
 
-    public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
-         Map transactionData = request.getTransactionData();
-
-        TransactionType transactionType = request.getTransactionType();
-
-        IMap response = null;
-        IMap responseBalance = null;
-
-        switch (transactionType) {            
-            case TECNICARD_LAST_TRANSACTIONS:
-                response = wmLastTransactions(transactionData);
-                break;
-           
-        }
-
-        LogUtil.log("TecnicardManager", "                        Finish " + transactionType);
-
+    public DirexTransactionResponse process(){
+         Map transactionData = new HashMap();
+ 
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
-        if (response != null) {
-            direxTransactionResponse.setTransactionData(response.toMap());
-
-            if (responseBalance != null) {
-                direxTransactionResponse.getTransactionData().putAll(responseBalance.toMap());
-            }
-        } else {
-            direxTransactionResponse.setTransactionData(new HashMap());
-        }
-
+        Map transactionHistory = new HashMap();
+        transactionHistory.put("list", buildTransactionList());
+        transactionHistory.put("total", 40); // 40 is the total, here we are sending just the first page
+            
+        transactionData.put(ParameterName.TRANSACTIONS_LIST, transactionHistory);
+        direxTransactionResponse.setTransactionData(transactionData);
         return direxTransactionResponse;
     }
-    
-    public IMap wmLastTransactions(Map map) throws Exception {
-        String pTransactionQuantity = MapUtil.getStringValueFromMap(map, ParameterName.TRANSACTION_QUANTITY, false);
-        String pStartDate = MapUtil.getStringValueFromMap(map, ParameterName.START_DATE, false);
-        String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
-        String pEndDate = MapUtil.getStringValueFromMap(map, ParameterName.END_DATE, false);
-        String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-
-        LastTransactionsResponse response = new LastTransactionsResponse();
-        response.setCurrencySymbol("LastTrans: currencySymbol");
-        response.setCurrencyName("LastTrans: currencyName");
-        response.setInitialBalance("LastTrans: initialBalance");
-        response.setFinalBalance("LastTrans: finalBalance");
-        response.setFinalBalance("LastTrans: finalBalance");
-        response.setTransactionsList(null);
-
-        response.setSessionTag(buildSessionTag("LastTransactions", pRequestID, "0"));
-
-        return response;
+     
+    public List buildTransactionList(){
+        List list = new ArrayList();
+        
+        list.add(new MobileTransaction("Feb 01 2017", "-58.42", "Store Purchase VONAGE America"));
+        list.add(new MobileTransaction("Feb 01 2017", "6.00", "Transferred from Savings"));
+        list.add(new MobileTransaction("Feb 02 2017", "4.00", "Received Money From Marilyn Lebrija"));
+        list.add(new MobileTransaction("Feb 03 2017", "50.00", "Money Added From Debit Card"));
+        list.add(new MobileTransaction("Feb 03 2017", "58.00", "Store Purchase CVS Farmacy"));
+        list.add(new MobileTransaction("Feb 04 2017", "10.45", "Store Purchase Gas Station"));
+        list.add(new MobileTransaction("Feb 05 2017", "12.42", "Card Reload at Walmart Supermarket"));
+        list.add(new MobileTransaction("Feb 05 2017", "34.12", "Money transfer at Western Union"));
+        list.add(new MobileTransaction("Feb 05 2017", "-32.40", "Check cash at Hiealeash Market Center"));
+        list.add(new MobileTransaction("Feb 06 2017", "11.52", "Store Purchase Publix Supermarket"));
+        
+        return list;
     }
-    
-    private SessionTag buildSessionTag(String methodName, String requestId, String resultCode) {
-        SessionTag sessionTag = new SessionTag();
-        sessionTag.setSucessfullProcessing(true);
-        sessionTag.setRequestID(requestId);
-        sessionTag.setSystemName(methodName + ": SystemName");
-        sessionTag.setOperationName(methodName + ": OperationName");
-
-        sessionTag.setTime(requestId);
-
-        String timeZone = GregorianCalendar.getInstance().getTimeZone().toString();
-        sessionTag.setGMTTimeZone(timeZone);
-
-        sessionTag.setOperationID(methodName + ": OperationId");
-        sessionTag.setResultCode(resultCode);
-        sessionTag.setResultMessage(methodName + ": resultMessage");
-
-        return sessionTag;
-    }
-
 }

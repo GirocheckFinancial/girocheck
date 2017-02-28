@@ -41,10 +41,16 @@ public class ExceptionMapperProvider implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception ex) {
+        
+        System.out.println("ExceptionMapperProvider -> toResponse");
+        
         Response response;
         BaseResponse smartResponse = new BaseResponse();
         smartResponse.setStatusMessage(ex.getMessage());
         if (ex instanceof javax.ws.rs.ForbiddenException) {
+            smartResponse.setStatus(Constants.CODE_NOT_PRIVILEGE);
+            response = Response.status(Response.Status.OK).entity(smartResponse).build();
+        } else if (ex instanceof javax.ws.rs.ForbiddenException) {
             smartResponse.setStatus(Constants.CODE_NOT_PRIVILEGE);
             response = Response.status(Response.Status.OK).entity(smartResponse).build();
         } else if (ex instanceof javax.xml.bind.ValidationException) {

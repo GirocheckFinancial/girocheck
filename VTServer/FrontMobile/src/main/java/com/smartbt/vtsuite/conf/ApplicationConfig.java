@@ -20,13 +20,12 @@ import com.smartbt.vtsuite.conf.filter.ResponseFilter;
 import com.smartbt.vtsuite.conf.filter.SecurityFilter;
 import com.smartbt.vtsuite.conf.provider.ExceptionMapperProvider;
 import com.smartbt.vtsuite.conf.provider.JSONObjectMapper;
-
+import com.smartbt.vtsuite.controller.v1.AuthController; 
 import javax.ws.rs.ApplicationPath;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.server.ResourceConfig;
 /**
  *
  * @author Ariel Saavedra
@@ -39,7 +38,7 @@ public class ApplicationConfig extends ResourceConfig {
      //   packages("com.smartbt.girocheck.controller");
         packages("com.smartbt.vtsuite.controller");
         
-        register(JacksonFeature.class);
+        register(JacksonFeature.class); 
         register(JSONObjectMapper.class);
        
         register(MultiPartFeature.class);
@@ -60,5 +59,6 @@ public class ApplicationConfig extends ResourceConfig {
        // property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         // @ValidateOnExecution annotations on subclasses won't cause errors.
         //property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
+        register(AuthController.class); 
     }
 }

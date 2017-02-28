@@ -52,15 +52,32 @@ public class CheckResendManager {
         String checkId = String.valueOf(id);
         DirexTransactionRequest direxTransactionRequest = new DirexTransactionRequest();
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckResendManager] processTransaction " + checkId, null);
+        
         try {
             Check check = checkResendDAO.getCheckDetails(id);
             Map map = new HashMap();
             map.put(TransactionType.TRANSACTION_TYPE, TransactionType.ISTREAM2_SEND_SINCE_ICL);
-            map.put(ParameterName.USER, "GCTLS");
-            map.put(ParameterName.PASSWORD, "sts283");
+            String prodProperty = System.getProperty("PROD");
+            Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
+            if(isProd)
+            {
+              String userName = System.getProperty("ISTREAM2_USER_NAME");
+              String password = System.getProperty("ISTREAM2_PWD");
+
+               map.put(ParameterName.USER, userName);
+               map.put(ParameterName.PASSWORD, password);
+               
+            }else{
+                 map.put(ParameterName.USER, "GCTLS");
+                 map.put(ParameterName.PASSWORD, "sts283");
+                 map.put(ParameterName.DEPOSIT, "4pm Deposit");
+
+            }
+            // map.put(ParameterName.USER, "GCTLS");
+            //map.put(ParameterName.PASSWORD, "sts283");
             //map.put(ParameterName.LOCATION_ID, check.getLocationId());
-            map.put(ParameterName.LOCATION_ID, "4769778");
-            map.put(ParameterName.AMMOUNT, "4");
+            //map.put(ParameterName.LOCATION_ID, "4769778");
+            map.put(ParameterName.AMMOUNT, check.getTransaction().getAmmount());
             map.put(ParameterName.DEPOSIT, "4pm Deposit");
             map.put(ParameterName.MICR, check.getMicr());
             map.put(ParameterName.CHECK_ID, check.getId());

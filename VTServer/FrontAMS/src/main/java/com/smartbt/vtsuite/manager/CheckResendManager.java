@@ -75,10 +75,10 @@ public class CheckResendManager {
             }
             // map.put(ParameterName.USER, "GCTLS");
             //map.put(ParameterName.PASSWORD, "sts283");
-            //map.put(ParameterName.LOCATION_ID, check.getLocationId());
             //map.put(ParameterName.LOCATION_ID, "4769778");
+            //map.put(ParameterName.DEPOSIT, "4pm Deposit");
+            map.put(ParameterName.LOCATION_ID, check.getLocationId());
             map.put(ParameterName.AMMOUNT, check.getTransaction().getAmmount());
-            map.put(ParameterName.DEPOSIT, "4pm Deposit");
             map.put(ParameterName.MICR, check.getMicr());
             map.put(ParameterName.CHECK_ID, check.getId());
             map.put(ParameterName.CHECK_FRONT, check.getCheckFront());

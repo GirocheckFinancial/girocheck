@@ -36,16 +36,16 @@ public class TransactionManager {
         return _this;
     }
 
-    public ResponseData transactionHistory(Integer clientId, Integer page, Integer start, Integer limit, String startDateStr, String endDateStr) {
+    public Map transactionHistory(Integer clientId, Integer page, Integer start, Integer limit, String startDateStr, String endDateStr) {
         DirexTransactionResponse technicardResponse;
         ResponseData response = new ResponseData();
 
         if ((clientId == 1 || clientId == 0)) {
             technicardResponse = MockFrontMobileBusinessLogic.get().process();
-            response.setStatus(Constants.CODE_SUCCESS);
-            response.setStatusMessage(VTSuiteMessages.SUCCESS);
-            response.setData(technicardResponse.getTransactionData().get(ParameterName.TRANSACTIONS_LIST));
-            return response;
+//            response.setStatus(Constants.CODE_SUCCESS);
+//            response.setStatusMessage(VTSuiteMessages.SUCCESS);
+            return (Map)technicardResponse.getTransactionData().get(ParameterName.TRANSACTIONS_LIST);
+            
         }
 
         CreditCard card = null;
@@ -103,8 +103,8 @@ public class TransactionManager {
             response.setStatusMessage(com.smartbt.girocheck.common.VTSuiteMessages.ERROR_GENERAL);
             e.printStackTrace();
         }
-
-        return response;
+        //TODO return the right data here
+        return null;
     }
 
 }

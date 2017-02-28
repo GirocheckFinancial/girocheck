@@ -51,7 +51,7 @@ public class MockFrontMobileBusinessLogic {
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
         Map transactionHistory = new HashMap();
-        transactionHistory.put("list", buildTransactionList());
+        transactionHistory.put("items", buildTransactionList());
         transactionHistory.put("total", 40); // 40 is the total, here we are sending just the first page
             
         transactionData.put(ParameterName.TRANSACTIONS_LIST, transactionHistory);

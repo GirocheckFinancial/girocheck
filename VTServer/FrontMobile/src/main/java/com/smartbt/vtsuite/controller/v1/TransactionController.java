@@ -6,6 +6,7 @@ package com.smartbt.vtsuite.controller.v1;
 
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.vtsuite.manager.TransactionManager;
+import java.util.Map;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,7 +26,7 @@ public class TransactionController {
     @GET
     @Path("history")
     @Produces(MediaType.APPLICATION_JSON)
-    public ResponseData history(
+    public Map history(
             @QueryParam("page") Integer page,
             @QueryParam("start") Integer start,
             @QueryParam("limit") Integer limit,

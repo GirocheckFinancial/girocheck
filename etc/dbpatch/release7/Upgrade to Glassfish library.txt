@@ -1,0 +1,17 @@
+Need to upgrade Jackson libraries in Glassfish server:
+
+*This was causing WebServices to fail the first request after restart the server
+*That is why the login in the AMS, sometimes we had to press the buton twice
+
+Steps:
+1-Stop domain
+2-Remove content of this folder: C:\Glassfish\glassfish\domains\DOMAIN_NAME\osgi-cache\felix
+3-In this folder: C:\Glassfish\glassfish\modules
+Substitute jackson libraries by the 2.4.4 version:
+jackson-module-jaxb-annotations-2.4.4   (This one was not there, so include it)
+jackson-jaxrs-json-provider-2.4.4
+jackson-jaxrs-base-2.4.4
+jackson-databind-2.4.4
+jackson-annotations-2.4.4
+jackson-core-2.4.4
+4-Start domain

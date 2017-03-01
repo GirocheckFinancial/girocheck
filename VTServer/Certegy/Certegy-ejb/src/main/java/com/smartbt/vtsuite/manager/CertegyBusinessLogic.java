@@ -72,6 +72,8 @@ public class CertegyBusinessLogic {
                 resultCode = reverseRequest(transactionData);
                 break;
         }
+        
+        System.out.println("[CertegyBusinessLogic] :: resultCode = " + resultCode);
 
         if (resultCode == null || !resultCode.equals("00")) {
             direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.CERTEGY_DENY, ResultMessage.CERTEGY_DENY);

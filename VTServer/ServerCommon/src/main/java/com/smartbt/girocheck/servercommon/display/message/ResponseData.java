@@ -17,6 +17,7 @@ package com.smartbt.girocheck.servercommon.display.message;
 
 import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
+import com.smartbt.vtsuite.vtcommon.Constants;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,7 +34,7 @@ public class ResponseData<T> extends BaseResponse {
     }
 
     public ResponseData(T data) {
-        super(ResultCode.SUCCESS.getCode(), VTSuiteMessages.SUCCESS);
+        super(Constants.CODE_SUCCESS, VTSuiteMessages.SUCCESS);
         this.data = data;
     }
 

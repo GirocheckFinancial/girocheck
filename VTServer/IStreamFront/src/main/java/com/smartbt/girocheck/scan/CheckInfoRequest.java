@@ -3,6 +3,7 @@ package com.smartbt.girocheck.scan;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.IMap;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,23 +13,18 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
- 
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "checkInfoRequest", propOrder = {
     "user",
     "password",
-    "checkId", 
+    "checkId",
     "id",
-    "telephone",
-    "email",
     "address",
     "city",
     "state",
     "idState",
     "zipCode",
-    "country",
-    "idCountry",
     "firstName",
     "lastName",
     "bornDate",
@@ -40,30 +36,39 @@ import javax.xml.bind.annotation.XmlType;
     "makerZip",
     "makerPhone",
     "makerAddress",
-    "locationId",
-    "paymentCheck",
-    
-    "checkIssueDate" 
-})
+    "paymentCheck", //(We send it to OE)
+    "checkIssueDate", //CheckDate
+
+    // optional fields
+    "checkType",
+    "checkNumber",
+    "checkCAR",
+    "checkLAR",
+    "micrAcountNumber",
+    "micrRoutingNumber",
+    "micrCheckNumber",
+    "micrCheckAmount",
+    "signaturePresent",
+    "aboveThreshold"})
+
 public class CheckInfoRequest implements IMap {
-    
+
+    public static final DateFormat MDY_DATE_FORMAT = new SimpleDateFormat("MM-dd-yyyy");
+    public static final DateFormat ISTREAM_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+
     private String user;
     private String password;
-    private String checkId; 
+    private String checkId;
     private String id;
-    private String telephone;
-    private String email;
     private String address;
     private String city;
     private String state;
     private String idState;
     private String zipCode;
-    private String country;
-    private String idCountry;
     private String firstName;
     private String lastName;
-    private Date bornDate; //date format should be yyyyMMdd
-    private Date expirationDate; // pendiente de verificacion
+    private String bornDate; //date format should be yyyyMMdd
+    private String expirationDate; // pendiente de verificacion
     private String micr;
     private String makerName;
     private String makerCity;
@@ -71,62 +76,95 @@ public class CheckInfoRequest implements IMap {
     private String makerZip;
     private String makerPhone;
     private String makerAddress;
-    private String locationId;
     private String paymentCheck;
     private String checkIssueDate;  // date format should be yyyyMMdd
-   
-    
+
+    //optional fields
+    private String checkType;
+    private String checkNumber;
+    private String checkCAR;
+    private String checkLAR;
+    private String micrAcountNumber;
+    private String micrRoutingNumber;
+    private String micrCheckNumber;
+    private String micrCheckAmount;
+    private String signaturePresent;
+    private String aboveThreshold;
+
     @Override
     public Map toMap() {
+        System.out.println("CheckInfoRequest -> toMap()");
+
         Map map = new HashMap();
         String errors = "";
- 
-            map.put(ParameterName.USER, getUser());
-            map.put(ParameterName.PASSWORD, getPassword());
-            map.put(ParameterName.CHECK_ID, getCheckId());
-            map.put(ParameterName.ID, getId());
-            map.put(ParameterName.TELEPHONE, getTelephone());
-            map.put(ParameterName.PHONE, getTelephone());
-            map.put(ParameterName.EMAIL, getEmail());
-            map.put(ParameterName.ADDRESS, getAddress());
-            map.put(ParameterName.CITY, getCity());
-            map.put(ParameterName.STATE, getState());
-            map.put(ParameterName.IDSTATE, getIdState()); 
-            map.put(ParameterName.COUNTRY, getCountry());
-            map.put(ParameterName.IDCOUNTRY, getIdCountry());
-            map.put(ParameterName.FIRST_NAME, getFirstName());
-            map.put(ParameterName.BORNDATE, getBornDate());
-            map.put(ParameterName.BORNDATE_AS_DATE, getBornDate());
 
-            //TODO define which fields to validate
+        map.put(ParameterName.USER, getUser());
+        map.put(ParameterName.PASSWORD, getPassword());
+        map.put(ParameterName.CHECK_ID, getCheckId());
+        map.put(ParameterName.ID, getId());
+        map.put(ParameterName.ADDRESS, getAddress());
+        map.put(ParameterName.CITY, getCity());
+        map.put(ParameterName.STATE, getState());
+        map.put(ParameterName.FIRST_NAME, getFirstName());
+
+        Date bornD = getDateFromString(getBornDate());
+        if (bornD != null) {
+            System.out.println("CheckInfoRequest -> toMap() :: BORNDATE_AS_DATE = " + bornD);
+            map.put(ParameterName.BORNDATE_AS_DATE, bornD);
+
+            String bornDstr = ISTREAM_DATE_FORMAT.format(bornD);
+            System.out.println("CheckInfoRequest -> toMap() :: BORNDATE = " + bornDstr);
+            map.put(ParameterName.BORNDATE, bornDstr);
+        }
+
+        Date expDate = getDateFromString(getExpirationDate());
+        if (expDate != null) {
+            System.out.println("CheckInfoRequest -> toMap() :: EXPIRATION_DATE_AS_DATE = " + expDate);
+            map.put(ParameterName.EXPIRATION_DATE_AS_DATE, expDate);
+
+            String expDstr = ISTREAM_DATE_FORMAT.format(expDate);
+            System.out.println("CheckInfoRequest -> toMap() :: EXPIRATION_DATE = " + expDstr);
+            map.put(ParameterName.EXPIRATION_DATE, expDstr);
+        }
+
+        //TODO define which fields to validate
         //    errors += validateRequiredFields(map);
+        if (!errors.isEmpty()) {
+            map.put(ParameterName.VALIDATION_ERROR, errors);
+        }
 
-            if(!errors.isEmpty()){
-                map.put(ParameterName.VALIDATION_ERROR, errors);
-            }
+        map.put(TransactionType.TRANSACTION_TYPE, TransactionType.CHECK_INFO);
+        map.put(ParameterName.EXPIRATION_DATE, getExpirationDate());
+        map.put(ParameterName.LAST_NAME, getLastName());
+        map.put(ParameterName.ZIPCODE, getZipCode());
+        map.put(ParameterName.MICR, getMicr());
+        map.put(ParameterName.MAKER_NAME, getMakerName());
+        map.put(ParameterName.MAKER_CITY, getMakerCity());
+        map.put(ParameterName.MAKER_STATE, getMakerState());
+        map.put(ParameterName.MAKER_ZIP, getMakerZip());
+        map.put(ParameterName.MAKER_PHONE, getMakerPhone());
+        map.put(ParameterName.MAKER_ADDRESS, getMakerAddress());
+        map.put(ParameterName.PAYMENTCHECK, getPaymentCheck());
 
-            map.put(TransactionType.TRANSACTION_TYPE, TransactionType.CHECK_INFO);
-            map.put(ParameterName.EXPIRATION_DATE, getExpirationDate());
-            map.put(ParameterName.LAST_NAME, getLastName());
-            map.put(ParameterName.ZIPCODE, getZipCode());
-            map.put(ParameterName.MICR, getMicr());
-            map.put(ParameterName.MAKER_NAME, getMakerName());
-            map.put(ParameterName.MAKER_CITY, getMakerCity());
-            map.put(ParameterName.MAKER_STATE, getMakerState());
-            map.put(ParameterName.MAKER_ZIP, getMakerZip());
-            map.put(ParameterName.MAKER_PHONE, getMakerPhone());
-            map.put(ParameterName.MAKER_ADDRESS, getMakerAddress());
+        map.put(ParameterName.PAYMENTCHECK, getPaymentCheck());
 
-            map.put(ParameterName.LOCATION_ID, getLocationId());
-            map.put(ParameterName.PAYMENTCHECK, getPaymentCheck());
-          
-            map.put(ParameterName.PAYMENTCHECK, getPaymentCheck());
-            
-            map.put(ParameterName.CHECK_ISSUE_DATE, getCheckIssueDate());
-           
+        map.put(ParameterName.CHECK_ISSUE_DATE, getCheckIssueDate());
+
         return map;
     }
-    
+
+    private Date getDateFromString(String dateStr) {
+        if (dateStr == null || dateStr.isEmpty()) {
+            return null;
+        }
+
+        try {
+            return MDY_DATE_FORMAT.parse(dateStr);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid Date Format");
+        }
+    }
+
     public String validateRequiredFields(Map map) {
 
         StringBuffer buffer = new StringBuffer();
@@ -139,13 +177,9 @@ public class CheckInfoRequest implements IMap {
             if (value == null || value.toString().isEmpty()) {
                 buffer.append("Field ").append(key).append(" required. " + '\n');
             }
-          
+
         }
         return buffer.toString();
-    }
- 
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
     }
 
     public String getPaymentCheck() {
@@ -181,7 +215,6 @@ public class CheckInfoRequest implements IMap {
     public void setCheckId(String checkId) {
         this.checkId = checkId;
     }
- 
 
     /**
      * @return the id
@@ -195,34 +228,6 @@ public class CheckInfoRequest implements IMap {
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return the telephone
-     */
-    public String getTelephone() {
-        return telephone;
-    }
-
-    /**
-     * @param telephone the telephone to set
-     */
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     /**
@@ -296,34 +301,6 @@ public class CheckInfoRequest implements IMap {
     }
 
     /**
-     * @return the country
-     */
-    public String getCountry() {
-        return country;
-    }
-
-    /**
-     * @param country the country to set
-     */
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    /**
-     * @return the idCountry
-     */
-    public String getIdCountry() {
-        return idCountry;
-    }
-
-    /**
-     * @param idCountry the idCountry to set
-     */
-    public void setIdCountry(String idCountry) {
-        this.idCountry = idCountry;
-    }
-
-    /**
      * @return the firstName
      */
     public String getFirstName() {
@@ -351,35 +328,26 @@ public class CheckInfoRequest implements IMap {
         this.lastName = lastName;
     }
 
-    /**
-     * @return the bornDate
-     */
-    public Date getBornDate() {
+    public String getBornDate() {
         return bornDate;
+    }
+
+    public void setBornDate(String bornDate) {
+        this.bornDate = bornDate;
+    }
+
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public String getExpirationDate() {
+        return expirationDate;
     }
 
     /**
      * @param bornDate the bornDate to set
      */
     //@JsonDeserialize(using=CustomDateDeserializer.class)
-    public void setBornDate(Date bornDate) throws ParseException {
-        System.out.println("setBornDate = " + bornDate);
-        this.bornDate = bornDate;
-    }
-
-    public void setExpirationDate(String expirationDate) throws ParseException {
-        if (expirationDate.isEmpty()) {
-            this.expirationDate = null;
-        } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            this.expirationDate = sdf.parse(expirationDate);
-        }
-    }
-
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
     /**
      * @return the user
      */
@@ -479,24 +447,150 @@ public class CheckInfoRequest implements IMap {
     }
 
     /**
-     * @return the locationId
-     */
-    public String getLocationId() {
-        return locationId;
-    }
-
-    /**
-     * @param locationId the locationId to set
-     */
-    public void setLocationId(String locationId) {
-        this.locationId = locationId;
-    } 
-
-    /**
      * @return the checkIssueDate
      */
     public String getCheckIssueDate() {
         return checkIssueDate;
     }
- 
+
+    /**
+     * @return the checkType
+     */
+    public String getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * @param checkType the checkType to set
+     */
+    public void setCheckType(String checkType) {
+        this.checkType = checkType;
+    }
+
+    /**
+     * @return the checkNumber
+     */
+    public String getCheckNumber() {
+        return checkNumber;
+    }
+
+    /**
+     * @param checkNumber the checkNumber to set
+     */
+    public void setCheckNumber(String checkNumber) {
+        this.checkNumber = checkNumber;
+    }
+
+    /**
+     * @return the checkCAR
+     */
+    public String getCheckCAR() {
+        return checkCAR;
+    }
+
+    /**
+     * @param checkCAR the checkCAR to set
+     */
+    public void setCheckCAR(String checkCAR) {
+        this.checkCAR = checkCAR;
+    }
+
+    /**
+     * @return the checkLAR
+     */
+    public String getCheckLAR() {
+        return checkLAR;
+    }
+
+    /**
+     * @param checkLAR the checkLAR to set
+     */
+    public void setCheckLAR(String checkLAR) {
+        this.checkLAR = checkLAR;
+    }
+
+    /**
+     * @return the micrAcountNumber
+     */
+    public String getMicrAcountNumber() {
+        return micrAcountNumber;
+    }
+
+    /**
+     * @param micrAcountNumber the micrAcountNumber to set
+     */
+    public void setMicrAcountNumber(String micrAcountNumber) {
+        this.micrAcountNumber = micrAcountNumber;
+    }
+
+    /**
+     * @return the micrRoutingNumber
+     */
+    public String getMicrRoutingNumber() {
+        return micrRoutingNumber;
+    }
+
+    /**
+     * @param micrRoutingNumber the micrRoutingNumber to set
+     */
+    public void setMicrRoutingNumber(String micrRoutingNumber) {
+        this.micrRoutingNumber = micrRoutingNumber;
+    }
+
+    /**
+     * @return the micrCheckNumber
+     */
+    public String getMicrCheckNumber() {
+        return micrCheckNumber;
+    }
+
+    /**
+     * @param micrCheckNumber the micrCheckNumber to set
+     */
+    public void setMicrCheckNumber(String micrCheckNumber) {
+        this.micrCheckNumber = micrCheckNumber;
+    }
+
+    /**
+     * @return the micrCheckAmount
+     */
+    public String getMicrCheckAmount() {
+        return micrCheckAmount;
+    }
+
+    /**
+     * @param micrCheckAmount the micrCheckAmount to set
+     */
+    public void setMicrCheckAmount(String micrCheckAmount) {
+        this.micrCheckAmount = micrCheckAmount;
+    }
+
+    /**
+     * @return the signaturePresent
+     */
+    public String getSignaturePresent() {
+        return signaturePresent;
+    }
+
+    /**
+     * @param signaturePresent the signaturePresent to set
+     */
+    public void setSignaturePresent(String signaturePresent) {
+        this.signaturePresent = signaturePresent;
+    }
+
+    /**
+     * @return the aboveThreshold
+     */
+    public String getAboveThreshold() {
+        return aboveThreshold;
+    }
+
+    /**
+     * @param aboveThreshold the aboveThreshold to set
+     */
+    public void setAboveThreshold(String aboveThreshold) {
+        this.aboveThreshold = aboveThreshold;
+    }
+
 }

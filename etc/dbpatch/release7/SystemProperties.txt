@@ -1,0 +1,3 @@
+VERSION   possible values:
+  1  :Use this tu run business logic before iStream Replacement Project
+  2  :Use this tu run business logic after iStream Replacement Project

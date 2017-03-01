@@ -41,7 +41,7 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency> 
-<!--         <dependency>
+        <!--         <dependency>
             <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
             <version>4.0-b90</version> 
@@ -107,26 +107,11 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>
+            <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <version>2.3</version>
                 <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsimport</goal>
-                        </goals>
-                        <configuration>
-                            <wsdlFiles>
-                                <wsdlFile>certegypca.wsdl</wsdlFile>
-                            </wsdlFiles>
-                            <packageName>com.smartbt.vtsuite.boundary</packageName>
-                            <wsdlLocation>file:/C:/REPO/Dev/girocheck/VTServer/Certegy/Certegy-ejb/src/main/java/com/smartbt/vtsuite/boundary/certegypca.wsdl</wsdlLocation>
-                            <staleFile>${project.build.directory}/jaxws/stale/certegypca.stale</staleFile>
-                        </configuration>
-                        <id>wsimport-generate-certegypca</id>
-                        <phase>generate-sources</phase>
-                    </execution>
                 </executions>
                 <dependencies>
                     <dependency>
@@ -143,7 +128,7 @@
                     <catalog>${basedir}/src/jax-ws-catalog.xml</catalog>
                     <target>2.0</target>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>          
     </build>
 </project>

@@ -58,37 +58,37 @@ public class SecurityFilter implements ContainerRequestFilter {
         
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[VTAMS] Incoming uri to the security filter" + uriInfo.getPath(),null);
     
-        VTSession vTSession = null;
-        if (!uriInfo.getPath().contains("VTAMS/authenticateUser")) {
+//        VTSession vTSession = null;
+//        if (!uriInfo.getPath().contains("VTAMS/authenticateUser")) {
             HibernateUtil.beginTransaction();
-            BaseResponse baseResponse = new BaseResponse();
-
-            String token = context.getRequestHeader("TOKEN") == null ? null : context.getRequestHeader("TOKEN").get(0);
-             
-            if(token != null && token.contains("_")){
-                token = token.split("_")[1];
-            }
-             
-            int code = VTSessionDAO.get().validateSession(token);
-            if (code == Constants.CODE_SESSION_LOST) {
-                baseResponse.setStatus(Constants.CODE_SESSION_LOST);
-                requestContext.abortWith(Response
-                        .status(Response.Status.OK)
-                        .entity(baseResponse)
-                        .build());
-                return;
-            }
-             if (code == Constants.CODE_SESSION_EXPIRE) {
-                baseResponse.setStatus(Constants.CODE_SESSION_EXPIRE);
-                requestContext.abortWith(Response
-                        .status(Response.Status.OK)
-                        .entity(baseResponse)
-                        .build());
-                return;
-            }
-            vTSession = authenticate(token);
-            SessionAMSUser.set(vTSession.getUser());
-        }
+//            BaseResponse baseResponse = new BaseResponse();
+//
+//            String token = context.getRequestHeader("TOKEN") == null ? null : context.getRequestHeader("TOKEN").get(0);
+//             
+//            if(token != null && token.contains("_")){
+//                token = token.split("_")[1];
+//            }
+//             
+//            int code = VTSessionDAO.get().validateSession(token);
+//            if (code == Constants.CODE_SESSION_LOST) {
+//                baseResponse.setStatus(Constants.CODE_SESSION_LOST);
+//                requestContext.abortWith(Response
+//                        .status(Response.Status.OK)
+//                        .entity(baseResponse)
+//                        .build());
+//                return;
+//            }
+//             if (code == Constants.CODE_SESSION_EXPIRE) {
+//                baseResponse.setStatus(Constants.CODE_SESSION_EXPIRE);
+//                requestContext.abortWith(Response
+//                        .status(Response.Status.OK)
+//                        .entity(baseResponse)
+//                        .build());
+//                return;
+//            }
+//            vTSession = authenticate(token);
+//            SessionAMSUser.set(vTSession.getUser());
+//        }
     }
     
      /**

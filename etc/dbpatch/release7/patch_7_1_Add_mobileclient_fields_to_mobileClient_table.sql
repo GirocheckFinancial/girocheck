@@ -1,4 +1,6 @@
-SELECT * FROM girocheck.mobile_client;CREATE TABLE `mobile_client` (
+INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(7, 'patch_7_1', now(), 'Create mobile_client table');
+ 
+CREATE TABLE `mobile_client` (
   `id` int(10) NOT NULL,
   `device_type` varchar(45) DEFAULT NULL,
   `registration_date` timestamp NULL DEFAULT NULL,

@@ -55,7 +55,7 @@ import java.util.Map;
  */
 public class CoreTransactionManager {
 
-    private boolean version2 = false;
+    private Boolean version2 = false;
 
     private static CoreAbstractTransactionBusinessLogic businessLogic;
     public static List SINGLE_TRANSACTION_LIST;
@@ -92,9 +92,9 @@ public class CoreTransactionManager {
     public void processTransaction(DirexTransactionRequest direxTransactionRequest) throws Exception {
 
         String prodProperty = System.getProperty("VERSION");
-        Boolean version2 = prodProperty != null && prodProperty.equalsIgnoreCase("2");
+        version2 = prodProperty != null && prodProperty.equalsIgnoreCase("2");
         System.out.println("CoreTransactionManager -> version2 = " + version2);
-        
+
         try {
             if (direxTransactionRequest.getTransactionData() != null && direxTransactionRequest.getTransactionData().containsKey(TransactionType.TRANSACTION_TYPE)) {
 
@@ -170,6 +170,9 @@ public class CoreTransactionManager {
         } catch (LoggingValidationException lve) {
             DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ResultMessage.FAILED, lve.getResultCode() + lve.getMessage(), "");
             JMSManager.get().send(response, JMSManager.get().getCoreOutQueue(), direxTransactionRequest.getCorrelation());
+        } catch (CreditCardException ccException) {
+            DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ccException.getMessage());
+            JMSManager.get().send(response, JMSManager.get().getCoreOutQueue(), direxTransactionRequest.getCorrelation());
         } catch (Exception ex) {
             DirexTransactionResponse response = DirexTransactionResponse.forException(ResultCode.CORE_ERROR, ex);
             JMSManager.get().send(response, JMSManager.get().getCoreOutQueue(), direxTransactionRequest.getCorrelation());
@@ -217,6 +220,7 @@ public class CoreTransactionManager {
             if (transactionType == TransactionType.CARD_RELOAD_WITH_DATA) {
                 System.out.println("[CoreTransactionManager] transactionType == TransactionType.CARD_RELOAD_WITH_DATA");
                 String cardNumberCR = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
+
                 client = creditCardManager.getClient(cardNumberCR);
 
                 if (client == null) {
@@ -319,6 +323,10 @@ public class CoreTransactionManager {
 
             direxTransactionRequest.getTransactionData().put(ParameterName.IDMERCHANT, terminal.getMerchant().getId());
 
+            if (version2) {
+                direxTransactionRequest.getTransactionData().put(ParameterName.LOCATION_ID, terminal.getMerchant().getIdIstreamTecnicardCheck());
+             }
+
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.AMMOUNT)) {
                 double ammount = (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AMMOUNT);
 
@@ -407,17 +415,19 @@ public class CoreTransactionManager {
             }
 
             // ---------------------  CREDIT CARD LOGIC -------
-          
             if (transactionType != TransactionType.TECNICARD_CARD_TO_BANK
                     && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                     String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
+
+                    System.out.println("[CoreTransactionManager] cardNumberCR == " + cardNumber);
+
                     if (cardNumber != null && !cardNumber.isEmpty()) {
 //                      
                         CreditCard creditCard = null;
                         try {
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Obtaining Card for transactionType = " + transactionType.toString(), null);
-                            
+
                             switch (transactionType) {
                                 case NEW_CARD_LOAD:
                                 case CARD_RELOAD:
@@ -439,7 +449,7 @@ public class CoreTransactionManager {
                         if (creditCard != null) {
                             transaction.setData_sc1(creditCard);
                         } else {
-                            throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, " CreditCard value is null. ", transaction);
+                            throw new CreditCardException(ResultCode.CREDIT_CARD_NOT_EXIST, "Card does not exist. ", transaction);
                         }
                     } else {
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] createTransaction(...) CreditCard value from the Terminal is NULL. ", null);

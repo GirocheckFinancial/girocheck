@@ -48,7 +48,7 @@ public class Check {
     @XmlElement(name = "IssueDate")
     protected String issueDate;
     @XmlElement(name = "Type")
-    protected String type;
+    protected String type;  //This is optional
 
     public static Check build(Map map) {
         Check _this = new Check();
@@ -61,7 +61,7 @@ public class Check {
         String issueDate = (String) map.get(ParameterName.CHECK_ISSUE_DATE);
         _this.setIssueDate(issueDate);
 
-        _this.setType((String) map.get(ParameterName.CHECK_TYPE));
+        _this.setType((String) map.get(ParameterName.CHECK_TYPE));  //This is optional
 
         return _this;
     }

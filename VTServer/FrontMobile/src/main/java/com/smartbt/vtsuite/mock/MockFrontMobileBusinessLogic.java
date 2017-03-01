@@ -17,18 +17,11 @@ package com.smartbt.vtsuite.mock;
 
 import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
-import com.smartbt.girocheck.servercommon.utils.IMap;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
-import com.smartbt.girocheck.servercommon.enums.TransactionType;
-import com.smartbt.girocheck.servercommon.log.LogUtil;
-import com.smartbt.vtsuite.boundary.util.MapUtil;
 import java.util.HashMap;
 import java.util.Map;
-import com.smartbt.vtsuite.boundary.client.LastTransactionsResponse;
-import com.smartbt.vtsuite.boundary.client.SessionTag;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -46,7 +39,7 @@ public class MockFrontMobileBusinessLogic {
     }
 
     public DirexTransactionResponse process(){
-         Map transactionData = new HashMap();
+       Map transactionData = new HashMap();
  
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
@@ -56,6 +49,19 @@ public class MockFrontMobileBusinessLogic {
             
         transactionData.put(ParameterName.TRANSACTIONS_LIST, transactionHistory);
         direxTransactionResponse.setTransactionData(transactionData);
+        return direxTransactionResponse;
+    }
+    
+     public DirexTransactionResponse processBalanceEnquiry(){
+        Map transactionData = new HashMap();
+ 
+        DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
+
+        Map balanceInquiry = new HashMap();       
+        balanceInquiry.put(ParameterName.BALANCE, 120.00); 
+        balanceInquiry.put(ParameterName.IN_TRANSIT_FUNDS, 80.00);            
+        
+        direxTransactionResponse.setTransactionData(balanceInquiry);
         return direxTransactionResponse;
     }
      
@@ -75,4 +81,5 @@ public class MockFrontMobileBusinessLogic {
         
         return list;
     }
+    
 }

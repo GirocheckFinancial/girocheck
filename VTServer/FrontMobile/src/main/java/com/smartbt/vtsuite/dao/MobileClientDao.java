@@ -30,11 +30,11 @@ public class MobileClientDao extends BaseDAO<MobileClient> {
         return dao;
     }
     
-    public CreditCard getMobileClientId(int clientId) {
+    public MobileClient getMobileClientId(int clientId) {
         Criteria criteria = HibernateUtil.getSession().createCriteria(MobileClient.class).
-                 createAlias( "MobileClient", "MobileClient" ) 
-                 .add(Restrictions.eq("MobileClient.id", clientId));
-               return (CreditCard) criteria.uniqueResult();
+                 createAlias( "client", "client" ) 
+                 .add(Restrictions.eq("client.id", clientId));
+               return (MobileClient) criteria.uniqueResult();
     }
 }    
 

@@ -7,7 +7,6 @@ package com.smartbt.vtsuite.controller.v1;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.vtsuite.manager.TransactionManager;
 import java.util.Map;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -33,9 +32,18 @@ public class TransactionController {
             @QueryParam("startDate") String startDate,
             @QueryParam("endDate") String endDate,
             @QueryParam("clientId") Integer clientId) throws Exception {
-        System.out.println("AuthController.history:: Incoming parameters : \n clientId :: " + clientId+ " \n page :: " + page + " \n start :: " + start + " \n limit :: " + limit + " \n startDate :: " + startDate + "\n endDate :: " + endDate);
+        System.out.println("TransactionController.history:: Incoming parameters : \n clientId :: " + clientId+ " \n page :: " + page + " \n start :: " + start + " \n limit :: " + limit + " \n startDate :: " + startDate + "\n endDate :: " + endDate);
 
         return manager.transactionHistory(clientId, page, start, limit, startDate, endDate);
+    }
+    
+    @GET
+    @Path("balanceEnquiry")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseData balanceEnquiry(@QueryParam("clientId") Integer clientId) throws Exception {
+        System.out.println("TransactionController.history:: Incoming parameters : \n clientId :: " + clientId);
+
+        return manager.balanceEnquiry(clientId);
     }
 
 }

@@ -90,16 +90,7 @@ public class Scan {
 
     public CheckAuthLocationConfigRes checkAuthLocationConfig( final CheckAuthLocationConfigRequest arg0 ) throws Exception {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] FRONT CHECK AUTH LOCATION CONFIG",null );
-         
-        Map requestMap = arg0.toMap();
-        
-         Iterator itReq = requestMap.keySet().iterator();
-        
-        while (itReq.hasNext()) {
-            Object key = itReq.next();
-             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront CheckAuthLocationConfig] " + key + " -> " + requestMap.get(key),null );
-        }
-        
+          
         Map map = FrontManager.processTransaction( arg0 );
         
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[GCHFront Scan] Response got to Scan",null );

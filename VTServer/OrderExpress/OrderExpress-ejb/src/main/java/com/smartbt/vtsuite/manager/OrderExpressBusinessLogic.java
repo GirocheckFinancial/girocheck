@@ -363,11 +363,10 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         ContratacionesResponse response = new ContratacionesResponse();
 
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " +cadena,null);
+         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " +cadena,null);
         String contratacionesResult = port.contrataciones( cadena, datos, corresponsales, rutaEjecutar );
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing contratacionesResult.lenght(): " + contratacionesResult.length(),null);
-
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] contratacionesResult value: " + contratacionesResult,null);
+      
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] contratacionesResult value: " + contratacionesResult,null);
         response.setContratacionesResult( contratacionesResult );
 
         Map responseMap = new HashMap();

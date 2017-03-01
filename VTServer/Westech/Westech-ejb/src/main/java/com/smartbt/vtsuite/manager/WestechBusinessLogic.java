@@ -87,13 +87,11 @@ public class WestechBusinessLogic {
         byte[] checkBack = (byte[])params.get(ParameterName.CHECK_BACK);
         byte[] idProof = (byte[])params.get(ParameterName.IDFRONT);
         
-        String idProofXML = buildIdProofXML(params);
-        byte[] idProof2dBarcode = Base64.decode(idProofXML);
-        
-        String log = printRequest(checkFront,checkBack,idProof, idProofXML, idProof2dBarcode);
+        String idProofXML = buildIdProofXML(params); 
+        String log = printRequest(checkFront,checkBack,idProof, idProofXML);
         System.out.println(log);
         
-        String checkId = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProof2dBarcode);
+        String checkId = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProofXML);
 
         Map map = new HashMap();
         map.put(ParameterName.CHECK_ID, checkId);
@@ -128,7 +126,7 @@ public class WestechBusinessLogic {
         return sb.toString();
     }
     
-    public static  String printRequest(byte[] checkFront,byte[]  checkBack,byte[]  idProof, String idProof2dBarcode, byte[] base64){
+    public static  String printRequest(byte[] checkFront,byte[]  checkBack,byte[]  idProof, String idProof2dBarcode){
          StringBuilder sb = new StringBuilder();
         sb.append("<WestechRequest>").append('\n');
         sb.append("<Username>").append(WT_USERNAME).append("</Username>").append('\n');
@@ -147,7 +145,7 @@ public class WestechBusinessLogic {
         }
         
         sb.append(idProof2dBarcode);
-                 sb.append("<base64>").append(base64).append("</base64>").append('\n');
+           
          sb.append("</WestechRequest>").append('\n');
         return sb.toString();
     }

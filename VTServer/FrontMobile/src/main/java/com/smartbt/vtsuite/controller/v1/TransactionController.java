@@ -36,14 +36,4 @@ public class TransactionController {
 
         return manager.transactionHistory(clientId, page, start, limit, startDate, endDate);
     }
-    
-    @GET
-    @Path("balanceEnquiry")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ResponseData balanceEnquiry(@QueryParam("clientId") Integer clientId) throws Exception {
-        System.out.println("TransactionController.history:: Incoming parameters : \n clientId :: " + clientId);
-
-        return manager.balanceEnquiry(clientId);
-    }
-
 }

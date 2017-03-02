@@ -14,6 +14,10 @@
 		</many-to-one>
                 <many-to-one name="card" cascade="lock" column="card" class="com.smartbt.girocheck.servercommon.model.CreditCard" not-null="true" lazy="proxy">
 		</many-to-one>
+                <property name="userName" column="username" type="string" length="55" not-null="false" lazy="false"/>
+                <property name="password" column="password" type="string" length="55" not-null="false" lazy="false"/>
+                <property name="pin" column="pin" type="string" length="25" not-null="false" lazy="false"/>
+                <property name="deviceId" column="device_id" type="string" length="255" not-null="false" lazy="false"/>
             </class>      
   
     </hibernate-mapping>

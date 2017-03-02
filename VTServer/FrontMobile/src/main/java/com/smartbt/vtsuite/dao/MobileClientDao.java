@@ -36,5 +36,24 @@ public class MobileClientDao extends BaseDAO<MobileClient> {
                  .add(Restrictions.eq("client.id", clientId));
                return (MobileClient) criteria.uniqueResult();
     }
+    
+    public MobileClient getMobileClientByUserNameAndPwd(String userName , String password) {
+        Criteria criteria = HibernateUtil.getSession().createCriteria(MobileClient.class)
+                 .add(Restrictions.eq("userName", userName))
+                 .add(Restrictions.eq("password", password));
+               return (MobileClient) criteria.uniqueResult();
+    }
+    
+    public MobileClient getMobileClientByPINAndDeviceId(String pin , String deviceId) {
+        Criteria criteria = HibernateUtil.getSession().createCriteria(MobileClient.class) 
+                 .add(Restrictions.eq("pin", pin))
+                 .add(Restrictions.eq("deviceId", deviceId));
+               return (MobileClient) criteria.uniqueResult();
+    }
+    
+    public MobileClient saveOrUpdateMobileClient(MobileClient client){
+        HibernateUtil.getSession().saveOrUpdate(client);
+        return client;
+    }
 }    
 

@@ -58,8 +58,7 @@ public class MockFrontMobileBusinessLogic {
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
         Map balanceInquiry = new HashMap();       
-        balanceInquiry.put(ParameterName.BALANCE, 120.00); 
-        balanceInquiry.put(ParameterName.IN_TRANSIT_FUNDS, 80.00);            
+        balanceInquiry.put(ParameterName.BALANCE, 120.00);                   
         
         direxTransactionResponse.setTransactionData(balanceInquiry);
         return direxTransactionResponse;

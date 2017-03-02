@@ -29,6 +29,16 @@ public class MobileClient implements Serializable {
      private Timestamp registrationDate;
      
      private Timestamp keyExpirationTime;
+     
+     private String userName;
+     
+     private String password;
+     
+     private String pin;
+     
+     private String deviceId;
+     
+     
 
 
     /**
@@ -128,6 +138,62 @@ public class MobileClient implements Serializable {
      */
     public void setKeyExpirationTime(Timestamp keyExpirationTime) {
         this.keyExpirationTime = keyExpirationTime;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the pin
+     */
+    public String getPin() {
+        return pin;
+    }
+
+    /**
+     * @param pin the pin to set
+     */
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
+    /**
+     * @return the deviceId
+     */
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    /**
+     * @param deviceId the deviceId to set
+     */
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
     
 }

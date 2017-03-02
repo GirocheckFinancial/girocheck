@@ -1,6 +1,8 @@
 /**
  *
- * Copyright @ 2004-2014 Smart Business Technology, Inc.
+ * Copyright
+ *
+ * @ 2004-2014 Smart Business Technology, Inc.
  *
  * All rights reserved. No part of this software may be reproduced, transmitted,
  * transcribed, stored in a retrieval system, or translated into any language or
@@ -11,9 +13,15 @@
  */
 package com.smartbt.vtsuite.controller.v1;
 
-import com.smartbt.vtsuite.manager.LoginAMSManager;
-import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
+import com.smartbt.girocheck.common.VTSuiteMessages;
+import com.smartbt.girocheck.servercommon.dao.VTSessionDAO;
+import com.smartbt.vtsuite.manager.LoginManager;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.model.MobileClient;
+import com.smartbt.girocheck.servercommon.model.VTSession;
+import com.smartbt.vtsuite.manager.TransactionManager;
+import com.smartbt.vtsuite.vtcommon.Constants;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,7 +33,8 @@ import javax.xml.bind.ValidationException;
 @Path("v1/auth")
 public class AuthController {
 
-    private LoginAMSManager manager = new LoginAMSManager();
+    private LoginManager manager = new LoginManager();
+    private TransactionManager txnManager = new TransactionManager();
 
     @POST
     @Path("login")
@@ -33,59 +42,107 @@ public class AuthController {
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseData login(LinkedHashMap params) throws ValidationException, NoSuchAlgorithmException, Exception {
         System.out.println("AuthController.login:: Incoming parameters : \n username :: " + params.get("username") + " \n password :: " + params.get("password") + " \n pin :: " + params.get("pin") + " \n deviceId :: " + params.get("deviceId"));
-
+        MobileClient mobileClient = new MobileClient();
+        ResponseData response = new ResponseData();
+        VTSession userSession = null;
         String username = (String) params.get("username");
         String password = (String) params.get("password");
         String pin = (String) params.get("pin");
         String deviceId = (String) params.get("deviceId");
+        try {
+            if (pin != null && !pin.isEmpty()) {
 
-        if (pin != null && !pin.isEmpty()) {
+                if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+                    //If get's here, the user is trying to login with the username and password                
+                    mobileClient = manager.getMobileClientByUserNameAndPwd(username, password);
+                    if (mobileClient != null) {
+                        mobileClient.setPin(pin);
+                        mobileClient.setDeviceId(deviceId);
+                        mobileClient = manager.saveorUpdate(mobileClient);
+                        userSession = createSession(mobileClient);
+                        if (userSession != null) {
+                            response.setStatus(Constants.CODE_SUCCESS);
+                            response.setStatusMessage(VTSuiteMessages.SUCCESS);
+                        } else {
+                            failLogin(response);
+                        }
+                    } else {
+                        failLogin(response);
+                    }
 
-            if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-                //If get's here, the user is setting a PIN
-//                TODO
-//                -Get MobileUser by username and password
-//                -Set the PIN to the MobileUser
-//                -Update deviceId in MobileUser
-//                -Create sesion
-//                -Return success 
+                } else {
+                    //If get's here, the user is trying to login with the PIN  
+                    mobileClient = manager.getMobileClientByPINAndDeviceId(pin, deviceId);
+
+                    if (mobileClient != null) {
+
+                        userSession = createSession(mobileClient);
+                        if (userSession != null) {
+                            response.setStatus(Constants.CODE_SUCCESS);
+                            response.setStatusMessage(VTSuiteMessages.SUCCESS);
+                        } else {
+                            failLogin(response);
+                        }
+                    } else {
+                        failLogin(response);
+                    }
+
+                }
             } else {
-                //If get's here, the user is trying to login with the PIN
-                //TODO
-                //-Get MobileUser by PIN and deviceId
-                //-Create sesion
-                //-Return success 
-            }
-        } else {
-            //Normal login
-            //TODO
-            // -Get MobileUser by username and password 
-            // -Update deviceId in MobileUser
-            // -Create sesion
-            // -Return success 
-        }
-//        return manager.authenticateUser( username, password);
+                //Normal login       
+                mobileClient = manager.getMobileClientByUserNameAndPwd(username, password);
+                if (mobileClient != null) {
+                    mobileClient.setDeviceId(deviceId);
+                    mobileClient = manager.saveorUpdate(mobileClient);
+                    userSession = createSession(mobileClient);
+                    if (userSession != null) {
+                        response.setStatus(Constants.CODE_SUCCESS);
+                        response.setStatusMessage(VTSuiteMessages.SUCCESS);
+                    } else {
+                        failLogin(response);
+                    }
+                } else {
+                    failLogin(response);
+                }
 
-        
-        
-        Map data = new HashMap();
-        data.put("clientId", "1"); //TODO Set the clientId here
-        data.put("token", "provissional_token"); //TODO generate a TOKEN using the same logic than FrontAMS
-        data.put("balance", "9.38"); //TODO consume balance inquiry and send the balance here
-        
-        return new ResponseData(data);
+            }
+            if (response.getStatus() == Constants.CODE_SUCCESS) {
+                //to return clientid, token and technicard balance
+                Map data = new HashMap();
+                if (mobileClient != null) {
+                    data.put("clientId", mobileClient.getClient().getId());
+                }
+                if (userSession != null) {
+                    data.put("token", userSession.getToken());
+                }
+                ResponseData balanceResponse = txnManager.balanceEnquiry(mobileClient.getClient().getId());
+                if (balanceResponse != null) {
+                    Map balanceMap = (Map) balanceResponse.getData();
+                    if (balanceMap != null) {
+                        data.put("balance", balanceMap.get(ParameterName.BALANCE)); //TODO consume balance inquiry and send the balance here 
+                    }
+                }
+                response.setData(data);                
+            }            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }  
+        return response;
     }
 
-//    @POST
-//    @Path("deleteSession")
-////    @Consumes("application/json")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public BaseResponse deleteSession(@FormParam("token") String token) {
-////        log.info("Incoming parameters : \n token to delete AuthController.deleteSession() : " + token);
-//
-////        return AuditLogMessage.logDeleteUser(""+idUser,manager.deleteUser(entityType, idUser));
-//        return manager.deleteSession(token);
-//    }
+    private void failLogin(ResponseData response) {
+        failLogin(response, VTSuiteMessages.INVALID_LOGIN_CREDENTIALS);
+    }
+
+    private void failLogin(ResponseData response, String message) {
+        response.setStatus(Constants.CODE_INVALID_USER);
+        response.setStatusMessage(message);
+    }
+
+    private VTSession createSession(MobileClient user) {
+        VTSession session = VTSessionDAO.get().saveOrUpdateSession(user);
+        return session;
+    }
 
     @GET
     @Path("ping")
@@ -94,5 +151,3 @@ public class AuthController {
         return "WORKING!!!";
     }
 }
- 
- 

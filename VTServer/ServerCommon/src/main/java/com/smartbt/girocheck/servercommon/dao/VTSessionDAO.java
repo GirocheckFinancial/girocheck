@@ -4,6 +4,7 @@
  */
 package com.smartbt.girocheck.servercommon.dao;
 
+import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.model.User;
 import com.smartbt.girocheck.servercommon.model.VTSession;
 import com.smartbt.girocheck.servercommon.utils.Utils;
@@ -51,6 +52,31 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
             String token = Utils.generateToken();
             vtSession.setToken(token);
             vtSession.setUser(user);
+            vtSession.setLastUpdate(new Date());
+            HibernateUtil.getSession().saveOrUpdate(vtSession);
+
+            return vtSession;
+        }
+        return vtSession;
+    }
+    
+    public VTSession saveOrUpdateSession(MobileClient user) {
+
+        VTSession vtSession = new VTSession();
+        if (user != null) {
+            Criteria criteria = HibernateUtil.getSession().createCriteria(VTSession.class)
+                    .createAlias("mobileClient", "mobileClient")
+                    .add(Restrictions.eq("mobileClient.id", user.getId()));
+            vtSession = (VTSession) criteria.uniqueResult();
+
+            if (vtSession == null) {
+                vtSession = new VTSession();
+            }
+
+            // Logic to create a new token and session
+            String token = Utils.generateToken();
+            vtSession.setToken(token);
+            vtSession.setMobileClient(user);
             vtSession.setLastUpdate(new Date());
             HibernateUtil.getSession().saveOrUpdate(vtSession);
 

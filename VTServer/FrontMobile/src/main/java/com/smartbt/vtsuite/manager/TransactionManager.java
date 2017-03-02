@@ -13,7 +13,6 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
-import com.smartbt.vtsuite.dao.CardDao;
 import com.smartbt.vtsuite.dao.MobileClientDao;
 import com.smartbt.vtsuite.mock.MockFrontMobileBusinessLogic;
 import com.smartbt.vtsuite.vtcommon.Constants;
@@ -27,8 +26,7 @@ import java.util.Map;
  * @author suresh
  */
 public class TransactionManager {
-
-    private CardDao cardDao = CardDao.get();
+  
     private MobileClientDao mobileClientDao = MobileClientDao.get();
     protected static TransactionManager _this;
 
@@ -150,8 +148,7 @@ public class TransactionManager {
                         response.setStatus(Constants.CODE_SUCCESS);
                         response.setStatusMessage(VTSuiteMessages.SUCCESS);
                         Map balanceInquiry = new HashMap();
-                        balanceInquiry.put(ParameterName.BALANCE, technicardResponse.getTransactionData().get(ParameterName.BALANCE));
-                        balanceInquiry.put(ParameterName.IN_TRANSIT_FUNDS, technicardResponse.getTransactionData().get(ParameterName.IN_TRANSIT_FUNDS));
+                        balanceInquiry.put(ParameterName.BALANCE, technicardResponse.getTransactionData().get(ParameterName.BALANCE));                       
                         response.setData(balanceInquiry);
                     } 
                 }

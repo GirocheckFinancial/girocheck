@@ -53,12 +53,16 @@ public class AuthController {
             if (pin != null && !pin.isEmpty()) {
 
                 if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-                    //If get's here, the user is trying to login with the username and password                
+                    //If get's here, the user is trying to login with the username and password 
+                    //And setting a pin at the same time
                     mobileClient = manager.getMobileClientByUserNameAndPwd(username, password);
                     if (mobileClient != null) {
                         mobileClient.setPin(pin);
                         mobileClient.setDeviceId(deviceId);
                         mobileClient = manager.saveorUpdate(mobileClient);
+                        
+                        //TODO--- This block is common for 3 types of login 
+                        //Should be moved to after the 3 types of login logic
                         userSession = createSession(mobileClient);
                         if (userSession != null) {
                             response.setStatus(Constants.CODE_SUCCESS);
@@ -66,6 +70,7 @@ public class AuthController {
                         } else {
                             failLogin(response);
                         }
+                        //---------------------
                     } else {
                         failLogin(response);
                     }
@@ -75,7 +80,8 @@ public class AuthController {
                     mobileClient = manager.getMobileClientByPINAndDeviceId(pin, deviceId);
 
                     if (mobileClient != null) {
-
+                        //TODO--- This block is common for 3 types of login 
+                        //Should be moved to after the 3 types of login logic
                         userSession = createSession(mobileClient);
                         if (userSession != null) {
                             response.setStatus(Constants.CODE_SUCCESS);
@@ -83,6 +89,7 @@ public class AuthController {
                         } else {
                             failLogin(response);
                         }
+                        //-----------------------------
                     } else {
                         failLogin(response);
                     }
@@ -94,6 +101,8 @@ public class AuthController {
                 if (mobileClient != null) {
                     mobileClient.setDeviceId(deviceId);
                     mobileClient = manager.saveorUpdate(mobileClient);
+                   //TODO--- This block is common for 3 types of login 
+                   //Should be moved to after the 3 types of login logic
                     userSession = createSession(mobileClient);
                     if (userSession != null) {
                         response.setStatus(Constants.CODE_SUCCESS);
@@ -101,6 +110,7 @@ public class AuthController {
                     } else {
                         failLogin(response);
                     }
+                    //------------------------
                 } else {
                     failLogin(response);
                 }
@@ -115,6 +125,7 @@ public class AuthController {
                 if (userSession != null) {
                     data.put("token", userSession.getToken());
                 }
+                //TODO is balanceInquiry :-)
                 ResponseData balanceResponse = txnManager.balanceEnquiry(mobileClient.getClient().getId());
                 if (balanceResponse != null) {
                     Map balanceMap = (Map) balanceResponse.getData();
@@ -122,6 +133,15 @@ public class AuthController {
                         data.put("balance", balanceMap.get(ParameterName.BALANCE)); //TODO consume balance inquiry and send the balance here 
                     }
                 }
+                //TODO (NEW requirement)
+                //Like we fo in register, we need to differenciate 
+                //when it fails by login or by consulting balance
+                
+                //If balanceInquiry fails, return balance as -1
+                //Notice there are two possible type of failures:
+                //1-Tecnicard return undexpected result code
+                //2-There was an exception calling balance Inquiry
+                 
                 response.setData(data);                
             }            
         } catch (Exception e) {

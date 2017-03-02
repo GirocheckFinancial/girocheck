@@ -108,6 +108,8 @@ public class Transaction
     
   public Map toMap() {
         Map map = new HashMap();
+        //TODO we dont need all fields,
+        //Use the class MobileTransaction here
       map.put(ParameterName.TRANSACTION_NUMBER, transactionNumber);
       map.put(ParameterName.DATE, date);
       map.put(ParameterName.TYPE_CODE, typeCode);

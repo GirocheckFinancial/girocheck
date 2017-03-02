@@ -309,6 +309,9 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         return port.wmLastTransactions(pRequestID, pCardNumber, pStartDate, pEndDate, pTransactionQuantity);
     }
 
+    //TODO
+    //Make the format of the output map similar to what I did in MockTecnicardBusinesLogic
+    //Include the logic for pagination (look at my suggestion in [FrontMobile] TransactionManager.getSubList)
     public IMap wmCashToCard(Map map) throws Exception {
         String pTransAmount = MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);

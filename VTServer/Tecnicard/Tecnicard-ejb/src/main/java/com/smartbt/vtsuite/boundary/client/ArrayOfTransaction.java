@@ -44,7 +44,8 @@ public class ArrayOfTransaction {
         List<Map> mapList = new ArrayList<>();
         
         List<Transaction> list = getTransaction();
-        
+        //TODO This should return a List<MobileTransaction>
+        //That was we dont need to do another convertion in the front
         for (Transaction t : list) {
             mapList.add(t.toMap());
         }

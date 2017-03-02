@@ -64,6 +64,7 @@ public class LastTransactionsResponse
            @Override
    public Map toMap() {
         Map map = super.getMap(EXPECTED_RESULT_CODE);
+        //TODO we dont need any of this parameters
       map.put(ParameterName.CURRENCY_CODE, currencyCode);
       map.put(ParameterName.CURRENCY_SYMBOL, currencySymbol);
       map.put(ParameterName.CURRENCY_NAME, currencyName);

@@ -93,6 +93,8 @@ public class WestechBusinessLogic {
         
         String checkId = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProofXML);
 
+        System.out.println("[WestechBusinessLogic] -> checkId = " + checkId);
+        
         Map map = new HashMap();
         map.put(ParameterName.CHECK_ID, checkId);
         return map;

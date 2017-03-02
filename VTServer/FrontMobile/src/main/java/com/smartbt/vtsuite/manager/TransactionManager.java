@@ -62,8 +62,7 @@ public class TransactionManager {
                 map.put(ParameterName.END_DATE, endDateStr);
                 map.put(ParameterName.STATUS_CODE, "G");
 
-                //TODO
-                //put the limit just when page = 1
+                //TODO 
                 //We need to ask all transactions in this range of dates
                 //to Technicard and make the pagination manually in our side
                 //This is because:
@@ -90,6 +89,9 @@ public class TransactionManager {
                             List mobileTransactions = buildTransactionList(transactionData);//Mobile application display purpose                       
                             //pagination 
                             if (page > 0) {
+                                
+                                //TODO
+                                //This map should come already with items and total from the host
                                 transactionHistory.put("items", getSubList(limit, page, mobileTransactions));
                                 transactionHistory.put("total", mobileTransactions.size());
                             } else {
@@ -172,6 +174,31 @@ public class TransactionManager {
             toIndex = fromIndex + max;
         }
         toIndex = (toIndex > list.size()) ? list.size() : toIndex;
+      
+        //TODO
+        //1- This logic I would put it in the host (to avoid send unnecesary data via JMS)
+        //2- Need to filter the list to take just the successfull transactions
+        //3- Ideally we want just one loop to filter and take the transactions in the range (start-max) we need
+        
+        List<MobileTransaction> result = new ArrayList<>();
+        
+        List original= null;  //Suppose this is the original list
+        
+        int start = 0;//this you receive as param ( the value 0 is just to put something there now)
+        int successfulCount = 0; //This is the total that
+                                 //we need to return along with the list
+        
+        for (int i = 0; i < original.size(); i++) {
+            if(true){//if( original.get(i).isSuccess()) //TODO Develop the isSuccess function in Tecnicard's Transaction class
+                if(successfulCount >= start && result.size() < max){
+                    //TODO develop createMobileTransactionFromTransaction
+                    result.add(null /*createMobileTransactionFromTransaction*/);
+                    successfulCount++; 
+                }
+            }
+        }
+        
+        //Need to filter the successfull transactions
         return list.subList(fromIndex, toIndex);
     }
 

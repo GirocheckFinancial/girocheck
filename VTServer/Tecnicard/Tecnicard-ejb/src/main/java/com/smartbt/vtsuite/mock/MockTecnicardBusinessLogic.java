@@ -16,6 +16,7 @@
 package com.smartbt.vtsuite.mock;
 
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
+import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.log.LogUtil;
@@ -39,9 +40,11 @@ import com.smartbt.vtsuite.boundary.util.MapUtil;
 import com.smartbt.vtsuite.util.TecnicardConstantValues;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -317,26 +320,57 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         return response;
     }
 
+    //TODO
+    //Test that this works properly
     public IMap wmLastTransactions(Map map) throws Exception {
-        String pTransactionQuantity = MapUtil.getStringValueFromMap(map, ParameterName.TRANSACTION_QUANTITY, false);
-        String pStartDate = MapUtil.getStringValueFromMap(map, ParameterName.START_DATE, false);
-        String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
-        String pEndDate = MapUtil.getStringValueFromMap(map, ParameterName.END_DATE, false);
-        String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
+        
+        return new IMap() {
 
-        LastTransactionsResponse response = new LastTransactionsResponse();
-        response.setCurrencySymbol("LastTrans: currencySymbol");
-        response.setCurrencyName("LastTrans: currencyName");
-        response.setInitialBalance("LastTrans: initialBalance");
-        response.setFinalBalance("LastTrans: finalBalance");
-        response.setFinalBalance("LastTrans: finalBalance");
-        response.setTransactionsList(null);
-
-        response.setSessionTag(buildSessionTag("LastTransactions", pRequestID, "0"));
-
-        return response;
+            @Override
+            public Map toMap() {
+               return buildTransactionHistoryResponse();
+            }
+        };
     }
 
+    public static Map buildTransactionHistoryResponse(){
+       Map transactionData = new HashMap();
+  
+        Map transactionHistory = new HashMap();
+        transactionHistory.put("items", buildTransactionList());
+        transactionHistory.put("total", 40); // 40 is the total, here we are sending just the first page
+            
+        transactionData.put(ParameterName.TRANSACTIONS_LIST, transactionHistory);
+        return transactionData;
+    }
+     
+    public  static List buildTransactionList(){
+        List list = new ArrayList();
+        
+        list.add(new MobileTransaction("Feb 01 2017", "-58.42", "Store Purchase VONAGE America"));
+        list.add(new MobileTransaction("Feb 01 2017", "6.00", "Transferred from Savings"));
+        list.add(new MobileTransaction("Feb 02 2017", "4.00", "Received Money From Marilyn Lebrija"));
+        list.add(new MobileTransaction("Feb 03 2017", "50.00", "Money Added From Debit Card"));
+        list.add(new MobileTransaction("Feb 03 2017", "58.00", "Store Purchase CVS Farmacy"));
+        list.add(new MobileTransaction("Feb 04 2017", "10.45", "Store Purchase Gas Station"));
+        list.add(new MobileTransaction("Feb 05 2017", "12.42", "Card Reload at Walmart Supermarket"));
+        list.add(new MobileTransaction("Feb 05 2017", "34.12", "Money transfer at Western Union"));
+        list.add(new MobileTransaction("Feb 05 2017", "-32.40", "Check cash at Hiealeash Market Center"));
+        list.add(new MobileTransaction("Feb 06 2017", "11.52", "Store Purchase Publix Supermarket"));
+        
+        list.add(new MobileTransaction("Feb 01 2017", "-58.42", "Store Purchase VONAGE America"));
+        list.add(new MobileTransaction("Feb 01 2017", "6.00", "Transferred from Savings"));
+        list.add(new MobileTransaction("Feb 02 2017", "4.00", "Received Money From Marilyn Lebrija"));
+        list.add(new MobileTransaction("Feb 03 2017", "50.00", "Money Added From Debit Card"));
+        list.add(new MobileTransaction("Feb 03 2017", "58.00", "Store Purchase CVS Farmacy"));
+        list.add(new MobileTransaction("Feb 04 2017", "10.45", "Store Purchase Gas Station"));
+        list.add(new MobileTransaction("Feb 05 2017", "12.42", "Card Reload at Walmart Supermarket"));
+        list.add(new MobileTransaction("Feb 05 2017", "34.12", "Money transfer at Western Union"));
+        list.add(new MobileTransaction("Feb 05 2017", "-32.40", "Check cash at Hiealeash Market Center"));
+        list.add(new MobileTransaction("Feb 06 2017", "11.52", "Store Purchase Publix Supermarket"));
+        
+        return list;
+    }
     public IMap wmCashToCard(Map map) throws Exception {
         String pTransAmount = MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);

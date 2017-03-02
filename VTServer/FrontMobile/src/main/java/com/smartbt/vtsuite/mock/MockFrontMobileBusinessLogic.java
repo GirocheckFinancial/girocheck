@@ -38,6 +38,10 @@ public class MockFrontMobileBusinessLogic {
         return INSTANCE;
     }
 
+    //TODO
+    //Copy this logic to MockTecnicardBusinessLogic.wmLastTransactions
+    //That way we can test this functionality in Dev when the
+    //SystemProperty PROD = false
     public DirexTransactionResponse process(){
        Map transactionData = new HashMap();
  

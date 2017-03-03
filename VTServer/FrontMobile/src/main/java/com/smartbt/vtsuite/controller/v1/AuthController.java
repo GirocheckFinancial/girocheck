@@ -55,45 +55,11 @@ public class AuthController {
                 if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
                     //If get's here, the user is trying to login with the username and password 
                     //And setting a pin at the same time
-                    mobileClient = manager.getMobileClientByUserNameAndPwd(username, password);
-                    if (mobileClient != null) {
-                        mobileClient.setPin(pin);
-                        mobileClient.setDeviceId(deviceId);
-                        mobileClient = manager.saveorUpdate(mobileClient);
-                        
-                        //TODO--- This block is common for 3 types of login 
-                        //Should be moved to after the 3 types of login logic
-                        userSession = createSession(mobileClient);
-                        if (userSession != null) {
-                            response.setStatus(Constants.CODE_SUCCESS);
-                            response.setStatusMessage(VTSuiteMessages.SUCCESS);
-                        } else {
-                            failLogin(response);
-                        }
-                        //---------------------
-                    } else {
-                        failLogin(response);
-                    }
+                    mobileClient = manager.getMobileClientByUserNameAndPwd(username, password);                   
 
                 } else {
                     //If get's here, the user is trying to login with the PIN  
-                    mobileClient = manager.getMobileClientByPINAndDeviceId(pin, deviceId);
-
-                    if (mobileClient != null) {
-                        //TODO--- This block is common for 3 types of login 
-                        //Should be moved to after the 3 types of login logic
-                        userSession = createSession(mobileClient);
-                        if (userSession != null) {
-                            response.setStatus(Constants.CODE_SUCCESS);
-                            response.setStatusMessage(VTSuiteMessages.SUCCESS);
-                        } else {
-                            failLogin(response);
-                        }
-                        //-----------------------------
-                    } else {
-                        failLogin(response);
-                    }
-
+                    mobileClient = manager.getMobileClientByPINAndDeviceId(pin, deviceId); 
                 }
             } else {
                 //Normal login       
@@ -101,21 +67,25 @@ public class AuthController {
                 if (mobileClient != null) {
                     mobileClient.setDeviceId(deviceId);
                     mobileClient = manager.saveorUpdate(mobileClient);
-                   //TODO--- This block is common for 3 types of login 
-                   //Should be moved to after the 3 types of login logic
-                    userSession = createSession(mobileClient);
-                    if (userSession != null) {
-                        response.setStatus(Constants.CODE_SUCCESS);
-                        response.setStatusMessage(VTSuiteMessages.SUCCESS);
-                    } else {
-                        failLogin(response);
-                    }
-                    //------------------------
+                }                  
+
+            }
+
+            //DONE--- This block is common for 3 types of login 
+            //moved to after the 3 types of login logic
+            if (mobileClient != null) {
+                userSession = createSession(mobileClient);
+                if (userSession != null) {
+                    response.setStatus(Constants.CODE_SUCCESS);
+                    response.setStatusMessage(VTSuiteMessages.SUCCESS);
                 } else {
                     failLogin(response);
                 }
-
+            } else {
+                failLogin(response);
             }
+
+            //---------------------
             if (response.getStatus() == Constants.CODE_SUCCESS) {
                 //to return clientid, token and technicard balance
                 Map data = new HashMap();
@@ -125,28 +95,23 @@ public class AuthController {
                 if (userSession != null) {
                     data.put("token", userSession.getToken());
                 }
-                //TODO is balanceInquiry :-)
-                ResponseData balanceResponse = txnManager.balanceEnquiry(mobileClient.getClient().getId());
-                if (balanceResponse != null) {
-                    Map balanceMap = (Map) balanceResponse.getData();
-                    if (balanceMap != null) {
-                        data.put("balance", balanceMap.get(ParameterName.BALANCE)); //TODO consume balance inquiry and send the balance here 
-                    }
-                }
-                //TODO (NEW requirement)
+                //DONE is balanceInquiry :-)
+                //DONE (NEW requirement)
                 //Like we fo in register, we need to differenciate 
                 //when it fails by login or by consulting balance
-                
+
                 //If balanceInquiry fails, return balance as -1
                 //Notice there are two possible type of failures:
                 //1-Tecnicard return undexpected result code
                 //2-There was an exception calling balance Inquiry
-                 
-                response.setData(data);                
-            }            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }  
+                
+                Map balanceMap = txnManager.balanceInquiry(mobileClient.getClient().getId());
+                data.put("balance", balanceMap.get(ParameterName.BALANCE)); //DONE consume balance inquiry and send the balance here                              
+                response.setData(data);
+            }
+        } catch (Exception e) {           
+           e.printStackTrace();
+        }
         return response;
     }
 

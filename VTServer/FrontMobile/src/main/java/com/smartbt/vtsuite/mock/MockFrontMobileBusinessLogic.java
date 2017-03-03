@@ -15,10 +15,12 @@
  */
 package com.smartbt.vtsuite.mock;
 
+import com.smartbt.girocheck.servercommon.display.mobile.MobileRegistration;
 import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
+import com.smartbt.girocheck.servercommon.utils.Utils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class MockFrontMobileBusinessLogic {
         return INSTANCE;
     }
 
-    //TODO
+    //DONE (Since this code is already present in MockTecnicardBusinessLogic.wmLastTransactions
     //Copy this logic to MockTecnicardBusinessLogic.wmLastTransactions
     //That way we can test this functionality in Dev when the
     //SystemProperty PROD = false
@@ -67,6 +69,18 @@ public class MockFrontMobileBusinessLogic {
         direxTransactionResponse.setTransactionData(balanceInquiry);
         return direxTransactionResponse;
     }
+     
+    public Map processRegistration(){       
+ 
+        MobileRegistration mobileRegistration = new MobileRegistration();
+        mobileRegistration.setClientId("1");
+        mobileRegistration.setBalance("120.00");
+        mobileRegistration.setToken(Utils.generateToken());
+        mobileRegistration.setRegistered(Boolean.TRUE);
+        Map registrationMap = new HashMap();       
+        registrationMap.put("details", mobileRegistration);        
+        return registrationMap;
+    } 
      
     public List buildTransactionList(){
         List list = new ArrayList();

@@ -26,7 +26,7 @@ import java.util.Map;
  * @author suresh
  */
 public class TransactionManager {
-  
+
     private MobileClientDao mobileClientDao = MobileClientDao.get();
     protected static TransactionManager _this;
 
@@ -60,7 +60,7 @@ public class TransactionManager {
                 map.put(ParameterName.CARD_NUMBER, mobileClient.getCard().getCardNumber());
                 map.put(ParameterName.START_DATE, startDateStr);
                 map.put(ParameterName.END_DATE, endDateStr);
-                map.put(ParameterName.STATUS_CODE, "G");
+                map.put(ParameterName.STATUS_CODE, "G");               
 
                 //TODO 
                 //We need to ask all transactions in this range of dates
@@ -89,7 +89,6 @@ public class TransactionManager {
                             List mobileTransactions = buildTransactionList(transactionData);//Mobile application display purpose                       
                             //pagination 
                             if (page > 0) {
-                                
                                 //TODO
                                 //This map should come already with items and total from the host
                                 transactionHistory.put("items", getSubList(limit, page, mobileTransactions));
@@ -111,20 +110,17 @@ public class TransactionManager {
         return transactionHistory;
     }
 
-    public ResponseData balanceEnquiry(Integer clientId) {
+    public Map balanceInquiry(Integer clientId) {
 
         DirexTransactionResponse technicardResponse;
         ResponseData response = new ResponseData();
+        Map balanceInquiry = new HashMap();
 
         if ((clientId == 1 || clientId == 0)) {
             technicardResponse = MockFrontMobileBusinessLogic.get().processBalanceEnquiry();
-            response.setStatus(Constants.CODE_SUCCESS);
-            response.setStatusMessage(VTSuiteMessages.SUCCESS);
-            response.setData(technicardResponse.getTransactionData());
-            return response;
-
+            balanceInquiry.put(ParameterName.BALANCE, technicardResponse.getTransactionData().get(ParameterName.BALANCE));
+            return balanceInquiry;
         }
-
         String transactionId = String.valueOf(clientId);
         DirexTransactionRequest direxTransactionRequest = new DirexTransactionRequest();
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TransactionManager:balanceEnquiry] processTransaction " + transactionId, null);
@@ -147,20 +143,21 @@ public class TransactionManager {
                 if (technicardResponse != null && technicardResponse.wasApproved()) {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "technicardResponse.wasApproved()" + technicardResponse.wasApproved(), null);
                     if (technicardResponse.getTransactionData() != null) {
-                        response.setStatus(Constants.CODE_SUCCESS);
-                        response.setStatusMessage(VTSuiteMessages.SUCCESS);
-                        Map balanceInquiry = new HashMap();
-                        balanceInquiry.put(ParameterName.BALANCE, technicardResponse.getTransactionData().get(ParameterName.BALANCE));                       
+                        balanceInquiry.put(ParameterName.BALANCE, technicardResponse.getTransactionData().get(ParameterName.BALANCE));
                         response.setData(balanceInquiry);
-                    } 
+                    } else {
+                        balanceInquiry.put(ParameterName.BALANCE, "-1");
+                    }
+                }else {
+                    balanceInquiry.put(ParameterName.BALANCE, "-1");
                 }
+
             }
         } catch (Exception e) {
-            response.setStatus(Constants.CODE_ERROR_GENERAL);
-            response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);           
+            balanceInquiry.put(ParameterName.BALANCE, "-1");
             e.printStackTrace();
         }
-        return response;
+        return balanceInquiry;
     }
 
     public static List<?> getSubList(int max, int pageNumber, List<?> list) {
@@ -174,30 +171,30 @@ public class TransactionManager {
             toIndex = fromIndex + max;
         }
         toIndex = (toIndex > list.size()) ? list.size() : toIndex;
-      
+
         //TODO
         //1- This logic I would put it in the host (to avoid send unnecesary data via JMS)
         //2- Need to filter the list to take just the successfull transactions
         //3- Ideally we want just one loop to filter and take the transactions in the range (start-max) we need
-        
+
         List<MobileTransaction> result = new ArrayList<>();
-        
-        List original= null;  //Suppose this is the original list
-        
+
+        List original = null;  //Suppose this is the original list
+
         int start = 0;//this you receive as param ( the value 0 is just to put something there now)
         int successfulCount = 0; //This is the total that
-                                 //we need to return along with the list
-        
+        //we need to return along with the list
+
         for (int i = 0; i < original.size(); i++) {
-            if(true){//if( original.get(i).isSuccess()) //TODO Develop the isSuccess function in Tecnicard's Transaction class
-                if(successfulCount >= start && result.size() < max){
+            if (true) {//if( original.get(i).isSuccess()) //TODO Develop the isSuccess function in Tecnicard's Transaction class
+                if (successfulCount >= start && result.size() < max) {
                     //TODO develop createMobileTransactionFromTransaction
                     result.add(null /*createMobileTransactionFromTransaction*/);
-                    successfulCount++; 
+                    successfulCount++;
                 }
             }
         }
-        
+
         //Need to filter the successfull transactions
         return list.subList(fromIndex, toIndex);
     }

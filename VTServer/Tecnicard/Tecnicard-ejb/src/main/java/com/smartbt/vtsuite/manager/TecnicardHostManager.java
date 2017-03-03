@@ -17,6 +17,7 @@ package com.smartbt.vtsuite.manager;
 
 //import com.smartbt.vtsuite.servercommon.manager.AuditManager;
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
+import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
@@ -29,7 +30,9 @@ import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.mock.MockTecnicardBusinessLogic;
 import com.smartbt.vtsuite.util.FixUtil;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomHost;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,11 +41,8 @@ import java.util.Map;
 public class TecnicardHostManager {
 
     AbstractBusinessLogicModule bizLogic;
-
     public static Map TRANSACTION_SEQUENCE;
-
     private static String CODE_000000, CODE_100011, CODE_100012, CODE_100015;
-
     private Transaction transaction;
 
     static {
@@ -79,7 +79,7 @@ public class TecnicardHostManager {
         String prodProperty = System.getProperty("PROD");
         Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
         System.out.println("TecnicardHostManager() -> isProd = " + isProd);
-        
+
         if (isProd) {
             bizLogic = new TecnicardBusinessLogic();
         } else {
@@ -258,6 +258,11 @@ public class TecnicardHostManager {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "--[TecnicardHostManager] success = " + success, null);
 
                     if (success) {
+                        //To filter last transactions for mobile
+                        if (transactionType == TransactionType.TECNICARD_LAST_TRANSACTIONS) {
+                            Map map = buildMobileTransactionList(request.getTransactionData(), (Map) response.getTransactionData().get(ParameterName.TRANSACTIONS_LIST));
+                            response.setTransactionData(map);
+                        }
                         request.setTransactionType(TransactionType.TECNICARD_BALANCE_INQUIRY);
                         DirexTransactionResponse inquiryResponse = (DirexTransactionResponse) bizLogic.handle(request);
 
@@ -340,4 +345,37 @@ public class TecnicardHostManager {
         transaction.addSubTransaction(subTransaction);
     }
 
+    private Map buildMobileTransactionList(Map transactionData, Map original) {
+        Map transactionHistory = new HashMap();
+
+        //DONE
+        //1- This logic I would put it in the host (to avoid send unnecesary data via JMS)
+        //2- Need to filter the list to take just the successfull transactions
+        //3- Ideally we want just one loop to filter and take the transactions in the range (start-max) we need
+
+        List<MobileTransaction> result = new ArrayList<>();
+
+        Integer start = (Integer) transactionData.get(ParameterName.START);//this you receive as param ( the value 0 is just to put something there now)
+        Integer max = (Integer) transactionData.get(ParameterName.MAX);
+
+        int successfulCount = 0; //This is the total that
+        //we need to return along with the list
+
+        for (int i = 0; i < original.size(); i++) {
+            Map transaction = (Map) original.get(i);
+            String status = (String) transaction.get(ParameterName.STATUS_CODE);//filtering successuful(approved) transactions
+            if (status.equalsIgnoreCase("G")) {
+                if (successfulCount >= start && result.size() < max) {
+                    //DONE develop createMobileTransactionFromTransaction
+                    result.add(new MobileTransaction((String) transaction.get(ParameterName.DATE), (String) transaction.get(ParameterName.AMMOUNT), (String) transaction.get(ParameterName.DESCRIPTION)));
+                    successfulCount++;
+                }
+            }
+        }
+
+        transactionHistory.put("items", result);
+        transactionHistory.put("total", successfulCount);
+
+        return transactionHistory;
+    }
 }

@@ -4,9 +4,7 @@
  */
 package com.smartbt.vtsuite.manager;
 
-import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
-import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
@@ -15,10 +13,7 @@ import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.dao.MobileClientDao;
 import com.smartbt.vtsuite.mock.MockFrontMobileBusinessLogic;
-import com.smartbt.vtsuite.vtcommon.Constants;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,7 +57,7 @@ public class TransactionManager {
                 map.put(ParameterName.END_DATE, endDateStr);
                 map.put(ParameterName.STATUS_CODE, "G");               
 
-                //TODO 
+                //DONE 
                 //We need to ask all transactions in this range of dates
                 //to Technicard and make the pagination manually in our side
                 //This is because:
@@ -71,7 +66,8 @@ public class TransactionManager {
                 //(Need to find out what to pass as 'limit' in order to 
                 // get all transactions in the range of dates..  (may be -1 ??)    
 
-                //map.put(ParameterName.TRANSACTION_QUANTITY, limit);
+                map.put(ParameterName.START, start);
+                map.put(ParameterName.MAX, limit);
 
                 direxTransactionRequest.setTransactionData(map);
                 direxTransactionRequest.setCorrelation(mobileClient.getCard().getCardNumber());
@@ -84,20 +80,7 @@ public class TransactionManager {
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "technicardResponse.wasApproved()" + technicardResponse.wasApproved(), null);
 
                     if (technicardResponse.getTransactionData() != null) {
-                        Map transactionData = (Map) technicardResponse.getTransactionData().get(ParameterName.TRANSACTIONS_LIST);
-                        if (transactionData != null) {
-                            List mobileTransactions = buildTransactionList(transactionData);//Mobile application display purpose                       
-                            //pagination 
-                            if (page > 0) {
-                                //TODO
-                                //This map should come already with items and total from the host
-                                transactionHistory.put("items", getSubList(limit, page, mobileTransactions));
-                                transactionHistory.put("total", mobileTransactions.size());
-                            } else {
-                                transactionHistory.put("items", mobileTransactions);
-                                transactionHistory.put("total", mobileTransactions.size());
-                            }
-                        }
+                        transactionHistory = (Map) technicardResponse.getTransactionData();                        
                     }
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TransactionManager:transactionHistory] processTransaction finished" + transactionId, null);
                 }
@@ -159,53 +142,5 @@ public class TransactionManager {
         }
         return balanceInquiry;
     }
-
-    public static List<?> getSubList(int max, int pageNumber, List<?> list) {
-        if (null == list || list.isEmpty()) {
-            return list;
-        }
-        int fromIndex = 0;
-        int toIndex = max;
-        if (max < list.size()) {
-            fromIndex = (pageNumber * max) - max;
-            toIndex = fromIndex + max;
-        }
-        toIndex = (toIndex > list.size()) ? list.size() : toIndex;
-
-        //TODO
-        //1- This logic I would put it in the host (to avoid send unnecesary data via JMS)
-        //2- Need to filter the list to take just the successfull transactions
-        //3- Ideally we want just one loop to filter and take the transactions in the range (start-max) we need
-
-        List<MobileTransaction> result = new ArrayList<>();
-
-        List original = null;  //Suppose this is the original list
-
-        int start = 0;//this you receive as param ( the value 0 is just to put something there now)
-        int successfulCount = 0; //This is the total that
-        //we need to return along with the list
-
-        for (int i = 0; i < original.size(); i++) {
-            if (true) {//if( original.get(i).isSuccess()) //TODO Develop the isSuccess function in Tecnicard's Transaction class
-                if (successfulCount >= start && result.size() < max) {
-                    //TODO develop createMobileTransactionFromTransaction
-                    result.add(null /*createMobileTransactionFromTransaction*/);
-                    successfulCount++;
-                }
-            }
-        }
-
-        //Need to filter the successfull transactions
-        return list.subList(fromIndex, toIndex);
-    }
-
-    public List buildTransactionList(Map transactionData) {
-        List list = new ArrayList();
-        for (Object key : transactionData.keySet()) {
-            Map transaction = (Map) transactionData.get(key);
-            list.add(new MobileTransaction((String) transaction.get(ParameterName.DATE), (String) transaction.get(ParameterName.AMMOUNT), (String) transaction.get(ParameterName.DESCRIPTION)));
-
-        }
-        return list;
-    }
+    
 }

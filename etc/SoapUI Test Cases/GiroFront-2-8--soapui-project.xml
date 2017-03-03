@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project activeEnvironment="Default" name="GiroFront(2.8)" resourceRoot="" soapui-version="4.6.4" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="ScanPortBinding" type="wsdl" bindingName="{http://scan.girocheck.smartbt.com/}ScanPortBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/SVN/GiroCheck/VTServer/GirocheckFront/src/main/webapp/WEB-INF/wsdl/Scan.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl"><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<con:soapui-project activeEnvironment="Default" name="GiroFront(2.8)" resourceRoot="" soapui-version="5.3.0" abortOnError="false" runType="SEQUENTIAL" id="17cc0a21-1044-4c60-a3ee-bdfee01829ce" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="ScanPortBinding" type="wsdl" bindingName="{http://scan.girocheck.smartbt.com/}ScanPortBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/SVN/GiroCheck/VTServer/GirocheckFront/src/main/webapp/WEB-INF/wsdl/Scan.wsdl" id="b7d1f00e-a627-4c5f-9d9f-c5d3efba9a9a" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl"><con:part><con:url>file:\C:\SVN\GiroCheck\VTServer\GirocheckFront\src\main\webapp\WEB-INF\wsdl\Scan.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="http://scan.girocheck.smartbt.com/" name="Scan" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://scan.girocheck.smartbt.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
     <xsd:schema>
       <xsd:import namespace="http://scan.girocheck.smartbt.com/" schemaLocation="Scan.xsd"/>
@@ -360,7 +360,7 @@
       <xs:element name="resultMessage" type="xs:string" minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints/><con:operation isOneWay="false" action="" name="balanceInquiry" bindingOperationName="balanceInquiry" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints/><con:operation isOneWay="false" action="" name="balanceInquiry" bindingOperationName="balanceInquiry" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="3eab8bab-8481-438b-a0ae-2ec246c519e8"><con:settings/><con:call name="Request 1" id="227479bc-f70c-4c46-8f56-5da0ff8f2efa"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <scan:balanceInquiry>
@@ -379,7 +379,7 @@
          </arg0>
       </scan:balanceInquiry>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardReload" bindingOperationName="cardReload" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/balanceInquiryRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardReload" bindingOperationName="cardReload" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="b2029bc0-2f60-4b44-aecf-c94fdbef96ac"><con:settings/><con:call name="Request 1" id="e989729a-f0f5-43c0-9488-89338e1cc5e0"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <scan:cardReload>
@@ -442,7 +442,7 @@
          </arg0>
       </scan:cardReload>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardToBank" bindingOperationName="cardToBank" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardReloadRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="cardToBank" bindingOperationName="cardToBank" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="5b34454d-f145-4bb6-aa16-955a7bbc9c08"><con:settings/><con:call name="Request 1" id="fc019055-df7e-4794-8a78-8a8509503a72"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <scan:cardToBank>
@@ -467,7 +467,7 @@
          </arg0>
       </scan:cardToBank>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuth" bindingOperationName="checkAuth" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/GirocheckFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/cardToBankRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuth" bindingOperationName="checkAuth" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="74c5d2eb-99a4-4645-883c-a01683ba3ba6"><con:settings/><con:call name="Request 1" id="9b8c2d4f-1111-4fcc-b97b-28ff13feca74"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/GirocheckFront/Scan</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <scan:checkAuth>
@@ -532,7 +532,7 @@
          </arg0>
       </scan:checkAuth>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthLocationConfig" bindingOperationName="checkAuthLocationConfig" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthLocationConfig" bindingOperationName="checkAuthLocationConfig" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="61456501-3c68-43df-8176-6c11ea32b3b9"><con:settings/><con:call name="Request 1" id="46353cb2-16a2-479e-b379-68afe6748b64"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <scan:checkAuthLocationConfig>
@@ -549,7 +549,7 @@
          </arg0>
       </scan:checkAuthLocationConfig>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthSubmit" bindingOperationName="checkAuthSubmit" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthLocationConfigRequest"/></con:call></con:operation><con:operation isOneWay="false" action="" name="checkAuthSubmit" bindingOperationName="checkAuthSubmit" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional" id="5c5e3d2f-5e6d-42a4-a8ea-7454f8a0b267"><con:settings/><con:call name="Request 1" id="9f72ad38-5f6f-4a2a-90c8-db04a089dd36"><con:settings/><con:encoding>UTF-8</con:encoding><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:scan="http://scan.girocheck.smartbt.com/">
    <soapenv:Header/>
    <soapenv:Body>
       <scan:checkAuthSubmit>
@@ -565,4 +565,4 @@
          </arg0>
       </scan:checkAuthSubmit>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://scan.girocheck.smartbt.com/Scan/checkAuthSubmitRequest"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

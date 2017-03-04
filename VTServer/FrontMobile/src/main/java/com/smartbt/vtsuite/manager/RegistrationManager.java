@@ -116,7 +116,7 @@ public class RegistrationManager {
                 }
 
                 // to crete new mobile client
-                mobileClient = createMobileClient(username, password, ssn, deviceId, email, phone, pin, card, client);
+                mobileClient = createMobileClient(username, password, ssn, deviceId, pin, card, client);
 
                 client.setEmail(email);
                 client.setTelephone(phone);
@@ -178,7 +178,7 @@ public class RegistrationManager {
         return card;
     }
 
-    private MobileClient createMobileClient(String username, String password, String ssn, String deviceId, String email, String phone, String pin, CreditCard card, Client client) throws ValidationException, NoSuchAlgorithmException {
+    private MobileClient createMobileClient(String username, String password, String ssn, String deviceId, String pin, CreditCard card, Client client) throws ValidationException, NoSuchAlgorithmException {
         MobileClient mobileClient = new MobileClient();
         mobileClient.setCard(card);
         mobileClient.setClient(client);
@@ -186,8 +186,6 @@ public class RegistrationManager {
         String generatedPassword = PasswordUtil.generatePassword(8);
         String encyptedPassword = PasswordUtil.encryptPassword(generatedPassword);
         mobileClient.setPassword(encyptedPassword);
-        mobileClient.setEmail(email);
-        mobileClient.setPhone(phone);
         mobileClient.setPin(pin);
         mobileClient.setDeviceId(deviceId);
         mobileClient.setDeviceType("device");//need to get device type

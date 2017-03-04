@@ -2,6 +2,7 @@ package com.smartbt.girocheck.servercommon.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
@@ -36,11 +37,7 @@ public class MobileClient implements Serializable {
      
      private String pin;
      
-     private String deviceId;
-     
-     private String email;
-     
-     private String phone;
+     private String deviceId; 
      
      
 
@@ -205,39 +202,9 @@ public class MobileClient implements Serializable {
         return keyExpirationTime;
     }
 
-    /**
-     * @param keyExpirationTime the keyExpirationTime to set
-     */
-    public void setKeyExpirationTime(java.util.Date keyExpirationTime) {
+    public void setKeyExpirationTime(Date keyExpirationTime) {
         this.keyExpirationTime = keyExpirationTime;
     }
-
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * @return the phone
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     * @param phone the phone to set
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+ 
     
 }

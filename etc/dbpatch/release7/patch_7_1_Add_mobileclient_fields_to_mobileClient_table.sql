@@ -1,5 +1,7 @@
 INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(7, 'patch_7_1', now(), 'Create mobile_client table');
  
+DROP table girocheck.mobile_client;
+ 
 CREATE TABLE `mobile_client` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `device_type` varchar(45) DEFAULT NULL,
@@ -11,9 +13,7 @@ CREATE TABLE `mobile_client` (
   `username` varchar(55) DEFAULT NULL,
   `password` varchar(55) DEFAULT NULL,
   `pin` varchar(25) DEFAULT NULL,
-  `device_id` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,    
+  `device_id` varchar(255) DEFAULT NULL,   
   PRIMARY KEY (`id`),
   KEY `sadsafs_idx` (`client`) USING BTREE,
   KEY `mobile_client_fk2_idx` (`card`),

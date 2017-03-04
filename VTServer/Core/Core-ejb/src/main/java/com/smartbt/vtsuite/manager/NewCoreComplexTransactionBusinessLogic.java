@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1234,6 +1235,10 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 if (dlData != null && !dlData.isEmpty()) {
                     try {
                         personalInfoMap = IDScanner.parseID(CoreTransactionManager.ID_SCAN_AUTH_KEY, dlData);
+                   
+                        System.out.println("Printing IDScanner output:");
+                        System.out.println(Arrays.toString(personalInfoMap.entrySet().toArray()));
+                    
                     } catch (Exception e) {
                         e.printStackTrace();
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexTransactionBusinessLogic] Null personInfo from DLicense WS.", null);

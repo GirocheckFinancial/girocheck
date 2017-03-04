@@ -175,6 +175,7 @@ public class IDScanner {
                     map.put(ParameterName.MIDDLE_NAME, getString(dl, "MiddleName"));
 
                     map.put(ParameterName.IDSTATE, getString(dl, "IssuedBy"));
+                    map.put(ParameterName.OEIDSTATE, getString(dl, "IssuedBy"));
 
                     map.put(ParameterName.COUNTRY, "US");
                     map.put(ParameterName.IDCOUNTRY, "US");

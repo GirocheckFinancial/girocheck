@@ -1,7 +1,7 @@
 INSERT INTO girocheck.dbpatch (release_number, name, applydate, description) VALUES(7, 'patch_7_1', now(), 'Create mobile_client table');
  
 CREATE TABLE `mobile_client` (
-  `id` int(10) NOT NULL,
+  `id` int(10) NOT NULL AUTO_INCREMENT,
   `device_type` varchar(45) DEFAULT NULL,
   `registration_date` timestamp NULL DEFAULT NULL,
   `forgot_password_key` varchar(45) DEFAULT NULL,
@@ -15,11 +15,12 @@ CREATE TABLE `mobile_client` (
   `email` varchar(255) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,    
   PRIMARY KEY (`id`),
-  KEY `sadsafs_idx` (`client`),
+  KEY `sadsafs_idx` (`client`) USING BTREE,
   KEY `mobile_client_fk2_idx` (`card`),
   CONSTRAINT `mobile_client_fk` FOREIGN KEY (`client`) REFERENCES `client` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `mobile_client_fk2` FOREIGN KEY (`card`) REFERENCES `card` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+alter table vtsession add column id_mobile_client int(10);
 alter table vtsession add constraint vtsession_fk2 foreign key(id_mobile_client) references mobile_client(id);

@@ -145,4 +145,8 @@ public class Constants {
     
     public static final int FEE_RECORD_EXISTS = 414; 
     
+    public static final int LOGIN_FAILED = 800;
+    
+    public static final int CARD_NOT_PERSONALIZED = 902;
+    
 }

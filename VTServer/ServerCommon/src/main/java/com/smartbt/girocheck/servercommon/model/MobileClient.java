@@ -26,9 +26,9 @@ public class MobileClient implements Serializable {
      
      private com.smartbt.girocheck.servercommon.model.CreditCard card;
      
-     private Timestamp registrationDate;
+     private java.util.Date registrationDate;
      
-     private Timestamp keyExpirationTime;
+     private java.util.Date keyExpirationTime;
      
      private String userName;
      
@@ -37,6 +37,10 @@ public class MobileClient implements Serializable {
      private String pin;
      
      private String deviceId;
+     
+     private String email;
+     
+     private String phone;
      
      
 
@@ -98,18 +102,13 @@ public class MobileClient implements Serializable {
         this.card = card;
     }
 
-    /**
-     * @return the registrationDate
-     */
-    public Timestamp getRegistrationDate() {
-        return registrationDate;
-    }
+    
 
     /**
      * @param registrationDate the registrationDate to set
      */
     public void setRegistrationDate(Timestamp registrationDate) {
-        this.registrationDate = registrationDate;
+        this.setRegistrationDate(registrationDate);
     }
 
     /**
@@ -126,19 +125,8 @@ public class MobileClient implements Serializable {
         this.client = client;
     }
 
-    /**
-     * @return the keyExpirationTime
-     */
-    public Timestamp getKeyExpirationTime() {
-        return keyExpirationTime;
-    }
-
-    /**
-     * @param keyExpirationTime the keyExpirationTime to set
-     */
-    public void setKeyExpirationTime(Timestamp keyExpirationTime) {
-        this.keyExpirationTime = keyExpirationTime;
-    }
+    
+    
 
     /**
      * @return the userName
@@ -194,6 +182,62 @@ public class MobileClient implements Serializable {
      */
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    /**
+     * @return the registrationDate
+     */
+    public java.util.Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    /**
+     * @param registrationDate the registrationDate to set
+     */
+    public void setRegistrationDate(java.util.Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    /**
+     * @return the keyExpirationTime
+     */
+    public java.util.Date getKeyExpirationTime() {
+        return keyExpirationTime;
+    }
+
+    /**
+     * @param keyExpirationTime the keyExpirationTime to set
+     */
+    public void setKeyExpirationTime(java.util.Date keyExpirationTime) {
+        this.keyExpirationTime = keyExpirationTime;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
     
 }

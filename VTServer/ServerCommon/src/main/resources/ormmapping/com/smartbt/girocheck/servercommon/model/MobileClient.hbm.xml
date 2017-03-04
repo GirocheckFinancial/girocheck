@@ -18,6 +18,8 @@
                 <property name="password" column="password" type="string" length="55" not-null="false" lazy="false"/>
                 <property name="pin" column="pin" type="string" length="25" not-null="false" lazy="false"/>
                 <property name="deviceId" column="device_id" type="string" length="255" not-null="false" lazy="false"/>
+                <property name="email" column="email" type="string" length="255" not-null="false" lazy="false"/>
+                <property name="phone" column="phone" type="string" length="20" not-null="false" lazy="false"/>
             </class>      
   
     </hibernate-mapping>

@@ -29,17 +29,17 @@ public class MobileRegistration implements Serializable{
     
     private String  clientId;
     private String  token;
-    private String  balance;
-    private Boolean registered;
+    private String  balance;  
+    
     
     public MobileRegistration() {
     }
 
-    public MobileRegistration(String clientId, String token, String balance,Boolean registered) {
+    public MobileRegistration(String clientId, String token, String balance) {
         this.clientId = clientId;
         this.token = token;
         this.balance = balance;
-        this.registered = registered;
+       
     }
 
     /**
@@ -84,18 +84,5 @@ public class MobileRegistration implements Serializable{
         this.balance = balance;
     }
 
-    /**
-     * @return the registered
-     */
-    public Boolean getRegistered() {
-        return registered;
-    }
-
-    /**
-     * @param registered the registered to set
-     */
-    public void setRegistered(Boolean registered) {
-        this.registered = registered;
-    }
     
 }

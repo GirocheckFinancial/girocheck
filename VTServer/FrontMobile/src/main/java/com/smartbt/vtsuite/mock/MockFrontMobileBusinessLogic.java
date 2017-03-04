@@ -76,10 +76,10 @@ public class MockFrontMobileBusinessLogic {
         mobileRegistration.setClientId("1");
         mobileRegistration.setBalance("120.00");
         mobileRegistration.setToken(Utils.generateToken());
-        mobileRegistration.setRegistered(Boolean.TRUE);
-        Map registrationMap = new HashMap();       
-        registrationMap.put("details", mobileRegistration);        
-        return registrationMap;
+        //mobileRegistration.setRegistered(Boolean.TRUE);
+        Map data = new HashMap();       
+        data.put("details", mobileRegistration);        
+        return data;
     } 
      
     public List buildTransactionList(){

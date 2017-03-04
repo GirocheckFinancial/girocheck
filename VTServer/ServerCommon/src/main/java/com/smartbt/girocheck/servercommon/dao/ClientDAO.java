@@ -17,6 +17,7 @@ import com.smartbt.girocheck.servercommon.display.ClientDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.model.Client;
+import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.utils.CryptoUtils;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.Utils;
@@ -191,7 +192,13 @@ public class ClientDAO extends BaseDAO<Client> {
        response.setStatus(Constants.CODE_SUCCESS);
        return response;
     }
+    
+    public Client getClientBySSN(String ssn){
         
+         Criteria criteria = HibernateUtil.getSession().createCriteria(Client.class) 
+                 .add(Restrictions.eq("ssn", ssn));          
+               return (Client) criteria.uniqueResult();  
+    }     
     
    
     }

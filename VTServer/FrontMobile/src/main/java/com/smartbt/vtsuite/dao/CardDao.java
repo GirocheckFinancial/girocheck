@@ -35,6 +35,11 @@ public class CardDao extends BaseDAO<CreditCard> {
                  .add(Restrictions.eq("client.id", clientId));
         return (CreditCard) criteria.uniqueResult();
     }
+    
+    public CreditCard createCard(CreditCard card) {
+        HibernateUtil.getSession().saveOrUpdate(card);
+        return card;
+    }
    
 
 }

@@ -399,6 +399,10 @@ public class VTSuiteMessages {
     
     public final static String ERROR_FEE_SCHEDULE_METHOD = "There is another fee schedule record with the same method.";
     
+    public static final String LOGIN_FAILED = "Login Failed. Please Contact Customer Support.";
+    
+    public static final String CARD_NOT_PERSONALIZED = "Card is not personised.";
+    
     
     /**
      * Get Default Error Message

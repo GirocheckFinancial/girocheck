@@ -27,11 +27,13 @@ import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.vtsuite.boundary.client.Transaction;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.ws.BindingProvider;
 
@@ -84,11 +86,9 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         TransactionType transactionType = request.getTransactionType();
 
         IMap response = null;
-        IMap responseBalance = null;
-        Map responseParameterMap = new HashMap();
+        IMap responseBalance = null; 
 
-        Map map;
-        Map balanceInqMap;
+        Map map; 
 
 //         LogUtil.logAndStore( "TecnicardBL", "                        proccessing:: " + transactionType );
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardBusinessLogic] proccessing:: " + transactionType, null);

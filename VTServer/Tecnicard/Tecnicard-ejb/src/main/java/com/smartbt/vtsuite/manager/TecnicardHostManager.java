@@ -40,6 +40,15 @@ import java.util.Map;
  */
 public class TecnicardHostManager {
 
+    public static TecnicardHostManager INSTANCE;
+
+    public static TecnicardHostManager get() {
+        if (INSTANCE == null) {
+            INSTANCE = new TecnicardHostManager();
+        }
+        return INSTANCE;
+    }
+
     AbstractBusinessLogicModule bizLogic;
     public static Map TRANSACTION_SEQUENCE;
     private static String CODE_000000, CODE_100011, CODE_100012, CODE_100015;
@@ -123,6 +132,19 @@ public class TecnicardHostManager {
         String resultCode = "";
 
         switch (transactionType) {
+            case TECNICARD_LAST_TRANSACTIONS:
+                try {
+                    response = (DirexTransactionResponse) bizLogic.handle(request);
+                    Map responseData = response.getTransactionData();
+
+                    responseData = buildMobileTransactionList(request.getTransactionData(), responseData);
+                    response.setTransactionData(responseData);
+                    return response;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_ERROR, e);
+                }
+ 
             case GENERIC_HOST_VALIDATION:
 
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "--[TecnicardHostManager] Processing: TECNICARD_CARD_VALIDATION", null);
@@ -257,12 +279,7 @@ public class TecnicardHostManager {
 
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "--[TecnicardHostManager] success = " + success, null);
 
-                    if (success) {
-                        //To filter last transactions for mobile
-                        if (transactionType == TransactionType.TECNICARD_LAST_TRANSACTIONS) {
-                            Map map = buildMobileTransactionList(request.getTransactionData(), (Map) response.getTransactionData().get(ParameterName.TRANSACTIONS_LIST));
-                            response.setTransactionData(map);
-                        }
+                    if (success) { 
                         request.setTransactionType(TransactionType.TECNICARD_BALANCE_INQUIRY);
                         DirexTransactionResponse inquiryResponse = (DirexTransactionResponse) bizLogic.handle(request);
 
@@ -345,29 +362,25 @@ public class TecnicardHostManager {
         transaction.addSubTransaction(subTransaction);
     }
 
-    private Map buildMobileTransactionList(Map transactionData, Map original) {
+    private Map buildMobileTransactionList(Map requestMap, Map responseMap) {
         Map transactionHistory = new HashMap();
-
-        //DONE
-        //1- This logic I would put it in the host (to avoid send unnecesary data via JMS)
-        //2- Need to filter the list to take just the successfull transactions
-        //3- Ideally we want just one loop to filter and take the transactions in the range (start-max) we need
-
         List<MobileTransaction> result = new ArrayList<>();
 
-        Integer start = (Integer) transactionData.get(ParameterName.START);//this you receive as param ( the value 0 is just to put something there now)
-        Integer max = (Integer) transactionData.get(ParameterName.MAX);
+        Integer start = (Integer) requestMap.get(ParameterName.START);//this you receive as param ( the value 0 is just to put something there now)
+        Integer max = (Integer) requestMap.get(ParameterName.MAX);
+        int successfulCount = 0;
 
-        int successfulCount = 0; //This is the total that
-        //we need to return along with the list
+        List<com.smartbt.vtsuite.boundary.client.Transaction> originalList = (List<com.smartbt.vtsuite.boundary.client.Transaction>) responseMap.get(ParameterName.TRANSACTIONS_LIST);
 
-        for (int i = 0; i < original.size(); i++) {
-            Map transaction = (Map) original.get(i);
-            String status = (String) transaction.get(ParameterName.STATUS_CODE);//filtering successuful(approved) transactions
-            if (status.equalsIgnoreCase("G")) {
-                if (successfulCount >= start && result.size() < max) {
-                    //DONE develop createMobileTransactionFromTransaction
-                    result.add(new MobileTransaction((String) transaction.get(ParameterName.DATE), (String) transaction.get(ParameterName.AMMOUNT), (String) transaction.get(ParameterName.DESCRIPTION)));
+        System.out.println("TecnicardHostManager.buildMobileTransactionList start = " + start + ", max = " + max);
+        System.out.println("TecnicardHostManager.buildMobileTransactionList originalList.size() = " + originalList.size());
+
+        if (originalList != null) {
+            for (int i = 0; i < originalList.size(); i++) {
+                if (originalList.get(i).wasSuccess()) {
+                    if (successfulCount >= start && result.size() < max) {
+                        result.add(originalList.get(i).toMobileTransaction());
+                    }
                     successfulCount++;
                 }
             }
@@ -378,4 +391,38 @@ public class TecnicardHostManager {
 
         return transactionHistory;
     }
+
+//    private Map buildMobileTransactionList(Map transactionData, Map original) {
+//        Map transactionHistory = new HashMap();
+//
+//        //DONE
+//        //1- This logic I would put it in the host (to avoid send unnecesary data via JMS)
+//        //2- Need to filter the list to take just the successfull transactions
+//        //3- Ideally we want just one loop to filter and take the transactions in the range (start-max) we need
+//
+//        List<MobileTransaction> result = new ArrayList<>();
+//
+//        Integer start = (Integer) transactionData.get(ParameterName.START);//this you receive as param ( the value 0 is just to put something there now)
+//        Integer max = (Integer) transactionData.get(ParameterName.MAX);
+//
+//        int successfulCount = 0; //This is the total that
+//        //we need to return along with the list
+//
+//        for (int i = 0; i < original.size(); i++) {
+//            Map transaction = (Map) original.get(i);
+//            String status = (String) transaction.get(ParameterName.STATUS_CODE);//filtering successuful(approved) transactions
+//            if (status.equalsIgnoreCase("G")) {
+//                if (successfulCount >= start && result.size() < max) {
+//                    //DONE develop createMobileTransactionFromTransaction
+//                    result.add(new MobileTransaction((String) transaction.get(ParameterName.DATE), (String) transaction.get(ParameterName.AMMOUNT), (String) transaction.get(ParameterName.DESCRIPTION)));
+//                    successfulCount++;
+//                }
+//            }
+//        }
+//
+//        transactionHistory.put("items", result);
+//        transactionHistory.put("total", successfulCount);
+//
+//        return transactionHistory;
+//    }
 }

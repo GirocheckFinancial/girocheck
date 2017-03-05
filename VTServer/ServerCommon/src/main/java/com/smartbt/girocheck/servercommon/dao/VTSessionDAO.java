@@ -59,16 +59,17 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
         }
         return vtSession;
     }
-    
+
     public VTSession saveOrUpdateSession(MobileClient user) {
 
         VTSession vtSession = new VTSession();
         if (user != null) {
+            System.out.println("-------VTSessionDAO -> saveOrUpdateSession 1");
             Criteria criteria = HibernateUtil.getSession().createCriteria(VTSession.class)
                     .createAlias("mobileClient", "mobileClient")
                     .add(Restrictions.eq("mobileClient.id", user.getId()));
             vtSession = (VTSession) criteria.uniqueResult();
-
+            System.out.println("--------VTSessionDAO -> saveOrUpdateSession 2");
             if (vtSession == null) {
                 vtSession = new VTSession();
             }
@@ -79,7 +80,7 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
             vtSession.setMobileClient(user);
             vtSession.setLastUpdate(new Date());
             HibernateUtil.getSession().saveOrUpdate(vtSession);
-
+            System.out.println("--------VTSessionDAO -> saveOrUpdateSession 3");
             return vtSession;
         }
         return vtSession;
@@ -98,8 +99,8 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
     }
 
     /**
-     * Verifies if token is valid.
-     * Return If the session expire or not
+     * Verifies if token is valid. Return If the session expire or not
+     *
      * @param token The token
      * @return session object
      */
@@ -110,8 +111,8 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
         if (userSession != null) {
             int aliveSessionTime = 36000000;
             long auxtime = System.currentTimeMillis() - userSession.getLastUpdate().getTime();
-            
-            if (!Validate.isTime(userSession.getLastUpdate().getTime(), aliveSessionTime)) {                
+
+            if (!Validate.isTime(userSession.getLastUpdate().getTime(), aliveSessionTime)) {
                 userSession.setLastUpdate(new Date());
                 userSession.setSessionInfo(String.valueOf(Constants.CODE_SESSION_VALID));
                 result = Constants.CODE_SESSION_VALID;
@@ -133,23 +134,22 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
         User user = (User) criteria.uniqueResult();
         return user.getId();
     }
-    
-    public void deleteSession(String token){
-        
+
+    public void deleteSession(String token) {
+
         Criteria criteria = HibernateUtil.getSession().createCriteria(VTSession.class).add(Restrictions.eq("token", token));
         VTSession vtsession = (VTSession) criteria.uniqueResult();
-        
+
         super.delete(vtsession);
-        
+
     }
-    
-    public void deleteSessionByUser(int idUser){ 
+
+    public void deleteSessionByUser(int idUser) {
         String sql = "delete from vtsession WHERE id_user = " + idUser;
- 
+
         int updatedRows = HibernateUtil.getSession().createSQLQuery(sql).executeUpdate();
-        
+
         System.out.println("Deleted " + updatedRows + " sessions..");
     }
-    
-     
+
 }

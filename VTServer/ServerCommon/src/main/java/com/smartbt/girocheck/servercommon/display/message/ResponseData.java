@@ -33,13 +33,18 @@ public class ResponseData<T> extends BaseResponse {
     public ResponseData() {
     }
 
+    public static ResponseData OK() {
+        ResponseData response = new ResponseData();
+        response.setStatus(Constants.CODE_SUCCESS);
+        response.setStatusMessage(VTSuiteMessages.SUCCESS);
+        return response;
+    }
+
     public ResponseData(T data) {
         super(Constants.CODE_SUCCESS, VTSuiteMessages.SUCCESS);
         this.data = data;
     }
 
-    
-    
     /**
      *
      * @return

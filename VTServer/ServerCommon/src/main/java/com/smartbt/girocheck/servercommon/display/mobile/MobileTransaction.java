@@ -36,7 +36,7 @@ public class MobileTransaction implements Serializable {
         this.date = date;
         this.description = description;
         this.amount = amount;
-    }
+    } 
 
     /**
      * @return the date

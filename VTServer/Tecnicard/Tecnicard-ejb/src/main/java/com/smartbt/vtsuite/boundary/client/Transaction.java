@@ -1,7 +1,7 @@
-
 package com.smartbt.vtsuite.boundary.client;
 
 import com.google.common.collect.HashBiMap;
+import com.smartbt.girocheck.servercommon.display.mobile.MobileTransaction;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +10,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for Transaction complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
+ * Java class for Transaction complex type.
+ *
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
+ *
  * <pre>
  * &lt;complexType name="Transaction">
  *   &lt;complexContent>
@@ -43,8 +45,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Transaction", propOrder = {
@@ -67,8 +69,7 @@ import javax.xml.bind.annotation.XmlType;
     "originalAmount"
 })
 public class Transaction
-    extends BasicExternalInfoObject
-{
+        extends BasicExternalInfoObject {
 
     @XmlElement(name = "TransactionNumber")
     protected String transactionNumber;
@@ -105,38 +106,30 @@ public class Transaction
     @XmlElement(name = "OriginalAmount")
     protected String originalAmount;
 
-    
-  public Map toMap() {
-        Map map = new HashMap();
-        //TODO we dont need all fields,
-        //Use the class MobileTransaction here
-      map.put(ParameterName.TRANSACTION_NUMBER, transactionNumber);
-      map.put(ParameterName.DATE, date);
-      map.put(ParameterName.TYPE_CODE, typeCode);
-      map.put(ParameterName.TYPE, type);
-      map.put(ParameterName.OPERATION_TYPE, operationType);
-      map.put(ParameterName.STATUS_CODE, statusCode);
-      map.put(ParameterName.STATUS_DESCRIPTION, statusDescription);
-      map.put(ParameterName.DESCRIPTION, description);
-      map.put(ParameterName.REJECTION_CODE, rejectionCode);
-      map.put(ParameterName.REJECTION_REASON, rejectionReason);
-      map.put(ParameterName.DEVICE, device);
-      map.put(ParameterName.COUNTRY, country);
-      map.put(ParameterName.STATE, state);
-      map.put(ParameterName.CITY, city);
-      map.put(ParameterName.FEE, fee);
-      map.put(ParameterName.AMMOUNT, amount);
-      map.put(ParameterName.ORIGINAL_AMOUNT, originalAmount);
-    return map;
+    public Boolean wasSuccess() {
+        return statusCode != null && statusCode.equalsIgnoreCase("G");
     }
     
+    public MobileTransaction toMobileTransaction(){
+        return new MobileTransaction(date, amount, description);
+    }
+
+    public Transaction() {
+    }
+
+    public Transaction(String statusCode, String date,String amount,String description) {
+        this.date = date; 
+        this.statusCode = statusCode; 
+        this.description = description; 
+        this.amount = amount; 
+    }
+     
+
     /**
      * Gets the value of the transactionNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getTransactionNumber() {
         return transactionNumber;
@@ -144,11 +137,9 @@ public class Transaction
 
     /**
      * Sets the value of the transactionNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setTransactionNumber(String value) {
         this.transactionNumber = value;
@@ -156,11 +147,9 @@ public class Transaction
 
     /**
      * Gets the value of the date property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getDate() {
         return date;
@@ -168,11 +157,9 @@ public class Transaction
 
     /**
      * Sets the value of the date property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setDate(String value) {
         this.date = value;
@@ -180,11 +167,9 @@ public class Transaction
 
     /**
      * Gets the value of the typeCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getTypeCode() {
         return typeCode;
@@ -192,11 +177,9 @@ public class Transaction
 
     /**
      * Sets the value of the typeCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setTypeCode(String value) {
         this.typeCode = value;
@@ -204,11 +187,9 @@ public class Transaction
 
     /**
      * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getType() {
         return type;
@@ -216,11 +197,9 @@ public class Transaction
 
     /**
      * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setType(String value) {
         this.type = value;
@@ -228,11 +207,9 @@ public class Transaction
 
     /**
      * Gets the value of the operationType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getOperationType() {
         return operationType;
@@ -240,11 +217,9 @@ public class Transaction
 
     /**
      * Sets the value of the operationType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setOperationType(String value) {
         this.operationType = value;
@@ -252,11 +227,9 @@ public class Transaction
 
     /**
      * Gets the value of the statusCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getStatusCode() {
         return statusCode;
@@ -264,11 +237,9 @@ public class Transaction
 
     /**
      * Sets the value of the statusCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setStatusCode(String value) {
         this.statusCode = value;
@@ -276,11 +247,9 @@ public class Transaction
 
     /**
      * Gets the value of the statusDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getStatusDescription() {
         return statusDescription;
@@ -288,11 +257,9 @@ public class Transaction
 
     /**
      * Sets the value of the statusDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setStatusDescription(String value) {
         this.statusDescription = value;
@@ -300,11 +267,9 @@ public class Transaction
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getDescription() {
         return description;
@@ -312,11 +277,9 @@ public class Transaction
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setDescription(String value) {
         this.description = value;
@@ -324,11 +287,9 @@ public class Transaction
 
     /**
      * Gets the value of the rejectionCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getRejectionCode() {
         return rejectionCode;
@@ -336,11 +297,9 @@ public class Transaction
 
     /**
      * Sets the value of the rejectionCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setRejectionCode(String value) {
         this.rejectionCode = value;
@@ -348,11 +307,9 @@ public class Transaction
 
     /**
      * Gets the value of the rejectionReason property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getRejectionReason() {
         return rejectionReason;
@@ -360,11 +317,9 @@ public class Transaction
 
     /**
      * Sets the value of the rejectionReason property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setRejectionReason(String value) {
         this.rejectionReason = value;
@@ -372,11 +327,9 @@ public class Transaction
 
     /**
      * Gets the value of the device property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getDevice() {
         return device;
@@ -384,11 +337,9 @@ public class Transaction
 
     /**
      * Sets the value of the device property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setDevice(String value) {
         this.device = value;
@@ -396,11 +347,9 @@ public class Transaction
 
     /**
      * Gets the value of the country property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getCountry() {
         return country;
@@ -408,11 +357,9 @@ public class Transaction
 
     /**
      * Sets the value of the country property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setCountry(String value) {
         this.country = value;
@@ -420,11 +367,9 @@ public class Transaction
 
     /**
      * Gets the value of the state property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getState() {
         return state;
@@ -432,11 +377,9 @@ public class Transaction
 
     /**
      * Sets the value of the state property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setState(String value) {
         this.state = value;
@@ -444,11 +387,9 @@ public class Transaction
 
     /**
      * Gets the value of the city property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getCity() {
         return city;
@@ -456,11 +397,9 @@ public class Transaction
 
     /**
      * Sets the value of the city property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setCity(String value) {
         this.city = value;
@@ -468,11 +407,9 @@ public class Transaction
 
     /**
      * Gets the value of the fee property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getFee() {
         return fee;
@@ -480,11 +417,9 @@ public class Transaction
 
     /**
      * Sets the value of the fee property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setFee(String value) {
         this.fee = value;
@@ -492,11 +427,9 @@ public class Transaction
 
     /**
      * Gets the value of the amount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getAmount() {
         return amount;
@@ -504,11 +437,9 @@ public class Transaction
 
     /**
      * Sets the value of the amount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setAmount(String value) {
         this.amount = value;
@@ -516,11 +447,9 @@ public class Transaction
 
     /**
      * Gets the value of the originalAmount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getOriginalAmount() {
         return originalAmount;
@@ -528,11 +457,9 @@ public class Transaction
 
     /**
      * Sets the value of the originalAmount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setOriginalAmount(String value) {
         this.originalAmount = value;

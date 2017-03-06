@@ -15,19 +15,26 @@
  */
 package com.smartbt.vtsuite.controller.v1;
 
+import com.smartbt.girocheck.servercommon.display.message.ResponseData;
+import java.util.LinkedHashMap;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import com.smartbt.vtsuite.manager.RegistrationManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author Roberto Rodriguez
  */
-@Controller
-@RequestMapping("/")
+@RestController
+@RequestMapping("/v1/gen")
 public class GeneralController {
 
+    @Autowired
+    RegistrationManager regManager;
   
     private static final Logger log = Logger.getLogger(GeneralController.class);
 
@@ -35,5 +42,28 @@ public class GeneralController {
     public String index() {
         return "index";
     }
+    
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseData register(@RequestBody LinkedHashMap params) throws Exception{
+        
+        String username = (String) params.get("username");
+        String password = (String) params.get("password");
+        String ssn = (String) params.get("ssn");       
+        String email = (String) params.get("email");
+        String phone = (String) params.get("phone");         
+        String cardNumber = (String) params.get("cardNumber");
+        
+        
+        
+        System.out.println("GeneralController.register: \n username: " + username
+                + "\n password: " + password
+                + "\n ssn: " + ssn
+                + "\n email: " + email
+                + "\n phone: " + phone
+                + "\n cardNumber: " + cardNumber);
+        
+        return regManager.register(username,password,ssn,email,phone,cardNumber);
+    }
+    
 
 }

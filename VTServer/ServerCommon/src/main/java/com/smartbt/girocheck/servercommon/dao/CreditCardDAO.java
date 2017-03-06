@@ -17,6 +17,7 @@ import com.smartbt.girocheck.servercommon.model.CreditCard;
 import com.smartbt.girocheck.servercommon.model.Merchant;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -86,5 +87,12 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
                 .add(Restrictions.eq("cardNumber", cardNumber))
                 .setMaxResults(1).uniqueResult();
     }
+    
+    public CreditCard getCardByClientId(int clientId) {
+        Criteria criteria = HibernateUtil.getSession().createCriteria(CreditCard.class).
+                 createAlias( "client", "client" ) 
+                 .add(Restrictions.eq("client.id", clientId));
+        return (CreditCard) criteria.uniqueResult();
+    }   
 
 }

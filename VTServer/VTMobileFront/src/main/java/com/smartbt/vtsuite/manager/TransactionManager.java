@@ -44,13 +44,12 @@ public class TransactionManager {
             map.put(ParameterName.CARD_NUMBER, cardNumber);
             //This has to be unique
             map.put(ParameterName.REQUEST_ID, token);
-            direxTransactionRequest.setTransactionData(map);
-            direxTransactionRequest.setCorrelation(token);
+            direxTransactionRequest.setTransactionData(map); 
             direxTransactionRequest.setTransactionType(TransactionType.TECNICARD_BALANCE_INQUIRY);
-            System.out.println("[TransactionManager:balanceEnquiry] -  card: ************" + cardNumber.substring(12));
+            System.out.println("[FrontMobile][TransactionManager:balanceEnquiry] -  card: ************" + cardNumber.substring(12));
 
             //DirexTransactionResponse technicardResponse = sendMessageToHost(direxTransactionRequest);
-            System.out.println("Calling Tecnicard without JMS...");
+            System.out.println("[FrontMobile]Calling Tecnicard without JMS...");
             DirexTransactionResponse technicardResponse = TecnicardHostManager.get().processTransaction(direxTransactionRequest);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "technicardResponse.wasApproved()" + technicardResponse.wasApproved(), null);
@@ -67,7 +66,7 @@ public class TransactionManager {
         return balance;
     }
 
-    public Map transactionHistory(Integer clientId, Integer page, Integer start, Integer limit, String startDateStr, String endDateStr, String token) {
+    public Map transactionHistory(Integer clientId, Integer page, Integer start, Integer limit, String startDateStr, String endDateStr) {
         DirexTransactionResponse technicardResponse;
         Map transactionHistory = new HashMap();
 
@@ -91,10 +90,7 @@ public class TransactionManager {
                 map.put(ParameterName.START, start);
                 map.put(ParameterName.MAX, limit);
 
-                direxTransactionRequest.setTransactionData(map);
-
-                //This has to be unique
-                direxTransactionRequest.setCorrelation(token);
+                direxTransactionRequest.setTransactionData(map); 
                 direxTransactionRequest.setTransactionType(TransactionType.TECNICARD_LAST_TRANSACTIONS);
 
                 System.out.println("Sending Transaction to Tecnicard HOST...");

@@ -16,6 +16,7 @@
 package com.smartbt.vtsuite.controller.v1;
 
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
+import com.smartbt.girocheck.servercommon.utils.Utils;
 import java.util.LinkedHashMap;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,17 +53,16 @@ public class GeneralController {
         String email = (String) params.get("email");
         String phone = (String) params.get("phone");         
         String cardNumber = (String) params.get("cardNumber");
-        
-        
-        
+          
         System.out.println("GeneralController.register: \n username: " + username
                 + "\n password: " + password
                 + "\n ssn: " + ssn
                 + "\n email: " + email
                 + "\n phone: " + phone
-                + "\n cardNumber: " + cardNumber);
+                + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
         
-        return regManager.register(username,password,ssn,email,phone,cardNumber);
+        String token = Utils.generateToken();
+        return regManager.register(username,password,ssn,email,phone,cardNumber,token);
     }
     
 

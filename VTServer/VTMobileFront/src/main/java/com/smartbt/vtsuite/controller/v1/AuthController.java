@@ -18,6 +18,7 @@ package com.smartbt.vtsuite.controller.v1;
 import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay;
+import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.vtsuite.manager.AuthManager;
 import com.smartbt.vtsuite.manager.TransactionManager;
@@ -60,7 +61,8 @@ public class AuthController {
                 + "\n session: " + (session == null ? "NULL" : "has value"));
         
         ResponseData response = ResponseData.OK();
-        MobileClientDisplay mobileClient = authManager.getMobileClientDisplayByUserAndPassword(username, password);
+        String encryptPassword = PasswordUtil.encryptPassword(password);
+        MobileClientDisplay mobileClient = authManager.getMobileClientDisplayByUserAndPassword(username, encryptPassword);
         
         if (mobileClient == null) {
             response.setStatus(Constants.CODE_INVALID_USER);

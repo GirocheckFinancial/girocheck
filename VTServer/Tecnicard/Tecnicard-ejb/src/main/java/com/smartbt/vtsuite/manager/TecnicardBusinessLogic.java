@@ -20,20 +20,16 @@ import com.smartbt.vtsuite.boundary.client.IStreamSrvHostWS;
 import com.smartbt.vtsuite.boundary.client.IStreamSrvHostWSSoap;
 import com.smartbt.vtsuite.boundary.util.MapUtil;
 import com.smartbt.girocheck.common.AbstractBusinessLogicModule;
-import com.smartbt.girocheck.servercommon.log.LogUtil;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
-import com.smartbt.girocheck.servercommon.messageFormat.IdType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
-import com.smartbt.vtsuite.boundary.client.Transaction;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.xml.ws.BindingProvider;
 

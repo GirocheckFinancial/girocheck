@@ -115,9 +115,8 @@ public class TecnicardHostManager {
             request.getTransactionData().put(ParameterName.FEE_AMMOUNT, FixUtil.fixAmmount(request.getTransactionData().get(ParameterName.FEE_AMMOUNT).toString()));
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] Parsing  fee_amount value :: " + request.getTransactionData().get(ParameterName.FEE_AMMOUNT), null);
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] creating a connection with Tecnicard WSDL", null);
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardHostManager] connection with Tecnicard WSDL DONE", null);
+       
+        
         TransactionType originalTransactionType = (TransactionType) request.getTransactionData().get(TransactionType.TRANSACTION_TYPE);
 
         Map collectorMap = new HashMap();
@@ -144,7 +143,7 @@ public class TecnicardHostManager {
                     e.printStackTrace();
                     return DirexTransactionResponse.forException(ResultCode.TECNICARD_HOST_ERROR, e);
                 }
- 
+
             case GENERIC_HOST_VALIDATION:
 
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "--[TecnicardHostManager] Processing: TECNICARD_CARD_VALIDATION", null);
@@ -275,11 +274,15 @@ public class TecnicardHostManager {
 
                     Map tagMap = ((Map) response.getTransactionData().get(ParameterName.SESSION_TAG_MAP));
 
+                    String tecnicardResultCode = (String) tagMap.get(ParameterName.RESULT_CODE);
+
+                    System.out.println("TecnicardHostManager -> tecnicardResultCode = " + tecnicardResultCode);
+
                     boolean success = (Boolean) tagMap.get(ParameterName.SUCESSFULL_PROCESSING);
 
                     CustomeLogger.Output(CustomeLogger.OutputStates.Info, "--[TecnicardHostManager] success = " + success, null);
 
-                    if (success) { 
+                    if (success) {
                         request.setTransactionType(TransactionType.TECNICARD_BALANCE_INQUIRY);
                         DirexTransactionResponse inquiryResponse = (DirexTransactionResponse) bizLogic.handle(request);
 
@@ -377,6 +380,8 @@ public class TecnicardHostManager {
 
         if (originalList != null) {
             for (int i = 0; i < originalList.size(); i++) {
+                originalList.get(i).print();
+
                 if (originalList.get(i).wasSuccess()) {
                     if (successfulCount >= start && result.size() < max) {
                         result.add(originalList.get(i).toMobileTransaction());

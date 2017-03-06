@@ -88,11 +88,12 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
                 .setMaxResults(1).uniqueResult();
     }
     
+    //Get one card
     public CreditCard getCardByClientId(int clientId) {
-        Criteria criteria = HibernateUtil.getSession().createCriteria(CreditCard.class).
+        return (CreditCard)HibernateUtil.getSession().createCriteria(CreditCard.class).
                  createAlias( "client", "client" ) 
-                 .add(Restrictions.eq("client.id", clientId));
-        return (CreditCard) criteria.uniqueResult();
+                 .add(Restrictions.eq("client.id", clientId))
+                .setMaxResults(1).uniqueResult();
     }   
 
 }

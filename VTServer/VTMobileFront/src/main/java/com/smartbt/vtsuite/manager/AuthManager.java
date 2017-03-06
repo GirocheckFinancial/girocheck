@@ -16,7 +16,7 @@
 package com.smartbt.vtsuite.manager;
 
 import com.smartbt.girocheck.servercommon.dao.MobileClientDao; 
-import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay;
+import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay; 
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +27,6 @@ import org.springframework.stereotype.Service;
 public class AuthManager {
   
     public MobileClientDisplay getMobileClientDisplayByUserAndPassword(String username, String password){
-        return MobileClientDao.get().getMobileClientDisplayByUserAndPassword(username, password);
+         return MobileClientDao.get().getMobileClientDisplayByUserAndPassword(username, password);
     }
 }

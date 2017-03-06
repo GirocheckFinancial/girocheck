@@ -72,4 +72,27 @@ public class MobileClientDao extends BaseDAO<MobileClient> {
         HibernateUtil.getSession().saveOrUpdate(client);
         return client;
     }
+    
+    public Boolean existMobileClientBySSN(String ssn){
+        return (Long)HibernateUtil.getSession().createCriteria(MobileClient.class).
+                createAlias("client", "client")
+                .add(Restrictions.eq("client.ssn", ssn))
+                .setProjection(Projections.rowCount())
+                .uniqueResult() > 0;
+    }
+    
+    public Boolean existMobileClientByUsername(String userName){
+        return (Long)HibernateUtil.getSession().createCriteria(MobileClient.class) 
+                .add(Restrictions.eq("userName", userName))
+                .setProjection(Projections.rowCount())
+                .uniqueResult() > 0;
+    }
+    
+    public Boolean existMobileAssociatedToCard(String cardNumber){
+        return (Long)HibernateUtil.getSession().createCriteria(MobileClient.class)
+                .createAlias("card", "card")
+                .add(Restrictions.eq("card.cardNumber", cardNumber))
+                .setProjection(Projections.rowCount())
+                .uniqueResult() > 0;
+    }
 }

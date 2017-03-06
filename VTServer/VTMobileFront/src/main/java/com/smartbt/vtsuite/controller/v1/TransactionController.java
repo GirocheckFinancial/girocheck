@@ -46,6 +46,6 @@ public class TransactionController {
             @RequestParam(value = "clientId") Integer clientId,
             HttpSession session) throws Exception {
 
-        return transactionManager.transactionHistory( clientId,  page,  start,  limit,  startDate,  endDate,  "PROVISSIONAL_TOKEN");
+        return transactionManager.transactionHistory( clientId,  page,  start,  limit,  startDate,  endDate);
     }
 }

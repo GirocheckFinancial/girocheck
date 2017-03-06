@@ -40,6 +40,12 @@ public class ResponseData<T> extends BaseResponse {
         return response;
     }
 
+    public ResponseData(int status, String statusMessage) {
+        super(status, statusMessage); 
+    }
+    
+    
+
     public ResponseData(T data) {
         super(Constants.CODE_SUCCESS, VTSuiteMessages.SUCCESS);
         this.data = data;

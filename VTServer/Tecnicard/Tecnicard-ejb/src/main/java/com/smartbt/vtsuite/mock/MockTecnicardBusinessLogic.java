@@ -243,7 +243,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
     public IMap wmBalanceInquiry(Map map) throws Exception {
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
-        System.out.println("MockTecnicardBusinessLogic -> wmBalanceInquiry :: pCardNumber = " + pCardNumber);
+        System.out.println("MockTecnicardBusinessLogic -> wmBalanceInquiry :: pCardNumber = **** **** **** " + pCardNumber.substring(pCardNumber.length() - 4));
         
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
 
@@ -305,9 +305,11 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCardHolderValidation(Map map) throws Exception {
-        String pId = MapUtil.getStringValueFromMap(map, ParameterName.ID, false);
+        String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
+        
+                                                                                           //port.wmCardHolderValidation(pRequestID, pCardNumber, pId, "1");
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockTecnicardBusinessLogic] port.wmCardHolderValidation(" + pRequestID + ",   ************" + pCardNumber.substring(pCardNumber.length() - 4) + ",  " + pId + ",  " + "1" + ")", null);
         CardHolderValidationResponse response = new CardHolderValidationResponse();
         response.setSessionTag(buildSessionTag("CardHolderValidation", pRequestID, "100013"));

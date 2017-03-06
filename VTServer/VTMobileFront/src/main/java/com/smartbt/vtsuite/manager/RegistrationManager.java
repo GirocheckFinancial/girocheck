@@ -1,6 +1,6 @@
 /*
-* To change this template, choose Tools | Templates
-* and open the template in the editor.
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package com.smartbt.vtsuite.manager;
 
@@ -18,14 +18,15 @@ import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import com.smartbt.girocheck.servercommon.dao.ClientDAO;
 import com.smartbt.girocheck.servercommon.dao.CreditCardDAO;
 import com.smartbt.girocheck.servercommon.dao.MobileClientDao;
-import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay;
-import com.smartbt.girocheck.servercommon.utils.Utils;
+import com.smartbt.girocheck.servercommon.model.Merchant;
+import com.smartbt.vtsuite.util.MobileValidationException;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,7 +36,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistrationManager {
 
-    private TransactionManager txnManager = new TransactionManager();
+    @Autowired
+    private TransactionManager transactionManager;
 
     protected static RegistrationManager _this;
 
@@ -46,103 +48,87 @@ public class RegistrationManager {
         return _this;
     }
 
-    public ResponseData register(String username, String password, String ssn, String email, String phone, String cardNumber) {
+    public ResponseData register(String username, String password, String ssn, String email, String phone, String cardNumber, String token) {
 
-        ResponseData response = new ResponseData();
-        Client client = null;
+        ResponseData response = ResponseData.OK(); 
         MobileClient mobileClient = null;
 
         DirexTransactionResponse technicardResponse;
         Map map = new HashMap();
 
-        if (ssn != null && ssn.equals("0")) { //Mock Response object
-            MobileClientDisplay mobileRegistration = new MobileClientDisplay();
-            mobileRegistration.setClientId(1);
-            mobileRegistration.setBalance("120.00");
-            mobileRegistration.setToken(Utils.generateToken());
-            Map data = new HashMap();
-            data.put("details", mobileRegistration);
-            response.setStatus(Constants.CODE_SUCCESS);
-            response.setStatusMessage(VTSuiteMessages.SUCCESS);
-            response.setData(data);
-        }
         try {
-            //Find client by SSN
-            if (ssn != null) {
-                client = ClientDAO.get().getClientBySSN(ssn);
-                if (client == null) {
-                    response.setStatus(Constants.LOGIN_FAILED);
-                    response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
-                    return response;
-                }
-            } else {
-                response.setStatus(Constants.LOGIN_FAILED);
-                response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
-                return response;
-            }
-
+            Client client = validateAndGetClient( ssn,  cardNumber,  username, password);
             //Consume Tecnicard's cardHolderValidation
             DirexTransactionRequest direxTransactionRequest = new DirexTransactionRequest();
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[RegistrationManager] processTransaction " + client.getId(), null);
 
             map.put(TransactionType.TRANSACTION_TYPE, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION);
-            map.put(ParameterName.IDTYPE, client.getId());//Not sure what data need to pass
             map.put(ParameterName.SSN, ssn);
             map.put(ParameterName.CARD_NUMBER, cardNumber);
-            map.put(ParameterName.REQUEST_ID, client.getId());//Not sure what data need to pass
+            map.put(ParameterName.REQUEST_ID, token);
 
             direxTransactionRequest.setTransactionData(map);
-            direxTransactionRequest.setCorrelation(ssn);//Not sure what data need to pass
             direxTransactionRequest.setTransactionType(TransactionType.TECNICARD_CARD_HOLDER_VALIDATION);
-            System.out.println("[TransactionManager:transactionHistory] - CLIENT_ID:- " + client.getId());
 
+            System.out.println("[FrontMobile.RegistrationManager] Calling TECNICARD_CARD_HOLDER_VALIDATION...");
             technicardResponse = TecnicardHostManager.get().processTransaction(direxTransactionRequest);
 
-            if (technicardResponse != null && !technicardResponse.wasApproved()) {
-                CreditCard card = null;
-                card = CreditCardDAO.get().getCardByClientId(client.getId());
+            if (technicardResponse != null && technicardResponse.wasApproved()) {
+                System.out.println("[FrontMobile.RegistrationManager] Loading card by number: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
+                CreditCard card = CreditCardDAO.get().getCard(cardNumber);
 
                 // to crete new card if card does not exists
                 if (card == null) {
+                    System.out.println("[FrontMobile.RegistrationManager] Card didn't exist, creating new card...");
                     card = createCard(cardNumber, client);
+                } else {
+                    System.out.println("[FrontMobile.RegistrationManager] Card exist...");
+
+                    System.out.println("card.getClient().getFirstName() = " + card.getClient().getFirstName());
+                    System.out.println("card.getClient().getSsn() = " + card.getClient().getSsn());
+
+                    if (!ssn.equals(card.getClient().getSsn())) {  response.setStatusMessage(VTSuiteMessages.CARD_BELONG_TO_ANOTHER_CLIENT);
+                        throw new MobileValidationException(Constants.CARD_BELONG_TO_ANOTHER_CLIENT, VTSuiteMessages.CARD_BELONG_TO_ANOTHER_CLIENT);
+                    }
                 }
 
-                // to crete new mobile client
-                mobileClient = createMobileClient(username, password,card, client);
+                System.out.println("[FrontMobile.RegistrationManager] Creating Mobile Client...");
+                mobileClient = createMobileClient(username, password, card, client);
 
                 client.setEmail(email);
                 client.setTelephone(phone);
+                System.out.println("[FrontMobile.RegistrationManager] Saving Client...");
                 ClientDAO.get().saveOrUpdate(client);
 
-                String token = Utils.generateToken();
-                //consume balance enquiry
-                String clientId = String.valueOf(mobileClient.getClient().getId());
-                String balance = txnManager.balanceInquiry(clientId, token);
+                //consume balance enquiry 
+                System.out.println("[FrontMobile.RegistrationManager] calling balanceInquiry");
+                String balance = transactionManager.balanceInquiry(cardNumber, token);
 
                 // To send details to Mobile application
                 Map data = new HashMap();
-                MobileClientDisplay mobileRegistration = new MobileClientDisplay();
-                mobileRegistration.setClientId(mobileClient.getClient().getId());
-                mobileRegistration.setBalance(balance);
-                mobileRegistration.setToken(token);
+                data.put("clientId", mobileClient.getId());
+                data.put("balance", balance);
+                data.put("token", token);
 
-                data.put("details", mobileRegistration);
-                response.setStatus(Constants.CODE_SUCCESS);
-                response.setStatusMessage(VTSuiteMessages.SUCCESS);
                 response.setData(data);
 
-            } else {
-                response.setStatus(Constants.CARD_NOT_PERSONALIZED);
-                response.setStatusMessage(VTSuiteMessages.CARD_NOT_PERSONALIZED);
-                return response;
+            } else { 
+                throw new MobileValidationException(Constants.CARD_NOT_PERSONALIZED, VTSuiteMessages.CARD_NOT_PERSONALIZED);
             }
-        } catch (Exception e) {
+        }catch(MobileValidationException mbe){
+            System.out.println("MobileValidationException:: " + mbe.getResponse().getStatusMessage());
+            mbe.printStackTrace();
+            response = mbe.getResponse();
+        }catch (Exception e) {
+            System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
             response.setStatus(Constants.LOGIN_FAILED);
             response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
             e.printStackTrace();
         }
+
+        System.out.println("[FrontMobile.RegistrationManager] return response.");
         return response;
     }
+ 
 
     private CreditCard createCard(String cardNumber, Client client) {
         CreditCard card = new CreditCard();
@@ -156,24 +142,77 @@ public class RegistrationManager {
             }
         }
         card.setMaskCardNumber(maskCardNumber);
-        card.setMerchant(null);//Need to know what merhant need to map here;
+        card.setMerchant(getMerchantFromExistentCard(client));
         card.setClient(client);
         CreditCardDAO.get().saveOrUpdate(card);
         return card;
+    }
+
+    private Merchant getMerchantFromExistentCard(Client client) {
+        CreditCard existentCard = CreditCardDAO.get().getCardByClientId(client.getId());
+
+        if (existentCard != null) {
+            return existentCard.getMerchant();
+        }
+        return null;
     }
 
     private MobileClient createMobileClient(String username, String password, CreditCard card, Client client) throws ValidationException, NoSuchAlgorithmException {
         MobileClient mobileClient = new MobileClient();
         mobileClient.setCard(card);
         mobileClient.setClient(client);
-        mobileClient.setUserName(username);        
+        mobileClient.setUserName(username);
         String encyptedPassword = PasswordUtil.encryptPassword(password);
-        mobileClient.setPassword(encyptedPassword);        
+        mobileClient.setPassword(encyptedPassword);
         mobileClient.setDeviceType("device");//need to get device type
         mobileClient.setRegistrationDate(new Date());
 
         MobileClientDao.get().saveOrUpdate(mobileClient);
         return mobileClient;
+    }
+
+    private Client validateAndGetClient(String ssn, String cardNumber, String username, String password) throws MobileValidationException {
+      
+        if (ssn == null || ssn.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "ssn");
+        }
+
+        if (cardNumber == null || cardNumber.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "Card Number");
+        }
+
+        if (username == null || username.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "UserName");
+        }
+
+        if (password == null || password.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "Password");
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] Validating if existMobileClientBySSN:");
+        if (MobileClientDao.get().existMobileClientBySSN(ssn)) {
+             throw new MobileValidationException(Constants.MOBILE_CLIENT_ALREADY_EXIST, VTSuiteMessages.MOBILE_CLIENT_ALREADY_EXIST);
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] Validating if existMobileClientByUsername:");
+        if (MobileClientDao.get().existMobileClientByUsername(username)) {
+            throw new MobileValidationException(Constants.USERNAME_IN_USE, VTSuiteMessages.USERNAME_IN_USE);
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] Validating if existMobileClientByUsername:");
+        if (MobileClientDao.get().existMobileAssociatedToCard(cardNumber)) {
+            throw new MobileValidationException(Constants.CARD_BELONG_TO_ANOTHER_CLIENT, VTSuiteMessages.CARD_BELONG_TO_ANOTHER_CLIENT);
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] Loading client by ssn : *** ** " + ssn.substring(ssn.length() - 4));
+        Client client = ClientDAO.get().getClientBySSN(ssn);
+
+        if (client == null) {
+            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
+        } else {
+            System.out.println("[FrontMobile.RegistrationManager] Found client: " + client.getFirstName());
+        }
+        return client;
     }
 
 }

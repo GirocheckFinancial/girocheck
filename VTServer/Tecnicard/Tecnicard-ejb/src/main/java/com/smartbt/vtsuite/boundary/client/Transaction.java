@@ -110,6 +110,10 @@ public class Transaction
         return statusCode != null && statusCode.equalsIgnoreCase("G");
     }
     
+    public void print(){
+        System.out.println("Transaction:: statusCode = " + statusCode + ", date = " + date + ", amount = " + amount + ", description = " + description);
+    }
+    
     public MobileTransaction toMobileTransaction(){
         return new MobileTransaction(date, amount, description);
     }

@@ -403,6 +403,11 @@ public class VTSuiteMessages {
     
     public static final String CARD_NOT_PERSONALIZED = "Card is not personised.";
     
+    public static final String CARD_BELONG_TO_ANOTHER_CLIENT = "Card belong to another client.";
+    public static final String MOBILE_CLIENT_ALREADY_EXIST = "There is already a mobile user asociated to this SSN.";
+    public static final String USERNAME_IN_USE = "Username already in use.";
+    public static final String REQUIRED_FIELD = "Required field: ";
+    
     
     /**
      * Get Default Error Message

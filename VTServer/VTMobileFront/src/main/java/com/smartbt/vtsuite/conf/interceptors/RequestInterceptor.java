@@ -28,17 +28,14 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author Roberto Rodriguez
  */
 public class RequestInterceptor extends HandlerInterceptorAdapter {
-
-//    @Autowired
-//    VTSessionManager vTSessionManager;
-//    private static final Logger log = Logger.getLogger(RequestInterceptor.class);
+ 
     private final List<String> uriNotNeedToken = new LinkedList<String>() {
-        {
-            add("/FrontMobile");
-            add("/FrontMobile/login/login");
+        { 
+            add("/FrontMobile/auth/login");
         }
     };
-
+ //TODO This is the token validation for every request
+ //We will keep this commented for development. Not need to touch for now. (Roberto)
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("RequestInterceptor -> preHandle :: HibernateUtil.beginTransaction();");
@@ -48,16 +45,14 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 //        if (!validateToken(request.getRequestURI())) {
 //            return true;
 //        }
+        
+//         String tokenInSession = request.getSession().getValue("TOKEN");
 //
 //        String token = request.getHeader("TOKEN");
-//        if (token == null) {
+//        if (token == null || token != tokenInSession) {
 //            throw new CustomException(Constants.HEADER_TOKEN_MISSING, "Token missing");
 //        }
-//
-//        int result = vTSessionManager.validateSession(token);
-//        if (result != Constants.CODE_SESSION_VALID) {
-//            throw new CustomException(result, "Session problem");
-//        }
+// 
         return true;
 //        SessionUser.set(sessionServiceManager.getSessionByToken(token));
     }
@@ -78,9 +73,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean validateToken(String uri) {
-        if (uri.charAt(uri.length() - 1) == '/') {
-            uri = uri.substring(0, uri.length() - 2);
-        }
+         
         return !uriNotNeedToken.contains(uri);
     }
 }

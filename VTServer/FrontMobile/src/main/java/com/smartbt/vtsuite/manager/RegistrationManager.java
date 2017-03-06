@@ -185,9 +185,7 @@ public class RegistrationManager {
         mobileClient.setUserName(username);
         String generatedPassword = PasswordUtil.generatePassword(8);
         String encyptedPassword = PasswordUtil.encryptPassword(generatedPassword);
-        mobileClient.setPassword(encyptedPassword);
-        mobileClient.setPin(pin);
-        mobileClient.setDeviceId(deviceId);
+        mobileClient.setPassword(encyptedPassword); 
         mobileClient.setDeviceType("device");//need to get device type
         mobileClient.setRegistrationDate(new Date());
 
@@ -205,7 +203,7 @@ public class RegistrationManager {
     }
 
     private VTSession createSession(MobileClient user) {
-        VTSession session = VTSessionDAO.get().saveOrUpdateSession(user);
-        return session;
+     //   VTSession session = VTSessionDAO.get().saveOrUpdateSession(user);
+        return null;
     }
 }

@@ -33,12 +33,7 @@ public class MobileClient implements Serializable {
      
      private String userName;
      
-     private String password;
-     
-     private String pin;
-     
-     private String deviceId; 
-     
+     private String password; 
      
 
 
@@ -152,35 +147,7 @@ public class MobileClient implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    /**
-     * @return the pin
-     */
-    public String getPin() {
-        return pin;
-    }
-
-    /**
-     * @param pin the pin to set
-     */
-    public void setPin(String pin) {
-        this.pin = pin;
-    }
-
-    /**
-     * @return the deviceId
-     */
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    /**
-     * @param deviceId the deviceId to set
-     */
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
+ 
     /**
      * @return the registrationDate
      */

@@ -15,8 +15,6 @@ License Type: Purchased
 		<property name="token" column="token" unique="true" type="string" length="50" not-null="true" lazy="false"/>
 		<property name="lastUpdate" column="last_update" type="timestamp" not-null="false" lazy="false"/>
 		<property name="sessionInfo" column="session_info" type="string" length="100" not-null="false" lazy="false"/>
-                <many-to-one name="mobileClient" column="id_mobile_client" class="com.smartbt.girocheck.servercommon.model.MobileClient" cascade="save-update" lazy="proxy">
-		</many-to-one>
-                
+             
 	</class>
 </hibernate-mapping>

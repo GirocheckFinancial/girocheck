@@ -4,14 +4,12 @@
  */
 package com.smartbt.girocheck.servercommon.dao;
 
-import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.model.User;
 import com.smartbt.girocheck.servercommon.model.VTSession;
 import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import com.smartbt.vtsuite.vtcommon.Validate;
-import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import java.util.Date;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -59,32 +57,7 @@ public class VTSessionDAO extends BaseDAO<VTSession> {
         }
         return vtSession;
     }
-
-    public VTSession saveOrUpdateSession(MobileClient user) {
-
-        VTSession vtSession = new VTSession();
-        if (user != null) {
-            System.out.println("-------VTSessionDAO -> saveOrUpdateSession 1");
-            Criteria criteria = HibernateUtil.getSession().createCriteria(VTSession.class)
-                    .createAlias("mobileClient", "mobileClient")
-                    .add(Restrictions.eq("mobileClient.id", user.getId()));
-            vtSession = (VTSession) criteria.uniqueResult();
-            System.out.println("--------VTSessionDAO -> saveOrUpdateSession 2");
-            if (vtSession == null) {
-                vtSession = new VTSession();
-            }
-
-            // Logic to create a new token and session
-            String token = Utils.generateToken();
-            vtSession.setToken(token);
-            vtSession.setMobileClient(user);
-            vtSession.setLastUpdate(new Date());
-            HibernateUtil.getSession().saveOrUpdate(vtSession);
-            System.out.println("--------VTSessionDAO -> saveOrUpdateSession 3");
-            return vtSession;
-        }
-        return vtSession;
-    }
+ 
 
     public VTSession getSessionByToken(String token) {
         Criteria criteria = HibernateUtil.getSession().createCriteria(VTSession.class).add(Restrictions.eq("token", token));

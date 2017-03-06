@@ -64,8 +64,7 @@ public class AuthController {
             } else {
                 //Normal login       
                 mobileClient = manager.getMobileClientByUserNameAndPwd(username, password);
-                if (mobileClient != null) {
-                    mobileClient.setDeviceId(deviceId);
+                if (mobileClient != null) { 
                     mobileClient = manager.saveorUpdate(mobileClient);
                 }                  
 
@@ -125,8 +124,8 @@ public class AuthController {
     }
 
     private VTSession createSession(MobileClient user) {
-        VTSession session = VTSessionDAO.get().saveOrUpdateSession(user);
-        return session;
+      //  VTSession session = VTSessionDAO.get().saveOrUpdateSession(user);
+        return null;
     }
 
     @GET

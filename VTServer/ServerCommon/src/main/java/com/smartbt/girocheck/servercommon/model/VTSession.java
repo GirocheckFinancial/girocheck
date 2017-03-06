@@ -28,9 +28,7 @@ public class VTSession implements Serializable {
 	
 	private java.util.Date lastUpdate;
 	
-	private String sessionInfo;
-        
-        private MobileClient mobileClient;
+	private String sessionInfo; 
 	
 	public void setId(int value) {
 		this.id = value;
@@ -75,21 +73,6 @@ public class VTSession implements Serializable {
 	public String toString() {
 		return String.valueOf(getId());
 	}
-
-    /**
-     * @return the mobileClient
-     */
-    public MobileClient getMobileClient() {
-        return mobileClient;
-    }
-
-    /**
-     * @param mobileClient the mobileClient to set
-     */
-    public void setMobileClient(MobileClient mobileClient) {
-        this.mobileClient = mobileClient;
-    }
-        
-        
+   
 	
 }

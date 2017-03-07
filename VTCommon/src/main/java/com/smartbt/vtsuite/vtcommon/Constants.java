@@ -151,7 +151,10 @@ public class Constants {
     public static final int USERNAME_IN_USE = 803;
     public static final int CARD_BELONG_TO_ANOTHER_CLIENT = 804;
     public static final int REQUIRED_FIELD = 805;
+     public static final int MOBILE_CLIENT_NOT_EXIST = 806;
     
     public static final int CARD_NOT_PERSONALIZED = 902;
+    
+    public static final int SUCCESS = 100;
     
 }

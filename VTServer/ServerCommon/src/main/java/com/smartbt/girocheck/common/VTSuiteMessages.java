@@ -407,6 +407,7 @@ public class VTSuiteMessages {
     public static final String MOBILE_CLIENT_ALREADY_EXIST = "There is already a mobile user asociated to this SSN.";
     public static final String USERNAME_IN_USE = "Username already in use.";
     public static final String REQUIRED_FIELD = "Required field: ";
+     public static final String MOBILE_CLIENT_NOT_EXIST = "Mobile client does not exist.";
     
     
     /**

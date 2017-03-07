@@ -65,5 +65,18 @@ public class GeneralController {
         return regManager.register(username,password,ssn,email,phone,cardNumber,token);
     }
     
+    @RequestMapping(value = "/replaceCard", method = RequestMethod.POST)
+    public ResponseData replaceCard(@RequestBody LinkedHashMap params) throws Exception{        
+        
+        String clientId = (String) params.get("clientId");         
+        String cardNumber = (String) params.get("cardNumber");
+          
+        System.out.println("GeneralController.replaceCard: \n clientId: " + clientId
+                    + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
+        
+        String token = Utils.generateToken();
+        return regManager.replaceCard(clientId,cardNumber,token);
+    }
+    
 
 }

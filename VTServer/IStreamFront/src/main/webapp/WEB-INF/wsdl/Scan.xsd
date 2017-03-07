@@ -86,8 +86,7 @@
             <xs:element name="lastName" type="xs:string" minOccurs="0"/>
             <xs:element name="bornDate" type="xs:date" minOccurs="0" />
             <xs:element name="expirationDate" type="xs:date" minOccurs="0"/>
-            <xs:element name="feeAmount" type="xs:string" minOccurs="0"/>
-            <xs:element name="payoutAmount" type="xs:string" minOccurs="0"/>
+          
             <xs:element name="micr" type="xs:string" minOccurs="0"/>
             <xs:element name="makerName" type="xs:string" minOccurs="0"/>
             <xs:element name="makerCity" type="xs:string" minOccurs="0"/>

@@ -196,6 +196,11 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
   
         Double payout = (Double) map.get(ParameterName.PAYOUT_AMMOUNT); 
         
+        if(amount > 2999.99){
+            System.out.println("[OrderExpressBusinessLogic] contrataciones ->  setting amount to 1. because amount was:: " + amount);
+            amount = 1D;
+        }
+        
         input.setTOTAL(amount + "");
         input.setSERVICE(fee);
         

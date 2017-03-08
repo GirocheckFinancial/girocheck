@@ -53,16 +53,18 @@ public class GeneralController {
         String email = (String) params.get("email");
         String phone = (String) params.get("phone");         
         String cardNumber = (String) params.get("cardNumber");
+        String firstName = (String) params.get("firstName");
           
         System.out.println("GeneralController.register: \n username: " + username
                 + "\n password: " + password
                 + "\n ssn: " + ssn
                 + "\n email: " + email
                 + "\n phone: " + phone
+                + "\n firstName: " + firstName
                 + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
         
         String token = Utils.generateToken();
-        return regManager.register(username,password,ssn,email,phone,cardNumber,token);
+        return regManager.register(username,password,ssn,email,phone,cardNumber,firstName,token);
     }
     
     @RequestMapping(value = "/replaceCard", method = RequestMethod.POST)

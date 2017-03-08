@@ -47,7 +47,7 @@ public class RegistrationManager {
         return _this;
     }
 
-    public ResponseData register(String username, String password, String ssn, String email, String phone, String cardNumber, String token) {
+    public ResponseData register(String username, String password, String ssn, String email, String phone, String cardNumber,String firstName, String token) {
 
         ResponseData response = ResponseData.OK();
         MobileClient mobileClient = null;
@@ -56,7 +56,7 @@ public class RegistrationManager {
         Map map = new HashMap();
 
         try {
-            Client client = validateAndGetClient(ssn, cardNumber, username, password);
+            Client client = validateAndGetClient(ssn, cardNumber, username, password,firstName);
             //Consume Tecnicard's cardHolderValidation
             DirexTransactionRequest direxTransactionRequest = new DirexTransactionRequest();
 
@@ -92,7 +92,7 @@ public class RegistrationManager {
                 }
 
                 System.out.println("[FrontMobile.RegistrationManager] Creating Mobile Client...");
-                mobileClient = createMobileClient(username, password, card, client);
+                mobileClient = createMobileClient(username, password,firstName,card, client);
 
                 client.setEmail(email);
                 client.setTelephone(phone);
@@ -234,11 +234,12 @@ public class RegistrationManager {
         return null;
     }
 
-    private MobileClient createMobileClient(String username, String password, CreditCard card, Client client) throws ValidationException, NoSuchAlgorithmException {
+    private MobileClient createMobileClient(String username, String password,String firstName, CreditCard card, Client client) throws ValidationException, NoSuchAlgorithmException {
         MobileClient mobileClient = new MobileClient();
         mobileClient.setCard(card);
         mobileClient.setClient(client);
         mobileClient.setUserName(username);
+        mobileClient.setFirstName(firstName);
         String encyptedPassword = PasswordUtil.encryptPassword(password);
         mobileClient.setPassword(encyptedPassword);
         mobileClient.setDeviceType("device");//need to get device type
@@ -248,7 +249,7 @@ public class RegistrationManager {
         return mobileClient;
     }
 
-    private Client validateAndGetClient(String ssn, String cardNumber, String username, String password) throws MobileValidationException {
+    private Client validateAndGetClient(String ssn, String cardNumber, String username, String password,String firstName) throws MobileValidationException {
 
         if (ssn == null || ssn.isEmpty()) {
             throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "ssn");
@@ -264,6 +265,10 @@ public class RegistrationManager {
 
         if (password == null || password.isEmpty()) {
             throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "Password");
+        }
+        
+        if (firstName == null || firstName.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "FirstName");
         }
 
         System.out.println("[FrontMobile.RegistrationManager] Validating if existMobileClientBySSN:");

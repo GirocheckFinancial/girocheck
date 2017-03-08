@@ -14,6 +14,7 @@ public class MobileClientDisplay implements Serializable {
     private String card;
     private String token;
     private String balance;
+    private String firstName;
  
 
     /**
@@ -70,5 +71,19 @@ public class MobileClientDisplay implements Serializable {
      */
     public void setClientId(Integer clientId) {
         this.clientId = clientId;
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 }

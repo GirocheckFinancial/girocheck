@@ -68,7 +68,7 @@ public class AuthController {
             response.setStatus(Constants.CODE_INVALID_USER);
             response.setStatusMessage(VTSuiteMessages.INVALID_LOGIN_CREDENTIALS);
         } else {            
-            mobileClient.setToken(Utils.generateToken());
+            mobileClient.setToken(Utils.generateToken());            
             String balance = transactionManager.balanceInquiry(mobileClient.getCard(), mobileClient.getToken());
             mobileClient.setBalance(balance);
             response.setData(mobileClient);

@@ -59,12 +59,11 @@ public class GeneralController {
                 + "\n password: " + password
                 + "\n ssn: " + ssn
                 + "\n email: " + email
-                + "\n phone: " + phone
-                + "\n firstName: " + firstName
+                + "\n phone: " + phone                
                 + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
         
         String token = Utils.generateToken();
-        return regManager.register(username,password,ssn,email,phone,cardNumber,firstName,token);
+        return regManager.register(username,password,ssn,email,phone,cardNumber,token);
     }
     
     @RequestMapping(value = "/replaceCard", method = RequestMethod.POST)

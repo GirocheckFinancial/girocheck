@@ -33,9 +33,7 @@ public class MobileClient implements Serializable {
      
      private String userName;
      
-     private String password; 
-     
-     private String firstName;
+     private String password;  
      
       
 
@@ -174,22 +172,7 @@ public class MobileClient implements Serializable {
 
     public void setKeyExpirationTime(Date keyExpirationTime) {
         this.keyExpirationTime = keyExpirationTime;
-    }
-
-    /**
-     * @return the firstName
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * @param firstName the firstName to set
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
+    }   
      
     
 }

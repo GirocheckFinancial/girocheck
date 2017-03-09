@@ -92,7 +92,7 @@ public class RegistrationManager {
                 }
 
                 System.out.println("[FrontMobile.RegistrationManager] Creating Mobile Client...");
-                mobileClient = createMobileClient(username, password,card, client);
+                mobileClient = createMobileClient(username, password, card, client);
 
                 client.setEmail(email);
                 client.setTelephone(phone);
@@ -106,7 +106,7 @@ public class RegistrationManager {
                 // To send details to Mobile application
                 Map data = new HashMap();
                 data.put("clientId", mobileClient.getId());
-                data.put("clientName", mobileClient.getClient().getFirstName());                
+                data.put("clientName", mobileClient.getClient().getFirstName());
                 data.put("clientEmail", client.getEmail());
                 data.put("clientPhone", client.getTelephone());
                 data.put("mobileClientUserName", mobileClient.getUserName());
@@ -185,7 +185,7 @@ public class RegistrationManager {
                     mobileClient.setClient(client);
                     System.out.println("[FrontMobile.RegistrationManager] Saving MobileClient...");
                     MobileClientDao.get().saveOrUpdate(mobileClient);
-                }else{
+                } else {
                     response.setStatusMessage(VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
                     throw new MobileValidationException(Constants.MOBILE_CLIENT_NOT_EXIST, VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
                 }
@@ -196,6 +196,55 @@ public class RegistrationManager {
             } else {
                 throw new MobileValidationException(Constants.CARD_NOT_PERSONALIZED, VTSuiteMessages.CARD_NOT_PERSONALIZED);
             }
+        } catch (MobileValidationException mbe) {
+            System.out.println("MobileValidationException:: " + mbe.getResponse().getStatusMessage());
+            mbe.printStackTrace();
+            response = mbe.getResponse();
+        } catch (Exception e) {
+            System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
+            response.setStatus(Constants.LOGIN_FAILED);
+            response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
+            e.printStackTrace();
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] return response.");
+        return response;
+    }
+
+    public ResponseData updateProfile(String clientId, String username, String email, String phone, String password, String token) {
+
+        ResponseData response = ResponseData.OK();
+        MobileClient mobileClient = null;
+
+        try {
+            Client client = validateDataAndGetClient(clientId, username, email, phone);
+            
+            System.out.println("[FrontMobile.RegistrationManager] getting Mobile Client...");
+            mobileClient = MobileClientDao.get().getMobileClientId(client.getId());
+            
+            if (mobileClient != null) {
+                mobileClient.setClient(client);
+                mobileClient.setUserName(username);
+                if(password != null && !password.isEmpty()){
+                    String encyptedPassword = PasswordUtil.encryptPassword(password);
+                    mobileClient.setPassword(encyptedPassword);  
+                }                                      
+                System.out.println("[FrontMobile.RegistrationManager] Saving MobileClient...");
+                MobileClientDao.get().saveOrUpdate(mobileClient);
+                
+                System.out.println("[FrontMobile.RegistrationManager] updating Client information(email,phone)...");
+                client.setEmail(email);
+                client.setTelephone(phone);
+                ClientDAO.get().saveOrUpdate(client);
+                
+            } else {
+                response.setStatusMessage(VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
+                throw new MobileValidationException(Constants.MOBILE_CLIENT_NOT_EXIST, VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
+            }
+
+            response.setStatus(Constants.SUCCESS);
+            response.setStatusMessage(VTSuiteMessages.SUCCESS);
+
         } catch (MobileValidationException mbe) {
             System.out.println("MobileValidationException:: " + mbe.getResponse().getStatusMessage());
             mbe.printStackTrace();
@@ -268,7 +317,7 @@ public class RegistrationManager {
 
         if (password == null || password.isEmpty()) {
             throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "Password");
-        }       
+        }
 
         System.out.println("[FrontMobile.RegistrationManager] Validating if existMobileClientBySSN:");
         if (MobileClientDao.get().existMobileClientBySSN(ssn)) {
@@ -308,6 +357,36 @@ public class RegistrationManager {
 
         if (MobileClientDao.get().existMobileAssociatedToCard(cardNumber)) {
             throw new MobileValidationException(Constants.CARD_BELONG_TO_ANOTHER_CLIENT, VTSuiteMessages.CARD_BELONG_TO_ANOTHER_CLIENT);
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] Loading client by clientId : " + clientId);
+        int id = Integer.parseInt(clientId);
+        Client client = ClientDAO.get().findById(id);
+
+        if (client == null) {
+            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
+        } else {
+            System.out.println("[FrontMobile.RegistrationManager] Found client: " + client.getFirstName());
+        }
+        return client;
+    }
+
+    private Client validateDataAndGetClient(String clientId, String username, String email, String phone) throws MobileValidationException {
+
+        if (clientId == null || clientId.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "clientId");
+        }
+
+        if (username == null || username.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "UserName");
+        }
+
+        if (email == null || email.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "email");
+        }
+
+        if (phone == null || phone.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "phone");
         }
 
         System.out.println("[FrontMobile.RegistrationManager] Loading client by clientId : " + clientId);

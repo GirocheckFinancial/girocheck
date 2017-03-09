@@ -136,18 +136,17 @@ public class RegistrationManager {
     public ResponseData replaceCard(String clientId, String cardNumber, String token) {
 
         ResponseData response = ResponseData.OK();
-        MobileClient mobileClient = null;
 
         DirexTransactionResponse technicardResponse;
         Map map = new HashMap();
 
         try {
-            Client client = validateAndGetClient(clientId, cardNumber);
+            MobileClient mobileClient = validateAndGetClient(clientId, cardNumber);
             //Consume Tecnicard's cardHolderValidation
             DirexTransactionRequest direxTransactionRequest = new DirexTransactionRequest();
 
             map.put(TransactionType.TRANSACTION_TYPE, TransactionType.TECNICARD_CARD_HOLDER_VALIDATION);
-            map.put(ParameterName.SSN, client.getSsn());
+            map.put(ParameterName.SSN, mobileClient.getClient().getSsn());
             map.put(ParameterName.CARD_NUMBER, cardNumber);
             map.put(ParameterName.REQUEST_ID, token);
 
@@ -164,31 +163,22 @@ public class RegistrationManager {
                 // to create new card if card does not exists
                 if (card == null) {
                     System.out.println("[FrontMobile.RegistrationManager] Card didn't exist, creating new card...");
-                    card = createCard(cardNumber, client);
+                    card = createCard(cardNumber, mobileClient.getClient());
                 } else {
                     System.out.println("[FrontMobile.RegistrationManager] Card exist...");
 
                     System.out.println("card.getClient().getFirstName() = " + card.getClient().getFirstName());
                     System.out.println("card.getClient().getSsn() = " + card.getClient().getSsn());
 
-                    if (!client.getSsn().equals(card.getClient().getSsn())) {
-                        response.setStatusMessage(VTSuiteMessages.CARD_BELONG_TO_ANOTHER_CLIENT);
+                    if (!mobileClient.getClient().getSsn().equals(card.getClient().getSsn())) {
                         throw new MobileValidationException(Constants.CARD_BELONG_TO_ANOTHER_CLIENT, VTSuiteMessages.CARD_BELONG_TO_ANOTHER_CLIENT);
                     }
 
                 }
 
-                System.out.println("[FrontMobile.RegistrationManager] getting Mobile Client and associating card/client...");
-                mobileClient = MobileClientDao.get().getMobileClientId(client.getId());
-                if (mobileClient != null) {
-                    mobileClient.setCard(card);
-                    mobileClient.setClient(client);
-                    System.out.println("[FrontMobile.RegistrationManager] Saving MobileClient...");
-                    MobileClientDao.get().saveOrUpdate(mobileClient);
-                } else {
-                    response.setStatusMessage(VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
-                    throw new MobileValidationException(Constants.MOBILE_CLIENT_NOT_EXIST, VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
-                }
+                mobileClient.setCard(card);
+                System.out.println("[FrontMobile.RegistrationManager] Saving MobileClient...");
+                MobileClientDao.get().saveOrUpdate(mobileClient);
 
                 response.setStatus(Constants.SUCCESS);
                 response.setStatusMessage(VTSuiteMessages.SUCCESS);
@@ -214,33 +204,20 @@ public class RegistrationManager {
     public ResponseData updateProfile(String clientId, String username, String email, String phone, String password, String token) {
 
         ResponseData response = ResponseData.OK();
-        MobileClient mobileClient = null;
 
         try {
-            Client client = validateDataAndGetClient(clientId, username, email, phone);
-            
-            System.out.println("[FrontMobile.RegistrationManager] getting Mobile Client...");
-            mobileClient = MobileClientDao.get().getMobileClientId(client.getId());
-            
-            if (mobileClient != null) {
-                mobileClient.setClient(client);
-                mobileClient.setUserName(username);
-                if(password != null && !password.isEmpty()){
-                    String encyptedPassword = PasswordUtil.encryptPassword(password);
-                    mobileClient.setPassword(encyptedPassword);  
-                }                                      
-                System.out.println("[FrontMobile.RegistrationManager] Saving MobileClient...");
-                MobileClientDao.get().saveOrUpdate(mobileClient);
-                
-                System.out.println("[FrontMobile.RegistrationManager] updating Client information(email,phone)...");
-                client.setEmail(email);
-                client.setTelephone(phone);
-                ClientDAO.get().saveOrUpdate(client);
-                
-            } else {
-                response.setStatusMessage(VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
-                throw new MobileValidationException(Constants.MOBILE_CLIENT_NOT_EXIST, VTSuiteMessages.MOBILE_CLIENT_NOT_EXIST);
+            MobileClient mobileClient = validateDataAndGetClient(clientId, username, email, phone);
+
+            mobileClient.setUserName(username);
+            if (password != null && !password.isEmpty()) {
+                String encyptedPassword = PasswordUtil.encryptPassword(password);
+                mobileClient.setPassword(encyptedPassword);
             }
+
+            System.out.println("[FrontMobile.RegistrationManager] updating Client information(email,phone)...");
+            mobileClient.getClient().setEmail(email);
+            mobileClient.getClient().setTelephone(phone);
+            MobileClientDao.get().saveOrUpdate(mobileClient);
 
             response.setStatus(Constants.SUCCESS);
             response.setStatusMessage(VTSuiteMessages.SUCCESS);
@@ -345,7 +322,7 @@ public class RegistrationManager {
         return client;
     }
 
-    private Client validateAndGetClient(String clientId, String cardNumber) throws MobileValidationException {
+    private MobileClient validateAndGetClient(String clientId, String cardNumber) throws MobileValidationException {
 
         if (clientId == null || clientId.isEmpty()) {
             throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "clientId");
@@ -361,17 +338,15 @@ public class RegistrationManager {
 
         System.out.println("[FrontMobile.RegistrationManager] Loading client by clientId : " + clientId);
         int id = Integer.parseInt(clientId);
-        Client client = ClientDAO.get().findById(id);
+        MobileClient mobileClient = MobileClientDao.get().getMobileClientById(id);
 
-        if (client == null) {
+        if (mobileClient == null) {
             throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
-        } else {
-            System.out.println("[FrontMobile.RegistrationManager] Found client: " + client.getFirstName());
         }
-        return client;
+        return mobileClient;
     }
 
-    private Client validateDataAndGetClient(String clientId, String username, String email, String phone) throws MobileValidationException {
+    private MobileClient validateDataAndGetClient(String clientId, String username, String email, String phone) throws MobileValidationException {
 
         if (clientId == null || clientId.isEmpty()) {
             throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "clientId");
@@ -391,14 +366,12 @@ public class RegistrationManager {
 
         System.out.println("[FrontMobile.RegistrationManager] Loading client by clientId : " + clientId);
         int id = Integer.parseInt(clientId);
-        Client client = ClientDAO.get().findById(id);
+        MobileClient mobileClient = MobileClientDao.get().getMobileClientById(id);
 
-        if (client == null) {
+        if (mobileClient == null) {
             throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
-        } else {
-            System.out.println("[FrontMobile.RegistrationManager] Found client: " + client.getFirstName());
         }
-        return client;
+        return mobileClient;
     }
 
 }

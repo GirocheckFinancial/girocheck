@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.smartbt.vtsuite.manager.RegistrationManager;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/gen")
 public class GeneralController {
-
+    public static final String TOKEN = "TOKEN";
     @Autowired
     RegistrationManager regManager;
   
@@ -45,7 +46,7 @@ public class GeneralController {
     }
     
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseData register(@RequestBody LinkedHashMap params) throws Exception{
+    public ResponseData register(@RequestBody LinkedHashMap params, HttpSession session) throws Exception{
         
         String username = (String) params.get("username");
         String password = (String) params.get("password");
@@ -62,11 +63,12 @@ public class GeneralController {
                 + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
         
         String token = Utils.generateToken();
+        session.setAttribute(TOKEN, token);
         return regManager.register(username,password,ssn,email,phone,cardNumber,token);
     }
     
     @RequestMapping(value = "/replaceCard", method = RequestMethod.POST)
-    public ResponseData replaceCard(@RequestBody LinkedHashMap params) throws Exception{        
+    public ResponseData replaceCard(@RequestBody LinkedHashMap params, HttpSession session) throws Exception{        
         
         String clientId = (String) params.get("clientId");         
         String cardNumber = (String) params.get("cardNumber");
@@ -74,7 +76,7 @@ public class GeneralController {
         System.out.println("GeneralController.replaceCard: \n clientId: " + clientId
                     + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
         
-        String token = Utils.generateToken();
+        String token = (String)session.getAttribute(TOKEN);
         return regManager.replaceCard(clientId,cardNumber,token);
     }
     

@@ -106,7 +106,10 @@ public class RegistrationManager {
                 // To send details to Mobile application
                 Map data = new HashMap();
                 data.put("clientId", mobileClient.getId());
-                data.put("clientName", mobileClient.getClient().getFirstName());
+                data.put("clientName", mobileClient.getClient().getFirstName());                
+                data.put("clientEmail", client.getEmail());
+                data.put("clientPhone", client.getTelephone());
+                data.put("mobileClientUserName", mobileClient.getUserName());
                 data.put("balance", balance);
                 data.put("token", token);
 

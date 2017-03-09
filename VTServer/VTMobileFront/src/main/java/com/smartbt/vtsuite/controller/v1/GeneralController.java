@@ -52,8 +52,7 @@ public class GeneralController {
         String ssn = (String) params.get("ssn");       
         String email = (String) params.get("email");
         String phone = (String) params.get("phone");         
-        String cardNumber = (String) params.get("cardNumber");
-        String firstName = (String) params.get("firstName");
+        String cardNumber = (String) params.get("cardNumber");        
           
         System.out.println("GeneralController.register: \n username: " + username
                 + "\n password: " + password

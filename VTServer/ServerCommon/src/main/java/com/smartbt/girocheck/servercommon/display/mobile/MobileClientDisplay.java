@@ -15,6 +15,9 @@ public class MobileClientDisplay implements Serializable {
     private String token;
     private String balance;
     private String clientName;
+    private String clientEmail;
+    private String clientPhone;
+    private String mobileClientUserName;
  
 
     /**
@@ -86,6 +89,50 @@ public class MobileClientDisplay implements Serializable {
     public void setClientName(String clientName) {
         this.clientName = clientName;
     }
+
+    /**
+     * @return the clientEmail
+     */
+    public String getClientEmail() {
+        return clientEmail;
+    }
+
+    /**
+     * @param clientEmail the clientEmail to set
+     */
+    public void setClientEmail(String clientEmail) {
+        this.clientEmail = clientEmail;
+    }
+
+    /**
+     * @return the clientPhone
+     */
+    public String getClientPhone() {
+        return clientPhone;
+    }
+
+    /**
+     * @param clientPhone the clientPhone to set
+     */
+    public void setClientPhone(String clientPhone) {
+        this.clientPhone = clientPhone;
+    }
+
+    /**
+     * @return the mobileClientUserName
+     */
+    public String getMobileClientUserName() {
+        return mobileClientUserName;
+    }
+
+    /**
+     * @param mobileClientUserName the mobileClientUserName to set
+     */
+    public void setMobileClientUserName(String mobileClientUserName) {
+        this.mobileClientUserName = mobileClientUserName;
+    }
+
+    
 
     
 }

@@ -46,7 +46,10 @@ public class MobileClientDao extends BaseDAO<MobileClient> {
          ProjectionList projectionList = Projections.projectionList()
                 .add(Projections.property("id").as("clientId"))
                 .add(Projections.property("card.cardNumber").as("card"))
-                .add(Projections.property("client.firstName").as("clientName"));
+                .add(Projections.property("client.firstName").as("clientName"))
+                .add(Projections.property("client.email").as("clientEmail"))
+                .add(Projections.property("client.telephone").as("clientPhone"))
+                .add(Projections.property("userName").as("mobileClientUserName"));
                 
         
         criteria.setProjection(projectionList);

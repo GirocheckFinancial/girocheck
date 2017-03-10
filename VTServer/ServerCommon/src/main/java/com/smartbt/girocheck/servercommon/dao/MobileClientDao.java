@@ -100,4 +100,16 @@ public class MobileClientDao extends BaseDAO<MobileClient> {
                 .setProjection(Projections.rowCount())
                 .uniqueResult() > 0;
     }
+    
+    public MobileClient getMobileClientByCardNumberAndMaskSSN(String maskSSN,String cardNumber) {
+        
+        Criteria criteria = HibernateUtil.getSession().createCriteria(MobileClient.class)
+                .createAlias("card", "card")
+                .createAlias("client", "client")
+                .add(Restrictions.eq("card.cardNumber", cardNumber))
+                .add(Restrictions.eq("client.maskSSN", maskSSN))
+                .setMaxResults(1);        
+         
+        return (MobileClient)criteria.uniqueResult();
+    }
 }

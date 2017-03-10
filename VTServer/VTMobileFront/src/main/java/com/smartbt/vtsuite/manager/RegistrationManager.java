@@ -17,7 +17,13 @@ import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import com.smartbt.girocheck.servercommon.dao.ClientDAO;
 import com.smartbt.girocheck.servercommon.dao.CreditCardDAO;
 import com.smartbt.girocheck.servercommon.dao.MobileClientDao;
+import com.smartbt.girocheck.servercommon.email.GoogleMail;
+import com.smartbt.girocheck.servercommon.enums.EmailName;
+import com.smartbt.girocheck.servercommon.manager.EmailManager;
+import com.smartbt.girocheck.servercommon.model.Email;
 import com.smartbt.girocheck.servercommon.model.Merchant;
+import com.smartbt.girocheck.servercommon.utils.SMSUtils;
+import com.smartbt.girocheck.servercommon.utils.Utils;
 import com.smartbt.vtsuite.util.MobileValidationException;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.security.NoSuchAlgorithmException;
@@ -237,6 +243,74 @@ public class RegistrationManager {
         return response;
     }
 
+    public ResponseData forgotPassword(String maskSSN, String cardNumber, String sendBy, String code, String token) {
+
+        ResponseData response = ResponseData.OK();
+
+        try {
+            MobileClient mobileClient = validateDataAndGetClient(maskSSN, cardNumber, sendBy);
+
+            if (code == null || code.isEmpty()) {
+                System.out.println("[FrontMobile.RegistrationManager] Code is empty...");
+                String forgotPwdKey = Utils.generateRandomNumber(6);
+                mobileClient.setForgotPasswordKey(forgotPwdKey);
+                mobileClient.setKeyExpirationTime(new Date());
+
+                sendEmailOrSMSNotification(mobileClient, sendBy);
+
+                MobileClientDao.get().saveOrUpdate(mobileClient);
+            } else {
+                System.out.println("[FrontMobile.RegistrationManager] Code exists...Code: "+code);
+                if (!code.equals(mobileClient.getForgotPasswordKey())) {
+                    response.setStatusMessage(VTSuiteMessages.FORGOT_PASSWORD_KEY_MISMATCH);
+                    throw new MobileValidationException(Constants.FORGOT_PASSWORD_KEY_MISMATCH, VTSuiteMessages.FORGOT_PASSWORD_KEY_MISMATCH);
+                }
+                
+                Date keyExpirationTime = mobileClient.getKeyExpirationTime();
+                Date now = new Date();
+                System.out.println("[FrontMobile.RegistrationManager] Keyexpriration time: "+keyExpirationTime.getTime());
+                System.out.println("[FrontMobile.RegistrationManager] now time: "+now.getTime());
+                if (now.getTime() - keyExpirationTime.getTime() > 30 * 60 * 1000) {
+                    System.out.println("[FrontMobile.RegistrationManager] difference is more than 30 minutes ");
+                    response.setStatusMessage(VTSuiteMessages.FORGOT_PASSWORD_KEY_EXPIRED);
+                    throw new MobileValidationException(Constants.FORGOT_PASSWORD_KEY_EXPIRED, VTSuiteMessages.FORGOT_PASSWORD_KEY_EXPIRED);
+                }
+
+            }
+
+            //consume balance enquiry 
+            System.out.println("[FrontMobile.RegistrationManager] calling balanceInquiry");
+            String balance = transactionManager.balanceInquiry(cardNumber, token);
+
+            // To send details to Mobile application
+            Map data = new HashMap();
+            data.put("clientId", mobileClient.getId());
+            data.put("clientName", mobileClient.getClient().getFirstName());
+            data.put("clientEmail", mobileClient.getClient().getEmail());
+            data.put("clientPhone", mobileClient.getClient().getEmail());
+            data.put("mobileClientUserName", mobileClient.getUserName());
+            data.put("balance", balance);
+            data.put("token", token);
+            response.setData(data);
+
+            response.setStatus(Constants.SUCCESS);
+            response.setStatusMessage(VTSuiteMessages.SUCCESS);
+
+        } catch (MobileValidationException mbe) {
+            System.out.println("MobileValidationException:: " + mbe.getResponse().getStatusMessage());
+            mbe.printStackTrace();
+            response = mbe.getResponse();
+        } catch (Exception e) {
+            System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
+            response.setStatus(Constants.LOGIN_FAILED);
+            response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
+            e.printStackTrace();
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] return response.");
+        return response;
+    }
+
     private CreditCard createCard(String cardNumber, Client client) {
         CreditCard card = new CreditCard();
         card.setCardNumber(cardNumber);
@@ -346,6 +420,29 @@ public class RegistrationManager {
         return mobileClient;
     }
 
+    private MobileClient validateDataAndGetClient(String maskSSN, String cardNumber, String sendBy) throws MobileValidationException {
+
+        if (maskSSN == null || maskSSN.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "maskSSN");
+        }
+
+        if (cardNumber == null || cardNumber.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "CardNumber");
+        }
+
+        if (sendBy == null || sendBy.isEmpty()) {
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "sendBy");
+        }
+
+        System.out.println("[FrontMobile.RegistrationManager] Loading client by cardNumber : " + cardNumber + " , maskSSN : " + maskSSN);
+        MobileClient mobileClient = MobileClientDao.get().getMobileClientByCardNumberAndMaskSSN(maskSSN, cardNumber);
+
+        if (mobileClient == null) {
+            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
+        }
+        return mobileClient;
+    }
+
     private MobileClient validateDataAndGetClient(String clientId, String username, String email, String phone) throws MobileValidationException {
 
         if (clientId == null || clientId.isEmpty()) {
@@ -372,6 +469,36 @@ public class RegistrationManager {
             throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
         }
         return mobileClient;
+    }
+
+    private void sendEmailOrSMSNotification(MobileClient mobileClient, String sendBy) throws Exception {
+
+        if (sendBy.equalsIgnoreCase("sms")) {
+            String smsMessage = "Thank you for choosing Mobile Application. Your request for forgot password key is: " + mobileClient.getForgotPasswordKey();
+            String sendSMSProperty = System.getProperty("SEND_SMS");
+            Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
+
+            if (sendSMS && mobileClient.getClient() != null && mobileClient.getClient().getTelephone() != null) {
+
+                System.out.println("--------------  SENDING SMS MESSAGE TO: 1" + mobileClient.getClient().getTelephone() + " --------------");
+
+                System.out.println("text: " + smsMessage);
+
+                SMSUtils.sendSMS("1" + mobileClient.getClient().getTelephone(), smsMessage);
+            }
+        } else if (sendBy.equalsIgnoreCase("email")) {
+            Map<String, String> emailValuesMap = new HashMap<>();
+            emailValuesMap.put("client_name", mobileClient.getClient().getFirstName());
+            emailValuesMap.put("forgot_password_key", mobileClient.getForgotPasswordKey());
+
+            System.out.println("--------------  SENDING " + EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY + " EMAIL --------------");
+            Email email = EmailManager.get().getByName(EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY);
+            email.setRecipients(mobileClient.getClient().getEmail());
+            email.setValues(emailValuesMap);
+            GoogleMail.get().sendEmail(email);
+
+        }
+
     }
 
 }

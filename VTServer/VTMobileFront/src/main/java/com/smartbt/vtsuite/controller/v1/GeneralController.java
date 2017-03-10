@@ -100,5 +100,24 @@ public class GeneralController {
         return regManager.updateProfile(clientId,username,email,phone,password,token);
     }
     
+    @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
+    public ResponseData forgotPassword(@RequestBody LinkedHashMap params, HttpSession session) throws Exception{        
+        
+        String maskSSN = (String) params.get("maskSSN");         
+        String cardNumber = (String) params.get("cardNumber");
+        String sendBy = (String) params.get("sendBy");
+        String code = (String) params.get("code");                        
+        
+          
+         System.out.println("GeneralController.forgotPassword: \n maskSSN: " + maskSSN
+                + "\n cardNumber: " + cardNumber               
+                + "\n sendBy: " + sendBy
+                + "\n code: " + code);
+        
+        String token = Utils.generateToken();
+        session.setAttribute(TOKEN, token);
+        return regManager.forgotPassword(maskSSN,cardNumber,sendBy,code,token);
+    }
+    
 
 }

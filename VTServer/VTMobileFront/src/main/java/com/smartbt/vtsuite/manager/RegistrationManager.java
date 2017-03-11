@@ -260,16 +260,16 @@ public class RegistrationManager {
 
                 MobileClientDao.get().saveOrUpdate(mobileClient);
             } else {
-                System.out.println("[FrontMobile.RegistrationManager] Code exists...Code: "+code);
+                System.out.println("[FrontMobile.RegistrationManager] Code exists...Code: " + code);
                 if (!code.equals(mobileClient.getForgotPasswordKey())) {
                     response.setStatusMessage(VTSuiteMessages.FORGOT_PASSWORD_KEY_MISMATCH);
                     throw new MobileValidationException(Constants.FORGOT_PASSWORD_KEY_MISMATCH, VTSuiteMessages.FORGOT_PASSWORD_KEY_MISMATCH);
                 }
-                
+
                 Date keyExpirationTime = mobileClient.getKeyExpirationTime();
                 Date now = new Date();
-                System.out.println("[FrontMobile.RegistrationManager] Keyexpriration time: "+keyExpirationTime.getTime());
-                System.out.println("[FrontMobile.RegistrationManager] now time: "+now.getTime());
+                System.out.println("[FrontMobile.RegistrationManager] Keyexpriration time: " + keyExpirationTime.getTime());
+                System.out.println("[FrontMobile.RegistrationManager] now time: " + now.getTime());
                 if (now.getTime() - keyExpirationTime.getTime() > 30 * 60 * 1000) {
                     System.out.println("[FrontMobile.RegistrationManager] difference is more than 30 minutes ");
                     response.setStatusMessage(VTSuiteMessages.FORGOT_PASSWORD_KEY_EXPIRED);
@@ -287,7 +287,7 @@ public class RegistrationManager {
             data.put("clientId", mobileClient.getId());
             data.put("clientName", mobileClient.getClient().getFirstName());
             data.put("clientEmail", mobileClient.getClient().getEmail());
-            data.put("clientPhone", mobileClient.getClient().getEmail());
+            data.put("clientPhone", mobileClient.getClient().getTelephone());
             data.put("mobileClientUserName", mobileClient.getUserName());
             data.put("balance", balance);
             data.put("token", token);
@@ -423,15 +423,15 @@ public class RegistrationManager {
     private MobileClient validateDataAndGetClient(String maskSSN, String cardNumber, String sendBy) throws MobileValidationException {
 
         if (maskSSN == null || maskSSN.isEmpty()) {
-            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "maskSSN");
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "SSN");
         }
 
         if (cardNumber == null || cardNumber.isEmpty()) {
-            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "CardNumber");
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "Card Number");
         }
 
         if (sendBy == null || sendBy.isEmpty()) {
-            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "sendBy");
+            throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + " Send By");
         }
 
         System.out.println("[FrontMobile.RegistrationManager] Loading client by cardNumber : " + cardNumber + " , maskSSN : " + maskSSN);
@@ -492,11 +492,18 @@ public class RegistrationManager {
             emailValuesMap.put("forgot_password_key", mobileClient.getForgotPasswordKey());
 
             System.out.println("--------------  SENDING " + EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY + " EMAIL --------------");
+            System.out.println("Access Code:: " + mobileClient.getForgotPasswordKey());
+            
+            try{
             Email email = EmailManager.get().getByName(EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY);
             email.setRecipients(mobileClient.getClient().getEmail());
             email.setValues(emailValuesMap);
             GoogleMail.get().sendEmail(email);
 
+            }catch(Exception e){
+                System.out.println("FAILED BRCAUSE THE PATCH WAS NOT INCLUDED");
+                System.out.println("TODO INCLUDE THE DBPATCH OF THE EMAIL AND REMOVE THIS try-catch");
+            }
         }
 
     }

@@ -28,24 +28,30 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author Roberto Rodriguez
  */
 public class RequestInterceptor extends HandlerInterceptorAdapter {
- 
+
     private final List<String> uriNotNeedToken = new LinkedList<String>() {
-        { 
+        {
             add("/FrontMobile/auth/login");
         }
     };
  //TODO This is the token validation for every request
- //We will keep this commented for development. Not need to touch for now. (Roberto)
+    //We will keep this commented for development. Not need to touch for now. (Roberto)
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("RequestInterceptor -> preHandle :: HibernateUtil.beginTransaction();");
-        HibernateUtil.beginTransaction();
+
+        if (HibernateUtil.getSession().getTransaction() != null) {
+            HibernateUtil.beginTransaction();
+        }else{
+            System.out.println("TRANSACTION STILL OPEN!!!");
+        }
+
 //        log.info("----->  Request " + request.getRequestURI() + " has been received <-----");
 //
 //        if (!validateToken(request.getRequestURI())) {
 //            return true;
 //        }
-        
 //         String tokenInSession = request.getSession().getValue("TOKEN");
 //
 //        String token = request.getHeader("TOKEN");
@@ -73,7 +79,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean validateToken(String uri) {
-         
+
         return !uriNotNeedToken.contains(uri);
     }
 }

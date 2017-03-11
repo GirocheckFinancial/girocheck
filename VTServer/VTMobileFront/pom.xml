@@ -168,7 +168,7 @@
     </dependencies>
 
     <build>
-        <finalName>FrontMobile_v${version}</finalName>
+        <finalName>FrontMobile</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

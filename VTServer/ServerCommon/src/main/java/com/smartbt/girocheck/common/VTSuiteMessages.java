@@ -38,7 +38,7 @@ public class VTSuiteMessages {
      * /**
      * Message
      */
-    public final static String ERROR_GENERAL = "ERROR";
+    public final static String ERROR_GENERAL = "System Error, please try again or call customer support.";
     /**
      * Message
      */

@@ -20,6 +20,7 @@ import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay;
 import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
 import com.smartbt.girocheck.servercommon.utils.Utils;
+import com.smartbt.vtsuite.conf.interceptors.ExceptionInterceptor;
 import static com.smartbt.vtsuite.controller.v1.GeneralController.TOKEN;
 import com.smartbt.vtsuite.manager.AuthManager;
 import com.smartbt.vtsuite.manager.TransactionManager;
@@ -27,6 +28,7 @@ import com.smartbt.vtsuite.vtcommon.Constants;
 import java.util.LinkedHashMap;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Roberto Rodriguez
  */
-@RestController
+@RestController 
 @RequestMapping("/v1/auth")
 public class AuthController {
     
@@ -51,7 +53,7 @@ public class AuthController {
         
         return "PING!!";
     }
-    
+   
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseData login(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {
         String username = (String) params.get("username");

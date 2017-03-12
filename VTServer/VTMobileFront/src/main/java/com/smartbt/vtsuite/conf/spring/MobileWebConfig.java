@@ -1,6 +1,7 @@
  
 package com.smartbt.vtsuite.conf.spring;
 
+import com.smartbt.vtsuite.conf.interceptors.ExceptionInterceptor;
 import com.smartbt.vtsuite.conf.interceptors.RequestInterceptor;
 import com.smartbt.vtsuite.conf.provider.HibernateAwareObjectMapper;
 import java.util.List;
@@ -48,11 +49,17 @@ public class MobileWebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(requestInterceptor());
+        //registry.addInterceptor(exceptionInterceptor());
     }
 
     @Bean
     RequestInterceptor requestInterceptor() {
         return new RequestInterceptor();
+    }
+
+    @Bean
+    ExceptionInterceptor exceptionInterceptor() {
+        return new ExceptionInterceptor();
     }
 
     @Bean

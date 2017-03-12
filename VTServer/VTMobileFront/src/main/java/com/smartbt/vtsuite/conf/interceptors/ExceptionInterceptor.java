@@ -14,8 +14,10 @@
  **
  */
 package com.smartbt.vtsuite.conf.interceptors;
- 
+
+import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
+import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,11 +33,26 @@ public class ExceptionInterceptor {
 
     static Logger log = Logger.getLogger(ExceptionInterceptor.class);
 
+    public ExceptionInterceptor() {
+        System.out.println("Creating ExceptionInterceptor bean...");
+    }
+
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public BaseResponse handleGeneralError(Exception ex) {
-        exceptionCommon(ex);
-        return new BaseResponse(Constants.CODE_ERROR_GENERAL, ex.getMessage());
+
+        System.out.println("ExceptionInterceptor -> handleGeneralError");
+
+        if (HibernateUtil.getSession().getTransaction() != null) {
+            System.out.println("There is a liven transaction");
+            HibernateUtil.getSession().getTransaction().rollback();
+        } else {
+            System.out.println("No transactions are open.");
+        }
+
+        ex.printStackTrace();
+
+        return new BaseResponse(Constants.CODE_ERROR_GENERAL, VTSuiteMessages.ERROR_GENERAL);
     }
 
 //    @ResponseBody
@@ -59,7 +76,7 @@ public class ExceptionInterceptor {
 //        return new BaseResponse(ex.getCode() , ex.getMessage());
 //    }
 //    
-    private void exceptionCommon(Exception ex){
+    private void exceptionCommon(Exception ex) {
         log.error(ex, ex);
     }
 }

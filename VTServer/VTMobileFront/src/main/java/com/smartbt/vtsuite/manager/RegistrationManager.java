@@ -130,8 +130,8 @@ public class RegistrationManager {
             response = mbe.getResponse();
         } catch (Exception e) {
             System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
-            response.setStatus(Constants.LOGIN_FAILED);
-            response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
+            response.setStatus(Constants.CODE_ERROR_GENERAL);
+            response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);
             e.printStackTrace();
         }
 
@@ -198,8 +198,8 @@ public class RegistrationManager {
             response = mbe.getResponse();
         } catch (Exception e) {
             System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
-            response.setStatus(Constants.LOGIN_FAILED);
-            response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
+            response.setStatus(Constants.CODE_ERROR_GENERAL);
+            response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);
             e.printStackTrace();
         }
 
@@ -234,8 +234,8 @@ public class RegistrationManager {
             response = mbe.getResponse();
         } catch (Exception e) {
             System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
-            response.setStatus(Constants.LOGIN_FAILED);
-            response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
+            response.setStatus(Constants.CODE_ERROR_GENERAL);
+            response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);
             e.printStackTrace();
         }
 
@@ -302,8 +302,8 @@ public class RegistrationManager {
             response = mbe.getResponse();
         } catch (Exception e) {
             System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
-            response.setStatus(Constants.LOGIN_FAILED);
-            response.setStatusMessage(VTSuiteMessages.LOGIN_FAILED);
+            response.setStatus(Constants.CODE_ERROR_GENERAL);
+            response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);
             e.printStackTrace();
         }
 
@@ -322,6 +322,7 @@ public class RegistrationManager {
                 maskCardNumber = cardNumber.substring(0, 4) + "********";
             }
         }
+        System.out.println("maskCardNumber = " + maskCardNumber);
         card.setMaskCardNumber(maskCardNumber);
         card.setMerchant(getMerchantFromExistentCard(client));
         card.setClient(client);

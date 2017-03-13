@@ -475,7 +475,7 @@ public class RegistrationManager {
     private void sendEmailOrSMSNotification(MobileClient mobileClient, String sendBy) throws Exception {
 
         if (sendBy.equalsIgnoreCase("sms")) {
-            String smsMessage = "Thank you for choosing Mobile Application. Your request for forgot password key is: " + mobileClient.getForgotPasswordKey();
+            String smsMessage = "Thank you for choosing VoltCash. Your password key is: " + mobileClient.getForgotPasswordKey()+". Ignore if you did not make this request.";
             String sendSMSProperty = System.getProperty("SEND_SMS");
             Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
 
@@ -495,16 +495,12 @@ public class RegistrationManager {
             System.out.println("--------------  SENDING " + EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY + " EMAIL --------------");
             System.out.println("Access Code:: " + mobileClient.getForgotPasswordKey());
             
-            try{
+            
             Email email = EmailManager.get().getByName(EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY);
             email.setRecipients(mobileClient.getClient().getEmail());
             email.setValues(emailValuesMap);
             GoogleMail.get().sendEmail(email);
-
-            }catch(Exception e){
-                System.out.println("FAILED BRCAUSE THE PATCH WAS NOT INCLUDED");
-                System.out.println("TODO INCLUDE THE DBPATCH OF THE EMAIL AND REMOVE THIS try-catch");
-            }
+            
         }
 
     }

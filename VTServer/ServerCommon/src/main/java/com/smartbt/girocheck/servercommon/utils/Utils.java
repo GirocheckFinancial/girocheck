@@ -78,7 +78,7 @@ public class Utils {
         return sb.toString();
 
     }
-    
+
     public static String encryptCredictCardNumber(String cCardNumber) throws NoSuchAlgorithmException {
         MessageDigest mDigest = MessageDigest.getInstance("SHA-1");
         byte[] result = mDigest.digest(cCardNumber.getBytes());
@@ -90,7 +90,7 @@ public class Utils {
         return sb.toString();
 
     }
-    
+
     public static String encryptSSN(String ssn) throws NoSuchAlgorithmException {
         MessageDigest mDigest = MessageDigest.getInstance("SHA-1");
         byte[] result = mDigest.digest(ssn.getBytes());
@@ -102,24 +102,24 @@ public class Utils {
         return sb.toString();
 
     }
-    
+
     public static String MD5(String unencrypted) {
 
-		try {
+        try {
 
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			m.update(unencrypted.getBytes(), 0, unencrypted.length());
-			String MD5 = new BigInteger(1, m.digest()).toString(16);
+            MessageDigest m = MessageDigest.getInstance("MD5");
+            m.update(unencrypted.getBytes(), 0, unencrypted.length());
+            String MD5 = new BigInteger(1, m.digest()).toString(16);
 
-			return MD5;
+            return MD5;
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ServerCommon.utils.Utils] MD5(...) Error ",e.getMessage());
-			return null;
-		}
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[ServerCommon.utils.Utils] MD5(...) Error ", e.getMessage());
+            return null;
+        }
 
-	}
+    }
 
 //    public static void convertTifToPng(File inputImage, File outputImage) {
 //        IMOperation op = new IMOperation();
@@ -129,4 +129,18 @@ public class Utils {
 //        ConvertCmd convert = new ConvertCmd();
 //        convert.run(op, new Object[]{inputImage.getAbsolutePath(), outputImage.getAbsolutePath()});
 //    }
+    public static String generateRandomNumber(int length) {
+        StringBuffer sb = new StringBuffer();
+        Random random = new Random();
+        for (int n = 0; n < length; n++) {
+            int j = (Math.abs(random.nextInt()) % 10);
+            // If First digit is "0", skip that and get next random
+            if (n == 0 && j == 0) {
+                n--;
+                continue;
+            }
+            sb.append(Integer.toString(j));
+        }
+        return sb.toString();
+    }
 }

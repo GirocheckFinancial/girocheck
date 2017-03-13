@@ -46,6 +46,8 @@ public class TransactionController {
             @RequestParam(value = "clientId") Integer clientId,
             HttpSession session) throws Exception {
 
-        return transactionManager.transactionHistory( clientId,  page,  start,  limit,  startDate,  endDate);
+        System.out.println("page = " + page + " \n start = " + start + "\n limit = " + limit + "\n startDate = " + startDate + "\n endDate = " + endDate + " \n clientId = " + clientId);
+
+        return transactionManager.transactionHistory(clientId, page, start, limit, startDate, endDate);
     }
 }

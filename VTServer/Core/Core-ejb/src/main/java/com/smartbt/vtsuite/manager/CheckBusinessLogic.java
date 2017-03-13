@@ -105,10 +105,10 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             feeCalculator(request, transaction);
 
-            if (checkInfoRequestMap.containsKey(ParameterName.ID) && checkInfoRequestMap.get(ParameterName.ID).equals("0")) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ParameterName.ID from personal info: " + checkInfoRequestMap.get(ParameterName.ID), null);
-                throw new TransactionalException(ResultCode.ISTREAM_FRONT_PERSONAL_INFO_RECEIVED_AS_NULL, TransactionType.PERSONAL_INFO, "Personal Info sent ID = 0");
-            }
+//            if (checkInfoRequestMap.containsKey(ParameterName.ID) && checkInfoRequestMap.get(ParameterName.ID).equals("0")) {
+//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ParameterName.ID from personal info: " + checkInfoRequestMap.get(ParameterName.ID), null);
+//                throw new TransactionalException(ResultCode.ISTREAM_FRONT_PERSONAL_INFO_RECEIVED_AS_NULL, TransactionType.PERSONAL_INFO, "Personal Info sent ID = 0");
+//            }
 
             //------ PROCESS PERSONAL INFO  ------
             processPersonalInfo(transaction, request, checkInfoRequestMap);

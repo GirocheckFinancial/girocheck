@@ -17,6 +17,7 @@
                 <property name="userName" column="username" type="string" length="55" not-null="false" lazy="false"/>
                 <property name="password" column="password" type="string" length="55" not-null="false" lazy="false"/>
                 
+                
             </class>      
   
     </hibernate-mapping>

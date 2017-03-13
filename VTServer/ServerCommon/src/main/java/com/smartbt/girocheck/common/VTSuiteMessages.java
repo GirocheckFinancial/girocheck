@@ -38,7 +38,7 @@ public class VTSuiteMessages {
      * /**
      * Message
      */
-    public final static String ERROR_GENERAL = "ERROR";
+    public final static String ERROR_GENERAL = "System Error, please try again or call customer support.";
     /**
      * Message
      */
@@ -408,6 +408,10 @@ public class VTSuiteMessages {
     public static final String USERNAME_IN_USE = "Username already in use.";
     public static final String REQUIRED_FIELD = "Required field: ";
      public static final String MOBILE_CLIENT_NOT_EXIST = "Mobile client does not exist.";
+     
+    public static final String FORGOT_PASSWORD_KEY_MISMATCH = "Forgot password code is incorrect.Please try again.";
+    public static final String FORGOT_PASSWORD_KEY_EXPIRED = "Forgot password code has been expired.Please request new code.";
+    public final static String INVALID_TOKEN = "Invalid Token.";
     
     
     /**

@@ -150,6 +150,18 @@ public class CheckInfoRequest implements IMap {
 
         map.put(ParameterName.CHECK_ISSUE_DATE, getCheckIssueDate());
 
+        Iterator<Map.Entry<Object, Object>> it = map.entrySet().iterator();
+        System.out.println("Printing input params: ");
+        System.out.println("");
+        while (it.hasNext()) {
+            Map.Entry entry = it.next();
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+
         return map;
     }
 

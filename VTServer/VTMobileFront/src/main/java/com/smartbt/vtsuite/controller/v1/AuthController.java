@@ -81,4 +81,22 @@ public class AuthController {
          
         return response;
     }
+    
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseData logout(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {       
+        
+        System.out.println("AuthController.logout");        
+        String token = (String) params.get("token"); 
+        
+        ResponseData response = ResponseData.OK();        
+        
+        if (token == null || token.isEmpty()) {
+            response.setStatus(Constants.INVALID_TOKEN);
+            response.setStatusMessage(VTSuiteMessages.INVALID_TOKEN);
+        } else {      
+            session.removeAttribute(token);            
+        }
+        
+        return response;
+    }
 }

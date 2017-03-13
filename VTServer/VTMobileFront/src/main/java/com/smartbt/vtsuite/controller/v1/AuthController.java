@@ -94,7 +94,7 @@ public class AuthController {
             response.setStatus(Constants.INVALID_TOKEN);
             response.setStatusMessage(VTSuiteMessages.INVALID_TOKEN);
         } else {      
-            session.removeAttribute(token);            
+            session.removeAttribute(TOKEN);            
         }
         
         return response;

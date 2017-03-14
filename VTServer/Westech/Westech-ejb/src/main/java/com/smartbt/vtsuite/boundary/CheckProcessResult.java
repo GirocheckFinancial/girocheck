@@ -1,7 +1,11 @@
 
 package com.smartbt.vtsuite.boundary;
 
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -16,66 +20,59 @@ import javax.xml.transform.stream.StreamSource;
  *
  * @author rrodriguez
  */
-
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "DATA"
-})
+ 
 @XmlRootElement(name = "DATA")
-public class CheckProcessResult {
-  @XmlElement( name = "Status")
-  private String Status;
-  @XmlElement( name = "TransactionId")
-  private String TransactionId;
+public class CheckProcessResult { 
+  private String status; 
+  private String transactionId;
 
     public CheckProcessResult() {
     }
-
-    public CheckProcessResult(String xml) throws JAXBException {
-      JAXBContext ctx = JAXBContext.newInstance(CheckProcessResult.class);
-      Unmarshaller unmarshaller = ctx.createUnmarshaller();
-      CheckProcessResult result = (CheckProcessResult)unmarshaller.unmarshal( new StreamSource( new StringReader( xml ) ) );
-    
-        System.out.println(result);
-    }
+ 
     
     public static void main(String args[]) throws JAXBException{
         String xml = "<DATA><Status>0</Status><TransactionId>50082</TransactionId></DATA>";
         
-        new CheckProcessResult(xml);
     }
 
     @Override
     public String toString() {
-        return "[Status = " + getStatus() +  ", TransactionId = " + TransactionId + "]";
+        return "[Status = " + getStatus() +  ", TransactionId = " + transactionId + "]";
+    }
+    
+    public Map toMap(){
+        Map map = new HashMap();
+        map.put(ParameterName.STATUS, status);
+        map.put(ParameterName.CHECK_ID, transactionId);
+        
+        return map;
     }
 
     /**
      * @return the Status
      */
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     /**
      * @param Status the Status to set
      */
-    public void setStatus(String Status) {
-        this.Status = Status;
+    @XmlElement(name = "Status")
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
      * @return the TransactionId
      */
     public String getTransactionId() {
-        return TransactionId;
+        return transactionId;
     }
 
-    /**
-     * @param TransactionId the TransactionId to set
-     */
-    public void setTransactionId(String TransactionId) {
-        this.TransactionId = TransactionId;
+    @XmlElement(name = "TransactionId")
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
  
 

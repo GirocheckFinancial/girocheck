@@ -23,13 +23,16 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.vtsuite.boundary.CheckProcessResult;
 import com.smartbt.vtsuite.boundary.CheckService;
 import com.smartbt.vtsuite.boundary.CheckServiceSoap;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.JAXB;
 import javaxt.utils.Base64;
 
 public class WestechBusinessLogic {
@@ -67,7 +70,15 @@ public class WestechBusinessLogic {
                 responseMap = checkProcess(transactionData);
                 break;
         }
+        
+        String status = (String)responseMap.get(ParameterName.STATUS);
 
+        if(!status.endsWith("0")){
+             direxTransactionResponse.setResultCode(ResultCode.WESTECH_HOST_UNEXPECTED_RESULT_CODE);
+             direxTransactionResponse.setResultMessage(status);
+             return direxTransactionResponse;
+        }
+        
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[WestechBusinessLogic] Finish " + transactionType, null);
 
         direxTransactionResponse.setResultCode(ResultCode.SUCCESS);
@@ -91,13 +102,16 @@ public class WestechBusinessLogic {
         String log = printRequest(checkFront,checkBack,idProof, idProofXML);
         System.out.println(log);
         
-        String checkId = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProofXML);
+        String xmlResult = port.checkProcess(WT_USERNAME, WT_PASSWORD, checkFront, checkBack, idProof, idProofXML);
 
-        System.out.println("[WestechBusinessLogic] -> checkId = " + checkId);
+        System.out.println("[WestechBusinessLogic] -> xmlResult = " + xmlResult);
+        CheckProcessResult result = (CheckProcessResult) JAXB.unmarshal(new StringReader(xmlResult), CheckProcessResult.class);
         
-        Map map = new HashMap();
-        map.put(ParameterName.CHECK_ID, checkId);
-        return map;
+        System.out.println("After parse -> result = " + result);
+        System.out.println("");
+        System.out.println("Westech CHECK_ID = " + result.getTransactionId());
+        System.out.println("");
+        return result.toMap();
     }
 
     

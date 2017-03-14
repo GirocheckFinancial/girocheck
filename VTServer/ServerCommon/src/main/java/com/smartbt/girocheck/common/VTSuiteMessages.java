@@ -401,7 +401,7 @@ public class VTSuiteMessages {
     
     public static final String LOGIN_FAILED = "Login Failed. Please Contact Customer Support.";
     
-    public static final String CARD_NOT_PERSONALIZED = "Card is not personised.";
+    public static final String CARD_NOT_PERSONALIZED = "Card is not personalized.";
     
     public static final String CARD_BELONG_TO_ANOTHER_CLIENT = "Card belong to another client.";
     public static final String MOBILE_CLIENT_ALREADY_EXIST = "There is already a mobile user asociated to this SSN.";

@@ -59,8 +59,11 @@ public class GeneralController {
                 + "\n password: " + password
                 + "\n ssn: " + ssn
                 + "\n email: " + email
-                + "\n phone: " + phone                
-                + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
+                + "\n phone: " + phone); 
+        
+        if(cardNumber != null && cardNumber.length()> 4){
+            System.out.println("cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
+        } 
         
         String token = Utils.generateToken();
         session.setAttribute(TOKEN, token);

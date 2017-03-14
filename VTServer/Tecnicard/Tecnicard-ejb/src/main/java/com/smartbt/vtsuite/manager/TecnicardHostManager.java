@@ -375,10 +375,11 @@ public class TecnicardHostManager {
 
         List<com.smartbt.vtsuite.boundary.client.Transaction> originalList = (List<com.smartbt.vtsuite.boundary.client.Transaction>) responseMap.get(ParameterName.TRANSACTIONS_LIST);
 
-        System.out.println("TecnicardHostManager.buildMobileTransactionList start = " + start + ", max = " + max);
-        System.out.println("TecnicardHostManager.buildMobileTransactionList originalList.size() = " + originalList.size());
 
         if (originalList != null) {
+                    System.out.println("TecnicardHostManager.buildMobileTransactionList start = " + start + ", max = " + max);
+                    System.out.println("TecnicardHostManager.buildMobileTransactionList originalList.size() = " + originalList.size());
+
             for (int i = 0; i < originalList.size(); i++) {
                 originalList.get(i).print();
 
@@ -389,6 +390,8 @@ public class TecnicardHostManager {
                     successfulCount++;
                 }
             }
+        }else{
+            System.out.println("originalList is null");
         }
 
         transactionHistory.put("items", result);

@@ -68,10 +68,10 @@ public class LastTransactionsResponse
         Map map = super.getMap(EXPECTED_RESULT_CODE);
 
         if (transactionsList != null) {
-            map.put(ParameterName.TRANSACTIONS_LIST, transactionsList.toMap());
+           return transactionsList.toMap();
         }
 
-        return map;
+        return null;
     }
 
     /**

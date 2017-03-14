@@ -330,7 +330,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         if (transactionMap.containsKey(ParameterName.IDBACK) && transactionMap.get(ParameterName.IDBACK) != null) {
             byte[] idBack = (byte[]) transactionMap.get(ParameterName.IDBACK);
             java.sql.Blob idBackBlob = new SerialBlob(idBack);
-            identidication.setIdFront(idBackBlob);
+            identidication.setIdBack(idBackBlob);
         }
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] fillOutPersonalIdentification(...) DONE", null);
         return identidication;

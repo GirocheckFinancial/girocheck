@@ -65,13 +65,13 @@ public class WestechHostManager {
                 subTransaction.setResultCode(response.getResultCode().getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             } else {
-                subTransaction.setResultCode(ResultCode.CHOICE_HOST_ERROR.getCode());
+                subTransaction.setResultCode(ResultCode.WESTECH_HOST_ERROR.getCode());
                 subTransaction.setResultMessage(response.getResultMessage());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response = DirexTransactionResponse.forException(ResultCode.CHOICE_HOST_ERROR, e);
-            subTransaction.setResultCode(ResultCode.CHOICE_HOST_ERROR.getCode());
+            response = DirexTransactionResponse.forException(ResultCode.WESTECH_HOST_ERROR, e);
+            subTransaction.setResultCode(ResultCode.WESTECH_HOST_ERROR.getCode());
             subTransaction.setResultMessage(e.getMessage());
         }
 

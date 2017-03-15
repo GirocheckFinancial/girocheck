@@ -80,11 +80,11 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         Map transactionData = request.getTransactionData();
 
         TransactionType transactionType = request.getTransactionType();
-
+        DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
         IMap response = null;
-        IMap responseBalance = null; 
+        IMap responseBalance = null;
 
-        Map map; 
+        Map map;
 
 //         LogUtil.logAndStore( "TecnicardBL", "                        proccessing:: " + transactionType );
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardBusinessLogic] proccessing:: " + transactionType, null);
@@ -97,7 +97,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
                 response = wmCardPersonalization(transactionData);
                 break;
             case TECNICARD_CARD_LOAD:
-                response = wmCardLoad(transactionData); 
+                response = wmCardLoad(transactionData);
                 break;
             case TECNICARD_BALANCE_INQUIRY:
                 response = wmBalanceInquiry(transactionData);
@@ -137,7 +137,9 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
                 break;
             case TECNICARD_LAST_TRANSACTIONS:
                 response = wmLastTransactions(transactionData);
-                break;
+                map = response.toMap();
+                direxTransactionResponse.setTransactionData(map);
+                return direxTransactionResponse;
             case TECNICARD_CASH_TO_CARD:
                 response = wmCashToCard(transactionData);
                 break;
@@ -145,8 +147,6 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
 //        LogUtil.log( "TecnicardManager", "                        Finish " + transactionType );
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardBusinessLogic] Finish " + transactionType, null);
-
-        DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
         if (response != null) {
             map = response.toMap();
@@ -195,9 +195,9 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     private IMap wmCardPersonalization(Map map) throws Exception {
 
         Integer idType = 1;
- 
+
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
- 
+
         String pState = MapUtil.getStringValueFromMap(map, ParameterName.STATE, false);
         String pCountry = MapUtil.getStringValueFromMap(map, ParameterName.COUNTRY, false);
         String pIdState = MapUtil.getStringValueFromMap(map, ParameterName.IDSTATE, false);
@@ -220,7 +220,6 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pFaxAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.FAX_AREA_CODE, false);
         String pLastName = MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false);
 
- 
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, true);
         String pWorkphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.WORKPHONE_AREA_CODE, false);
         String pCellphoneAreaCode = MapUtil.getStringValueFromMap(map, ParameterName.CELL_PHONE_AREA, false);
@@ -245,14 +244,13 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
                 pState, pCity, pAddress, pZipCode, pEmail, pTelephoneAreaCode, pTelephone, pCellphoneAreaCode, pCellphone, pWorkphoneAreaCode, pWorkphone, pFaxAreaCode, pFaxphone, pRBService, pCurrentAddress);
     }
 
- 
     public IMap wmCardLoad(Map map) throws Exception {
         String pTransAmount = MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false);
         String pCheckFee = MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pTerminalCode = MapUtil.getStringValueFromMap(map, ParameterName.TERMINAL_ID_TECNICARD, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardLoad(" + pRequestID + "," + pTerminalCode + ", ************" + pCardNumber.substring(pCardNumber.length() - 4)+ ", " + pTransAmount + ", " + pCheckFee, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[TecnicardBusinessLogic] port.wmCardLoad(" + pRequestID + "," + pTerminalCode + ", ************" + pCardNumber.substring(pCardNumber.length() - 4) + ", " + pTransAmount + ", " + pCheckFee, null);
         return port.wmCardLoad(pRequestID, pTerminalCode, pCardNumber, pTransAmount, pCheckFee);
     }
 
@@ -283,7 +281,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmCardHolderValidation(Map map) throws Exception {
-        
+
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);

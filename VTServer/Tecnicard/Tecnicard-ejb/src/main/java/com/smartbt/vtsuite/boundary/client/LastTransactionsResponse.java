@@ -64,9 +64,7 @@ public class LastTransactionsResponse
     protected ArrayOfTransaction transactionsList;
 
     @Override
-    public Map toMap() {
-        Map map = super.getMap(EXPECTED_RESULT_CODE);
-
+    public Map toMap() { 
         if (transactionsList != null) {
            return transactionsList.toMap();
         }

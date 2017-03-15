@@ -1,8 +1,12 @@
 
 package com.smartbt.vtsuite.boundary.ws;
 
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.utils.IMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -36,13 +40,22 @@ import javax.xml.bind.annotation.XmlType;
     "items",
     "postDate"
 })
-public class TlsiclResponse {
+public class TlsiclResponse implements IMap{
 
     protected String batchId;
     @XmlElement(nillable = true)
     protected List<ResponseItem> items;
     protected String postDate;
 
+    
+    
+    @Override
+    public Map toMap() {
+       Map map = new HashMap();
+       map.put(ParameterName.BATCH_ID, batchId);
+       map.put(ParameterName.POST_DATE, postDate);
+       return map;
+    }
     /**
      * Gets the value of the batchId property.
      * 
@@ -119,5 +132,6 @@ public class TlsiclResponse {
     public void setPostDate(String value) {
         this.postDate = value;
     }
+
 
 }

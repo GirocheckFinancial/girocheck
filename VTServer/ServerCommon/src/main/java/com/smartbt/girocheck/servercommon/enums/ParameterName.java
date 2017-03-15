@@ -330,5 +330,5 @@ public enum ParameterName {
     CARD2MERCHANT_TRANSACTIONS,
     START,
     MAX,
-    PAGE_NUMBER
+    PAGE_NUMBER, BATCH_ID, POST_DATE
 }

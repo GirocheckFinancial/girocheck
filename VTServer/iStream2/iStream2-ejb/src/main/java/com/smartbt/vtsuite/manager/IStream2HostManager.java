@@ -17,6 +17,7 @@ package com.smartbt.vtsuite.manager;
 
 //import com.smartbt.vtsuite.servercommon.manager.AuditManager;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
+import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
 import com.smartbt.girocheck.servercommon.model.SubTransaction;
@@ -67,8 +68,8 @@ public class IStream2HostManager {
         try { 
             if (response.wasApproved()) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction executed successfully", null);
-                subTransaction.setResultCode(response.getResultCode().getCode());
-                subTransaction.setResultMessage(response.getResultMessage());
+                subTransaction.setResultCode(ResultCode.SUCCESS.getCode());
+                subTransaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
             } else {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStream2HostManager] transaction failed", null);
                 subTransaction.setResultCode(ResultCode.ISTREAM2_HOST_ERROR.getCode());

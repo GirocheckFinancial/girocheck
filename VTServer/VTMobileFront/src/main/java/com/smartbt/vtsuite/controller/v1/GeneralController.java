@@ -34,93 +34,94 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/gen")
 public class GeneralController {
+
     public static final String TOKEN = "TOKEN";
     @Autowired
     RegistrationManager regManager;
-  
+
     private static final Logger log = Logger.getLogger(GeneralController.class);
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index() {
         return "index";
     }
-    
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseData register(@RequestBody LinkedHashMap params, HttpSession session) throws Exception{
-        
+    public ResponseData register(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {
+
         String username = (String) params.get("username");
         String password = (String) params.get("password");
-        String ssn = (String) params.get("ssn");       
+        String ssn = (String) params.get("ssn");
         String email = (String) params.get("email");
-        String phone = (String) params.get("phone");         
-        String cardNumber = (String) params.get("cardNumber");        
-          
+        String phone = (String) params.get("phone");
+        String cardNumber = (String) params.get("cardNumber");
+
         System.out.println("GeneralController.register: \n username: " + username
                 + "\n password: " + password
                 + "\n ssn: " + ssn
                 + "\n email: " + email
-                + "\n phone: " + phone); 
-        
-        if(cardNumber != null && cardNumber.length()> 4){
+                + "\n phone: " + phone);
+
+        if (cardNumber != null && cardNumber.length() > 4) {
             System.out.println("cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
-        } 
-        
+        }
+
         String token = Utils.generateToken();
         session.setAttribute(TOKEN, token);
-        return regManager.register(username,password,ssn,email,phone,cardNumber,token);
+        return regManager.register(username, password, ssn, email, phone, cardNumber, token);
     }
-    
+
     @RequestMapping(value = "/replaceCard", method = RequestMethod.POST)
-    public ResponseData replaceCard(@RequestBody LinkedHashMap params, HttpSession session) throws Exception{        
-        
-        String clientId = (String) params.get("clientId");         
+    public ResponseData replaceCard(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {
+
+        String clientId = (String) params.get("clientId");
         String cardNumber = (String) params.get("cardNumber");
-          
-        System.out.println("GeneralController.replaceCard: \n clientId: " + clientId
-                    + "\n cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
-        
-        String token = (String)session.getAttribute(TOKEN);
-        return regManager.replaceCard(clientId,cardNumber,token);
+
+        System.out.println("GeneralController.replaceCard: \n clientId: " + clientId);
+
+        if (cardNumber != null && cardNumber.length() > 4) {
+            System.out.println("cardNumber: **** **** **** " + cardNumber.substring(cardNumber.length() - 4));
+        }
+
+        String token = (String) session.getAttribute(TOKEN);
+        return regManager.replaceCard(clientId, cardNumber, token);
     }
-    
+
     @RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
-    public ResponseData updateProfile(@RequestBody LinkedHashMap params) throws Exception{        
-        
-        String clientId = (String) params.get("clientId");         
+    public ResponseData updateProfile(@RequestBody LinkedHashMap params) throws Exception {
+
+        String clientId = (String) params.get("clientId");
         String username = (String) params.get("username");
         String email = (String) params.get("email");
         String phone = (String) params.get("phone");
-        String password = (String) params.get("password");                
-        
-          
-         System.out.println("GeneralController.register: \n username: " + username
-                + "\n password: " + password               
+        String password = (String) params.get("password");
+
+        System.out.println("GeneralController.register: \n username: " + username
+                + "\n password: " + password
                 + "\n email: " + email
-                + "\n phone: " + phone                
+                + "\n phone: " + phone
                 + "\n clientId: " + clientId);
-        
+
         String token = Utils.generateToken();
-        return regManager.updateProfile(clientId,username,email,phone,password,token);
+        return regManager.updateProfile(clientId, username, email, phone, password, token);
     }
-    
+
     @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
-    public ResponseData forgotPassword(@RequestBody LinkedHashMap params, HttpSession session) throws Exception{        
-        
-        String maskSSN = (String) params.get("maskSSN");         
+    public ResponseData forgotPassword(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {
+
+        String maskSSN = (String) params.get("maskSSN");
         String cardNumber = (String) params.get("cardNumber");
         String sendBy = (String) params.get("sendBy");
-        String code = (String) params.get("code");                        
-        
-          
-         System.out.println("GeneralController.forgotPassword: \n maskSSN: " + maskSSN
-                + "\n cardNumber: " + cardNumber               
+        String code = (String) params.get("code");
+
+        System.out.println("GeneralController.forgotPassword: \n maskSSN: " + maskSSN
+                + "\n cardNumber: " + cardNumber
                 + "\n sendBy: " + sendBy
                 + "\n code: " + code);
-        
+
         String token = Utils.generateToken();
         session.setAttribute(TOKEN, token);
-        return regManager.forgotPassword(maskSSN,cardNumber,sendBy,code,token);
+        return regManager.forgotPassword(maskSSN, cardNumber, sendBy, code, token);
     }
-    
 
 }

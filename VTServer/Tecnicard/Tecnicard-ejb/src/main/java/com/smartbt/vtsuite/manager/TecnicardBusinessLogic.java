@@ -304,6 +304,8 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pEndDate = MapUtil.getStringValueFromMap(map, ParameterName.END_DATE, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
 
+        String maskedCardNumber = (pCardNumber != null && pCardNumber.length() > 4) ? "************" + pCardNumber.substring(pCardNumber.length() - 4) :"";
+        
         System.out.println("TecnicardBusinessLogin -> wmLastTransactions(" + pRequestID + ", " + pCardNumber + ", " + pStartDate + ", " + pEndDate + ", \"\")");
 
         LastTransactionsResponse response = port.wmLastTransactions(pRequestID, pCardNumber, pStartDate, pEndDate, "");

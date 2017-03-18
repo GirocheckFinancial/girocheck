@@ -76,9 +76,7 @@ public class TransactionManager {
         try {
             Map map = new HashMap();
             String card = MobileClientDao.get().getCardNumberByMobileClientId(clientId);
-            
-            System.out.println("TransactionManager.transactionHistory -> card = " + card);
-            
+             
             if (card != null) {
                 System.out.println("[TransactionManager:transactionHistory] - CARD_MASK_NUMBER:- **********" + card.substring(12));
 

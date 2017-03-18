@@ -16,6 +16,7 @@
 package com.smartbt.vtsuite.conf.interceptors;
 
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
+import static com.smartbt.vtsuite.controller.v1.GeneralController.TOKEN;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,31 +45,48 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("RequestInterceptor -> preHandle :: HibernateUtil.beginTransaction();");
 
-        if (HibernateUtil.getSession().getTransaction() != null) {
+        try {
+            if (HibernateUtil.getSession().getTransaction() != null) {
+                HibernateUtil.beginTransaction();
+            } else {
+                System.out.println("TRANSACTION STILL OPEN!!!");
+            }
+        } catch (Exception e) {
+            System.out.println("It was going to throw a NestedTransactionException...   Thread.currentThread().sleep(1000);");
+            HibernateUtil.commitTransaction();
+            
+            Thread.currentThread().sleep(1000);
             HibernateUtil.beginTransaction();
-        } else {
-            System.out.println("TRANSACTION STILL OPEN!!!");
         }
-
+        
+       
         String uri = request.getRequestURI();
         System.out.println("URL = " + uri);
 
-        if (isExcludedURL(uri)) {
-            System.out.println("Excluded URL, (not need to check for token)");
-            return true;
-        }
+//        if (isExcludedURL(uri)) {
+//            System.out.println("Excluded URL, (not need to check for token)");
+//            return true;
+//        }
 
-        String tokenInSession = (String) request.getSession().getValue("TOKEN");
+        String tokenInSession = (String) request.getSession().getAttribute("TOKEN");
         String token = request.getHeader("TOKEN");
+        
+        System.out.println("JSESSIONID = " + request.getSession().getId());
 
         System.out.println("tokenInSession = " + tokenInSession);
         System.out.println("tokenInHeader = " + token);
 
-        boolean isValid = (tokenInSession != null && token != null && token.equals(tokenInSession));
+        if(tokenInSession == null){
+            request.getSession().setAttribute(TOKEN, token);
+        }
+        
+         return true;
 
-        System.out.println("is Token Valid = " + isValid);
-
-        return isValid;
+//        boolean isValid = (tokenInSession != null && token != null && token.equals(tokenInSession));
+//
+//        System.out.println("is Token Valid = " + isValid);
+//
+//        return isValid;
     }
 
     @Override
@@ -83,6 +101,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         } catch (Exception ex) {
             ex.printStackTrace();
             HibernateUtil.rollbackTransaction();
+        }finally{
+            HibernateUtil.getSession().close();
         }
     }
 

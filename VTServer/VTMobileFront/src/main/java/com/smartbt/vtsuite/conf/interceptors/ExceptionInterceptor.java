@@ -45,7 +45,14 @@ public class ExceptionInterceptor {
 
         if (HibernateUtil.getSession().getTransaction() != null) {
             System.out.println("There is a liven transaction");
-            HibernateUtil.getSession().getTransaction().rollback();
+            try {
+                System.out.println("RequestInterceptor -> postHandle :: HibernateUtil.commitTransaction();");
+                HibernateUtil.commitTransaction();
+            } catch (Exception e) {
+                HibernateUtil.rollbackTransaction();
+            } finally {
+                HibernateUtil.getSession().close();
+            }
         } else {
             System.out.println("No transactions are open.");
         }

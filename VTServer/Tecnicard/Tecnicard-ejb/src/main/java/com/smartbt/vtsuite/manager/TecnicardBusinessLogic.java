@@ -25,11 +25,15 @@ import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
+import com.smartbt.vtsuite.boundary.client.ArrayOfTransaction;
+import com.smartbt.vtsuite.boundary.client.LastTransactionsResponse;
+import com.smartbt.vtsuite.boundary.client.Transaction;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.ws.BindingProvider;
 
@@ -295,12 +299,38 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
     }
 
     public IMap wmLastTransactions(Map map) throws Exception {
-        String pTransactionQuantity = MapUtil.getStringValueFromMap(map, ParameterName.TRANSACTION_QUANTITY, false);
         String pStartDate = MapUtil.getStringValueFromMap(map, ParameterName.START_DATE, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pEndDate = MapUtil.getStringValueFromMap(map, ParameterName.END_DATE, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-        return port.wmLastTransactions(pRequestID, pCardNumber, pStartDate, pEndDate, pTransactionQuantity);
+
+        System.out.println("TecnicardBusinessLogin -> wmLastTransactions(" + pRequestID + ", " + pCardNumber + ", " + pStartDate + ", " + pEndDate + ", \"\")");
+
+        LastTransactionsResponse response = port.wmLastTransactions(pRequestID, pCardNumber, pStartDate, pEndDate, "");
+
+        System.out.println("response is " + (response == null ? "NULL" : "NOT NULL"));
+
+        if (response != null) {
+            System.out.println("response.getTransactionsList() is " + (response.getTransactionsList() == null ? "NULL" : "NOT NULL"));
+        }
+
+        if (response.getTransactionsList() != null) {
+            System.out.println("response.getTransactionsList().size = " + response.getTransactionsList());
+
+            List<Transaction> arrayOfTransaction = response.getTransactionsList().getTransaction();
+
+            System.out.println("arrayOfTransaction = " + (arrayOfTransaction == null ? "NULL" : "NOT NULL"));
+
+            if (arrayOfTransaction != null) {
+                System.out.println("arrayOfTransaction.size() = " + arrayOfTransaction.size());
+
+                for (Transaction arrayOfTransaction1 : arrayOfTransaction) {
+                    arrayOfTransaction1.print();
+                }
+            }
+        }
+
+        return response;
     }
 
     //TODO

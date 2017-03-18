@@ -111,21 +111,25 @@ public class Transaction
     }
     
     public void print(){
-        System.out.println("Transaction:: statusCode = " + statusCode + ", date = " + date + ", amount = " + amount + ", description = " + description);
+        System.out.println("Transaction:: statusCode = " + statusCode + ", date = " + date +  ", OperationType = " + operationType+ ", amount = " + amount + ", Fee = " + fee+ ", description = " + description);
     }
     
-    public MobileTransaction toMobileTransaction(){
-        return new MobileTransaction(date, amount, description);
+    public MobileTransaction toMobileTransaction(){ 
+        //String type, String date, String amount, String fee, String debitOrCredit, String description   statusCode,
+         return new MobileTransaction(type, date, amount,fee,  operationType,statusCode, description);
     }
 
     public Transaction() {
     }
 
-    public Transaction(String statusCode, String date,String amount,String description) {
+    public Transaction(String type, String statusCode, String date,String amount,String fee, String operationType, String description) {
+        this.type = type;
         this.date = date; 
         this.statusCode = statusCode; 
         this.description = description; 
         this.amount = amount; 
+        this.fee = fee; 
+        this.operationType = operationType; 
     }
      
 

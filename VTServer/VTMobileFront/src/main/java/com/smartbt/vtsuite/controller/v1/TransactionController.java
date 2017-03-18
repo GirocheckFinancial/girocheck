@@ -15,6 +15,7 @@
  */
 package com.smartbt.vtsuite.controller.v1;
 
+import static com.smartbt.vtsuite.controller.v1.GeneralController.TOKEN;
 import com.smartbt.vtsuite.manager.TransactionManager;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
@@ -47,7 +48,7 @@ public class TransactionController {
             HttpSession session) throws Exception {
 
         System.out.println("page = " + page + " \n start = " + start + "\n limit = " + limit + "\n startDate = " + startDate + "\n endDate = " + endDate + " \n clientId = " + clientId);
-
-        return transactionManager.transactionHistory(clientId, page, start, limit, startDate, endDate);
+        String token = (String) session.getAttribute(TOKEN); 
+        return transactionManager.transactionHistory(clientId, page, start, limit, startDate, endDate, token);
     }
 }

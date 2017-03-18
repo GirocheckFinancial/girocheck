@@ -18,12 +18,14 @@ package com.smartbt.vtsuite.manager;
 import com.smartbt.girocheck.servercommon.dao.MobileClientDao; 
 import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay; 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Roberto Rodriguez
  */
 @Service
+@Transactional
 public class AuthManager {
   
     public MobileClientDisplay getMobileClientDisplayByUserAndPassword(String username, String password){

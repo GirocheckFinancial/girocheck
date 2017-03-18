@@ -244,7 +244,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     public IMap wmBalanceInquiry(Map map) throws Exception {
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         System.out.println("MockTecnicardBusinessLogic -> wmBalanceInquiry :: pCardNumber = **** **** **** " + pCardNumber.substring(pCardNumber.length() - 4));
-        
+
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
 
         BalanceInquiryResponse response = new BalanceInquiryResponse();
@@ -308,8 +308,8 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
-        
-                                                                                           //port.wmCardHolderValidation(pRequestID, pCardNumber, pId, "1");
+
+        //port.wmCardHolderValidation(pRequestID, pCardNumber, pId, "1");
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[MockTecnicardBusinessLogic] port.wmCardHolderValidation(" + pRequestID + ",   ************" + pCardNumber.substring(pCardNumber.length() - 4) + ",  " + pId + ",  " + "1" + ")", null);
         CardHolderValidationResponse response = new CardHolderValidationResponse();
         response.setSessionTag(buildSessionTag("CardHolderValidation", pRequestID, "100013"));
@@ -328,50 +328,48 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
     //TODO
     //Test that this works properly
     public IMap wmLastTransactions(Map map) throws Exception {
-        
+
+        String pStartDate = MapUtil.getStringValueFromMap(map, ParameterName.START_DATE, false);
+        String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);
+        String pEndDate = MapUtil.getStringValueFromMap(map, ParameterName.END_DATE, false);
+        String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
+
+        System.out.println("TecnicardBusinessLogin -> wmLastTransactions(" + pRequestID + ", " + pCardNumber + ", " + pStartDate + ", " + pEndDate + ", \"\")");
+
         return new IMap() {
 
             @Override
             public Map toMap() {
-               return buildTransactionHistoryResponse();
+                return buildTransactionHistoryResponse();
             }
         };
     }
 
-    public static Map buildTransactionHistoryResponse(){
-       Map transactionData = new HashMap();
+    public static Map buildTransactionHistoryResponse() {
+        Map transactionData = new HashMap();
         transactionData.put(ParameterName.TRANSACTIONS_LIST, buildTransactionList());
-        transactionData.put(ParameterName.SESSION_TAG_MAP ,buildSessionTag("Cash2Card", "1", "0"));
+        transactionData.put(ParameterName.SESSION_TAG_MAP, buildSessionTag("Cash2Card", "1", "0"));
         return transactionData;
     }
-     
-    public  static List buildTransactionList(){
+
+    public static List buildTransactionList() {
         List<Transaction> list = new ArrayList();
-        
-        list.add(new Transaction( "G", "Feb 01 2017", "-58.42", "Store Purchase VONAGE America"));
-        list.add(new Transaction( "G", "Feb 01 2017", "6.00", "Transferred from Savings"));
-        list.add(new Transaction( "G", "Feb 02 2017", "4.00", "Received Money From Marilyn Lebrija"));
-        list.add(new Transaction( "G", "Feb 03 2017", "50.00", "Money Added From Debit Card"));
-        list.add(new Transaction( "G", "Feb 03 2017", "58.00", "Store Purchase CVS Farmacy"));
-        list.add(new Transaction( "G", "Feb 04 2017", "10.45", "Store Purchase Gas Station"));
-        list.add(new Transaction( "G", "Feb 05 2017", "12.42", "Card Reload at Walmart Supermarket"));
-        list.add(new Transaction( "G", "Feb 05 2017", "34.12", "Money transfer at Western Union"));
-        list.add(new Transaction( "G", "Feb 05 2017", "-32.40", "Check cash at Hiealeash Market Center"));
-        list.add(new Transaction( "G", "Feb 06 2017", "11.52", "Store Purchase Publix Supermarket"));
-        
-        list.add(new Transaction( "G", "Feb 01 2017", "-58.42", "Store Purchase VONAGE America"));
-        list.add(new Transaction( "G", "Feb 01 2017", "6.00", "Transferred from Savings"));
-        list.add(new Transaction( "G", "Feb 02 2017", "4.00", "Received Money From Marilyn Lebrija"));
-        list.add(new Transaction( "G", "Feb 03 2017", "50.00", "Money Added From Debit Card"));
-        list.add(new Transaction( "G", "Feb 03 2017", "58.00", "Store Purchase CVS Farmacy"));
-        list.add(new Transaction( "G", "Feb 04 2017", "10.45", "Store Purchase Gas Station"));
-        list.add(new Transaction( "G", "Feb 05 2017", "12.42", "Card Reload at Walmart Supermarket"));
-        list.add(new Transaction( "G", "Feb 05 2017", "34.12", "Money transfer at Western Union"));
-        list.add(new Transaction( "G", "Feb 05 2017", "-32.40", "Check cash at Hiealeash Market Center"));
-        list.add(new Transaction( "G", "Feb 06 2017", "11.52", "Store Purchase Publix Supermarket"));
-        
+        //String type, String statusCode, String date,String amount,String fee, String operationType, String description
+        list.add(new Transaction("PURCHASE", "F", "20170317", "25.00", "0.00", "D", "GOOGLE *Google Play    g.co/payhelp# CA"));
+        list.add(new Transaction("AUTHORIZATION REJECTED", "D", "20170315", "100.75", "0.00", "0", "AmazonPrime Membership amzn.com/prme WA"));
+        list.add(new Transaction("CHECK TO CARD", "G", "20170311", "10.00", "0.00", "C", "GIROCHECK VCVT[CHECKS0001]"));
+        list.add(new Transaction("CHECK FEE", "G", "20170311", "2.95", "0.00", "D", "Check Fee"));
+        list.add(new Transaction("AUTHORIZATION REJECTED", "D", "20170310", "100.75", "0.00", "D", "AmazonPrime Membership amzn.com/prme WA"));
+        list.add(new Transaction("CARD TO BANK", "D", "20170309", "0.50", "0.00", "D", "CARDTOBANK"));
+        list.add(new Transaction("CASH TO CARD", "G", "20170307", "9.01", "3.95", "C", "GIROCHECK VCVT[CASH0001]"));
+        list.add(new Transaction("CASH TO CARD", "G", "20170307", "9.01", "3.95", "C", "GIROCHECK VCVT[CASH0001]"));
+        list.add(new Transaction("CASH TO CARD", "G", "20170306", "9.01", "3.95", "C", "GIROCHECK VCVT[CASH0001]"));
+        list.add(new Transaction("CASH TO CARD", "G", "20170301", "9.02", "3.95", "C", "GIROCHECK VCVT[CASH0001]"));
+        list.add(new Transaction("CASH TO CARD", "G", "20170301", "9.01", "3.95", "C", "GIROCHECK VCVT[CASH0001]"));
+
         return list;
     }
+
     public IMap wmCashToCard(Map map) throws Exception {
         String pTransAmount = MapUtil.getStringValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false);
         String pCardNumber = MapUtil.getStringValueFromMap(map, ParameterName.CARD_NUMBER, false);

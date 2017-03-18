@@ -20,17 +20,18 @@ import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionRequest;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
-import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Roberto Rodriguez
  */
 @Service
+@Transactional
 public class TransactionManager {
 
     public String balanceInquiry(String cardNumber, String token) {
@@ -66,7 +67,7 @@ public class TransactionManager {
         return balance;
     }
 
-    public Map transactionHistory(Integer clientId, Integer page, Integer start, Integer limit, String startDateStr, String endDateStr) {
+    public Map transactionHistory(Integer clientId, Integer page, Integer start, Integer limit, String startDateStr, String endDateStr, String token) {
         DirexTransactionResponse technicardResponse;
         Map transactionHistory = new HashMap();
 
@@ -84,8 +85,8 @@ public class TransactionManager {
                 map.put(TransactionType.TRANSACTION_TYPE, TransactionType.TECNICARD_LAST_TRANSACTIONS);
                 map.put(ParameterName.CARD_NUMBER, card);
                 map.put(ParameterName.START_DATE, startDateStr);
-                map.put(ParameterName.END_DATE, endDateStr);
-                map.put(ParameterName.STATUS_CODE, "G");
+                map.put(ParameterName.END_DATE, endDateStr); 
+                map.put(ParameterName.REQUEST_ID, "" + token);
 
                 map.put(ParameterName.START, start);
                 map.put(ParameterName.MAX, limit);
@@ -109,43 +110,5 @@ public class TransactionManager {
         }
         return transactionHistory;
     }
- 
-
-    //KEEP this in case injecting Tecnicard.ejb not work in prod (need to test in real scenario)
-//    private DirexTransactionResponse sendMessageToHost(DirexTransactionRequest request) throws JMSException, Exception {
-//
-//        Properties props = new Properties();
-//        props.setProperty("hostName", NomHost.TECNICARD.toString());
-//        JMSManager jmsManager = JMSManager.get();
-//
-//        jmsManager.sendWithProps(request, jmsManager.getHostInQueue(), request.getCorrelation(), props);
-//
-//        return receiveMessageFromHost(request.getTransactionType(), request.getCorrelation());
-//
-//    }
-//
-//    private DirexTransactionResponse receiveMessageFromHost(TransactionType transactionType, String correlationId) throws Exception {
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TransactionAMSManager] Receiving message from host TECNICARD", null);
-//
-//        Message message = null;
-//        DirexTransactionResponse response;
-//        JMSManager jmsManager = JMSManager.get();
-//        try {
-//            message = jmsManager.receive(jmsManager.getHostOutQueue(), correlationId, 30000);
-//        } catch (Exception e) {
-//            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TransactionAMSManager] receiving message on receiveMessageFromHost() throws an exeption.", null);
-//            response = DirexTransactionResponse.forException(transactionType, ResultCode.RESPONSE_TIME_EXCEEDED, ResultMessage.RESPONSE_TIME_EXCEEDED, NomHost.TECNICARD.toString());
-//            response.setTransactionType(transactionType);
-//
-//            throw new Exception();
-//        }
-//
-//        ObjectMessage objectMessage = (ObjectMessage) message;
-//        Serializable s = objectMessage.getObject();
-//        response = (DirexTransactionResponse) s;
-//
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TransactionAMSManager] Message received", null);
-//
-//        return response;
-//    }
+  
 }

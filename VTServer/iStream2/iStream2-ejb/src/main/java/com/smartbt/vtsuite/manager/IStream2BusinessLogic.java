@@ -103,7 +103,7 @@ public class IStream2BusinessLogic {
             
             highQualityImage.setImgBackBinary(checkBack);
             highQualityImage.setImgFrontBinary(checkFront);
-            List<AuxField> auxFields = new ArrayList();
+            List<AuxField> auxFields = null;
             TransactionType transactionType = request.getTransactionType();
 
             IMap response = null;

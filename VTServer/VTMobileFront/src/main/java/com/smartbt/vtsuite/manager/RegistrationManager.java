@@ -258,13 +258,17 @@ public class RegistrationManager {
                 mobileClient.setForgotPasswordKey(forgotPwdKey);
                 mobileClient.setKeyExpirationTime(new Date());
 
-                sendEmailOrSMSNotification(mobileClient, sendBy);
+                try {
+                    sendEmailOrSMSNotification(mobileClient, sendBy);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new MobileValidationException(Constants.COULD_NOT_SEND_ACCESS_CODE, VTSuiteMessages.COULD_NOT_SEND_ACCESS_CODE);
+                }
 
                 MobileClientDao.get().saveOrUpdate(mobileClient);
             } else {
                 System.out.println("[FrontMobile.RegistrationManager] Code exists...Code: " + code);
                 if (!code.equals(mobileClient.getForgotPasswordKey())) {
-                    response.setStatusMessage(VTSuiteMessages.FORGOT_PASSWORD_KEY_MISMATCH);
                     throw new MobileValidationException(Constants.FORGOT_PASSWORD_KEY_MISMATCH, VTSuiteMessages.FORGOT_PASSWORD_KEY_MISMATCH);
                 }
 
@@ -274,26 +278,24 @@ public class RegistrationManager {
                 System.out.println("[FrontMobile.RegistrationManager] now time: " + now.getTime());
                 if (now.getTime() - keyExpirationTime.getTime() > 30 * 60 * 1000) {
                     System.out.println("[FrontMobile.RegistrationManager] difference is more than 30 minutes ");
-                    response.setStatusMessage(VTSuiteMessages.FORGOT_PASSWORD_KEY_EXPIRED);
                     throw new MobileValidationException(Constants.FORGOT_PASSWORD_KEY_EXPIRED, VTSuiteMessages.FORGOT_PASSWORD_KEY_EXPIRED);
                 }
 
+                //consume balance enquiry 
+                System.out.println("[FrontMobile.RegistrationManager] calling balanceInquiry");
+                String balance = transactionManager.balanceInquiry(cardNumber, token);
+
+                // To send details to Mobile application
+                Map data = new HashMap();
+                data.put("clientId", mobileClient.getId());
+                data.put("clientName", mobileClient.getClient().getFirstName());
+                data.put("clientEmail", mobileClient.getClient().getEmail());
+                data.put("clientPhone", mobileClient.getClient().getTelephone());
+                data.put("mobileClientUserName", mobileClient.getUserName());
+                data.put("balance", balance);
+                data.put("token", token);
+                response.setData(data);
             }
-
-            //consume balance enquiry 
-            System.out.println("[FrontMobile.RegistrationManager] calling balanceInquiry");
-            String balance = transactionManager.balanceInquiry(cardNumber, token);
-
-            // To send details to Mobile application
-            Map data = new HashMap();
-            data.put("clientId", mobileClient.getId());
-            data.put("clientName", mobileClient.getClient().getFirstName());
-            data.put("clientEmail", mobileClient.getClient().getEmail());
-            data.put("clientPhone", mobileClient.getClient().getTelephone());
-            data.put("mobileClientUserName", mobileClient.getUserName());
-            data.put("balance", balance);
-            data.put("token", token);
-            response.setData(data);
 
             response.setStatus(Constants.SUCCESS);
             response.setStatusMessage(VTSuiteMessages.SUCCESS);
@@ -303,6 +305,7 @@ public class RegistrationManager {
             mbe.printStackTrace();
             response = mbe.getResponse();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("[FrontMobile.RegistrationManager] LOGIN_FAILED");
             response.setStatus(Constants.CODE_ERROR_GENERAL);
             response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);
@@ -477,7 +480,7 @@ public class RegistrationManager {
     private void sendEmailOrSMSNotification(MobileClient mobileClient, String sendBy) throws Exception {
 
         if (sendBy.equalsIgnoreCase("sms")) {
-            String smsMessage = "Thank you for choosing VoltCash. Your password key is: " + mobileClient.getForgotPasswordKey()+". Ignore if you did not make this request.";
+            String smsMessage = "Thank you for choosing VoltCash. Your password key is: " + mobileClient.getForgotPasswordKey() + ". Ignore if you did not make this request.";
             String sendSMSProperty = System.getProperty("SEND_SMS");
             Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
 
@@ -496,13 +499,12 @@ public class RegistrationManager {
 
             System.out.println("--------------  SENDING " + EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY + " EMAIL --------------");
             System.out.println("Access Code:: " + mobileClient.getForgotPasswordKey());
-            
-            
+
             Email email = EmailManager.get().getByName(EmailName.ALERT_MOBILE_FORGOT_PASSWORD_KEY);
             email.setRecipients(mobileClient.getClient().getEmail());
             email.setValues(emailValuesMap);
             GoogleMail.get().sendEmail(email);
-            
+
         }
 
     }

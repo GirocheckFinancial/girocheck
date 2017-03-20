@@ -413,6 +413,7 @@ public class VTSuiteMessages {
     public static final String FORGOT_PASSWORD_KEY_EXPIRED = "Access Code has expired.";
     public final static String INVALID_TOKEN = "Invalid Token.";
     public final static String COULD_NOT_SEND_ACCESS_CODE = "We were not able to send you the Access Code. Please contact customer service.";
+    public final static String INVALID_OLD_PASSWORD = "Invalid Old Password.";
     
     
     /**

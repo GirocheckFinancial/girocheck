@@ -50,10 +50,23 @@ public class MICR {
         MICR _this = new MICR();
         _this.setExpansionType("TOAD");
         _this.setEntryType("S");
-        _this.setLine((String)map.get(ParameterName.MICR));
+        
+        String originalMICR = (String)map.get(ParameterName.MICR);
+        System.out.println("MICR.build() -> originalMICR = " + originalMICR);
+        String translatedMICR = translateMICR(originalMICR);
+        System.out.println("MICR.build() -> translatedMICR = " + translatedMICR);
+        _this.setLine(translatedMICR);
         
         return _this;
     }
+    
+     private static String translateMICR(String originalMICR){
+        if(originalMICR != null){
+            return originalMICR.replace("C", "O").replace("A", "T");
+        }
+        return "";
+    }
+   
     
      @Override
     public String toString(){

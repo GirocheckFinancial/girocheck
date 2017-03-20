@@ -209,12 +209,12 @@ public class RegistrationManager {
         return response;
     }
 
-    public ResponseData updateProfile(String clientId, String username, String email, String phone, String password, String token) {
+    public ResponseData updateProfile(String clientId, String username, String email, String phone, String password, String oldPassword, String token) {
 
         ResponseData response = ResponseData.OK();
 
         try {
-            MobileClient mobileClient = validateDataAndGetClient(clientId, username, email, phone);
+            MobileClient mobileClient = validateDataAndGetClient(clientId, username, email, phone,oldPassword);
 
             mobileClient.setUserName(username);
             if (password != null && !password.isEmpty()) {
@@ -449,7 +449,7 @@ public class RegistrationManager {
         return mobileClient;
     }
 
-    private MobileClient validateDataAndGetClient(String clientId, String username, String email, String phone) throws MobileValidationException {
+    private MobileClient validateDataAndGetClient(String clientId, String username, String email, String phone, String oldPassword) throws MobileValidationException, ValidationException, NoSuchAlgorithmException {
 
         if (clientId == null || clientId.isEmpty()) {
             throw new MobileValidationException(Constants.REQUIRED_FIELD, VTSuiteMessages.REQUIRED_FIELD + "clientId");
@@ -474,6 +474,16 @@ public class RegistrationManager {
         if (mobileClient == null) {
             throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
         }
+        
+        if(oldPassword != null){
+            String encryptPassword = PasswordUtil.encryptPassword(oldPassword);
+            if(!mobileClient.getPassword().equalsIgnoreCase(encryptPassword)){
+                throw new MobileValidationException(Constants.INVALID_OLD_PASSWORD, VTSuiteMessages.INVALID_OLD_PASSWORD);
+            }
+        }else{
+            throw new MobileValidationException(Constants.INVALID_OLD_PASSWORD, VTSuiteMessages.INVALID_OLD_PASSWORD);
+        }
+        
         return mobileClient;
     }
 

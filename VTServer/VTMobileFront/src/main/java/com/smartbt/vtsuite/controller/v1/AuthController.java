@@ -16,6 +16,7 @@
 package com.smartbt.vtsuite.controller.v1;
 
 import com.smartbt.girocheck.common.VTSuiteMessages;
+import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay;
 import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
@@ -24,6 +25,7 @@ import com.smartbt.vtsuite.conf.interceptors.ExceptionInterceptor;
 import static com.smartbt.vtsuite.controller.v1.GeneralController.TOKEN;
 import com.smartbt.vtsuite.manager.AuthManager;
 import com.smartbt.vtsuite.manager.TransactionManager;
+import com.smartbt.vtsuite.util.MobileValidationException;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.util.LinkedHashMap;
 import javax.servlet.http.HttpSession;
@@ -78,6 +80,30 @@ public class AuthController {
             mobileClient.setBalance(balance);
             response.setData(mobileClient);
         }
+         
+        return response;
+    }
+    
+      @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    public ResponseData resetPassword(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {
+        String clientId = (String) params.get("clientId");
+        String password = (String) params.get("newPassword"); 
+        
+        ResponseData response = ResponseData.OK();
+        try{
+             authManager.resetPassword(clientId, password);
+        }catch(MobileValidationException mbe){
+            mbe.printStackTrace();
+            return mbe.getResponse();
+        }catch(Exception e){
+            e.printStackTrace();
+             return ResponseData.ERROR();
+        }  
+        
+        System.out.println("AuthController.login");
+        
+        
+         
          
         return response;
     }

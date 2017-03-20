@@ -40,6 +40,13 @@ public class ResponseData<T> extends BaseResponse {
         return response;
     }
 
+    public static ResponseData ERROR() {
+        ResponseData response = new ResponseData();
+        response.setStatus(Constants.CODE_ERROR_GENERAL);
+        response.setStatusMessage(VTSuiteMessages.ERROR_GENERAL);
+        return response;
+    }
+
     public ResponseData(int status, String statusMessage) {
         super(status, statusMessage); 
     }

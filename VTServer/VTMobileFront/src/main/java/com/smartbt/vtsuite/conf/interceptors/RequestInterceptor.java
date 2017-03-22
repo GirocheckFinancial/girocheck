@@ -63,10 +63,10 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         String uri = request.getRequestURI();
         System.out.println("URL = " + uri);
 
-//        if (isExcludedURL(uri)) {
-//            System.out.println("Excluded URL, (not need to check for token)");
-//            return true;
-//        }
+        if (isExcludedURL(uri)) {
+            System.out.println("Excluded URL, (not need to check for token)");
+            return true;
+        }
 
         String tokenInSession = (String) request.getSession().getAttribute("TOKEN");
         String token = request.getHeader("TOKEN");
@@ -78,15 +78,13 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         if(tokenInSession == null){
             request.getSession().setAttribute(TOKEN, token);
-        }
-        
-         return true;
+        } 
 
-//        boolean isValid = (tokenInSession != null && token != null && token.equals(tokenInSession));
-//
-//        System.out.println("is Token Valid = " + isValid);
-//
-//        return isValid;
+        boolean isValid = (tokenInSession != null && token != null && token.equals(tokenInSession));
+
+        System.out.println("is Token Valid = " + isValid);
+
+        return isValid;
     }
 
     @Override

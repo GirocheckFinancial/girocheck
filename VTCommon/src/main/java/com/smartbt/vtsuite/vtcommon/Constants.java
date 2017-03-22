@@ -155,6 +155,8 @@ public class Constants {
     public static final int FORGOT_PASSWORD_KEY_MISMATCH = 807;
     public static final int FORGOT_PASSWORD_KEY_EXPIRED = 808;
     public static final int INVALID_TOKEN = 809;
+    public static final int COULD_NOT_SEND_ACCESS_CODE = 810;
+    public static final int INVALID_OLD_PASSWORD = 811;
     
     
     public static final int CARD_NOT_PERSONALIZED = 902;

@@ -89,21 +89,22 @@ public class GeneralController {
 
     @RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
     public ResponseData updateProfile(@RequestBody LinkedHashMap params) throws Exception {
-
         String clientId = (String) params.get("clientId");
         String username = (String) params.get("username");
         String email = (String) params.get("email");
         String phone = (String) params.get("phone");
         String password = (String) params.get("password");
+        String oldPassword = (String) params.get("oldPassword");
 
         System.out.println("GeneralController.register: \n username: " + username
                 + "\n password: " + password
+                + "\n oldPassword: " + oldPassword
                 + "\n email: " + email
                 + "\n phone: " + phone
                 + "\n clientId: " + clientId);
 
         String token = Utils.generateToken();
-        return regManager.updateProfile(clientId, username, email, phone, password, token);
+        return regManager.updateProfile(clientId, username, email, phone, password, oldPassword,token);
     }
 
     @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)

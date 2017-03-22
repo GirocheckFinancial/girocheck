@@ -28,6 +28,7 @@ import com.smartbt.vtsuite.boundary.PCAReverseRequest;
 import com.smartbt.vtsuite.boundary.PCAReverseResponse;
 import com.smartbt.vtsuite.boundary.PCAService;
 import java.math.BigDecimal; 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -42,7 +43,7 @@ public class CertegyBusinessLogic {
 
     private PCAService service;
     private PCA port;
-
+ 
     public static synchronized CertegyBusinessLogic get() {
         if (INSTANCE == null) {
             INSTANCE = new CertegyBusinessLogic();
@@ -106,5 +107,5 @@ public class CertegyBusinessLogic {
         PCAReverseResponse response = port.reverse(request);
         return response != null ? response.getResponseCode() : "";
     }
-
+ 
 }

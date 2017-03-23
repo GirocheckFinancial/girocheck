@@ -529,6 +529,8 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Failed to get state by abbreviation : " + idStateAbbreviation + " sending FL instead.", null);
                         e.printStackTrace();
                     }
+                }else{
+                    System.out.println("personalInfoRequestMap DOES NOT CONTAIN :: IDSTATE");
                 }
 
                 request.getTransactionData().put(ParameterName.COUNTRY, EnumCountry.EUA.getCode() + "");

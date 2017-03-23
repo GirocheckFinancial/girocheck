@@ -684,7 +684,7 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      * ******OE TIMER START*******
      */
     private static Map reqOELogMethod;
-    private static Map respOELogMethod;
+    private Map respOELogMethod = new HashMap();
     private static boolean timeOutOELog = true;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1000);
 

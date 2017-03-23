@@ -105,6 +105,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.ADDRESS, getAddress());
         map.put(ParameterName.CITY, getCity());
         map.put(ParameterName.STATE, getState());
+        map.put(ParameterName.IDSTATE, getState());
         map.put(ParameterName.FIRST_NAME, getFirstName());
 
         Date bornD = getDateFromString(getBornDate());

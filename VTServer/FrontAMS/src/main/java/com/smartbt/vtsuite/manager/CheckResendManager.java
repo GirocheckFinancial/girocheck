@@ -56,7 +56,7 @@ public class CheckResendManager {
         try {
             Check check = checkResendDAO.getCheckDetails(id);
             Map map = new HashMap();
-            map.put(TransactionType.TRANSACTION_TYPE, TransactionType.ISTREAM2_SEND_SINCE_ICL);
+            map.put(TransactionType.TRANSACTION_TYPE, TransactionType.ISTREAM2_SEND_SINGLE_ICL);
             String prodProperty = System.getProperty("PROD");
             Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
             if(isProd)
@@ -86,7 +86,7 @@ public class CheckResendManager {
             
             direxTransactionRequest.setTransactionData(map);
             direxTransactionRequest.setCorrelation(checkId);
-            direxTransactionRequest.setTransactionType(TransactionType.ISTREAM2_SEND_SINCE_ICL);
+            direxTransactionRequest.setTransactionType(TransactionType.ISTREAM2_SEND_SINGLE_ICL);
 
             correlationId = checkId;
 
@@ -128,7 +128,7 @@ public class CheckResendManager {
 
         jmsManager.sendWithProps(request, jmsManager.getHostInQueue(), correlationId, props);
 
-        if (request.getTransactionType() == TransactionType.ISTREAM2_SEND_SINCE_ICL) {
+        if (request.getTransactionType() == TransactionType.ISTREAM2_SEND_SINGLE_ICL) {
             return receiveMessageFromHost(request.getTransactionType(), hostName, waitTime, notifyToIstream);
         } else {
             return null;

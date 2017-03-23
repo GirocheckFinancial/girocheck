@@ -96,7 +96,7 @@ public class IDScanner {
     public static Map<ParameterName, Object> parseID(String authKey, String text) throws Exception {
         Map<ParameterName, Object> map = null;
         try {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID", null);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
             map = parseIdLocally(text);
         } catch (Exception e) {
@@ -119,8 +119,7 @@ public class IDScanner {
 
     public static Map<ParameterName, Object> parseIdLocally(String text) {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally...", null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
-           
+
         String decoded = new String(Base64.decodeBase64(text));
         return new DriverLicense(decoded).toMap();
     }

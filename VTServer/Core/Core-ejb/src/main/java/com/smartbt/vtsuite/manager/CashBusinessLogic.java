@@ -1,11 +1,10 @@
 
 /*
 
-@Author Roberto Rodriguez
-robertoSoftwareEngineer@gmail.com
+ @Author Roberto Rodriguez
+ robertoSoftwareEngineer@gmail.com
 
-*/
-
+ */
 package com.smartbt.vtsuite.manager;
 
 import com.smartbt.vtsuite.util.CoreTransactionUtil;
@@ -34,7 +33,7 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
     @Override
     public void process(DirexTransactionRequest request, Transaction transaction) throws Exception {
         //This variable will control the behavior in Exceptional cases
-        boolean sendChoiceCancelationRequest = false;
+        boolean sendOEDevolutionIfFails = false;
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] Send answer to TERMINAL", null);
 
@@ -70,33 +69,46 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
 
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] Getting personal info from PersonalInfoFromIDReader()", null);
                 DirexTransactionResponse personalInfoResponse = getPersonalInfoFromIDReader(request);
- 
+
                 personalInfoRequestMap = personalInfoResponse.getTransactionData();
 
             } else {
                 personalInfoRequestMap = request.getTransactionData();
             }
- 
+
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] Personal info from PersonalInfoFromIDReader() done", null);
 
             request.getTransactionData().putAll(personalInfoRequestMap);
 
-           
             //------ PROCESS PERSONAL INFO  ------
-            
-            processPersonalInfo(transaction,request, personalInfoRequestMap);
-             
+            processPersonalInfo(transaction, request, personalInfoRequestMap);
+
             //-------SENT TO CHOICE ------
-            DirexTransactionRequest reqCHOICE = request;
-            reqCHOICE.setTransactionType(TransactionType.CHOICE_INSERT_TRANSACTION);
+            //-------SEND TO ORDER_EXPRESS ------ 
+            request.setTransactionType(TransactionType.ORDER_EXPRESS_CONTRATACIONES);
 
-            response = sendMessageToHost(reqCHOICE, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
+            response = sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
 
-            //---- if CHOICE Success --------    
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] CHOICE Success", null);
- 
-            
-            sendChoiceCancelationRequest = true;
+            Map oeResponseMap = response.getTransactionData();
+
+            if (oeResponseMap.containsKey(ParameterName.AUTHO_NUMBER)) {
+                String authoNumber = (String) oeResponseMap.get(ParameterName.AUTHO_NUMBER);
+                transaction.setOrderExpressId(authoNumber);
+                request.getTransactionData().put(ParameterName.AUTHO_NUMBER, authoNumber);
+            }
+
+            if (oeResponseMap.containsKey(ParameterName.IDBENEFICIARY)) {
+                transaction.getClient().setIdBeneficiary((String) oeResponseMap.get(ParameterName.IDBENEFICIARY));
+            }
+
+            sendOEDevolutionIfFails = true;
+
+            //------SEND OE LOGS --------- 
+            request.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
+            sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+
+            //---- if ORDER_EXPRESS Success --------    
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] ORDER_EXPRESS Success", null);
 
             //----------  TECNICARD VALIDATON ------------------
             String hostName = (String) request.getTransactionData().get(ParameterName.HOSTNAME);
@@ -115,9 +127,9 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
 
             //-------------- WAIT CONFIRMATION FROM TERMINAL -------------
             DirexTransactionRequest confirmationRequest = null;
-     
+
             confirmationRequest = receiveMessageFromFront(TransactionType.TECNICARD_CONFIRMATION, correlationId, transaction);
-        
+
             correlationId = confirmationRequest.getCorrelation();
             request.setCorrelation(correlationId);
             currentQueue = jmsManager.getCore2OutQueue();
@@ -134,13 +146,23 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CashBusinessLogic] Before consuming choiceNotifyPayment " + transaction.getSub_Transaction().size(), null);
 
-            choiceNotifyPayment(request, transaction);
+            //choiceNotifyPayment(request, transaction);
+            if (response.wasApproved()) {
+                try {
+                    request.setTransactionType(TransactionType.ORDER_EXPRESS_REPORTAPAGO);
+                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+                } catch (Exception e) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CashBusinessLogic] OEPago Failed.", null);
+                    e.printStackTrace();
+                }
+            }
+
             //if fails, it puts me in hte transaction all I need
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CashBusinessLogic] choiceNotifyPayment sent. Transaction done. Success." + transaction.getSub_Transaction().size(), null);
 
             transaction.setResultCode(ResultCode.SUCCESS.getCode());
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
- 
+
             CoreTransactionUtil.persistTransaction(transaction);
 
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] Transaction finished successfully. ", null);
@@ -150,8 +172,15 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
         } catch (TransactionalException transactionalException) {
             System.out.println("*********** TransactionalException ************");
 
-            if (sendChoiceCancelationRequest) {
-                choiceCancellationRequest(request, transaction);
+            if (sendOEDevolutionIfFails) {
+//                choiceCancellationRequest(request, transaction);
+                try {
+                    request.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
+                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+                } catch (Exception e) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CashBusinessLogic] OEDevolution Failed.", null);
+                    e.printStackTrace();
+                }
             }
 
             if (transactionalException.getResponse() != null) {
@@ -179,7 +208,7 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
             CoreTransactionUtil.subTransactionFailed(transaction, currentQueue, correlationId, request.getTransactionType(), e.getMessage());
         }
     }
- 
+
     private DirexTransactionRequest receiveMessageFromFront(TransactionType transactionType, String correlationId, Transaction transaction) throws Exception {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "", null);
@@ -223,6 +252,5 @@ public class CashBusinessLogic extends AbstractCommonBusinessLogic {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CashBusinessLogic] Message received. ", null);
         return request;
     }
-     
 
 }

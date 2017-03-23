@@ -46,7 +46,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         Queue currentQueue = jmsManager.getCoreOutQueue();
 
         //This variables will control the behavior in Exceptional cases
-        boolean sendChoiceCancelationRequestIfFails = false;
+        boolean sendOEDevolutionIfFails = false;
         // boolean sendIstreamCheckAuthSubmit = false;
         boolean sendCertegyReverseRequestIfFails = false;
         boolean sendWestechSendSingleICL = false;
@@ -109,22 +109,34 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 //                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ParameterName.ID from personal info: " + checkInfoRequestMap.get(ParameterName.ID), null);
 //                throw new TransactionalException(ResultCode.ISTREAM_FRONT_PERSONAL_INFO_RECEIVED_AS_NULL, TransactionType.PERSONAL_INFO, "Personal Info sent ID = 0");
 //            }
-
             //------ PROCESS PERSONAL INFO  ------
             processPersonalInfo(transaction, request, checkInfoRequestMap);
 
-            //-------SEND TO CHOICE ------ 
-            request.setTransactionType(TransactionType.CHOICE_INSERT_TRANSACTION);
+            //-------SEND TO ORDER_EXPRESS ------ 
+            request.setTransactionType(TransactionType.ORDER_EXPRESS_CONTRATACIONES);
 
-            response = sendMessageToHost(request, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
+            response = sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
 
-            sendChoiceCancelationRequestIfFails = true;
+            Map oeResponseMap = response.getTransactionData();
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] CHOICE Success", null);
+            if (oeResponseMap.containsKey(ParameterName.AUTHO_NUMBER)) {
+                String authoNumber = (String) oeResponseMap.get(ParameterName.AUTHO_NUMBER);
+                transaction.setOrderExpressId(authoNumber);
+                request.getTransactionData().put(ParameterName.AUTHO_NUMBER, authoNumber);
+            }
 
+            if (oeResponseMap.containsKey(ParameterName.IDBENEFICIARY)) {
+                transaction.getClient().setIdBeneficiary((String) oeResponseMap.get(ParameterName.IDBENEFICIARY));
+            }
+
+            sendOEDevolutionIfFails = true;
+ 
+            //------SEND OE LOGS --------- 
+            request.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
+            sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+          
             //-------SEND TO CERTEGY ------
-            request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION);
-            System.out.println("CheckBusinessLogic -> sending to certegy...");
+            request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION); 
             try {
                 sendMessageToHost(request, NomHost.CERTEGY, CERTEGY_WAIT_TIME, transaction);
             } catch (TransactionalException te) {
@@ -143,9 +155,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             request.setTransactionType(TransactionType.GENERIC_HOST_VALIDATION);
             request.getTransactionData().put(TransactionType.TRANSACTION_TYPE, originalTransaction);
             response = sendMessageToHost(request, NomHost.valueOf(hostName), GENERIC_VALIDATION_WAIT_TIME, transaction);
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] Recived message from " + hostName + " Validation", null);
-
+ 
             String estimatedPostingTime = response.getResultMessage();
 
             sendAnswerToTerminal(TransactionType.get(transaction.getTransactionType()), ResultCode.SUCCESS, "", correlationId);
@@ -171,7 +181,15 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             if (response.wasApproved()) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Sending answer to Terminal -> correlationId = " + correlationId, null);
                 sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.SUCCESS, estimatedPostingTime, correlationId);
-                choiceNotifyPayment(request, transaction);
+              //  choiceNotifyPayment(request, transaction);
+
+                try {
+                    request.setTransactionType(TransactionType.ORDER_EXPRESS_REPORTAPAGO);
+                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+                } catch (Exception e) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] OEPago Failed.", null);
+                    e.printStackTrace();
+                }
                 sendWestechSendSingleICL = true;
             }
 
@@ -179,16 +197,16 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             transaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
 
             if (sendWestechSendSingleICL) {
-                request.setTransactionType(TransactionType.ISTREAM2_SEND_SINCE_ICL);
+                request.setTransactionType(TransactionType.ISTREAM2_SEND_SINGLE_ICL);
 
                 CheckStatus checkStatus = CheckStatus.COMPLETED;
                 try {
                     response = sendMessageToHost(request, NomHost.ISTREAM2, ISTREAM_HOST_WAIT_TIME, transaction);
-                 } catch (TransactionalException e) {
+                } catch (TransactionalException e) {
                     System.out.println("ISTREAM2_SEND_SINCE_ICL was not approved. response.wasApproved() = " + response.wasApproved());
                     checkStatus = CheckStatus.HOLD;
-                 }
-                 
+                }
+
                 transaction.getCheck().setStatus(checkStatus.getStatus());
             }
 
@@ -202,8 +220,15 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         } catch (TransactionalException transactionalException) {
             System.out.println("*********** TransactionalException ************");
 
-            if (sendChoiceCancelationRequestIfFails) {
-                choiceCancellationRequest(request, transaction);
+            if (sendOEDevolutionIfFails) {
+//                choiceCancellationRequest(request, transaction);
+                try {
+                    request.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
+                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+                } catch (Exception e) {
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] OEDevolution Failed.", null);
+                    e.printStackTrace();
+                }
             }
 
             if (sendCertegyReverseRequestIfFails) {

@@ -59,7 +59,7 @@ public enum TransactionType {
     CERTEGY_AUTHENTICATION(NomHost.CERTEGY, 40),
     CERTEGY_REVERSE_REQUEST(NomHost.CERTEGY, 41),
     
-    ISTREAM2_SEND_SINCE_ICL(NomHost.ISTREAM2, 42),
+    ISTREAM2_SEND_SINGLE_ICL(NomHost.ISTREAM2, 42),
     CHECK_INFO(null, 43);
 
     private NomHost host;
@@ -168,7 +168,7 @@ public enum TransactionType {
             case 41: 
                 return TransactionType.CERTEGY_REVERSE_REQUEST;
             case 42: 
-                return TransactionType.ISTREAM2_SEND_SINCE_ICL;
+                return TransactionType.ISTREAM2_SEND_SINGLE_ICL;
             default:
                   return TransactionType.TRANSACTION_TYPE;
         }

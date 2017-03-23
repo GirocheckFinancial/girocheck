@@ -26,22 +26,16 @@ public class Scan {
 
     public PersonalInfoRes personalInfo(PersonalInfoRequest arg0) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] Receiving personalInfo at "+ (new Date()), null);
-  
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] Receiving personalInfo at " + (new Date()), null);
+
         return new PersonalInfoRes().build(FrontManager.processTransaction(arg0));
     }
 
     public CheckInfoRes checkInfo(CheckInfoRequest arg0) throws Exception {
- CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] Receiving checkInfo at "+ (new Date()), null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] checkInfo", null);
- 
-        String user = arg0.getUser();
-        String passw = arg0.getPassword();
-        
-        Map map = arg0.toMap();
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] checkInfo completed.", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] Receiving checkInfo at " + (new Date()), null);
+
         //   return new CheckInfoRes().mock(user, passw);
-     return new CheckInfoRes().build(FrontManager.processTransaction(arg0));
+        return new CheckInfoRes().build(FrontManager.processTransaction(arg0));
     }
 
     public CertegyInfoRes certegyInfo(CertegyInfoRequest arg0) throws Exception {

@@ -419,11 +419,11 @@ public class CoreTransactionManager {
                     && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                     String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
+ 
+                    if (cardNumber != null && !cardNumber.isEmpty() && cardNumber.length() >= 12) {
+                      System.out.println("[CoreTransactionManager] cardNumberCR == *******" + cardNumber.substring(12));
 
-                    System.out.println("[CoreTransactionManager] cardNumberCR == " + cardNumber);
-
-                    if (cardNumber != null && !cardNumber.isEmpty()) {
-//                      
+                        
                         CreditCard creditCard = null;
                         try {
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Obtaining Card for transactionType = " + transactionType.toString(), null);

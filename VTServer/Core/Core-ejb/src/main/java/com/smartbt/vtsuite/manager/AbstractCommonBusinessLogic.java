@@ -49,6 +49,8 @@ import javax.jms.Queue;
 import javax.sql.rowset.serial.SerialBlob;
 import static com.smartbt.vtsuite.util.CoreTransactionUtil.*;
 import com.smartbt.vtsuite.util.TransactionalException;
+import com.smartbt.vtsuite.vtcommon.nomenclators.NomState;
+import java.util.Arrays;
 
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactionBusinessLogic {
@@ -66,6 +68,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
     protected static final long GENERIC_CARD_LOAD_WAIT_TIME = 60000;//1min 
     protected static final long CERTEGY_WAIT_TIME = 30000;//30sec
     protected static final long CERTEGY_INFO_WAIT_TIME = 420000;//7min
+    protected static final long ORDER_EXPRESS_WAIT_TIME = 300000;//5min
 
     protected static CountryManager countryManager = CountryManager.get();
     protected static StateManager stateManager = StateManager.get();
@@ -99,7 +102,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
     }
 
     protected DirexTransactionResponse sendMessageToHost(DirexTransactionRequest request, NomHost host, long waitTime, Transaction transaction) throws JMSException, Exception {
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Send message to host " + host, null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Send " + request.getTransactionType() + " to host " + host, null);
 
         Properties props = new Properties();
         props.setProperty("hostName", host.toString());
@@ -143,7 +146,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             throw new TransactionalException(ResultCode.getFromHost(host), transactionType, "Message received is null.");
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Message received:: response.wasApproved() = " + response.wasApproved(), null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Message received:: for SubTransaction: " + transactionType + ". response.wasApproved() = " + response.wasApproved(), null);
 
         return response;
     }
@@ -162,17 +165,17 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
     }
 
-    protected void choiceCancellationRequest(DirexTransactionRequest request, Transaction transaction) throws Exception {
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic]  Sending  ChoiceCancellationRequest", null);
-        DirexTransactionRequest choiceRequest = request.clone();
-        choiceRequest.setTransactionType(TransactionType.CHOICE_CANCELATION_REQUEST);
-
-        sendMessageToHost(choiceRequest, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Response from CHOICE, subTRANSACTION FINISHED. ", null);
-
-    }
-
+    //Don't remove  (This is for when switch to Choice)
+//    protected void choiceCancellationRequest(DirexTransactionRequest request, Transaction transaction) throws Exception {
+//
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic]  Sending  ChoiceCancellationRequest", null);
+//        DirexTransactionRequest choiceRequest = request.clone();
+//        choiceRequest.setTransactionType(TransactionType.CHOICE_CANCELATION_REQUEST);
+//
+//        sendMessageToHost(choiceRequest, NomHost.CHOICE, CHOICE_WAIT_TIME, transaction);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Response from CHOICE, subTRANSACTION FINISHED. ", null);
+//
+//    }
     protected void certegyReverseRequest(DirexTransactionRequest request, Transaction transaction) throws Exception {
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic]  Sending  CertegyReverseRequest", null);
@@ -194,7 +197,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
     protected void feeCalculator(DirexTransactionRequest request, Transaction transaction) throws TransactionalException {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[NewCoreComplexCashBL] feeCalculator() start ...", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] feeCalculator() start ...", null);
 
         try {
             HibernateUtil.beginTransaction();
@@ -209,7 +212,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
             Double amount = (Double) request.getTransactionData().get(ParameterName.AMMOUNT);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] FEE_AMOUNT applied: " + feeAmount, null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] FEE_AMOUNT applied: " + feeAmount, null);
             Double payOut = amount - feeAmount;//No se le resta ese fee a peticion de carlos aparicio dic/04/2014
 
             request.getTransactionData().put(ParameterName.PAYOUT_AMMOUNT, payOut);
@@ -218,7 +221,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             transaction.setFeeAmmount(feeAmount);
             transaction.setPayoutAmmount(payOut);
 
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreComplexCashBL] feeCalculator() done with PAYOUT_AMOUNT: " + payOut, null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] feeCalculator() done with PAYOUT_AMOUNT: " + payOut, null);
 
             HibernateUtil.commitTransaction();
         } catch (Exception e) {
@@ -422,7 +425,9 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                 }
 
                 if (personalInfoMap != null) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] ----------------- Printing PersonInfo map  -----------------  ", null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] ----------------- Printing IDScanner output map  -----------------  ", null);
+                    System.out.println(Arrays.toString(personalInfoMap.entrySet().toArray()));
+
                     String ssn = (String) request.getTransactionData().get(ParameterName.SSN);
                     dtr.getTransactionData().put(ParameterName.IDTYPE, CoreTransactionUtil.getIdTypeFromId(ssn));
                     dtr.getTransactionData().put(ParameterName.ID, personalInfoMap.get(ParameterName.ID));
@@ -481,10 +486,10 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         //------ CREATE PERSONAL INFO SUBTRANSACTION ------
         addSuccessfulSubTransaction(transaction, TransactionType.PERSONAL_INFO);
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Persist personal Info", null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[AbstractCommonBusinessLogic] Persist personal Info", null);
         //PERSIST PERSONAL INFO
 
-        fixPersonalInfoName(request);
+        fixPersonInfoName(request.getTransactionData());
         fillOutClient(request.getTransactionData(), transaction);
         fillOutClientAddress(request.getTransactionData(), transaction);
         PersonalIdentification identification = fillOutPersonalIdentification(request.getTransactionData(), transaction);
@@ -506,7 +511,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
                 if (personalInfoRequestMap.containsKey(ParameterName.IDSTATE)) {
                     String idStateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDSTATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] For IDSTATE StateAbbreviation >>> = " + idStateAbbreviation, null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For IDSTATE StateAbbreviation >>> = " + idStateAbbreviation, null);
                     State statee = stateManager.getByAbbreviation(idStateAbbreviation);
 
                     if (statee != null) {
@@ -515,13 +520,22 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     } else {
                         request.getTransactionData().put(ParameterName.IDSTATE, EnumState.FL.getId() + "");
                     }
+
+                    try {
+                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(idStateAbbreviation).getId() + "");
+                    } catch (Exception e) {
+                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.FL.getId());
+
+                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Failed to get state by abbreviation : " + idStateAbbreviation + " sending FL instead.", null);
+                        e.printStackTrace();
+                    }
                 }
 
                 request.getTransactionData().put(ParameterName.COUNTRY, EnumCountry.EUA.getCode() + "");
 
                 if (personalInfoRequestMap.containsKey(ParameterName.STATE)) {
                     String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] For STATE StateAbbreviation >>> = " + stateAbbreviation, null);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For STATE StateAbbreviation >>> = " + stateAbbreviation, null);
                     State statee = stateManager.getByAbbreviation(stateAbbreviation);
 
                     if (statee != null) {
@@ -538,11 +552,11 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
                     String cell_phone = (String) request.getTransactionData().get(ParameterName.PHONE);
                     request.getTransactionData().put(ParameterName.CELL_PHONE, cell_phone.substring(3));
-                    }
+                }
 
                 HibernateUtil.commitTransaction();
             } catch (Exception e) {
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] Error 2 ", e.getMessage());
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Error 2 ", e.getMessage());
                 HibernateUtil.rollbackTransaction();
 
                 throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, e);
@@ -555,52 +569,4 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
         transaction.getClient().setData_SD(set);
     }
 
-    protected void fixPersonalInfoName(DirexTransactionRequest requestData) throws Exception {
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName(...)", null);
-        try {
-
-            String name = (String) requestData.getTransactionData().get(ParameterName.FIRST_NAME);
-            String middleName = (String) requestData.getTransactionData().get(ParameterName.MIDDLE_NAME);
-            String lastName = (String) requestData.getTransactionData().get(ParameterName.LAST_NAME);
-            String[] aux;
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName to fix name: " + name, null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName to fix Middle name: " + middleName, null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName to fix last name: " + lastName, null);
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName with name: " + name, null);
-            if (name != null && name.contains(" ")) {
-                aux = name.split(" ");
-                name = aux[0];
-                middleName = aux[1];
-            }
-            if (name != null && name.length() > 15) {
-                name = name.substring(0, 15);
-            }
-            if (middleName != null && middleName.length() > 15) {
-                middleName = middleName.substring(0, 15);
-            }
-            if (lastName != null && lastName.length() > 15) {
-                lastName = lastName.substring(0, 15);
-            }
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName fixed with name: " + name, null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName fixed with Middle name: " + middleName, null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName fixed with last name: " + lastName, null);
-
-            if (name != null) {
-                requestData.getTransactionData().put(ParameterName.FIRST_NAME, name);
-            }
-            if (middleName != null) {
-                requestData.getTransactionData().put(ParameterName.MIDDLE_NAME, middleName);
-            }
-            if (lastName != null) {
-                requestData.getTransactionData().put(ParameterName.LAST_NAME, lastName);
-            }
-        } catch (Exception e) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] fixPersonalInfoName() Error fixing full name.", null);
-
-            throw new TransactionalException(ResultCode.CORE_ERROR, TransactionType.PERSONAL_INFO, e);
-        }
-    }
 }

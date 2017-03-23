@@ -55,11 +55,11 @@ public class WestechHostManager {
             String prodProperty = System.getProperty("PROD");
             Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
 
-//            if (isProd) {
+            if (isProd) {
                 response = WestechBusinessLogic.get().process(request);
-//            } else {
-//                response = MockWestechBusinessLogic.get().process(request);
-//            }
+            } else {
+                response = MockWestechBusinessLogic.get().process(request);
+            }
  
             if (response.wasApproved()) {
                 subTransaction.setResultCode(response.getResultCode().getCode());

@@ -60,18 +60,18 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      * Constructor
      */
     public OrderExpressBusinessLogic() {
-        
-        String url= "";
+
+        String url = "";
         try {
             //development url:http://10.10.2.119:8081/stored/Service1.asmx
             url = System.getProperty("WS_OE_PRODUCTION_URL");
 
-            if(url == null){
+            if (url == null) {
                 url = "http://gwin.orderexpress.com.mx:8081/stored/Service1.asmx?wsdl";
             }
-            
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] URL = " + url,null);
-            
+
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] URL = " + url, null);
+
             BindingProvider bindingProvider = (BindingProvider) port;
             bindingProvider.getRequestContext().put(
                     BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
@@ -80,44 +80,48 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         } catch (Exception ex) {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error", ex.getMessage());
         }
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] URL value: " +url,null);
-        
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] URL value: " + url, null);
+
     }
 
     @Override
-    public void preprocess( DirexTransactionRequest tr ) throws Exception {
+    public void preprocess(DirexTransactionRequest tr) throws Exception {
     }
 
     @Override
-    public DirexTransactionResponse process( DirexTransactionRequest request ) throws Exception {
+    public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] processing ...",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] processing ...", null);
 
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
         TransactionType transactionType = request.getTransactionType();
         Map map = request.getTransactionData();
         Map response = map;
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] processing transaction type: " +transactionType.toString(),null);
-        switch(transactionType){
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] processing transaction type: " + transactionType.toString(), null);
+        if(map.containsKey(ParameterName.AUTHO_NUMBER)){
+             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] AUTHO_NUMBER = " + map.get(ParameterName.AUTHO_NUMBER), null);
+        }
+        
+        switch (transactionType) {
             case ORDER_EXPRESS_CONTRATACIONES:
-                response = contrataciones( map );
+                response = contrataciones(map);
                 break;
             case ORDER_EXPRESS_REPORTAPAGO:
-                response = reportaPago( map );
+                response = reportaPago(map);
                 break;
             case ORDER_EXPRESS_DEVOLUCION:
-                response = devolucion( map );
+                response = devolucion(map);
                 break;
             case ORDER_EXPRESS_LOGS:
-                response = OETimerLogExecutor( map );
+                response = OETimerLogExecutor(map);
                 break;
-        } 
+        }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Proccess finish",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Proccess finish", null);
         direxTransactionResponse.setTransactionType(transactionType);
-        direxTransactionResponse.setTransactionData( response );
+        direxTransactionResponse.setTransactionData(response);
 
         return direxTransactionResponse;
     }
@@ -133,7 +137,7 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      * @throws Exception
      */
     @Override
-    public void postprocess( DirexTransactionRequest transactionRequest, DirexTransactionResponse transactionResponse ) throws Exception {
+    public void postprocess(DirexTransactionRequest transactionRequest, DirexTransactionResponse transactionResponse) throws Exception {
     }
 
     /**
@@ -145,8 +149,8 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
      * @return
      * @throws JAXBException
      */
-    private Map contrataciones( Map map ) throws Exception {
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">>> [OrderExpressBusinessLogic] ContratacionesMethod()...",null);
+    private Map contrataciones(Map map) throws Exception {
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, ">>> [OrderExpressBusinessLogic] ContratacionesMethod()...", null);
 
         ObjectFactory factory = new ObjectFactory();
 
@@ -169,54 +173,53 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         LOTEENTRADA.TRANSACCIONE.CONTRATACIONINPUT.CLIENTEB.DOCUMENTACIONCLIENTEB clientDocumentationB = factory.createLOTEENTRADATRANSACCIONECONTRATACIONINPUTCLIENTEBDOCUMENTACIONCLIENTEB();
 
         //Set Classes ...
-        client.setDOCUMENTACIONCLIENTE( clientDocumentation );
-        clientB.setDOCUMENTACIONCLIENTEB( clientDocumentationB );
+        client.setDOCUMENTACIONCLIENTE(clientDocumentation);
+        clientB.setDOCUMENTACIONCLIENTEB(clientDocumentationB);
 
-        input.setCLIENTE( client );
-        input.setCLIENTEB( clientB );
+        input.setCLIENTE(client);
+        input.setCLIENTEB(clientB);
 
-        transaction.setCONTRATACIONINPUT( input );
+        transaction.setCONTRATACIONINPUT(input);
 
-        entry.setCORRESPONSAL( corresponsal );
-        entry.setTRANSACCIONE( transaction );
+        entry.setCORRESPONSAL(corresponsal);
+        entry.setTRANSACCIONE(transaction);
 
         /**
          * DEFAULT CONFIG VALUES ARE SET IN @see
          * com.smartbt.vtsuite.utils.OrderExpressConstantValues
          */
         //  fixed VALUES
-        transaction.setREQUESTTYPE( "T" );
+        transaction.setREQUESTTYPE("T");
         input.setIDSERVICE("21");
 
-        String hostName = MapUtil.getStringValueFromMap( map,ParameterName.HOSTNAME,true);
-        String operation = MapUtil.getStringValueFromMap( map, ParameterName.OPERATION,true);
-        
+        String hostName = MapUtil.getStringValueFromMap(map, ParameterName.HOSTNAME, true);
+        String operation = MapUtil.getStringValueFromMap(map, ParameterName.OPERATION, true);
+
         Double amount = (Double) map.get(ParameterName.AMMOUNT);
-        String fee =  map.get(ParameterName.FEE_AMMOUNT) + "";
-  
-        Double payout = (Double) map.get(ParameterName.PAYOUT_AMMOUNT); 
-        
-        if(amount > 2999.99){
+        String fee = map.get(ParameterName.FEE_AMMOUNT) + "";
+
+        Double payout = (Double) map.get(ParameterName.PAYOUT_AMMOUNT);
+
+        if (amount > 2999.99) {
             System.out.println("[OrderExpressBusinessLogic] contrataciones ->  setting amount to 1. because amount was:: " + amount);
             amount = 1D;
         }
-        
+
         input.setTOTAL(amount + "");
         input.setSERVICE(fee);
-        
+
         input.setDEPOSIT(payout + "");
         input.setRELIEVE(payout + "");
-        
+
         if (hostName.equalsIgnoreCase("TECNICARD") && operation.equalsIgnoreCase("02")) {
-            
-            
+
 //            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
             input.setTAX("NULL");
 //            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
             input.setRATE("1.00");
 //            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
 //            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
-        }else{
+        } else {
 //            input.setDEPOSIT(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
             input.setTAX("NULL");
 //            input.setTOTAL(MapUtil.getStringValueFromMap(map, ParameterName.AMMOUNT, false));
@@ -224,8 +227,8 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 //            input.setRELIEVE(MapUtil.getDoubleValueFromMap(map, ParameterName.PAYOUT_AMMOUNT, false));
 //            input.setSERVICE(MapUtil.getStringValueFromMap(map, ParameterName.FEE_AMMOUNT, false));
         }
-        corresponsal.setIDMERCHANT( System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
-        
+        corresponsal.setIDMERCHANT(System.getProperty("PARAM_OE_ID_MERCHANT"));  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
+
         //1 x cada producto
         if (operation.equals("01")) {
             input.setIDDESTINY(System.getProperty("PARAM_OE_ID_DESTINY_CH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_ID_DESTINY_CH")) : "84693");//7574 - poner la variable en el glassfish
@@ -236,130 +239,129 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         } else {
             input.setIDDESTINY(System.getProperty("PARAM_OE_ID_DESTINY_CASH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_ID_DESTINY_CASH")) : "84693");//7574 - poner la variable en el glassfish
             input.setPAYMENTMETHOD(System.getProperty("PARAM_OE_PAYMENT_METHOD_CASH") != null ? OEUtils.singleQuote(System.getProperty("PARAM_OE_PAYMENT_METHOD_CASH")) : "01");
-            
+
             input.setPAYMENTIMPORT(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTIMPORT, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTIMPORT, false)) : "NULL");
             input.setPAYMENTCOMISSION(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCOMISSION, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCOMISSION, false)) : "NULL");
         }
 
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDPOS&IDTELLER",null);
-        if(map.containsKey(ParameterName.IDPOS) && map.get(ParameterName.IDPOS) != null){
-            input.setIDPOS(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDPOS, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.IDPOS, false ) ) : "NULL" );
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDPOS&IDTELLER", null);
+        if (map.containsKey(ParameterName.IDPOS) && map.get(ParameterName.IDPOS) != null) {
+            input.setIDPOS(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDPOS, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.IDPOS, false)) : "NULL");
         }
-        if(map.containsKey(ParameterName.IDTELLER) && map.get(ParameterName.IDTELLER) != null){
-            input.setIDTELLER(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false ) ) : "NULL" );
+        if (map.containsKey(ParameterName.IDTELLER) && map.get(ParameterName.IDTELLER) != null) {
+            input.setIDTELLER(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) : "NULL");
         }
-         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDPOS: "+ map.get(ParameterName.IDPOS).toString()+" IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
-        
-        input.setPAYMENTCHECK(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.PAYMENTCHECK, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.PAYMENTCHECK, false ) ) : "NULL" );
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDPOS: " + map.get(ParameterName.IDPOS).toString() + " IDTELLER: " + map.get(ParameterName.IDTELLER).toString(), null);
 
-        input.setNOTES(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.OPERATION, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.OPERATION, false ) ) : "NULL");
+        input.setPAYMENTCHECK(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCHECK, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.PAYMENTCHECK, false)) : "NULL");
 
-        client.setMNAME( "''" );
-        client.setLNAME( "''" );
-        client.setCOLONY( "''" );
-        clientB.setMNAMEB( "''" );
-        clientB.setLNAMEB( "''" );
-        clientB.setCOLONYB( "''" );
+        input.setNOTES(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.OPERATION, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.OPERATION, false)) : "NULL");
 
-        corresponsal.setLOGIN( OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGIN") ) );
-        corresponsal.setPASSWORD( OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORD") ) );
-        
-        DateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd hh:mm:ss" );
-        input.setDATETIME( OEUtils.singleQuote( dateFormat.format( new Date() ) ) );
+        client.setMNAME("''");
+        client.setLNAME("''");
+        client.setCOLONY("''");
+        clientB.setMNAMEB("''");
+        clientB.setLNAMEB("''");
+        clientB.setCOLONYB("''");
 
-        input.setBANKAUTHO( (!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false ))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap( map, ParameterName.REQUEST_ID, false )) : "NULL" );  //auto-incrementable
+        corresponsal.setLOGIN(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGIN")));
+        corresponsal.setPASSWORD(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORD")));
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        input.setDATETIME(OEUtils.singleQuote(dateFormat.format(new Date())));
+
+        input.setBANKAUTHO((!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false)) : "NULL");  //auto-incrementable
 
         // input.setIDBENEFICIARY( "1" );
-        client.setFNAME( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.FIRST_NAME, false ) ) );
-        clientB.setFNAMEB( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.FIRST_NAME, false ) ) );
+        client.setFNAME(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.FIRST_NAME, false)));
+        clientB.setFNAMEB(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.FIRST_NAME, false)));
 
-        client.setSNAME( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.LAST_NAME, false ) ) );
-        clientB.setSNAMEB( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.LAST_NAME, false ) ) );
+        client.setSNAME(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false)));
+        clientB.setSNAMEB(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.LAST_NAME, false)));
 
-        Date bornDate = MapUtil.getDateValueFromMap( map, ParameterName.BORNDATE_AS_DATE, false );
-        if ( bornDate != null ) {
+        Date bornDate = MapUtil.getDateValueFromMap(map, ParameterName.BORNDATE_AS_DATE, false);
+        if (bornDate != null) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            client.setBORNDATE( OEUtils.singleQuote(df.format( bornDate )) );
-            clientB.setBORNDATEB( OEUtils.singleQuote( df.format( bornDate )) );
+            client.setBORNDATE(OEUtils.singleQuote(df.format(bornDate)));
+            clientB.setBORNDATEB(OEUtils.singleQuote(df.format(bornDate)));
         }
 
-        client.setSTREET( OEUtils.singleQuote( addressSplitter(MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false ) ).get(1)) );
-        clientB.setSTREETB( OEUtils.singleQuote( addressSplitter(MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false ) ).get(1)));
-        client.setNUMBER( OEUtils.singleQuote( addressSplitter(MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false ) ).get(0)) );
-        clientB.setNUMBERB( OEUtils.singleQuote( addressSplitter(MapUtil.getStringValueFromMap( map, ParameterName.ADDRESS, false ) ).get(0)) );
-          
-        
+        client.setSTREET(OEUtils.singleQuote(addressSplitter(MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false)).get(1)));
+        clientB.setSTREETB(OEUtils.singleQuote(addressSplitter(MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false)).get(1)));
+        client.setNUMBER(OEUtils.singleQuote(addressSplitter(MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false)).get(0)));
+        clientB.setNUMBERB(OEUtils.singleQuote(addressSplitter(MapUtil.getStringValueFromMap(map, ParameterName.ADDRESS, false)).get(0)));
 
-        client.setZIPCODE( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.ZIPCODE, false ) ) );
-        clientB.setZIPCODEB( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.ZIPCODE, false ) ) );
- 
+        client.setZIPCODE(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.ZIPCODE, false)));
+        clientB.setZIPCODEB(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.ZIPCODE, false)));
+
         System.out.println("OEBusinessLogic -> Setting idCountry = 2");
-        
+
 //        if ( map.containsKey( ParameterName.IDCOUNTRY ) ) {
-            String idCountry = "2";//(String) map.get( ParameterName.IDCOUNTRY );
-            client.setIDPAIS( idCountry + "" );
-            clientB.setIDPAISB( idCountry + "" );
+        String idCountry = "2";//(String) map.get( ParameterName.IDCOUNTRY );
+        client.setIDPAIS(idCountry + "");
+        clientB.setIDPAISB(idCountry + "");
 //        }
 
-        if ( map.containsKey( ParameterName.OEIDSTATE ) ) {
-            String idState = (String) map.get( ParameterName.OEIDSTATE );
-            client.setIDESTADO( idState + "" );
-            clientB.setIDESTADOB( idState + "" );
+        if (map.containsKey(ParameterName.OEIDSTATE)) {
+            String idState = (String) map.get(ParameterName.OEIDSTATE);
+            client.setIDESTADO(idState + "");
+            clientB.setIDESTADOB(idState + "");
         }
 
-        client.setPOBLACION( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.CITY, false ) ) );//
-        clientB.setPOBLACIONB( OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.CITY, false ) ) );//
+        client.setPOBLACION(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.CITY, false)));//
+        clientB.setPOBLACIONB(OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.CITY, false)));//
 
-        client.setTELEPHONE1( !"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false ) ): "NULL" );
-        clientB.setTELEPHONE1B( !"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.TELEPHONE, false ) ):"NULL" );
+        client.setTELEPHONE1(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.TELEPHONE, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.TELEPHONE, false)) : "NULL");
+        clientB.setTELEPHONE1B(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.TELEPHONE, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.TELEPHONE, false)) : "NULL");
 
-        client.setIDOCUPACION( "117" );
-        clientB.setIDOCUPACIONB( "117" );
+        client.setIDOCUPACION("117");
+        clientB.setIDOCUPACIONB("117");
 
         //falta implementar la logica del ID
         //Client Documentation
-        if ( map.containsKey( ParameterName.IDTYPE ) ) {
-            if(map.containsKey( ParameterName.ID ) || map.containsKey( ParameterName.ID ) ){
+        if (map.containsKey(ParameterName.IDTYPE)) {
+            if (map.containsKey(ParameterName.ID) || map.containsKey(ParameterName.ID)) {
 
-            IdType idType = (IdType) map.get( ParameterName.IDTYPE );
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadena with idType: " + idType,null);
-            String id = OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.ID, true ) );
-            switch ( idType ) {
-                case VISA:
-                    clientDocumentation.setVISA( id );
-                    clientDocumentationB.setVISAB( id );
-                    break;
-                case PASSPORT:
-                    clientDocumentation.setPASAPORTE( id );
-                    clientDocumentationB.setPASAPORTEB( id );
-                    break;
-                case GREEN_CARD:
-                    clientDocumentation.setGREENCARD( id  );
-                    clientDocumentationB.setGREENCARDB( id );
-                    break;
+                IdType idType = (IdType) map.get(ParameterName.IDTYPE);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadena with idType: " + idType, null);
+                String id = OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.ID, true));
+                switch (idType) {
+                    case VISA:
+                        clientDocumentation.setVISA(id);
+                        clientDocumentationB.setVISAB(id);
+                        break;
+                    case PASSPORT:
+                        clientDocumentation.setPASAPORTE(id);
+                        clientDocumentationB.setPASAPORTEB(id);
+                        break;
+                    case GREEN_CARD:
+                        clientDocumentation.setGREENCARD(id);
+                        clientDocumentationB.setGREENCARDB(id);
+                        break;
 
-                case MATRICULA_CONSULAR:
-                    clientDocumentation.setMATRICULACONSULAR( id);
-                    clientDocumentationB.setMATRICULACONSULARB( id);
-                    break;
-                case DRIVER_LICENSE:
-                    clientDocumentation.setLICENCIA( id);
-                    clientDocumentationB.setLICENCIAB( id );
-                    break;
-                case SSN:
-                default:
-                    clientDocumentation.setLICENCIA( id);
-                    clientDocumentationB.setLICENCIAB( id );
-                    
+                    case MATRICULA_CONSULAR:
+                        clientDocumentation.setMATRICULACONSULAR(id);
+                        clientDocumentationB.setMATRICULACONSULARB(id);
+                        break;
+                    case DRIVER_LICENSE:
+                        clientDocumentation.setLICENCIA(id);
+                        clientDocumentationB.setLICENCIAB(id);
+                        break;
+                    case SSN:
+                    default:
+                        clientDocumentation.setLICENCIA(id);
+                        clientDocumentationB.setLICENCIAB(id);
+
 //                    clientDocumentation.setSS( id  );
 //                    clientDocumentationB.setSSB( id );
-                    break;
+                        break;
+                }
+
             }
+        }
 
-        }}
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadena",null);
-        String cadena = OEUtils.processRequest( entry );
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadena", null);
+        String cadena = OEUtils.processRequest(entry);
 
         String datos = "EX";
 //        String corresponsales = "OEINC";
@@ -368,45 +370,44 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         ContratacionesResponse response = new ContratacionesResponse();
 
-         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " +cadena,null);
-        String contratacionesResult = port.contrataciones( cadena, datos, corresponsales, rutaEjecutar );
-      
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] contratacionesResult value: " + contratacionesResult,null);
-        response.setContratacionesResult( contratacionesResult );
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadena value: " + cadena, null);
+        String contratacionesResult = port.contrataciones(cadena, datos, corresponsales, rutaEjecutar);
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] contratacionesResult value: " + contratacionesResult, null);
+        response.setContratacionesResult(contratacionesResult);
 
         Map responseMap = new HashMap();
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding contratacionesResult data",null);
-        try{
-        LOTESALIDA lotesalida = (LOTESALIDA) OEUtils.unMarshallResponse( JAXBContext.newInstance( LOTESALIDA.class
-        ), OEUtils.decodeBase64String( response.getContratacionesResult() ) );
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] contratacionesResult data decoded.",null);
-        
-        responseMap.put( ParameterName.AUTHO_NUMBER, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getAUTHONUMBER() );
-        responseMap.put( ParameterName.OP_CODE, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getOPCODE() );
-        responseMap.put( ParameterName.OP_CODE2, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getOPCODE2() );
-        responseMap.put( ParameterName.IDCONSIGNOR, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getIDCONSIGNOR() );
-        responseMap.put( ParameterName.IDBENEFICIARY, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getIDBENEFICIARY() );
-        responseMap.put( ParameterName.BANK_AUTHO, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getBANKAUTHO() );
-        }catch(Exception e){           
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalilda.",null);
+        try {
+            LOTESALIDA lotesalida = (LOTESALIDA) OEUtils.unMarshallResponse(JAXBContext.newInstance(LOTESALIDA.class
+            ), OEUtils.decodeBase64String(response.getContratacionesResult()));
+            CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] contratacionesResult data decoded.", null);
+
+            responseMap.put(ParameterName.AUTHO_NUMBER, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getAUTHONUMBER());
+            responseMap.put(ParameterName.OP_CODE, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getOPCODE());
+            responseMap.put(ParameterName.OP_CODE2, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getOPCODE2());
+            responseMap.put(ParameterName.IDCONSIGNOR, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getIDCONSIGNOR());
+            responseMap.put(ParameterName.IDBENEFICIARY, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getIDBENEFICIARY());
+            responseMap.put(ParameterName.BANK_AUTHO, lotesalida.getTRANSACCIONO().getCONTRATACIONOUTPUT().getBANKAUTHO());
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalilda.", null);
             e.printStackTrace();
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.", null);
         return responseMap;
 
     }
-    
+
     /*
-    *
-    *
-    * NEW WS IMPLEMNTATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-    *
-    *
-    */
-    
-    private Map reportaPago(Map map)throws Exception{
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] reportaPago Method()...",null);
+     *
+     *
+     * NEW WS IMPLEMNTATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+     *
+     *
+     */
+    private Map reportaPago(Map map) throws Exception {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] reportaPago Method()...", null);
 
         // Build ...
         //Entry
@@ -422,66 +423,64 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         input.setDocumentacioncliente(clientDocumentation);
 
-        transaction.setReportaPagoInput(input );
+        transaction.setReportaPagoInput(input);
 
-        entry.setCorresponsal(corresponsal );
-        entry.setTransaccione(transaction );
+        entry.setCorresponsal(corresponsal);
+        entry.setTransaccione(transaction);
 
-        transaction.setRequesttype("R" );
-        
-        corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANTPAGO") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
+        transaction.setRequesttype("R");
+
+        corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANTPAGO"));  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO",null);
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] AUTHO_NUMBER",null);
-        
-        input.setIdteller(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLERPAGO, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.IDTELLERPAGO, false ) ) : "NULL" );
-        input.setAutonumber(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false )) ? OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false ) ) : "NULL" );
-         
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO: " +map.get(ParameterName.IDTELLER).toString() + " AUTHO_NUMBER: "+map.get(ParameterName.AUTHO_NUMBER).toString(),null);
+        input.setIdteller(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLERPAGO, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLERPAGO, false)) : "NULL");
+        input.setAutonumber(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) : "NULL");
 
-        corresponsal.setLogin(OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGINPAGO") ) );
-        corresponsal.setPassword(OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORDPAGO") ) );
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLERPAGO: " +map.get(ParameterName.IDTELLER).toString() + " AUTHO_NUMBER: "+map.get(ParameterName.AUTHO_NUMBER).toString(),null);
+        corresponsal.setLogin(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGINPAGO")));
+        corresponsal.setPassword(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORDPAGO")));
 
         //Client Documentation
-        if ( map.containsKey( ParameterName.IDTYPE ) && map.containsKey( ParameterName.ID ) ) {
+        if (map.containsKey(ParameterName.IDTYPE) && map.containsKey(ParameterName.ID)) {
 
-            IdType idType = (IdType) map.get( ParameterName.IDTYPE );
-            String id = OEUtils.singleQuote( MapUtil.getStringValueFromMap( map, ParameterName.ID, true ) );
+            IdType idType = (IdType) map.get(ParameterName.IDTYPE);
+            String id = OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.ID, true));
 
-            switch ( idType ) {
+            switch (idType) {
                 case VISA:
-                    clientDocumentation.setVisa(id );
+                    clientDocumentation.setVisa(id);
                     break;
                 case PASSPORT:
-                    clientDocumentation.setPasaporte(id );
+                    clientDocumentation.setPasaporte(id);
                     break;
                 case GREEN_CARD:
-                    clientDocumentation.setGreencard(id );
+                    clientDocumentation.setGreencard(id);
                     break;
 
                 case MATRICULA_CONSULAR:
-                    clientDocumentation.setMatriculaconsular(id );
+                    clientDocumentation.setMatriculaconsular(id);
                     break;
                 case DRIVER_LICENSE:
-                    clientDocumentation.setLicencia(id );
+                    clientDocumentation.setLicencia(id);
                     break;
                 case SSN:
                 default:
-                    clientDocumentation.setSs(id );
+                    clientDocumentation.setSs(id);
                     break;
             }
 
         }
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaRP",null);
-        String cadena = OEUtils.processRequestRP( entry );
+        String cadena = OEUtils.processRequestRP(entry);
 
         String datos = "EX";
         String corresponsales = "GIRO_CHECK";
         String rutaEjecutar = null;
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaRP value: " +cadena,null);
-        String reportaPagoResult = port.reportaPago(cadena, datos, corresponsales, rutaEjecutar );
+        String reportaPagoResult = port.reportaPago(cadena, datos, corresponsales, rutaEjecutar);
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing reportaPagoResult.lenght(): " + reportaPagoResult.length(),null);
 //
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] reportaPagoResult value: " + reportaPagoResult,null);
@@ -489,30 +488,28 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         Map responseMap = new HashMap();
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding reportaPagoResult data",null);
-        try{
-        LOTESALIDARP lotesalida = (LOTESALIDARP) OEUtils.unMarshallResponseRP( JAXBContext.newInstance( LOTESALIDARP.class
-        ), OEUtils.decodeBase64String( reportaPagoResult) );
+        try {
+            LOTESALIDARP lotesalida = (LOTESALIDARP) OEUtils.unMarshallResponseRP(JAXBContext.newInstance(LOTESALIDARP.class
+            ), OEUtils.decodeBase64String(reportaPagoResult));
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] reportaPagoResult data decoded.",null);
 //
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] reportaPagoResult autho number value3: "+lotesalida.getTransacciono().getReportapagooutput().getAuthonumber(),null);
-        
-        responseMap.put( ParameterName.AUTHO_NUMBER, lotesalida.getTransacciono().getReportapagooutput().getAuthonumber() );
-        responseMap.put( ParameterName.OP_CODE, lotesalida.getTransacciono().getReportapagooutput().getOpcode() );
-        responseMap.put( ParameterName.OP_CODE2, lotesalida.getTransacciono().getReportapagooutput().getOpcode2() );
-        
-        }catch(Exception e){           
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaRP.",null);
+            responseMap.put(ParameterName.AUTHO_NUMBER, lotesalida.getTransacciono().getReportapagooutput().getAuthonumber());
+            responseMap.put(ParameterName.OP_CODE, lotesalida.getTransacciono().getReportapagooutput().getOpcode());
+            responseMap.put(ParameterName.OP_CODE2, lotesalida.getTransacciono().getReportapagooutput().getOpcode2());
+
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaRP.", null);
             e.printStackTrace();
         }
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.", null);
         return responseMap;
     }
-    
-    private Map devolucion(Map map)throws Exception{
-        
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionMethod()...",null);
 
+    private Map devolucion(Map map) throws Exception {
+
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionMethod()...",null);
         // Build ...
         //Entry
         LOTEENTRADAD entry = new LOTEENTRADAD();
@@ -523,69 +520,66 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         //Input
         LOTEENTRADAD.TRANSACCIONE.DEVOLUCIONINPUT input = new LOTEENTRADAD.TRANSACCIONE.DEVOLUCIONINPUT();
 
-        transaction.setDevolucioninput(input );
+        transaction.setDevolucioninput(input);
 
-        entry.setCorresponsal(corresponsal );
-        entry.setTransaccione(transaction );
+        entry.setCorresponsal(corresponsal);
+        entry.setTransaccione(transaction);
 
         //  fixed VALUES
-        transaction.setRequesttype( "D" );
+        transaction.setRequesttype("D");
 
-        corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
+        corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANT"));  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER",null);
+        input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) ? MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false) : "NULL");
 
-        input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false )) ? MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false ) : "NULL" );
-         
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
+        corresponsal.setLogin(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGIN")));
+        corresponsal.setPassword(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORD")));
 
-        corresponsal.setLogin(OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGIN") ) );
-        corresponsal.setPassword(OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORD") ) );
-
-        input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false ))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false )) : "NULL" );
+        input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) : "NULL");
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaD",null);
-        String cadena = OEUtils.processRequestD( entry );
+        String cadena = OEUtils.processRequestD(entry);
 
         String datos = "EX";
         String corresponsales = "GIRO_CHECK";
         String rutaEjecutar = null;
-        String devolucionResult="";
+        String devolucionResult = "";
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaD value: " +cadena,null);
-        try{
-        devolucionResult = port.devolucion( cadena, datos, corresponsales, rutaEjecutar );
-        }catch(Exception e){
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Devolucion Exception from port.devolucion(...).",null);
+        try {
+            devolucionResult = port.devolucion(cadena, datos, corresponsales, rutaEjecutar);
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Devolucion Exception from port.devolucion(...).", null);
             e.printStackTrace();
         }
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing devolucionResult.lenght(): " + devolucionResult.length(),null);
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] devolucionResult value: " + devolucionResult,null);
-
         Map responseMap = new HashMap();
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding devolucionResult data",null);
-        try{
-        LOTESALIDAD lotesalida = (LOTESALIDAD) OEUtils.unMarshallResponseD( JAXBContext.newInstance( LOTESALIDAD.class
-        ), OEUtils.decodeBase64String( devolucionResult ) );
+        try {
+            LOTESALIDAD lotesalida = (LOTESALIDAD) OEUtils.unMarshallResponseD(JAXBContext.newInstance(LOTESALIDAD.class
+            ), OEUtils.decodeBase64String(devolucionResult));
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult data decoded.",null);
-        
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult authoNumber value: " + lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber(),null);
-        responseMap.put( ParameterName.AUTHO_NUMBER, lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber() );
-        responseMap.put( ParameterName.OP_CODE, lotesalida.getTransacciono().getDevolucionoutput().getOpcode() );
-        responseMap.put( ParameterName.OP_CODE2, lotesalida.getTransacciono().getDevolucionoutput().getOpcode2() );
 
-        }catch(Exception e){           
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaD.",null);
+//        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] devolucionResult authoNumber value: " + lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber(),null);
+            responseMap.put(ParameterName.AUTHO_NUMBER, lotesalida.getTransacciono().getDevolucionoutput().getAuthonumber());
+            responseMap.put(ParameterName.OP_CODE, lotesalida.getTransacciono().getDevolucionoutput().getOpcode());
+            responseMap.put(ParameterName.OP_CODE2, lotesalida.getTransacciono().getDevolucionoutput().getOpcode2());
+
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaD.", null);
             e.printStackTrace();
         }
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
         return responseMap;
     }
-    
-    private Map oElog(Map map)throws Exception{
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OELogMethod()...",null);
+
+    private Map oElog(Map map) throws Exception {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OELogMethod()...", null);
 
         // Build ...
         //Entry
@@ -597,38 +591,37 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         //Input
         LOTEENTRADAL.TRANSACCIONE.LOGINPUT input = new LOTEENTRADAL.TRANSACCIONE.LOGINPUT();
 
-        transaction.setLoginput( input );
+        transaction.setLoginput(input);
 
-        entry.setCorresponsal(corresponsal );
-        entry.setTransaccione(transaction );
+        entry.setCorresponsal(corresponsal);
+        entry.setTransaccione(transaction);
 
         //  fixed VALUES
-        transaction.setRequesttype( "L" );
+        transaction.setRequesttype("L");
 
-        corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANT") );  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
+        corresponsal.setIdmerchant(System.getProperty("PARAM_OE_ID_MERCHANT"));  // estet valor ex fijo para Girocheck??    o es uno para cada merchant? si
 
-        input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false )) ? MapUtil.getStringValueFromMap( map, ParameterName.IDTELLER, false ) : "NULL" );
-         
+        input.setIdTeller(!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false)) ? MapUtil.getStringValueFromMap(map, ParameterName.IDTELLER, false) : "NULL");
+
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] IDTELLER: " +map.get(ParameterName.IDTELLER).toString(),null);
+        corresponsal.setLogin(OEUtils.singleQuote(System.getProperty("PARAM_OE_LOGIN")));
+        corresponsal.setPassword(OEUtils.singleQuote(System.getProperty("PARAM_OE_PASSWORD")));
 
-        corresponsal.setLogin(OEUtils.singleQuote( System.getProperty("PARAM_OE_LOGIN") ) );
-        corresponsal.setPassword(OEUtils.singleQuote( System.getProperty("PARAM_OE_PASSWORD") ) );
-
-        input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false ))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap( map, ParameterName.AUTHO_NUMBER, false )) : "NULL" );
+        input.setAutonumber((!"NULL".equals(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false))) ? OEUtils.singleQuote(MapUtil.getStringValueFromMap(map, ParameterName.AUTHO_NUMBER, false)) : "NULL");
 
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Proccess cadenaL",null);
-        String cadena = OEUtils.processRequestL( entry );
+        String cadena = OEUtils.processRequestL(entry);
 
         String datos = "EX";
         String corresponsales = "GIRO_CHECK";
         String rutaEjecutar = null;
-        String logResult="";
+        String logResult = "";
 
-//        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing cadenaL value: " +cadena,null);
-        try{
-        logResult = port.logs( cadena, datos, corresponsales, rutaEjecutar );
-        }catch(Exception e){
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Log Exception from port.logs(...).",null);
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing OELogs cadena : " +cadena,null);
+        try {
+            logResult = port.logs(cadena, datos, corresponsales, rutaEjecutar);
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Log Exception from port.logs(...).", null);
             e.printStackTrace();
         }
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] printing logResult.lenght(): " + logResult.length(),null);
@@ -636,75 +629,90 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] logResult value: " + logResult,null);
 
         Map responseMap = new HashMap();
+        String outputCadena = OEUtils.decodeBase64String(logResult);
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] decoding logResult data",null);
-        try{
-        LOTESALIDAL lotesalida = (LOTESALIDAL) OEUtils.unMarshallResponseL( JAXBContext.newInstance( LOTESALIDAL.class
-        ), OEUtils.decodeBase64String( logResult ) );
+        try {
+            LOTESALIDAL lotesalida = (LOTESALIDAL) OEUtils.unMarshallResponseL(JAXBContext.newInstance(LOTESALIDAL.class
+            ), outputCadena);
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] logResult data decoded.",null);
-        
-        responseMap = lotesalida.toMap();
 
-        }catch(Exception e){           
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaL.",null);
+            System.out.println("");
+             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Printing OELogs output cadena : " + outputCadena,null);
+       
+            responseMap = lotesalida.toMap();
+
+        } catch (Exception e) {
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] Error getting data from lotesalidaL.", null);
             e.printStackTrace();
         }
 //        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[OrderExpressBusinessLogic] Ready to return.",null);
+
+        if (responseMap != null) {
+            CustomeLogger.Output("[OEBusinessLogic] Response from method log OE OP_CODE : " + responseMap.get(ParameterName.OP_CODE));
+            CustomeLogger.Output("[OEBusinessLogic] Response from method log OE OESTATUS : " + responseMap.get(ParameterName.OESTATUS));
+            CustomeLogger.Output("[OEBusinessLogic] Response from method log OE IDTELLER : " + responseMap.get(ParameterName.IDTELLER));
+            CustomeLogger.Output("[OEBusinessLogic] Response from method log OE OEDATE_TIME : " + responseMap.get(ParameterName.OEDATE_TIME));
+            CustomeLogger.Output("[OEBusinessLogic] Response from method log OE OENOTES : " + responseMap.get(ParameterName.OENOTES));
+            CustomeLogger.Output("[OEBusinessLogic] Response from method log OE AUTHO_NUMBER : " + responseMap.get(ParameterName.AUTHO_NUMBER));
+        }
+
         return responseMap;
     }
-    
-    public LinkedList<String> addressSplitter(String address){
-        
-        LinkedList<String> data = new LinkedList();        
+
+    public LinkedList<String> addressSplitter(String address) {
+
+        LinkedList<String> data = new LinkedList();
         String number;
         String street;
-        
+
         int pos = 0;
         address = address.trim();
-        while(address.charAt(pos) != ' '){
+        while (address.charAt(pos) != ' ') {
             pos++;
         }
-        
+
         number = address.substring(0, pos).trim();
         street = address.substring(pos).trim();
 
         data.add(number);
         data.add(street);
-         
+
         return data;
     }
-    
-        /********OE TIMER START********/
-    
+
+    /**
+     * ******OE TIMER START*******
+     */
     private static Map reqOELogMethod;
     private static Map respOELogMethod;
-    private static boolean timeOutOELog =true;
+    private static boolean timeOutOELog = true;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1000);
-    
+
     private Map OETimerLogExecutor(Map req) throws InterruptedException {
-        
+
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() start processing ...", null);
-        
+
         String temp;
         long period;
         long delay;
         reqOELogMethod = req;
-        
+
         temp = System.getProperty("OE_TIMER_PERIOD");
 
         if (temp == null) {
             period = 5;
-        }else{
+        } else {
             period = Long.parseLong(temp);
         }
-        
+
         temp = System.getProperty("OE_TIMER_TOTAL");
-        
+
         if (temp == null) {
             delay = 60;
-        }else{
+        } else {
             delay = Long.parseLong(temp);
         }
-        
+
         final Runnable logTask = new Runnable() {
 
             @Override
@@ -728,31 +736,31 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
         };
 
         final ScheduledFuture<?> timerHandle = scheduler.scheduleAtFixedRate(logTask, 0, period, SECONDS);//rate execution time 
-        
+
         scheduler.schedule(new Runnable() {
             @Override
             public void run() {
                 boolean taskDone = timerHandle.cancel(true);
                 scheduler.shutdown();
-                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() Time finished: "+taskDone,null);
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] OETimerLogExecutor() Time finished: " + taskDone, null);
             }
         }, delay, SECONDS);//complete time of executions
-        
-        scheduler.awaitTermination(delay+5, SECONDS);
+
+        scheduler.awaitTermination(delay + 5, SECONDS);
 
         respOELogMethod.put(ParameterName.OELOGTIMEOUT, timeOutOELog);
-        
+
         return respOELogMethod;
-        
+
     }
-    
+
     public boolean oEVerificationCode(Map response) {
 
         String status = (String) response.get(ParameterName.OESTATUS);
-        
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] oEVerificationCode() status: ["+status+"]",null);
-        
-        if (status!=null) {
+
+        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[OrderExpressBusinessLogic] oEVerificationCode() status: [" + status + "]", null);
+
+        if (status != null) {
 
             if (status.equals("0") || status.equals("1") || status.equals("2") || status.equals("400")) {
                 return false;
@@ -762,6 +770,8 @@ public class OrderExpressBusinessLogic extends AbstractBusinessLogicModule {
 
         return true;
     }
-    /******************OE TIMER END******************/
+    /**
+     * ****************OE TIMER END*****************
+     */
 
 }

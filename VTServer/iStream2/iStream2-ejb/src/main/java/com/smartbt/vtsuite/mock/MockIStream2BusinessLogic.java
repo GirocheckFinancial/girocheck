@@ -31,6 +31,7 @@ import com.smartbt.vtsuite.boundary.ws.TLS;
 import com.smartbt.vtsuite.boundary.ws.TLS_Service;
 import static com.smartbt.vtsuite.manager.IStream2BusinessLogic.requestToString;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class MockIStream2BusinessLogic {
             String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
             Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
             String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
-            String depositName = MapUtil.getStringValueFromMap(transactionData, ParameterName.DEPOSIT, true);
+            String depositName = "Deposit at " + (new Date());
             String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
             String cutomerItemId = MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
 
@@ -81,7 +82,7 @@ public class MockIStream2BusinessLogic {
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[iStream2BusinessLogic] proccessing:: " + transactionType, null);
 
             switch (transactionType) {
-                case ISTREAM2_SEND_SINCE_ICL:
+                case ISTREAM2_SEND_SINGLE_ICL:
                     String log = requestToString(userName, password, "" + locationId, ammount, depositName, micr, cutomerItemId, checkBack, checkFront, null);
                     System.out.println("----------- IStrean -> SendSingleICL -----------");
                     System.out.println(log);

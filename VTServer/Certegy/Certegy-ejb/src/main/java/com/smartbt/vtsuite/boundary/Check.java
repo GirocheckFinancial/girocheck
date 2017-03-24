@@ -1,6 +1,7 @@
 package com.smartbt.vtsuite.boundary;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import java.text.DecimalFormat;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -54,12 +55,10 @@ public class Check {
         Check _this = new Check();
         Double amount = (Double) map.get(ParameterName.AMMOUNT);
         
-        String amountStr = amount + "";
-        if(amountStr.contains(".") && amountStr.split(".").length == 2 && amountStr.split(".")[1].length() == 1){
-            amountStr += "0";
-        }
+        DecimalFormat twoPlaces = new DecimalFormat("0.00");
+        String amountString = twoPlaces.format(amount);
         
-        _this.setAmount(amountStr);
+        _this.setAmount(amountString);
 
         MICR micr = MICR.build(map);
         _this.setMICR(micr);
@@ -76,13 +75,14 @@ public class Check {
         return _this;
     }
     
+ 
   
 
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("        <Check>" ).append('\n');  
-        s.append("            <Amount>").append(amount + "0").append("</Amount>" ).append('\n');
+        s.append("            <Amount>").append(amount).append("</Amount>" ).append('\n');
         s.append(micr.toString() ).append('\n');
         s.append("            <IssueDate>").append(issueDate).append("</IssueDate>" ).append('\n');
         s.append("            <Type>").append(type).append("</Type>" ).append('\n');

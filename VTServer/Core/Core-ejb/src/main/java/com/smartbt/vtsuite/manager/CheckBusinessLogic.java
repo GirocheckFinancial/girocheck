@@ -146,6 +146,12 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
                 transaction.getCheck().setStatus(CheckStatus.DENIED.getStatus());
                 throw te;
             }
+            
+            //TODO ask which output field from certegy should we put here.
+//              if (certegyInfoRequestMap.containsKey(ParameterName.DEPOSIT_ID)) {
+//                    String depositId = (String) certegyInfoRequestMap.get(ParameterName.DEPOSIT_ID);
+//                    transaction.setIstream_id(depositId);
+//                }
 
             sendCertegyReverseRequestIfFails = true;
 

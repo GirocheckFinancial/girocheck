@@ -268,6 +268,11 @@ public class CoreTransactionUtil {
         System.out.println("ResultCode :: " + transaction.getResultCode());
         System.out.println("ResultMessage :: " + transaction.getResultMessage());
 
+        
+        System.out.println("");
+        System.out.println("");
+         System.out.println("--****************  sub-transactions  *****************--");
+        System.out.println("");
         System.out.println("");
 
         List<SubTransaction> subTransactions = new ArrayList(transaction.getSub_Transaction());
@@ -315,8 +320,7 @@ public class CoreTransactionUtil {
     }
 
     private static boolean condition1(String ssn) {
-        Integer sub = Integer.parseInt(ssn.substring(3, 5));
-        System.out.println("sub = " + sub);
+        Integer sub = Integer.parseInt(ssn.substring(3, 5)); 
         return ssn.charAt(0) == '9' && sub >= 70 && sub <= 88;
     }
 
@@ -328,6 +332,7 @@ public class CoreTransactionUtil {
 
         return b1 || b2 || b3;
     }
+     
 
 //    public static void printMap(DirexTransactionRequest request) {
 //        Map map = request.getTransactionData();

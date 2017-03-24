@@ -248,7 +248,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         String pRequestID = MapUtil.getStringValueFromMap(map, ParameterName.REQUEST_ID, false);
 
         BalanceInquiryResponse response = new BalanceInquiryResponse();
-        response.setBalance("120.1");
+        response.setBalance("2014");
         response.setInTransitFunds("80.00");
 
         String validationResponse = "0";

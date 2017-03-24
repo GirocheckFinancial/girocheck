@@ -509,10 +509,11 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
                 request.getTransactionData().put(ParameterName.IDCOUNTRY, EnumCountry.EUA.getCode() + "");
 
+                String stateAbbreviation = "";
                 if (personalInfoRequestMap.containsKey(ParameterName.IDSTATE)) {
-                    String idStateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDSTATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For IDSTATE StateAbbreviation >>> = " + idStateAbbreviation, null);
-                    State statee = stateManager.getByAbbreviation(idStateAbbreviation);
+                     stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDSTATE);
+                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For IDSTATE StateAbbreviation >>> = " + stateAbbreviation, null);
+                    State statee = stateManager.getByAbbreviation(stateAbbreviation);
 
                     if (statee != null) {
                         request.getTransactionData().put(ParameterName.IDSTATE, statee.getCode() + "");
@@ -522,11 +523,11 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     }
 
                     try {
-                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(idStateAbbreviation).getId() + "");
+                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
                     } catch (Exception e) {
                         request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.FL.getId());
 
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Failed to get state by abbreviation : " + idStateAbbreviation + " sending FL instead.", null);
+                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Failed to get state by abbreviation : " + stateAbbreviation + " sending FL instead.", null);
                         e.printStackTrace();
                     }
                 }else{
@@ -535,8 +536,8 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
 
                 request.getTransactionData().put(ParameterName.COUNTRY, EnumCountry.EUA.getCode() + "");
 
-                if (personalInfoRequestMap.containsKey(ParameterName.STATE)) {
-                    String stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
+                if (personalInfoRequestMap.containsKey(ParameterName.STATE) && personalInfoRequestMap.get(ParameterName.STATE) != null && !((String)personalInfoRequestMap.get(ParameterName.STATE)).isEmpty()){
+                    stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
                     CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For STATE StateAbbreviation >>> = " + stateAbbreviation, null);
                     State statee = stateManager.getByAbbreviation(stateAbbreviation);
 
@@ -546,6 +547,10 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     } else {
                         request.getTransactionData().put(ParameterName.STATE, EnumState.FL.getId() + "");
                     }
+                }
+                
+                if(stateAbbreviation != null && !stateAbbreviation.isEmpty()){
+                    request.getTransactionData().put(ParameterName.STATE_ABBREVIATION, stateAbbreviation);
                 }
 
                 if (request.getTransactionData().containsKey(ParameterName.PHONE)) {

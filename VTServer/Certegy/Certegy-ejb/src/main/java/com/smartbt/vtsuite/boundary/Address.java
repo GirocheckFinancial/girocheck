@@ -58,7 +58,7 @@ public class Address {
         Address address = new Address();
         address.setLine1((String)map.get(ParameterName.ADDRESS));
         address.setCity((String)map.get(ParameterName.CITY));
-        address.setState((String)map.get(ParameterName.STATE));
+        address.setState((String)map.get(ParameterName.STATE_ABBREVIATION));
         address.setZip((String)map.get(ParameterName.ZIPCODE));
         return address;
     }

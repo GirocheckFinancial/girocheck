@@ -53,24 +53,36 @@ public class Check {
     public static Check build(Map map) {
         Check _this = new Check();
         Double amount = (Double) map.get(ParameterName.AMMOUNT);
-        _this.setAmount(amount + "");
+        
+        String amountStr = amount + "";
+        if(amountStr.contains(".") && amountStr.split(".").length == 2 && amountStr.split(".")[1].length() == 1){
+            amountStr += "0";
+        }
+        
+        _this.setAmount(amountStr);
 
         MICR micr = MICR.build(map);
         _this.setMICR(micr);
 
         String issueDate = (String) map.get(ParameterName.CHECK_ISSUE_DATE);
-        _this.setIssueDate(issueDate);
+        
+        if(issueDate!= null){ 
+             _this.setIssueDate(issueDate.replace("-", ""));
+        }
+      
 
         _this.setType((String) map.get(ParameterName.CHECK_TYPE));  //This is optional
 
         return _this;
     }
+    
+  
 
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("        <Check>" ).append('\n');
-        s.append("            <Amount>").append(amount).append("</Amount>" ).append('\n');
+        s.append("        <Check>" ).append('\n');  
+        s.append("            <Amount>").append(amount + "0").append("</Amount>" ).append('\n');
         s.append(micr.toString() ).append('\n');
         s.append("            <IssueDate>").append(issueDate).append("</IssueDate>" ).append('\n');
         s.append("            <Type>").append(type).append("</Type>" ).append('\n');

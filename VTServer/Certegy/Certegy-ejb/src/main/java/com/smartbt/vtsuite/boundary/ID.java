@@ -45,8 +45,9 @@ public class ID {
 
     public static ID build(Map map) {
         ID id = new ID();
-
-        String type = (String) map.get(ParameterName.IDSTATE);
+ 
+        //TODO put MX when is Matricula Consular
+        String type = (String) map.get(ParameterName.STATE_ABBREVIATION);
         id.setType(type);
 
         String pId = (String) map.get(ParameterName.ID);

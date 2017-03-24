@@ -81,8 +81,8 @@ public class Enrollment {
         _this.setID(id);
 
         //TODO ask if this is idFront or idBack
-        byte[] idFront = (byte[]) map.get(ParameterName.IDFRONT);
-        _this.setSwipedID(idFront);
+       // byte[] idFront = (byte[]) map.get(ParameterName.IDFRONT);
+      //  _this.setSwipedID(idFront);
 
         return _this;
     }

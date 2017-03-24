@@ -149,15 +149,15 @@ public class WestechBusinessLogic {
         sb.append("<Password>").append(WT_PASSWORD).append("</Password>").append('\n');
         
         if(checkFront != null && checkFront.length > 0){
-            sb.append("<CheckFront>").append("AN IMAGE").append("</CheckFront>").append('\n');
+            sb.append("<CheckFront>").append("AN IMAGE ::" + checkFront.length).append("</CheckFront>").append('\n');
         }
         
         if(checkBack != null && checkBack.length > 0){
-            sb.append("<checkBack>").append("AN IMAGE").append("</checkBack>").append('\n');
+            sb.append("<checkBack>").append("AN IMAGE :: " + checkBack.length).append("</checkBack>").append('\n');
         }
         
         if(idProof != null && idProof.length > 0){
-            sb.append("<idProof>").append("AN IMAGE").append("</idProof>").append('\n');
+            sb.append("<idProof>").append("AN IMAGE :: " + idProof.length).append("</idProof>").append('\n');
         }
         
         sb.append(idProof2dBarcode);

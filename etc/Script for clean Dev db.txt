@@ -4,3 +4,4 @@ delete from identification;
 delete from mobile_client;
 delete from card;
 delete from client;
+delete from `check`;

@@ -49,9 +49,19 @@ public class DOB {
     public static DOB build(Map map){
         Date dateOfBirth = (Date)map.get(ParameterName.BORNDATE_AS_DATE);
         DOB dob = new DOB();
+        String month = 1 + dateOfBirth.getMonth() + "";
+        if(month.length() == 1){
+            month = "0" + month;
+        }
+        
+        String day = dateOfBirth.getDate() + "";
+        if(day.length() == 1){
+            day = "0" + day;
+        }
+        
         dob.setYear(1900 + dateOfBirth.getYear() + "");
-        dob.setMonth(1 + dateOfBirth.getMonth() + "");
-        dob.setDay(dateOfBirth.getDate() + "");
+        dob.setMonth(month);
+        dob.setDay(day);
         
         return dob;
     } 

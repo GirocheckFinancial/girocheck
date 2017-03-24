@@ -475,7 +475,7 @@ public class RegistrationManager {
             throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
         }
         
-        if(oldPassword != null){
+        if(oldPassword != null && !oldPassword.isEmpty()){
             String encryptPassword = PasswordUtil.encryptPassword(oldPassword);
             if(!mobileClient.getPassword().equalsIgnoreCase(encryptPassword)){
                 throw new MobileValidationException(Constants.INVALID_OLD_PASSWORD, VTSuiteMessages.INVALID_OLD_PASSWORD);

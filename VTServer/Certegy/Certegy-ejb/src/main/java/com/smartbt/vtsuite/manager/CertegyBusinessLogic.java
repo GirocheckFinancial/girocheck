@@ -164,7 +164,8 @@ public class CertegyBusinessLogic {
                 com.smartbt.vtsuite.boundary.prod.PCAService prodService = new com.smartbt.vtsuite.boundary.prod.PCAService();
                 PCA prodPort = prodService.getPCAPort();
                 PCAEchoRequest request = new PCAEchoRequest();
-                request.setEchoNumber(new BigInteger(CERTEGY_SITE_ID));
+                request.setSiteID(CERTEGY_SITE_ID);
+                request.setEchoNumber(new BigInteger("1000"));
                 PCAEchoResponse certegyResponse = prodPort.echo(request);
 
                 System.out.println("*************** CERTEGY CONNECTION GOT " + response.toString());

@@ -129,11 +129,12 @@ public class WestechBusinessLogic {
         }
          sb.append("<Address>").append(map.get(ParameterName.ADDRESS)).append("</Address>").append('\n');
          sb.append("<City>").append(map.get(ParameterName.CITY)).append("</City>").append('\n');
-         sb.append("<State>").append(map.get(ParameterName.STATE)).append("</State>").append('\n');
+         System.out.println("WestechBusinessLogic. STATE_ABBREVIATION = " + map.get(ParameterName.STATE_ABBREVIATION));
+         sb.append("<State>").append(map.get(ParameterName.STATE_ABBREVIATION)).append("</State>").append('\n');
          sb.append("<ZipCode>").append(map.get(ParameterName.ZIPCODE)).append("</ZipCode>").append('\n');
          
-         Date expirationDate = (Date)map.get(ParameterName.ACCOUNTNUM.EXPIRATION_DATE_AS_DATE);
-         
+         Date expirationDate = (Date)map.get(ParameterName.EXPIRATION_DATE_AS_DATE);
+         System.out.println("WestechBusinessLogic. buildIdProofXML -> expirationDate = " + expirationDate);
          if(expirationDate != null){
           sb.append("<ExpirationDate>").append(df.format(expirationDate)).append("</ExpirationDate>").append('\n');   
          }

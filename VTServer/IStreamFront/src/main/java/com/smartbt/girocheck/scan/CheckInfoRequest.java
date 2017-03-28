@@ -93,7 +93,7 @@ public class CheckInfoRequest implements IMap {
 
     @Override
     public Map toMap() {
-        System.out.println("CheckInfoRequest -> toMap()");
+        System.out.println("CheckInfoRequest -> toMap() expirationDate = " + expirationDate);
 
         Map map = new HashMap();
         String errors = "";

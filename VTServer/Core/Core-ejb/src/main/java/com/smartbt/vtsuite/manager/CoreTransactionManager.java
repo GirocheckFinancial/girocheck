@@ -223,7 +223,7 @@ public class CoreTransactionManager {
 
                 client = creditCardManager.getClient(cardNumberCR);
 
-                if (client == null) {
+                if (client == null || client.getData_SD() == null || client.getData_SD().isEmpty()) {
                     System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
                     transaction.setResultCode(3);
                     return transaction;
@@ -279,6 +279,7 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.SSN, client.getSsn());
                 direxTransactionRequest.getTransactionData().put(ParameterName.IDTYPE, IdType.getIdType(identification.getIdType()));
                 direxTransactionRequest.getTransactionData().put(ParameterName.ID, identification.getIdentification());
+                direxTransactionRequest.getTransactionData().put(ParameterName.EXPIRATION_DATE_AS_DATE, identification.getExpirationDate());
 
                 direxTransactionRequest.getTransactionData().put(ParameterName.BORNDATE_AS_DATE, client.getBornDate());
                 direxTransactionRequest.getTransactionData().put(ParameterName.FIRST_NAME, client.getFirstName());
@@ -286,6 +287,10 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.ADDRESS, address.getAddress());
                 direxTransactionRequest.getTransactionData().put(ParameterName.CITY, address.getCity());
                 direxTransactionRequest.getTransactionData().put(ParameterName.STATE, state.getCode());
+                System.out.println("CoreTransactionManager -> state.getCode() = " + state.getCode());
+                System.out.println("CoreTransactionManager -> state.getAbbreviation() = " + state.getAbbreviation());
+                
+                direxTransactionRequest.getTransactionData().put(ParameterName.STATE_ABBREVIATION, state.getAbbreviation());
                 direxTransactionRequest.getTransactionData().put(ParameterName.OEIDSTATE, state.getAbbreviation());
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
 

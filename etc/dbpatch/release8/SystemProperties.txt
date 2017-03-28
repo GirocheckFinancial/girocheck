@@ -1,0 +1,5 @@
+CERTEGY_PRIMARY_PROD_URL  possible values:  https://pca-prod.FNIS.com/mepca/PCAService
+
+CERTEGY_CERT_KEY_FILE     possible values:  Edberg.Ken.p12
+
+CERTEGY_CERT_KEY_PHRASE   possible valies:  RLLT4w3KLfI= 

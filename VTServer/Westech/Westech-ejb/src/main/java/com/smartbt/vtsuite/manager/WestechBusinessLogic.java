@@ -75,7 +75,12 @@ public class WestechBusinessLogic {
 
         if(!status.endsWith("0")){
              direxTransactionResponse.setResultCode(ResultCode.WESTECH_HOST_UNEXPECTED_RESULT_CODE);
-             direxTransactionResponse.setResultMessage(status);
+             String msg = (String)responseMap.get(ParameterName.MESSAGE);
+             
+             if(msg == null || msg.isEmpty()){
+                 msg = status;
+             }
+             direxTransactionResponse.setResultMessage(msg);
              return direxTransactionResponse;
         }
         

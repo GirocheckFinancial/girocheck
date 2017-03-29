@@ -480,8 +480,6 @@ public class RegistrationManager {
             if(!mobileClient.getPassword().equalsIgnoreCase(encryptPassword)){
                 throw new MobileValidationException(Constants.INVALID_OLD_PASSWORD, VTSuiteMessages.INVALID_OLD_PASSWORD);
             }
-        }else{
-            throw new MobileValidationException(Constants.INVALID_OLD_PASSWORD, VTSuiteMessages.INVALID_OLD_PASSWORD);
         }
         
         return mobileClient;

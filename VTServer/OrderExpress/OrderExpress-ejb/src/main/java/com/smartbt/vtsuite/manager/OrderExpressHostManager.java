@@ -43,7 +43,7 @@ public class OrderExpressHostManager {
         fixZipCode(direxTransactionRequest);
 
         String prodProperty = System.getProperty("PROD");
-        Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
+        Boolean isProd = false;// prodProperty != null && prodProperty.equalsIgnoreCase("true");
         System.out.println("OrderExpressHostManager() -> isProd = " + isProd);
  
         if (isProd) {

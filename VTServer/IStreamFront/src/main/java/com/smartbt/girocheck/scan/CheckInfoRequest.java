@@ -105,7 +105,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.CITY, getCity());
         map.put(ParameterName.STATE, getState());
         map.put(ParameterName.IDSTATE, getState());
-        map.put(ParameterName.FIRST_NAME, getFirstName());
+        map.put(ParameterName.FIRST_NAME, getFirstName()); 
         map.put(ParameterName.AMMOUNT, checkLAR);
 
         Date bornD = getDateFromString(getBornDate());
@@ -152,7 +152,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.CHECK_ISSUE_DATE, getCheckIssueDate());
 
         Iterator<Map.Entry<Object, Object>> it = map.entrySet().iterator();
-        System.out.println("Printing input params: ");
+        System.out.println("Printing input params:: ");
         System.out.println("");
         while (it.hasNext()) {
             Map.Entry entry = it.next();

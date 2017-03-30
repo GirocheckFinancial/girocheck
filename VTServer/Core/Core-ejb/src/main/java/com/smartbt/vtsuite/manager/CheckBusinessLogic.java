@@ -95,17 +95,9 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             sendResponseToIStreamFront(true, checkId);
 
             Map checkInfoRequestMap = checkInfoRequest.getTransactionData();
-            
-            Double westechAmount = (Double)checkInfoRequestMap.get(ParameterName.AMMOUNT);
-            Double amount = (Double)request.getTransactionData().get(ParameterName.AMMOUNT);
-            if(!amount.equals(westechAmount)){
-                System.out.println("Amounts doesn't match:");
-                System.out.println("westechAmount = " + westechAmount);
-                System.out.println("terminalAmount = " + amount); 
-                
-                throw new TransactionalException(ResultCode.TERMINAL_WRONG_AMMOUNT, originalTransaction, ResultMessage.TERMINAL_WRONG_AMMOUNT.getMessage());
-            }
-            
+
+            validateCheckAmount(request, checkInfoRequestMap);
+
             //TODO check is this is necessay (if Westech not trim the last name)
             if (idScanSuccess && checkInfoRequestMap.containsKey(ParameterName.LAST_NAME)) {
                 checkInfoRequestMap.remove(ParameterName.LAST_NAME);
@@ -140,13 +132,13 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             }
 
             sendOEDevolutionIfFails = true;
- 
+
             //------SEND OE LOGS --------- 
             request.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
             sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
-          
+
             //-------SEND TO CERTEGY ------
-            request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION); 
+            request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION);
             try {
                 sendMessageToHost(request, NomHost.CERTEGY, CERTEGY_WAIT_TIME, transaction);
             } catch (TransactionalException te) {
@@ -156,13 +148,12 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
                 transaction.getCheck().setStatus(CheckStatus.DENIED.getStatus());
                 throw te;
             }
-            
+
             //TODO ask which output field from certegy should we put here.
 //              if (certegyInfoRequestMap.containsKey(ParameterName.DEPOSIT_ID)) {
 //                    String depositId = (String) certegyInfoRequestMap.get(ParameterName.DEPOSIT_ID);
 //                    transaction.setIstream_id(depositId);
 //                }
-
             sendCertegyReverseRequestIfFails = true;
 
             //----------  TECNICARD VALIDATON ------------------
@@ -171,7 +162,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             request.setTransactionType(TransactionType.GENERIC_HOST_VALIDATION);
             request.getTransactionData().put(TransactionType.TRANSACTION_TYPE, originalTransaction);
             response = sendMessageToHost(request, NomHost.valueOf(hostName), GENERIC_VALIDATION_WAIT_TIME, transaction);
- 
+
             String estimatedPostingTime = response.getResultMessage();
 
             sendAnswerToTerminal(TransactionType.get(transaction.getTransactionType()), ResultCode.SUCCESS, "", correlationId);
@@ -197,7 +188,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             if (response.wasApproved()) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Sending answer to Terminal -> correlationId = " + correlationId, null);
                 sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.SUCCESS, estimatedPostingTime, correlationId);
-              //  choiceNotifyPayment(request, transaction);
+                //  choiceNotifyPayment(request, transaction);
 
                 try {
                     request.setTransactionType(TransactionType.ORDER_EXPRESS_REPORTAPAGO);
@@ -405,6 +396,28 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         sendMessageToHost(istreamCancelRequest, NomHost.ISTREAM, ISTREAM_HOST_WAIT_TIME, transaction);
 
         addSuccessfulSubTransaction(transaction, TransactionType.ISTREAM_CASH_AUTH_SUBMIT);
+    }
+
+    public void validateCheckAmount(DirexTransactionRequest request, Map checkInfoRequestMap) throws TransactionalException {
+        Double westechAmount = 0D;
+        String westechAmountString = "";
+        try {
+            westechAmountString = (String) checkInfoRequestMap.get(ParameterName.AMMOUNT);
+            westechAmount = Double.parseDouble(westechAmountString);
+        } catch (Exception e) {
+        }
+
+        Double amount = (Double) request.getTransactionData().get(ParameterName.AMMOUNT);
+
+        if (!amount.equals(westechAmount)) {
+            System.out.println("Amounts doesn't match:");
+            System.out.println("westechAmount = " + westechAmountString);
+            System.out.println("terminalAmount = " + amount);
+
+            throw new TransactionalException(ResultCode.TERMINAL_WRONG_AMMOUNT, TransactionType.CHECK_INFO, ResultMessage.TERMINAL_WRONG_AMMOUNT.getMessage());
+        }
+        
+        checkInfoRequestMap.remove(ParameterName.AMMOUNT);
     }
 
 }

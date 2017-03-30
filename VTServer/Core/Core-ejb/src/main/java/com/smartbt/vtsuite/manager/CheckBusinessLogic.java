@@ -95,7 +95,17 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             sendResponseToIStreamFront(true, checkId);
 
             Map checkInfoRequestMap = checkInfoRequest.getTransactionData();
-
+            
+            Double westechAmount = (Double)checkInfoRequestMap.get(ParameterName.AMMOUNT);
+            Double amount = (Double)request.getTransactionData().get(ParameterName.AMMOUNT);
+            if(!amount.equals(westechAmount)){
+                System.out.println("Amounts doesn't match:");
+                System.out.println("westechAmount = " + westechAmount);
+                System.out.println("terminalAmount = " + amount); 
+                
+                throw new TransactionalException(ResultCode.TERMINAL_WRONG_AMMOUNT, originalTransaction, ResultMessage.TERMINAL_WRONG_AMMOUNT.getMessage());
+            }
+            
             //TODO check is this is necessay (if Westech not trim the last name)
             if (idScanSuccess && checkInfoRequestMap.containsKey(ParameterName.LAST_NAME)) {
                 checkInfoRequestMap.remove(ParameterName.LAST_NAME);

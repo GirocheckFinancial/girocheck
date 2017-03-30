@@ -3,8 +3,7 @@ package com.smartbt.girocheck.scan;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.TransactionType;
 import com.smartbt.girocheck.servercommon.utils.IMap;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.text.DateFormat; 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -107,6 +106,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.STATE, getState());
         map.put(ParameterName.IDSTATE, getState());
         map.put(ParameterName.FIRST_NAME, getFirstName());
+        map.put(ParameterName.AMMOUNT, checkLAR);
 
         Date bornD = getDateFromString(getBornDate());
         if (bornD != null) {

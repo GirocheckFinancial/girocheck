@@ -210,15 +210,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
             personalInfoSubTransaction.setResultCode(ResultCode.SUCCESS.getCode());
             personalInfoSubTransaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
             transaction.addSubTransaction(personalInfoSubTransaction);
-
-            //---------  ASK IF CANCELATED ------------------ (set cancelable as TRUE)
-            if (isCancelated(true)) {
-                sendResponseToIStreamFront(false, checkId);
-                response = DirexTransactionResponse.forException(ResultCode.TERMINAL_CANCELATED_TRANSACTION, ResultMessage.TERMINAL_CANCELATED_TRANSACTION);
-                response.setTransactionType(TransactionType.ISTREAM_CASH_AUTH_SUBMIT);
-                CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
-                return;
-            }
+ 
 
             //--------------------------------------------------
             state = 2;
@@ -338,15 +330,7 @@ public class NewCoreComplexTransactionBusinessLogic extends CoreAbstractTransact
                 transaction.getClient().setIdBeneficiary((String) responseMap.get(ParameterName.IDBENEFICIARY));
             }
 
-            //if order express success, I ask if terminal cancelated transaction.
-            //(set cancelable as false)
-            if (isCancelated(false)) {
-                sendResponseToIStreamFront(false, checkId);
-                response = DirexTransactionResponse.forException(ResultCode.TERMINAL_CANCELATED_TRANSACTION, ResultMessage.TERMINAL_CANCELATED_TRANSACTION);
-                response.setTransactionType(originalTransaction);
-                CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
-                return;
-            }
+            
 
             if (request.getTransactionData().containsKey(ParameterName.PHONE)) {
                 String cell_area_code = (String) request.getTransactionData().get(ParameterName.PHONE);

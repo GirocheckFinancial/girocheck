@@ -40,7 +40,7 @@ public class FrontManager {
             return transactionData;
         }
 
-        direxTransactionRequest.setTransactionData(request.toMap());
+        direxTransactionRequest.setTransactionData(map);
 
         try {
             DirexTransactionResponse response = businessLogic.handle(direxTransactionRequest);

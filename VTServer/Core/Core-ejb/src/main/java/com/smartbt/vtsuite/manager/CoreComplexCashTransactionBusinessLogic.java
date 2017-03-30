@@ -166,15 +166,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             personalInfoSubTransaction.setResultCode(ResultCode.SUCCESS.getCode());
             personalInfoSubTransaction.setResultMessage(ResultMessage.SUCCESS.getMessage());
             transaction.addSubTransaction(personalInfoSubTransaction);
-
-            //---------  ASK IF CANCELATED ------------------ (set cancelable as TRUE)
-            if (isCancelated(true)) {
-                response = DirexTransactionResponse.forException(ResultCode.TERMINAL_CANCELATED_TRANSACTION, ResultMessage.TERMINAL_CANCELATED_TRANSACTION);
-                response.setTransactionType(TransactionType.ISTREAM_CASH_AUTH_SUBMIT);
-                CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
-                return;
-            }
-
+ 
             //-------------------------
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CoreComplexCashBL] Persist personal Info", null);
             //PERSIST PERSONAL INFO
@@ -338,16 +330,7 @@ public class CoreComplexCashTransactionBusinessLogic extends CoreAbstractTransac
             if (responseMap.containsKey(ParameterName.IDBENEFICIARY)) {
                 transaction.getClient().setIdBeneficiary((String) responseMap.get(ParameterName.IDBENEFICIARY));
             }
-
-            //if order express success, I ask if terminal cancelated transaction.
-            //(set cancelable as false)
-            if (isCancelated(false)) {
-                response = DirexTransactionResponse.forException(ResultCode.TERMINAL_CANCELATED_TRANSACTION, ResultMessage.TERMINAL_CANCELATED_TRANSACTION);
-                response.setTransactionType(originalTransaction);
-                CoreTransactionUtil.subTransactionFailed(transaction, response, jmsManager.getCoreOutQueue(), correlationId);
-                return;
-            }
-
+ 
             if (request.getTransactionData().containsKey(ParameterName.PHONE)) {
                 String cell_area_code = (String) request.getTransactionData().get(ParameterName.PHONE);
                 request.getTransactionData().put(ParameterName.CELL_PHONE_AREA, cell_area_code.substring(0, 3));

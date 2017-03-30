@@ -58,6 +58,7 @@ public enum ResultMessage {
     TERMINAL_CONFIRMATION_TIME_EXCEED("Terminal has exceed the time for TecnicardConfirmation.","Check Truncation Failed. Please Contact Customer Support."),
     
     TERMINAL_WRONG_AMMOUNT_FORMAT("Wrong format for amount. N(2,2) expected.","Transaction Failed. Please Contact Customer Support."),
+    TERMINAL_WRONG_AMMOUNT("Terminal's amount doesn't match check's amount.","Terminal's amount doesn't match check's amount."),
     
     TERMINAL_CANCELATED_TRANSACTION("Terminal cancelled transaction.","Transaction Failed. Please Contact Customer Support."),
       

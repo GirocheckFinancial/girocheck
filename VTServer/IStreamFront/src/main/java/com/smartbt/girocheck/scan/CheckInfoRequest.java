@@ -106,7 +106,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.STATE, getState());
         map.put(ParameterName.IDSTATE, getState());
         map.put(ParameterName.FIRST_NAME, getFirstName()); 
-        map.put(ParameterName.AMMOUNT, checkLAR);
+        map.put(ParameterName.AMMOUNT, checkCAR);
 
         Date bornD = getDateFromString(getBornDate());
         if (bornD != null) {
@@ -139,6 +139,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.LAST_NAME, getLastName());
         map.put(ParameterName.ZIPCODE, getZipCode());
         map.put(ParameterName.MICR, getMicr());
+       // map.put(ParameterName.CHECK_TYPE, checkType);
         map.put(ParameterName.MAKER_NAME, getMakerName());
         map.put(ParameterName.MAKER_CITY, getMakerCity());
         map.put(ParameterName.MAKER_STATE, getMakerState());

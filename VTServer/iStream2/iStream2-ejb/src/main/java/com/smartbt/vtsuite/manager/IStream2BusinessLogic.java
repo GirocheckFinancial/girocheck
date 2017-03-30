@@ -81,14 +81,16 @@ public class IStream2BusinessLogic {
         }
 
     }
-
+//USer: GCTLS
+//PW: jpl500
+//LocationId: 4769778
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
         try {
             Map transactionData = request.getTransactionData();
             DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
-            String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);
-            String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
-            Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
+            String userName = "GCTLS";// MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);
+            String password = "jpl500"; //MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
+            Integer locationId = 4769778;//MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
             String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
             String depositName = "Deposit at " + (new Date());
             String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);

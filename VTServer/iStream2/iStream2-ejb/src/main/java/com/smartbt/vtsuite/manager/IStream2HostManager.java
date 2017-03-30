@@ -57,7 +57,7 @@ public class IStream2HostManager {
         subTransaction.setHost(NomHost.ISTREAM2.getId());
 
         String prodProperty = System.getProperty("PROD");
-        Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
+        Boolean isProd = true; //prodProperty != null && prodProperty.equalsIgnoreCase("true");
 
         if (isProd) {
             response = IStream2BusinessLogic.get().process(request);

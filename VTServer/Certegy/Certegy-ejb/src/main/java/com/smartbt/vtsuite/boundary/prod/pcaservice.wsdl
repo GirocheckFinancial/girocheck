@@ -123,7 +123,8 @@
   </binding>
   <service name="PCAService">
     <port name="PCAPort" binding="tns:PCAPortBinding">
-      <soap:address location="https://pca-prod.FNIS.com/mepca/PCAService"/>
+      <soap:address location="https://pca-transtest2.FNIS.com/mepca2/PCAService"/>
+      <!--<soap:address location="https://pca-prod.FNIS.com/mepca/PCAService"/>-->
     </port>
   </service>
 </definitions>

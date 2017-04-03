@@ -94,6 +94,11 @@ public class IStream2BusinessLogic {
             String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
             String depositName = "Deposit at " + (new Date());
             String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
+            
+            if(micr != null){
+                micr = micr.replaceAll("C", "<").replaceAll("A", ":").replaceAll("D", "=");
+            }
+            
             String cutomerItemId = MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
            
             byte[] checkBack = (byte[]) transactionData.get(ParameterName.CHECK_BACK);

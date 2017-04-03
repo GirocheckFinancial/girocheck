@@ -73,7 +73,7 @@ public class PCAReverseRequest {
         req.setTransID((String)map.get(ParameterName.REQUEST_ID));
          req.setVersion(CERTEGY_VERSION); 
         //TODO put this in a System property var
-        req.setSiteID(CERTEGY_SITE_ID);
+        req.setSiteID((String)map.get(ParameterName.CERTEGY_LOCATION_ID));
         
         req.setSSN((String)map.get(ParameterName.SSN));
         

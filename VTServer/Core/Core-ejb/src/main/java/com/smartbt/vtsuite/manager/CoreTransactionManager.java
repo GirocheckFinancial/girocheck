@@ -387,6 +387,7 @@ public class CoreTransactionManager {
             direxTransactionRequest.getTransactionData().put(ParameterName.IDPOS, terminal.getMerchant().getIdPosOrderExp());
             direxTransactionRequest.getTransactionData().put(ParameterName.IDTELLER, terminal.getMerchant().getIdTellerOrderExp());
             direxTransactionRequest.getTransactionData().put(ParameterName.IDTELLERPAGO, terminal.getMerchant().getIdTellerPagoOrderExp());
+            direxTransactionRequest.getTransactionData().put(ParameterName.CERTEGY_LOCATION_ID, terminal.getMerchant().getIdIstreamFuzeCash()); //TODO create new parameter for this
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] IDPOS: " + terminal.getMerchant().getIdPosOrderExp() + " IDTELLER: " + terminal.getMerchant().getIdTellerOrderExp(), null);
 
             if (transactionType == TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {

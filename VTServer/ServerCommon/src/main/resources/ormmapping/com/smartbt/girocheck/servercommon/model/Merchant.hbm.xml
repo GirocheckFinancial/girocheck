@@ -49,7 +49,7 @@ License Type: Evaluation
                 
                 <property name="idTecnicardCheck" column="id_tecnicard_check" type="string" length="255" not-null="false" lazy="false"/>
 		<property name="idTecnicardCash" column="id_tecnicard_cash" type="string" length="255" not-null="false" lazy="false"/>
-		<property name="idIstreamFuzeCash" column="id_istream_fuze_cash" type="string" length="20" not-null="false" lazy="false"/>
+		<property name="idIstreamFuzeCash" column="certegy_location_id" type="string" length="20" not-null="false" lazy="false"/>
 		<property name="idIstreamFuzeCheck" column="id_istream_fuze_check" type="string" length="20" not-null="false" lazy="false"/>
 		<property name="idIstreamTecnicardCash" column="id_istream_tecnicard_cash" type="string" length="20" not-null="false" lazy="false"/>
 		<property name="idIstreamTecnicardCheck" column="id_istream_tecnicard_check" type="string" length="20" not-null="false" lazy="false"/>

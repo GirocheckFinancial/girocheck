@@ -194,7 +194,7 @@ public class MerchantEditor extends BaseBoardingEditor {
         /*  Row 6*/
 //        idIStream = new BaseTextItem( 14, "idIStream", "ID IStream", "Enter the IStream ID.", false );
 //        idIStream.setTextAlign( Alignment.LEFT );
-        idIstreamFuzeCash = new BaseTextItem( 17, "idIstreamFuzeCash", "ID IStream Fuze Cash", "Enter the Istream ID Fuze Cash.", false );
+        idIstreamFuzeCash = new BaseTextItem( 17, "idIstreamFuzeCash", "Certegy's Location Id", "Enter the certegy's Location ID.", false );
         idIstreamFuzeCash.setTextAlign( Alignment.LEFT );
         idIstreamFuzeCheck = new BaseTextItem( 18, "idIstreamFuzeCheck", "ID IStream Fuze Check", "Enter the Istream ID Fuze Check.", false );
         idIstreamFuzeCheck.setTextAlign( Alignment.LEFT );

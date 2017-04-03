@@ -26,7 +26,8 @@ public class PCAService
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/C:/REPO/Dev/girocheck/VTServer/Certegy/Certegy-ejb/src/main/java/com/smartbt/vtsuite/boundary/prod/pcaservice.wsdl");
+            String prodURL = System.getProperty("CERTEGY_PRIMARY_PROD_WSDL");//add this property in glassfish domain if not present
+            url = new URL("file:/"+prodURL);
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

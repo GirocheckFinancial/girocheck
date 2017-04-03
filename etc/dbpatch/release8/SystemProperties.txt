@@ -1,5 +1,2 @@
-CERTEGY_PRIMARY_PROD_URL  possible values:  https://pca-prod.FNIS.com/mepca/PCAService
+CERTEGY_PRIMARY_PROD_WSDL  possible values:  C:/REPO/Dev/girocheck/VTServer/Certegy/Certegy-ejb/src/main/java/com/smartbt/vtsuite/boundary/pcaservice.wsdl
 
-CERTEGY_CERT_KEY_FILE     possible values:  Edberg.Ken.p12
-
-CERTEGY_CERT_KEY_PHRASE   possible valies:  RLLT4w3KLfI= 

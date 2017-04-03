@@ -39,10 +39,13 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+import java.util.Iterator;
 import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
 
 /**
  * Mpowa Business Logic Class
@@ -56,6 +59,8 @@ public class CertegyBusinessLogic {
     private PCA port;
     private com.smartbt.vtsuite.boundary.prod.PCAService primaryService;
     Boolean isCertegyProdConnect = true;
+   
+
 
     public static synchronized CertegyBusinessLogic get() {
         if (INSTANCE == null) {
@@ -66,18 +71,16 @@ public class CertegyBusinessLogic {
 
     public CertegyBusinessLogic() {
         isCertegyProdConnect = doConnectCertegyProdURL();
-        if (isCertegyProdConnect) {
-            primaryService = new com.smartbt.vtsuite.boundary.prod.PCAService();
-            port = primaryService.getPCAPort();
-            System.out.println("*************** CERTEGY PRIMARY URL CONNECTION GOT *********************** " + primaryService.getWSDLDocumentLocation().getPath());
-        } else {
-            secondaryService = new PCAService();
+        if (!isCertegyProdConnect) {
+            secondaryService = new PCAService();           
             port = secondaryService.getPCAPort();
             System.out.println("*************** CERTEGY SECONDARY URL CONNECTION GOT ***********************" + secondaryService.getWSDLDocumentLocation().getPath());
         }
     }
 
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
+        
+               
         Map transactionData = request.getTransactionData();
         DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
 
@@ -131,70 +134,39 @@ public class CertegyBusinessLogic {
 
     private Boolean doConnectCertegyProdURL() {
 
-        String prodURL = System.getProperty("CERTEGY_PRIMARY_PROD_URL");//add this property in glassfish domain if not present
-        String certFile = System.getProperty("CERTEGY_CERT_KEY_FILE");//add this property in glassfish domain if not present and add cetificate file in domain config folder
-        String certKeyPhrase = System.getProperty("CERTEGY_CERT_KEY_PHRASE");//add this property in glassfish domain if not present
+        String prodURL = System.getProperty("CERTEGY_PRIMARY_PROD_WSDL");//add this property in glassfish domain if not present
+        
         try {
 
-            if (prodURL != null && !prodURL.isEmpty() && certFile != null && !certFile.isEmpty() && certKeyPhrase != null && !certKeyPhrase.isEmpty()) {
-
-                System.out.println("*************** CERTEGY CONNECTING TO PRODUCTION URL " + prodURL);
-
-                URL url = new URL(prodURL);
-                HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-                con.setSSLSocketFactory(getFactory(new File(certFile), certKeyPhrase));
-                con.setAllowUserInteraction(true);
-
-                // optional default is GET
-                con.setRequestMethod("GET");
-
-                int responseCode = con.getResponseCode();
-
-                System.out.println("Sending 'GET' request to URL : " + url);
-                System.out.println("Response Code : " + responseCode);
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-
-                }
-                com.smartbt.vtsuite.boundary.prod.PCAService prodService = new com.smartbt.vtsuite.boundary.prod.PCAService();
-                PCA prodPort = prodService.getPCAPort();
+            if (prodURL != null && !prodURL.isEmpty()) {
+                System.out.println("*************** CONNECTING TO CERTEGY PRODUCTION URL " + prodURL);                
+                URL url = new URL("file:/"+prodURL);
+                QName serviceName =new QName("http://fis.certegy.pca.com/","PCAService") ;
+                
+                QName portName =new QName("http://fis.certegy.pca.com/","PCAPort") ;
+                
+                
+                Service ser= Service.create(url, serviceName);                        
+                        
+                port =ser.getPort(portName, PCA.class);  
+                
+                System.out.println("***************GOT CERTEGY PORT BINDING "+port);
+                
                 PCAEchoRequest request = new PCAEchoRequest();
                 request.setSiteID(CERTEGY_SITE_ID);
                 request.setEchoNumber(new BigInteger("1000"));
-                PCAEchoResponse certegyResponse = prodPort.echo(request);
-
-                System.out.println("*************** CERTEGY CONNECTION GOT " + response.toString());
+                PCAEchoResponse certegyResponse = port.echo(request);
+                System.out.println("***************GOT CERTEGEY ECHO RESPONSE*****************"+" SITEID = "+certegyResponse.getSiteID()+" , ECHO NUMBER = "+certegyResponse.getEchoNumber());
 
             } else {
                 isCertegyProdConnect = false;
             }
 
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             System.out.println("*************** UNABLE TO CONNECT CERTEGY PRODUCTION URL " + prodURL);
             isCertegyProdConnect = false;
         }
         return isCertegyProdConnect;
-    }
-
-    private static javax.net.ssl.SSLSocketFactory getFactory(File pKeyFile, String pKeyPassword) throws Exception {
-        KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
-        KeyStore keyStore = KeyStore.getInstance("PKCS12");
-
-        InputStream keyInput = new FileInputStream(pKeyFile);
-        keyStore.load(keyInput, pKeyPassword.toCharArray());
-        keyInput.close();
-
-        keyManagerFactory.init(keyStore, pKeyPassword.toCharArray());
-
-        SSLContext context = SSLContext.getInstance("TLS");
-        context.init(keyManagerFactory.getKeyManagers(), null, new SecureRandom());
-
-        return context.getSocketFactory();
-    }
+    }   
 }

@@ -5,40 +5,40 @@
       <xsd:import namespace="http://fis.certegy.pca.com/" schemaLocation="PCAService_schema1.xsd"/>
     </xsd:schema>
   </types>
-  <message name="reverseResponse">
-    <part name="parameters" element="tns:ReverseResponse">
-    </part>
-  </message>
-  <message name="authorize">
-    <part name="parameters" element="tns:AuthorizeRequest">
-    </part>
-  </message>
   <message name="authorizeResponse">
     <part name="parameters" element="tns:AuthorizeResponse">
-    </part>
-  </message>
-  <message name="echoResponse">
-    <part name="parameters" element="tns:EchoResponse">
-    </part>
-  </message>
-  <message name="SOAPException">
-    <part name="fault" element="tns:SOAPException">
-    </part>
-  </message>
-  <message name="postMIR">
-    <part name="parameters" element="tns:PostMIRRequest">
     </part>
   </message>
   <message name="echo">
     <part name="parameters" element="tns:EchoRequest">
     </part>
   </message>
-  <message name="postMIRResponse">
-    <part name="parameters" element="tns:AuthorizeResponse">
+  <message name="authorize">
+    <part name="parameters" element="tns:AuthorizeRequest">
+    </part>
+  </message>
+  <message name="postMIR">
+    <part name="parameters" element="tns:PostMIRRequest">
+    </part>
+  </message>
+  <message name="echoResponse">
+    <part name="parameters" element="tns:EchoResponse">
     </part>
   </message>
   <message name="reverse">
     <part name="parameters" element="tns:ReverseRequest">
+    </part>
+  </message>
+  <message name="SOAPException">
+    <part name="fault" element="tns:SOAPException">
+    </part>
+  </message>
+  <message name="reverseResponse">
+    <part name="parameters" element="tns:ReverseResponse">
+    </part>
+  </message>
+  <message name="postMIRResponse">
+    <part name="parameters" element="tns:AuthorizeResponse">
     </part>
   </message>
   <portType name="PCA">
@@ -123,7 +123,7 @@
   </binding>
   <service name="PCAService">
     <port name="PCAPort" binding="tns:PCAPortBinding">
-      <soap:address location="https://10.102.232.197:443/mepca/PCAService"/>
+      <soap:address location="https://pca-prod.FNIS.com/mepca/PCAService"/>
     </port>
   </service>
 </definitions>

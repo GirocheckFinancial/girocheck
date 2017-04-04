@@ -47,6 +47,10 @@ public class ClientDisplay implements Serializable {
     private String state;
     private String city;
     private Boolean blackList;
+    
+    private Boolean excludeSms;
+        
+           
 
 //    private Boolean active;
 
@@ -226,6 +230,21 @@ public class ClientDisplay implements Serializable {
     public void setBlackList(Boolean blackList) {
         this.blackList = blackList;
     }
+
+    /**
+     * @return the excludeSms
+     */
+    public Boolean getExcludeSms() {
+        return excludeSms;
+    }
+
+    /**
+     * @param excludeSms the excludeSms to set
+     */
+    public void setExcludeSms(Boolean excludeSms) {
+        this.excludeSms = excludeSms;
+    }
+
     
     /**
      * @return the address

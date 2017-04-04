@@ -21,6 +21,7 @@ License Type: Evaluation
 		<property name="createdAt" column="created_at" type="timestamp" not-null="false" lazy="false"/>
 		<property name="addressForm" column="address_form" type="blob" not-null="false" lazy="false"/>
 		<property name="successfulLoads" column="successful_loads" type="integer"/>
+                <property name="excludeSms" column="exclude_sms" type="boolean" length="1" not-null="false" lazy="false"/>
                  
 		<property name="bornDate" column="born_date" type="date" not-null="false" lazy="false"/>
                 <property name="ssn"  type="string" length="255" not-null="true" lazy="false">

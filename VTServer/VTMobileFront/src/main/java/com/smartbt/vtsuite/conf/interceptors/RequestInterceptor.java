@@ -39,6 +39,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         excludedURLs.put("login", "");
         excludedURLs.put("register", "");
         excludedURLs.put("forgotPassword", "");
+        excludedURLs.put("optOut", "");
     }
 
     @Override

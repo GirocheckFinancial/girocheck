@@ -47,6 +47,10 @@ public class Client implements Serializable {
 	private String maskSSN; 
 	
 	private String idBeneficiary;
+        
+        private Boolean excludeSms;
+                
+        
 	
 	private java.util.Set<com.smartbt.girocheck.servercommon.model.CreditCard> data_SC = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.CreditCard>();
 	
@@ -268,5 +272,18 @@ public class Client implements Serializable {
         this.blacklistCard2bank = blacklistCard2bank;
     }
 
+    /**
+     * @return the excludeSms
+     */
+    public Boolean getExcludeSms() {
+        return excludeSms;
+    }
+
+    /**
+     * @param excludeSms the excludeSms to set
+     */
+    public void setExcludeSms(Boolean excludeSms) {
+        this.excludeSms = excludeSms;
+    }
         	
 }

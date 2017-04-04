@@ -112,4 +112,14 @@ public class MobileClientDao extends BaseDAO<MobileClient> {
          
         return (MobileClient)criteria.uniqueResult();
     }
+    
+    public MobileClient getMobileClientByTelphone(String recipentNumber) {
+        
+        Criteria criteria = HibernateUtil.getSession().createCriteria(MobileClient.class)
+                .createAlias("client", "client")
+                .add(Restrictions.eq("client.telephone", recipentNumber))               
+                .setMaxResults(1);        
+         
+        return (MobileClient)criteria.uniqueResult();
+    }
 }

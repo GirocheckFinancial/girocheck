@@ -46,7 +46,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         Queue currentQueue = jmsManager.getCoreOutQueue();
 
         //This variables will control the behavior in Exceptional cases
-        boolean sendOEDevolutionIfFails = false;
+//        boolean sendOEDevolutionIfFails = false;
         // boolean sendIstreamCheckAuthSubmit = false;
         boolean sendCertegyReverseRequestIfFails = false;
         boolean sendWestechSendSingleICL = false;
@@ -114,28 +114,29 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             //------ PROCESS PERSONAL INFO  ------
             processPersonalInfo(transaction, request, checkInfoRequestMap);
 
+            System.out.println("[CheckBusinessLogic] After processPersonalInfo STATE = " + request.getTransactionData().get(ParameterName.STATE));
             //-------SEND TO ORDER_EXPRESS ------ 
-            request.setTransactionType(TransactionType.ORDER_EXPRESS_CONTRATACIONES);
+          //  request.setTransactionType(TransactionType.ORDER_EXPRESS_CONTRATACIONES);
 
-            response = sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+          //  response = sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
 
-            Map oeResponseMap = response.getTransactionData();
+          //  Map oeResponseMap = response.getTransactionData();
 
-            if (oeResponseMap.containsKey(ParameterName.AUTHO_NUMBER)) {
-                String authoNumber = (String) oeResponseMap.get(ParameterName.AUTHO_NUMBER);
-                transaction.setOrderExpressId(authoNumber);
-                request.getTransactionData().put(ParameterName.AUTHO_NUMBER, authoNumber);
-            }
+//            if (oeResponseMap.containsKey(ParameterName.AUTHO_NUMBER)) {
+//                String authoNumber = (String) oeResponseMap.get(ParameterName.AUTHO_NUMBER);
+//                transaction.setOrderExpressId(authoNumber);
+//                request.getTransactionData().put(ParameterName.AUTHO_NUMBER, authoNumber);
+//            }
+//
+//            if (oeResponseMap.containsKey(ParameterName.IDBENEFICIARY)) {
+//                transaction.getClient().setIdBeneficiary((String) oeResponseMap.get(ParameterName.IDBENEFICIARY));
+//            }
 
-            if (oeResponseMap.containsKey(ParameterName.IDBENEFICIARY)) {
-                transaction.getClient().setIdBeneficiary((String) oeResponseMap.get(ParameterName.IDBENEFICIARY));
-            }
-
-            sendOEDevolutionIfFails = true;
+//            sendOEDevolutionIfFails = true;
 
             //------SEND OE LOGS --------- 
-            request.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
-            sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+//            request.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
+//            sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
 
             //-------SEND TO CERTEGY ------
             request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION);
@@ -227,16 +228,16 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         } catch (TransactionalException transactionalException) {
             System.out.println("*********** TransactionalException ************");
 
-            if (sendOEDevolutionIfFails) {
-//                choiceCancellationRequest(request, transaction);
-                try {
-                    request.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
-                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
-                } catch (Exception e) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] OEDevolution Failed.", null);
-                    e.printStackTrace();
-                }
-            }
+//            if (sendOEDevolutionIfFails) {
+////                choiceCancellationRequest(request, transaction);
+//                try {
+//                    request.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
+//                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
+//                } catch (Exception e) {
+//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] OEDevolution Failed.", null);
+//                    e.printStackTrace();
+//                }
+//            }
 
             if (sendCertegyReverseRequestIfFails) {
                 certegyReverseRequest(request, transaction);

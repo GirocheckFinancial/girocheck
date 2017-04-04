@@ -302,7 +302,8 @@
  <service name="PCAService">
   <port name="PCAPort" binding="tns:PCAPortBinding">
    <soap:address 
-      location="https://transtest2.certegy.com/mepca2/PCAService" />
+      location="https://pca-transtest2.FNIS.com/mepca2/PCAService" />
+      <!--location="https://transtest2.certegy.com/mepca2/PCAService" />-->
   </port>
  </service>
 </definitions>

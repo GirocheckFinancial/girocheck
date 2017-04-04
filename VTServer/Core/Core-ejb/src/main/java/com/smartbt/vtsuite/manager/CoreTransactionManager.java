@@ -94,7 +94,7 @@ public class CoreTransactionManager {
 
         String prodProperty = System.getProperty("VERSION");
         version2 = prodProperty != null && prodProperty.equalsIgnoreCase("2");
-        System.out.println("CoreTransactionManager -> version2 = " + version2);
+        System.out.println(">>> CoreTransactionManager -> version2 = " + version2);
 
         try {
             if (direxTransactionRequest.getTransactionData() != null && direxTransactionRequest.getTransactionData().containsKey(TransactionType.TRANSACTION_TYPE)) {
@@ -291,8 +291,7 @@ public class CoreTransactionManager {
                 System.out.println("CoreTransactionManager -> state.getCode() = " + state.getCode());
                 System.out.println("CoreTransactionManager -> state.getAbbreviation() = " + state.getAbbreviation());
                 
-                direxTransactionRequest.getTransactionData().put(ParameterName.STATE_ABBREVIATION, state.getAbbreviation());
-                direxTransactionRequest.getTransactionData().put(ParameterName.OEIDSTATE, state.getAbbreviation());
+                direxTransactionRequest.getTransactionData().put(ParameterName.STATE_ABBREVIATION, state.getAbbreviation()); 
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
 
                 Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();

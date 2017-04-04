@@ -498,7 +498,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
             fillOutCheck(request.getTransactionData(), transaction);
         }
 
-        if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY) || personalInfoRequestMap.containsKey(ParameterName.IDSTATE)
+        if (personalInfoRequestMap.containsKey(ParameterName.IDCOUNTRY) 
                 || personalInfoRequestMap.containsKey(ParameterName.COUNTRY) || personalInfoRequestMap.containsKey(ParameterName.STATE)) {
             try {
                 HibernateUtil.beginTransaction();
@@ -508,37 +508,14 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                 }
 
                 request.getTransactionData().put(ParameterName.IDCOUNTRY, EnumCountry.EUA.getCode() + "");
-
-                String stateAbbreviation = "";
-                if (personalInfoRequestMap.containsKey(ParameterName.IDSTATE)) {
-                     stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.IDSTATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For IDSTATE StateAbbreviation >>> = " + stateAbbreviation, null);
-                    State statee = stateManager.getByAbbreviation(stateAbbreviation);
-
-                    if (statee != null) {
-                        request.getTransactionData().put(ParameterName.IDSTATE, statee.getCode() + "");
-                        identification.setState(statee);
-                    } else {
-                        request.getTransactionData().put(ParameterName.IDSTATE, EnumState.FL.getId() + "");
-                    }
-
-                    try {
-                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.valueOf(stateAbbreviation).getId() + "");
-                    } catch (Exception e) {
-                        request.getTransactionData().put(ParameterName.OEIDSTATE, NomState.FL.getId());
-
-                        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] Failed to get state by abbreviation : " + stateAbbreviation + " sending FL instead.", null);
-                        e.printStackTrace();
-                    }
-                }else{
-                    System.out.println("personalInfoRequestMap DOES NOT CONTAIN :: IDSTATE");
-                }
-
+ 
                 request.getTransactionData().put(ParameterName.COUNTRY, EnumCountry.EUA.getCode() + "");
 
-                if (personalInfoRequestMap.containsKey(ParameterName.STATE) && personalInfoRequestMap.get(ParameterName.STATE) != null && !((String)personalInfoRequestMap.get(ParameterName.STATE)).isEmpty()){
-                    stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE);
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] For STATE StateAbbreviation >>> = " + stateAbbreviation, null);
+                String stateAbbreviation = (String)personalInfoRequestMap.get(ParameterName.STATE_ABBREVIATION); 
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] processPersonalInfo -> StateAbbreviation = " + stateAbbreviation, null);
+                
+                if (stateAbbreviation != null && !stateAbbreviation.isEmpty()){
+                    stateAbbreviation = (String) personalInfoRequestMap.get(ParameterName.STATE_ABBREVIATION); 
                     State statee = stateManager.getByAbbreviation(stateAbbreviation);
 
                     if (statee != null) {
@@ -549,9 +526,7 @@ public abstract class AbstractCommonBusinessLogic extends CoreAbstractTransactio
                     }
                 }
                 
-                if(stateAbbreviation != null && !stateAbbreviation.isEmpty()){
-                    request.getTransactionData().put(ParameterName.STATE_ABBREVIATION, stateAbbreviation);
-                }
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[AbstractCommonBusinessLogic] STATE = " +  request.getTransactionData().get(ParameterName.STATE), null);
 
                 if (request.getTransactionData().containsKey(ParameterName.PHONE)) {
                     String cell_area_code = (String) request.getTransactionData().get(ParameterName.PHONE);

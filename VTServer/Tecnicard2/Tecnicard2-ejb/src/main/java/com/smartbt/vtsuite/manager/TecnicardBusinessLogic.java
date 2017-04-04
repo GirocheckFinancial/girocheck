@@ -210,7 +210,7 @@ public class TecnicardBusinessLogic extends AbstractBusinessLogicModule {
 
         String pState = MapUtil.getStringValueFromMap(map, ParameterName.STATE, false);
         String pCountry = MapUtil.getStringValueFromMap(map, ParameterName.COUNTRY, false);
-        String pIdState = MapUtil.getStringValueFromMap(map, ParameterName.IDSTATE, false);
+        String pIdState = pState;
         String pIdCountry = MapUtil.getStringValueFromMap(map, ParameterName.IDCOUNTRY, false);
 
         DateFormat df = new SimpleDateFormat("yyyyMMdd");

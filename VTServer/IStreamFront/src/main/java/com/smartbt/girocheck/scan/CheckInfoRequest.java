@@ -103,7 +103,7 @@ public class CheckInfoRequest implements IMap {
         map.put(ParameterName.ID, getId());
         map.put(ParameterName.ADDRESS, getAddress());
         map.put(ParameterName.CITY, getCity());
-        map.put(ParameterName.STATE, getState());
+        map.put(ParameterName.STATE_ABBREVIATION, getState());
         map.put(ParameterName.IDSTATE, getState());
         map.put(ParameterName.FIRST_NAME, getFirstName()); 
         map.put(ParameterName.AMMOUNT, checkCAR);

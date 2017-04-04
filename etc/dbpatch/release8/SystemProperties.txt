@@ -1,2 +1,2 @@
-CERTEGY_PRIMARY_PROD_WSDL  possible values:  C:/REPO/Dev/girocheck/VTServer/Certegy/Certegy-ejb/src/main/java/com/smartbt/vtsuite/boundary/pcaservice.wsdl
+CERTEGY_PRIMARY_PROD_WSDL  possible values:  C:/REPO/Dev/girocheck/VTServer/Certegy/Certegy-ejb/src/main/java/com/smartbt/vtsuite/boundary/prod/pcaservice.wsdl
 

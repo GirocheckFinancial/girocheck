@@ -107,37 +107,11 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             feeCalculator(request, transaction);
 
-//            if (checkInfoRequestMap.containsKey(ParameterName.ID) && checkInfoRequestMap.get(ParameterName.ID).equals("0")) {
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ParameterName.ID from personal info: " + checkInfoRequestMap.get(ParameterName.ID), null);
-//                throw new TransactionalException(ResultCode.ISTREAM_FRONT_PERSONAL_INFO_RECEIVED_AS_NULL, TransactionType.PERSONAL_INFO, "Personal Info sent ID = 0");
-//            }
             //------ PROCESS PERSONAL INFO  ------
             processPersonalInfo(transaction, request, checkInfoRequestMap);
 
             System.out.println("[CheckBusinessLogic] After processPersonalInfo STATE = " + request.getTransactionData().get(ParameterName.STATE));
-            //-------SEND TO ORDER_EXPRESS ------ 
-          //  request.setTransactionType(TransactionType.ORDER_EXPRESS_CONTRATACIONES);
-
-          //  response = sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
-
-          //  Map oeResponseMap = response.getTransactionData();
-
-//            if (oeResponseMap.containsKey(ParameterName.AUTHO_NUMBER)) {
-//                String authoNumber = (String) oeResponseMap.get(ParameterName.AUTHO_NUMBER);
-//                transaction.setOrderExpressId(authoNumber);
-//                request.getTransactionData().put(ParameterName.AUTHO_NUMBER, authoNumber);
-//            }
-//
-//            if (oeResponseMap.containsKey(ParameterName.IDBENEFICIARY)) {
-//                transaction.getClient().setIdBeneficiary((String) oeResponseMap.get(ParameterName.IDBENEFICIARY));
-//            }
-
-//            sendOEDevolutionIfFails = true;
-
-            //------SEND OE LOGS --------- 
-//            request.setTransactionType(TransactionType.ORDER_EXPRESS_LOGS);
-//            sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
-
+        
             //-------SEND TO CERTEGY ------
             request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION);
             try {
@@ -189,15 +163,6 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             if (response.wasApproved()) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Sending answer to Terminal -> correlationId = " + correlationId, null);
                 sendAnswerToTerminal(TransactionType.TECNICARD_CONFIRMATION, ResultCode.SUCCESS, estimatedPostingTime, correlationId);
-                //  choiceNotifyPayment(request, transaction);
-
-                try {
-                    request.setTransactionType(TransactionType.ORDER_EXPRESS_REPORTAPAGO);
-                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
-                } catch (Exception e) {
-                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] OEPago Failed.", null);
-                    e.printStackTrace();
-                }
                 sendWestechSendSingleICL = true;
             }
 
@@ -227,17 +192,6 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             //
         } catch (TransactionalException transactionalException) {
             System.out.println("*********** TransactionalException ************");
-
-//            if (sendOEDevolutionIfFails) {
-////                choiceCancellationRequest(request, transaction);
-//                try {
-//                    request.setTransactionType(TransactionType.ORDER_EXPRESS_DEVOLUCION);
-//                    sendMessageToHost(request, NomHost.ORDER_EXPRESS, ORDER_EXPRESS_WAIT_TIME, transaction);
-//                } catch (Exception e) {
-//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] OEDevolution Failed.", null);
-//                    e.printStackTrace();
-//                }
-//            }
 
             if (sendCertegyReverseRequestIfFails) {
                 certegyReverseRequest(request, transaction);

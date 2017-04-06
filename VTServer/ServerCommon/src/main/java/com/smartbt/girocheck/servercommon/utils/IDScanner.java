@@ -6,7 +6,10 @@
 package com.smartbt.girocheck.servercommon.utils;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
+import com.smartbt.girocheck.servercommon.manager.StateManager;
 import com.smartbt.girocheck.servercommon.messageFormat.IdType;
+import com.smartbt.girocheck.servercommon.model.State;
+import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import com.smartbt.girocheck.servercommon.utils.idscanner.DriverLicense;
 
 import java.text.SimpleDateFormat;
@@ -96,14 +99,14 @@ public class IDScanner {
     public static Map<ParameterName, Object> parseID(String authKey, String text) throws Exception {
         Map<ParameterName, Object> map = null;
         try {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID", null);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: text = " + text, null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]::: Parsing ID", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]::: text = " + text, null);
             map = parseIdLocally(text);
         } catch (Exception e) {
         }
 
         if (!validateOutput(map)) {
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally FAILED", null);
+            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]::: Parsing ID locally FAILED", null);
             try {
                 map = parseIDRemotely(authKey, text, 5);
             } catch (Exception e) {
@@ -114,6 +117,12 @@ public class IDScanner {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[IDScanner]:: Parsing ID locally... SUCCESS", null);
         }
 
+        String stateAbbreviation = (String)map.get(ParameterName.STATE_ABBREVIATION);
+        HibernateUtil.beginTransaction();
+        State state = StateManager.get().getByAbbreviation(stateAbbreviation);
+        map.put(ParameterName.STATE, state.getCode() + "");
+        System.out.println("IDScanner -> STATE = " + state.getCode());
+        HibernateUtil.commitTransaction();
         return map;
     }
 
@@ -167,7 +176,6 @@ public class IDScanner {
                     map.put(ParameterName.ADDRESS, getString(dl, "Address1"));
                     map.put(ParameterName.GENDER, getString(dl, "Gender"));
                     map.put(ParameterName.CITY, getString(dl, "City"));
-                    map.put(ParameterName.STATE, getString(dl, "IssuedBy"));
                     map.put(ParameterName.LAST_NAME, getString(dl, "LastName"));
                     map.put(ParameterName.ZIPCODE, getString(dl, "PostalCode"));
                     map.put(ParameterName.FIRST_NAME, getString(dl, "FirstName"));

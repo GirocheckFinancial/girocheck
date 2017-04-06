@@ -328,7 +328,6 @@ public class DriverLicense {
         map.put(ParameterName.ADDRESS, getAddress());
         map.put(ParameterName.GENDER, getSex());
         map.put(ParameterName.CITY, getCity());
-        map.put(ParameterName.STATE, getState());
         map.put(ParameterName.STATE_ABBREVIATION, getState()); 
         
         Date expDate = getLicenseExpirationDate().getTime();

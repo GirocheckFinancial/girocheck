@@ -145,8 +145,7 @@ public class MerchantDAO extends BaseDAO<Merchant> {
             
             display.setSic( merchant.getSic() );
             display.setCardInventory( merchant.getInventory() + "" );
-            display.setMerchantType( merchant.getMerchantType() + "" );
-            display.setDistributor( merchant.getDistributor() + "" );
+            display.setMerchantType( merchant.getMerchantType() + "" ); 
             display.setDistributionChanel( merchant.getDistributionChanel() + "" );
             display.setRisk( merchant.getRisk() + "" );
 
@@ -164,6 +163,7 @@ public class MerchantDAO extends BaseDAO<Merchant> {
 
             display.setDocumentNotes( merchant.getDocumentNotes() );
             display.setDescription( merchant.getDescription() );
+            display.setCommissionType(merchant.getCommissionType() + "");
 
             display.setHasTransaction( hasTransaction( id ) );
         } else {

@@ -42,20 +42,17 @@ public class DataSourceBuilder {
       return new BaseDatasource(item1,item2,item3);
   }  
 
-  public static BaseDatasource getDistributorDS(){
+  public static BaseDatasource getCommissionTypeDS(){
       Record item1 = new Record();
-      item1.setAttribute( "id", 1);
-      item1.setAttribute( "name", "Distributor 1");
+      item1.setAttribute( "id", 1);  //"D"
+      item1.setAttribute( "name", "Direct");
       
       Record item2 = new Record();
-      item2.setAttribute( "id", 2);
-      item2.setAttribute( "name", "Distributor 2");
+      item2.setAttribute( "id", 2); //"I"
+      item2.setAttribute( "name", "ISO");
+       
       
-      Record item3 = new Record();
-      item3.setAttribute( "id",3);
-      item3.setAttribute( "name", "Distributor 3");
-      
-      return new BaseDatasource(item1,item2,item3);
+      return new BaseDatasource(item1,item2);
   }  
 
   public static BaseDatasource getDistributionChanelDS(){

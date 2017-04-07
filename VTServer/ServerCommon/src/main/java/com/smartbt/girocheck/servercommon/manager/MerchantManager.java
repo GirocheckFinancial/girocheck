@@ -13,12 +13,8 @@
 package com.smartbt.girocheck.servercommon.manager;
 
 import com.smartbt.girocheck.servercommon.dao.AgrupationDAO;
-import com.smartbt.girocheck.servercommon.dao.CreditCardDAO;
 import com.smartbt.girocheck.servercommon.dao.CardProgramDAO;
-import com.smartbt.girocheck.servercommon.dao.CountryDAO;
 import com.smartbt.girocheck.servercommon.dao.MerchantDAO;
-import com.smartbt.girocheck.servercommon.dao.StateDAO;
-import com.smartbt.girocheck.servercommon.display.AgrupationDisplay;
 import com.smartbt.girocheck.servercommon.display.MerchantDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
@@ -32,9 +28,7 @@ import com.smartbt.girocheck.servercommon.model.CardProgram;
 import com.smartbt.girocheck.servercommon.model.Country;
 import com.smartbt.girocheck.servercommon.model.State;
 import com.smartbt.vtsuite.vtcommon.Constants;
-import java.awt.Window;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -44,10 +38,7 @@ import java.util.List;
  */
 public class MerchantManager {
     private AgrupationDAO agrupationDAO = AgrupationDAO.get();
-    private MerchantDAO merchantDAO = MerchantDAO.get();
-    private CountryDAO countryDAO = CountryDAO.get();
-    private StateDAO stateDAO = StateDAO.get();
-    private CreditCardDAO creditCardDAO = CreditCardDAO.get();
+    private MerchantDAO merchantDAO = MerchantDAO.get(); 
     private CardProgramDAO cardProgramDAO = CardProgramDAO.get();
 
     public ResponseDataList getMerchantsByAgrupation( int idAgrupation ) {
@@ -82,7 +73,6 @@ public class MerchantManager {
         merchant.setAgrupation( agrupation );
 
         merchant.setLegalName(display.getLegalName());
-//        merchant.setLegalName( URLEncoder.encode(display.getLegalName(), "UTF-8") );
         merchant.setAgentName( display.getAgentName() );
         merchant.setBankName(display.getBankName());
         merchant.setRoutingBankNumber(display.getRoutingBankNumber());
@@ -120,8 +110,7 @@ public class MerchantManager {
         merchant.setIdTecnicardCash(display.getIdTecnicardCash());
         merchant.setIstreamUser( display.getiStreamUser());
         merchant.setIstreamPassword( display.getiStreamPassword());
-        
-//        merchant.setIdIstream(display.getIdIStream());
+         
         merchant.setIdIstreamFuzeCash(display.getIdIstreamFuzeCash());
         merchant.setIdIstreamFuzeCheck(display.getIdIstreamFuzeCheck());
         merchant.setIdIstreamTecnicardCash(display.getIdIstreamTecnicardCash());
@@ -136,11 +125,8 @@ public class MerchantManager {
             merchant.setCard_program( cardProgram );
         }
         
-        merchant.setMerchantType(Integer.parseInt(display.getMerchantType()) );
-        merchant.setDistributor(Integer.parseInt(display.getDistributor()) );
-        merchant.setDistributionChanel(Integer.parseInt(display.getDistributionChanel()) );
-        merchant.setRisk(Integer.parseInt(display.getRisk()) );
-        
+        merchant.setMerchantType(Integer.parseInt(display.getMerchantType()) ); 
+       
         //Boolean values
         merchant.setIndependentOwner( display.getIndependentOwner());
         merchant.setMoneyTransmission( display.getMoneyTransmission());
@@ -156,6 +142,11 @@ public class MerchantManager {
         merchant.setDocumentNotes( display.getDocumentNotes());
         merchant.setDescription(display.getDescription());
         merchant.setAuthFeeP(display.getAuthFeeP());
+        
+        if(display.getCommissionType() != null && display.getCommissionType().length() > 0){
+            merchant.setCommissionType(display.getCommissionType().charAt(0));
+        }
+        
 
         merchantDAO.saveOrUpdate( merchant );
 

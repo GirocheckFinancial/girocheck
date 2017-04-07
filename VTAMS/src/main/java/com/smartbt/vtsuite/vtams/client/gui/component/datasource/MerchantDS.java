@@ -89,6 +89,7 @@ public class MerchantDS extends BaseDatasource {
         DataSourceTextField descriptionField = new DataSourceTextField("description");
         DataSourceTextField oEAgentNumberField = new DataSourceTextField("oEAgentNumber");
         DataSourceTextField authFeePField = new DataSourceTextField("authFeeP");
+        DataSourceTextField commissionTypeField = new DataSourceTextField("commissionType");
        
         DataSourceBooleanField hasTransactionField = new DataSourceBooleanField("hasTransaction");
         
@@ -146,7 +147,8 @@ public class MerchantDS extends BaseDatasource {
                 oEAgentNumberField,
         
                 hasTransactionField,
-                authFeePField);
+                authFeePField,
+                commissionTypeField);
     }
 
     public MerchantDS(String fetchDataUrl) {

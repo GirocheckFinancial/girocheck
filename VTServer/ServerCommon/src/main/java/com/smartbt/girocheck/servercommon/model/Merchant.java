@@ -11,10 +11,7 @@
  */
 package com.smartbt.girocheck.servercommon.model;
 
-import java.io.Serializable;
-import java.sql.Blob;
-import java.util.Date;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import java.io.Serializable; 
 
 public class Merchant implements Serializable {
 
@@ -115,6 +112,7 @@ public class Merchant implements Serializable {
     
     private Integer inventory;
     private Integer threshold;
+    private Character commissionType;
 
     private java.util.Set<com.smartbt.girocheck.servercommon.model.MerchantParameterValue> merchant_Parameter_Value = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.MerchantParameterValue>();
 
@@ -683,6 +681,22 @@ public class Merchant implements Serializable {
     public void setThreshold(Integer threshold) {
         this.threshold = threshold;
     }
+ 
+
+    /**
+     * @return the commissionType
+     */
+    public Character getCommissionType() {
+        return commissionType;
+    }
+
+    /**
+     * @param commissionType the commissionType to set
+     */
+    public void setCommissionType(Character commissionType) {
+        this.commissionType = commissionType;
+    }
+ 
 
 
 }

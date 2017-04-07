@@ -89,7 +89,7 @@ public class MerchantDisplay implements Serializable {
     private boolean hasTransaction;
     
     private java.util.Date activationDate;
-
+    private String commissionType;
     
     public MerchantDisplay() {
 
@@ -733,5 +733,22 @@ public class MerchantDisplay implements Serializable {
     public void setActivationDate(Date activationDate) {
         this.activationDate = activationDate;
     }
+ 
+    /**
+     * @return the commissionType
+     */
+    public String getCommissionType() {
+        return commissionType;
+    }
+
+    /**
+     * @param commissionType the commissionType to set
+     */
+    public void setCommissionType(String commissionType) {
+        this.commissionType = commissionType;
+    }
+ 
+
+   
 
 }

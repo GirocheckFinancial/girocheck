@@ -15,6 +15,7 @@
  */
 package com.smartbt.vtsuite.manager;
 
+import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
 import com.smartbt.girocheck.servercommon.messageFormat.DirexTransactionResponse;
@@ -29,21 +30,10 @@ import com.smartbt.vtsuite.boundary.PCAResponse;
 import com.smartbt.vtsuite.boundary.PCAReverseRequest;
 import com.smartbt.vtsuite.boundary.PCAReverseResponse;
 import com.smartbt.vtsuite.boundary.PCAService;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.util.Iterator;
 import java.util.Map;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
@@ -89,18 +79,21 @@ public class CertegyBusinessLogic {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CertegyBusinessLogic] proccessing:: " + transactionType, null);
 
         String resultCode = "";
+        Boolean success = false;
         switch (transactionType) {
             case CERTEGY_AUTHENTICATION:
                 resultCode = combinedEnrollmentAuthentication(transactionData);
+                success = (resultCode != null && resultCode.equals("00"));
                 break;
             case CERTEGY_REVERSE_REQUEST:
                 resultCode = reverseRequest(transactionData);
+                success = (resultCode != null && resultCode.equals("13"));
                 break;
         }
 
         System.out.println("[CertegyBusinessLogic] :: resultCode = " + resultCode);
 
-        if (resultCode == null || !resultCode.equals("00")) {
+        if (!success) {
             direxTransactionResponse = DirexTransactionResponse.forException(ResultCode.CERTEGY_DENY, ResultMessage.CERTEGY_DENY);
             direxTransactionResponse.setErrorCode(resultCode);
             return direxTransactionResponse;
@@ -127,7 +120,10 @@ public class CertegyBusinessLogic {
     public String reverseRequest(Map params) {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CertegyBusinessLogic] Calling method cancelationRequest", null);
 
+        params.remove(ParameterName.CHECK_ISSUE_DATE);
+        
         PCAReverseRequest request = PCAReverseRequest.build(params);
+        System.out.println(request.toString());
         PCAReverseResponse response = port.reverse(request);
         return response != null ? response.getResponseCode() : "";
     }

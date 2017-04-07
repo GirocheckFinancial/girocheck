@@ -66,7 +66,7 @@ public class Check {
         String issueDate = (String) map.get(ParameterName.CHECK_ISSUE_DATE);
         
         if(issueDate!= null){ 
-             _this.setIssueDate(issueDate.replace("-", ""));
+             _this.setIssueDate(issueDate.replaceAll("-", ""));
         }
       
 

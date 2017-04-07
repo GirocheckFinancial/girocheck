@@ -1,4 +1,3 @@
-
 package com.smartbt.vtsuite.boundary;
 
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
@@ -14,12 +13,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for PCAReverseRequest complex type.
- * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
+ * Java class for PCAReverseRequest complex type.
+ *
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
+ *
  * <pre>
  * &lt;complexType name="PCAReverseRequest">
  *   &lt;complexContent>
@@ -37,8 +38,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PCAReverseRequest", propOrder = {
@@ -51,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
     "custom"
 })
 public class PCAReverseRequest {
- 
+
     @XmlElement(name = "TransID", required = true)
     protected String transID;
     @XmlElement(name = "Version", required = true, defaultValue = "1.2")
@@ -67,28 +68,43 @@ public class PCAReverseRequest {
     @XmlElement(name = "Custom")
     protected List<Custom> custom;
 
-    
-     public static PCAReverseRequest build(Map map) {
+    public static PCAReverseRequest build(Map map) { 
         PCAReverseRequest req = new PCAReverseRequest();
-        req.setTransID((String)map.get(ParameterName.REQUEST_ID));
-         req.setVersion(CERTEGY_VERSION); 
+        Object transactionId = map.get(ParameterName.REQUEST_ID); 
+        req.setTransID(transactionId.toString());
+        req.setVersion(CERTEGY_VERSION);
         //TODO put this in a System property var
-        req.setSiteID((String)map.get(ParameterName.CERTEGY_LOCATION_ID));
-        
-        req.setSSN((String)map.get(ParameterName.SSN));
-        
+        req.setSiteID((String) map.get(ParameterName.CERTEGY_LOCATION_ID));
+
+        req.setSSN((String) map.get(ParameterName.SSN));
+
         Check check = Check.build(map);
         req.setCheck(check);
-        
-        return req; 
+
+        return req;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+
+        s.append("-------------  Certegy PCAReverseRequest ----------").append('\n');
+        s.append("<PCAReverseRequest>").append('\n');
+        s.append("    <TransID>").append(transID).append("</TransID>").append('\n');
+        s.append("    <Version>").append(version).append("</Version>").append('\n');
+        s.append("    <SiteID>").append(siteID).append("</SiteID>").append('\n');
+        s.append("    <SSN>").append(ssn).append("</SSN>").append('\n');
+        s.append(check.toString()).append('\n');
+        s.append("</PCAReverseRequest>").append('\n');
+
+        return s.toString();
+    }
+
     /**
      * Gets the value of the transID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getTransID() {
         return transID;
@@ -96,11 +112,9 @@ public class PCAReverseRequest {
 
     /**
      * Sets the value of the transID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setTransID(String value) {
         this.transID = value;
@@ -108,11 +122,9 @@ public class PCAReverseRequest {
 
     /**
      * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @return possible object is {@link BigDecimal }
+     *
      */
     public BigDecimal getVersion() {
         return version;
@@ -120,11 +132,9 @@ public class PCAReverseRequest {
 
     /**
      * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @param value allowed object is {@link BigDecimal }
+     *
      */
     public void setVersion(BigDecimal value) {
         this.version = value;
@@ -132,11 +142,9 @@ public class PCAReverseRequest {
 
     /**
      * Gets the value of the siteID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getSiteID() {
         return siteID;
@@ -144,11 +152,9 @@ public class PCAReverseRequest {
 
     /**
      * Sets the value of the siteID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setSiteID(String value) {
         this.siteID = value;
@@ -156,11 +162,9 @@ public class PCAReverseRequest {
 
     /**
      * Gets the value of the ssn property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is {@link String }
+     *
      */
     public String getSSN() {
         return ssn;
@@ -168,11 +172,9 @@ public class PCAReverseRequest {
 
     /**
      * Sets the value of the ssn property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is {@link String }
+     *
      */
     public void setSSN(String value) {
         this.ssn = value;
@@ -180,11 +182,9 @@ public class PCAReverseRequest {
 
     /**
      * Gets the value of the check property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Check }
-     *     
+     *
+     * @return possible object is {@link Check }
+     *
      */
     public Check getCheck() {
         return check;
@@ -192,11 +192,9 @@ public class PCAReverseRequest {
 
     /**
      * Sets the value of the check property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Check }
-     *     
+     *
+     * @param value allowed object is {@link Check }
+     *
      */
     public void setCheck(Check value) {
         this.check = value;
@@ -204,25 +202,24 @@ public class PCAReverseRequest {
 
     /**
      * Gets the value of the roundtrip property.
-     * 
+     *
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the roundtrip property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the roundtrip property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getRoundtrip().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link String }
+     *
+     *
      */
     public List<String> getRoundtrip() {
         if (roundtrip == null) {
@@ -233,25 +230,24 @@ public class PCAReverseRequest {
 
     /**
      * Gets the value of the custom property.
-     * 
+     *
      * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the custom property.
-     * 
+     * This accessor method returns a reference to the live list, not a
+     * snapshot. Therefore any modification you make to the returned list will
+     * be present inside the JAXB object. This is why there is not a
+     * <CODE>set</CODE> method for the custom property.
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getCustom().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Custom }
-     * 
-     * 
+     * Objects of the following type(s) are allowed in the list {@link Custom }
+     *
+     *
      */
     public List<Custom> getCustom() {
         if (custom == null) {

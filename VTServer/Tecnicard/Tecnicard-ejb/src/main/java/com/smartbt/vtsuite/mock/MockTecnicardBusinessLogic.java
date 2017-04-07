@@ -156,8 +156,7 @@ public class MockTecnicardBusinessLogic extends AbstractBusinessLogicModule {
         return response;
     }
 
-    private IMap wmCardPersonalization(Map map) throws Exception {
-
+    private IMap wmCardPersonalization(Map map) throws Exception { 
         String pId = MapUtil.getStringValueFromMap(map, ParameterName.SSN, true);
 
         String pState = MapUtil.getStringValueFromMap(map, ParameterName.STATE, false);

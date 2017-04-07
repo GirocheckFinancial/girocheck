@@ -92,8 +92,9 @@ public class CoreTransactionManager {
      */
     public void processTransaction(DirexTransactionRequest direxTransactionRequest) throws Exception {
 
-        String prodProperty = System.getProperty("VERSION");
-        version2 = prodProperty != null && prodProperty.equalsIgnoreCase("2");
+        String versionProperty = System.getProperty("VERSION");
+        System.out.println(">>> CoreTransactionManager -> versionProperty = " + versionProperty);
+        version2 = versionProperty != null && versionProperty.equalsIgnoreCase("2");
         System.out.println(">>> CoreTransactionManager -> version2 = " + version2);
 
         try {
@@ -225,7 +226,15 @@ public class CoreTransactionManager {
                 client = creditCardManager.getClient(cardNumberCR);
 
                 if (client == null || client.getData_SD() == null || client.getData_SD().isEmpty()) {
-                    System.out.println("[CoreTransactionManager] CARD_RELOAD_WITH_DATA -> Card NULL");
+                    System.out.println("[CoreTransactionManager] Sending Code 3");
+                    System.out.println("client == null -> " + (client == null));
+                    if (client != null) {
+                        System.out.println("client.getData_SD() == null -> " + (client.getData_SD() == null));
+                        if (client.getData_SD() != null) {
+                            System.out.println("client.getData_SD().isEmpty() -> " + (client.getData_SD().isEmpty()));
+                        }
+                    }
+
                     transaction.setResultCode(3);
                     return transaction;
                 } else {
@@ -290,8 +299,8 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.STATE, state.getCode());
                 System.out.println("CoreTransactionManager -> state.getCode() = " + state.getCode());
                 System.out.println("CoreTransactionManager -> state.getAbbreviation() = " + state.getAbbreviation());
-                
-                direxTransactionRequest.getTransactionData().put(ParameterName.STATE_ABBREVIATION, state.getAbbreviation()); 
+
+                direxTransactionRequest.getTransactionData().put(ParameterName.STATE_ABBREVIATION, state.getAbbreviation());
                 direxTransactionRequest.getTransactionData().put(ParameterName.ZIPCODE, address.getZipcode());
 
                 Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();
@@ -330,7 +339,7 @@ public class CoreTransactionManager {
 
             if (version2) {
                 direxTransactionRequest.getTransactionData().put(ParameterName.LOCATION_ID, terminal.getMerchant().getIdIstreamTecnicardCheck());
-             }
+            }
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.AMMOUNT)) {
                 double ammount = (Double) direxTransactionRequest.getTransactionData().get(ParameterName.AMMOUNT);
@@ -425,11 +434,10 @@ public class CoreTransactionManager {
                     && transactionType != TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.CARD_NUMBER)) {
                     String cardNumber = (String) direxTransactionRequest.getTransactionData().get(ParameterName.CARD_NUMBER);
- 
-                    if (cardNumber != null && !cardNumber.isEmpty() && cardNumber.length() >= 12) {
-                      System.out.println("[CoreTransactionManager] cardNumberCR == *******" + cardNumber.substring(12));
 
-                        
+                    if (cardNumber != null && !cardNumber.isEmpty() && cardNumber.length() >= 12) {
+                        System.out.println("[CoreTransactionManager] cardNumberCR == *******" + cardNumber.substring(12));
+
                         CreditCard creditCard = null;
                         try {
                             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Obtaining Card for transactionType = " + transactionType.toString(), null);

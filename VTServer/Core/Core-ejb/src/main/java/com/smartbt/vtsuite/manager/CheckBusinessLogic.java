@@ -96,6 +96,11 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             Map checkInfoRequestMap = checkInfoRequest.getTransactionData();
 
+            if (checkInfoRequestMap.containsKey(ParameterName.ID) && checkInfoRequestMap.get(ParameterName.ID).equals("0")) {
+                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ID = 0  (Westech Declined)" , null);
+                throw new TransactionalException(ResultCode.WESTECH_DECLINED, TransactionType.CHECK_INFO, "Westech Declined");
+            }
+
             validateCheckAmount(request, checkInfoRequestMap);
 
             //TODO check is this is necessay (if Westech not trim the last name)
@@ -111,7 +116,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
             processPersonalInfo(transaction, request, checkInfoRequestMap);
 
             System.out.println("[CheckBusinessLogic] After processPersonalInfo STATE = " + request.getTransactionData().get(ParameterName.STATE));
-        
+
             //-------SEND TO CERTEGY ------
             request.setTransactionType(TransactionType.CERTEGY_AUTHENTICATION);
             try {
@@ -371,7 +376,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             throw new TransactionalException(ResultCode.TERMINAL_WRONG_AMMOUNT, TransactionType.CHECK_INFO, ResultMessage.TERMINAL_WRONG_AMMOUNT.getMessage());
         }
-        
+
         checkInfoRequestMap.remove(ParameterName.AMMOUNT);
     }
 

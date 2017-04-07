@@ -90,7 +90,8 @@ public class PCARequest {
         _this.setTranType("C");
          
         //TODO put this in a System property var
-        _this.setSiteID(CERTEGY_SITE_ID);
+        String certegyLocationId = (String)map.get(ParameterName.CERTEGY_LOCATION_ID); 
+        _this.setSiteID(certegyLocationId);
         
         _this.setSSN((String)map.get(ParameterName.SSN));
         

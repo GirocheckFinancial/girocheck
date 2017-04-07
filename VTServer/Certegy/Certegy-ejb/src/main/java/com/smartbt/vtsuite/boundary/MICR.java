@@ -62,7 +62,7 @@ public class MICR {
     
      private static String translateMICR(String originalMICR){
         if(originalMICR != null){
-            return originalMICR.replace("C", "O").replace("A", "T");
+            return originalMICR.replaceAll("C", "O").replaceAll("A", "T");
         }
         return "";
     }

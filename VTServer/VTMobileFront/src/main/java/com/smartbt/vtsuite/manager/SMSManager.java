@@ -8,6 +8,7 @@ import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.dao.MobileClientDao;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.model.MobileClient;
+import com.smartbt.vtsuite.util.MobileMessage;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

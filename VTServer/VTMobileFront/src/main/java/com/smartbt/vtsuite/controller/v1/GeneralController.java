@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GeneralController {
 
     public static final String TOKEN = "TOKEN";
+    public static final String LANG = "LANG";
     @Autowired
     RegistrationManager regManager;
 
@@ -68,7 +69,10 @@ public class GeneralController {
 
         String token = Utils.generateToken();
         session.setAttribute(TOKEN, token);
-        return regManager.register(username, password, ssn, email, phone, cardNumber, token);
+        
+        String lang = (String)session.getAttribute(LANG);
+        
+        return regManager.register(username, password, ssn, email, phone, cardNumber, token, lang);
     }
 
     @RequestMapping(value = "/replaceCard", method = RequestMethod.POST)
@@ -84,11 +88,13 @@ public class GeneralController {
         }
 
         String token = (String) session.getAttribute(TOKEN);
-        return regManager.replaceCard(clientId, cardNumber, token);
+        String lang = (String)session.getAttribute(LANG);
+        
+        return regManager.replaceCard(clientId, cardNumber, token,lang);
     }
 
     @RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
-    public ResponseData updateProfile(@RequestBody LinkedHashMap params) throws Exception {
+    public ResponseData updateProfile(@RequestBody LinkedHashMap params, HttpSession session) throws Exception {
         String clientId = (String) params.get("clientId");
         String username = (String) params.get("username");
         String email = (String) params.get("email");
@@ -104,7 +110,8 @@ public class GeneralController {
                 + "\n clientId: " + clientId);
 
         String token = Utils.generateToken();
-        return regManager.updateProfile(clientId, username, email, phone, password, oldPassword,token);
+        String lang = (String)session.getAttribute(LANG);
+        return regManager.updateProfile(clientId, username, email, phone, password, oldPassword,token,lang);
     }
 
     @RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
@@ -122,7 +129,8 @@ public class GeneralController {
 
         String token = Utils.generateToken();
         session.setAttribute(TOKEN, token);
-        return regManager.forgotPassword(maskSSN, cardNumber, sendBy, code, token);
+        String lang = (String)session.getAttribute(LANG);
+        return regManager.forgotPassword(maskSSN, cardNumber, sendBy, code, token,lang);
     }
 
 }

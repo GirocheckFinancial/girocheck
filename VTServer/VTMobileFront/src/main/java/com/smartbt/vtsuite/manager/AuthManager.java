@@ -14,12 +14,12 @@
  **
  */
 package com.smartbt.vtsuite.manager;
-
-import com.smartbt.girocheck.common.VTSuiteMessages;
+ 
 import com.smartbt.girocheck.servercommon.dao.MobileClientDao;
 import com.smartbt.girocheck.servercommon.display.mobile.MobileClientDisplay;
 import com.smartbt.girocheck.servercommon.model.MobileClient;
 import com.smartbt.girocheck.servercommon.utils.PasswordUtil;
+import com.smartbt.vtsuite.util.MobileMessage;
 import com.smartbt.vtsuite.util.MobileValidationException;
 import com.smartbt.vtsuite.vtcommon.Constants;
 import java.security.NoSuchAlgorithmException;
@@ -39,12 +39,12 @@ public class AuthManager {
         return MobileClientDao.get().getMobileClientDisplayByUserAndPassword(username, password);
     }
 
-    public void resetPassword(String clientId, String password) throws ValidationException, NoSuchAlgorithmException, MobileValidationException {
+    public void resetPassword(String clientId, String password, String lang) throws ValidationException, NoSuchAlgorithmException, MobileValidationException {
         int id = Integer.parseInt(clientId);
         MobileClient mobileClient = MobileClientDao.get().getMobileClientById(id);
 
         if (mobileClient == null) {
-            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
+            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, MobileMessage.CLIENT_DOES_NOT_EXIST.get(lang));
         }
 
         String encyptedPassword = PasswordUtil.encryptPassword(password);

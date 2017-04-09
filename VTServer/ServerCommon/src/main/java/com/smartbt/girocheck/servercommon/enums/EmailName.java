@@ -22,7 +22,8 @@ public enum EmailName {
     TWO_SUCCESSFUL_LOADS_TO_TECNICARD("2_successful_loads_to_tecnicard"),
     ALERT_INVENTORY_REACH_THRESHOLD("alert_inventory_reach_threshold"),
     ALERT_INVENTORY_REACH_ZERO("alert_inventory_reach_zero"),
-    ALERT_MOBILE_FORGOT_PASSWORD_KEY("alert_mobile_forgot_password_key");
+    ALERT_MOBILE_FORGOT_PASSWORD_KEY("alert_mobile_forgot_password_key"),
+    ALERT_MOBILE_FORGOT_PASSWORD_KEY_ES("alert_mobile_forgot_password_key_ES");
     
     private EmailName(String name) {
         this.name = name;

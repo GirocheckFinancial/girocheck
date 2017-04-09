@@ -401,19 +401,7 @@ public class VTSuiteMessages {
     
     public static final String LOGIN_FAILED = "Login Failed. Please Contact Customer Support.";
     
-    public static final String CARD_NOT_PERSONALIZED = "Card is not personalized.";
     
-    public static final String CARD_BELONG_TO_ANOTHER_CLIENT = "This card belong to another client.";
-    public static final String MOBILE_CLIENT_ALREADY_EXIST = "There is already a mobile user asociated to this SSN.";
-    public static final String USERNAME_IN_USE = "Username already in use.";
-    public static final String REQUIRED_FIELD = "Required field: ";
-     public static final String MOBILE_CLIENT_NOT_EXIST = "Mobile client does not exist.";
-     
-    public static final String FORGOT_PASSWORD_KEY_MISMATCH = "Incalid Access Code.";
-    public static final String FORGOT_PASSWORD_KEY_EXPIRED = "Access Code has expired.";
-    public final static String INVALID_TOKEN = "Invalid Token.";
-    public final static String COULD_NOT_SEND_ACCESS_CODE = "We were not able to send you the Access Code. Please contact customer service.";
-    public final static String INVALID_OLD_PASSWORD = "Invalid Old Password.";
     
     
     /**

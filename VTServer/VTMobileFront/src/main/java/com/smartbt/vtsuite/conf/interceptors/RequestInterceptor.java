@@ -16,10 +16,8 @@
 package com.smartbt.vtsuite.conf.interceptors;
 
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
-import static com.smartbt.vtsuite.controller.v1.GeneralController.TOKEN;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import static com.smartbt.vtsuite.controller.v1.GeneralController.*;
+import java.util.HashMap; 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,14 +69,25 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         String tokenInSession = (String) request.getSession().getAttribute("TOKEN");
         String token = request.getHeader("TOKEN");
-        
+         
         System.out.println("JSESSIONID = " + request.getSession().getId());
 
         System.out.println("tokenInSession = " + tokenInSession);
         System.out.println("tokenInHeader = " + token);
+        
+        String lang = request.getHeader("LANG");
+        System.out.println("LANG = " + lang);
+        
+        if(lang == null || lang.equalsIgnoreCase("defaultLocale")){
+            lang = "es";
+        }else{
+            lang = lang.toLowerCase();
+        }
+        request.getSession().setAttribute(LANG, lang);
+        
 
         if(tokenInSession == null){
-            request.getSession().setAttribute(TOKEN, token);
+            request.getSession().setAttribute(TOKEN, token); 
         } 
 
         boolean isValid = (tokenInSession != null && token != null && token.equals(tokenInSession));

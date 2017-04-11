@@ -28,44 +28,27 @@ public class ClientDisplay implements Serializable {
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-
     private Integer id;
-
 //    private com.smartbt.girocheck.servercommon.model.Address address;
     private String address;
-    
     private String firstName;
-
     private String lastName;
-
     private String telephone;
-
     private String email;
     private String maskSS;
-    
     private String zipcode;
     private String state;
     private String city;
     private Boolean blackList;
-    
-    private Boolean excludeSms;
-        
-           
+    private Boolean optOut;
 
 //    private Boolean active;
-
 //    private java.util.Date createdAt;
-
 //    private java.sql.Blob addressForm;
-
 //    private java.sql.Blob achForm;
-
 //    private java.util.Date bornDate;
-
 //    private String ssn;
-
 //    private String idBeneficiary;
-
 //    private java.util.Set<com.smartbt.girocheck.servercommon.model.CreditCard> data_SC = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.CreditCard>();
 //
 //    private java.util.Set<com.smartbt.girocheck.servercommon.model.PersonalIdentification> data_SD = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.PersonalIdentification>();
@@ -73,10 +56,9 @@ public class ClientDisplay implements Serializable {
 //    private java.util.Set<com.smartbt.girocheck.servercommon.model.Transaction> transaction = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.Transaction>();
 //
 //    private java.util.Set<com.smartbt.girocheck.servercommon.model.Check> check = new java.util.HashSet<com.smartbt.girocheck.servercommon.model.Check>();
+    public ClientDisplay() {
+    }
 
-    public  ClientDisplay(){}   
-    
-     
     /**
      * @return the firstName
      */
@@ -234,18 +216,16 @@ public class ClientDisplay implements Serializable {
     /**
      * @return the excludeSms
      */
-    public Boolean getExcludeSms() {
-        return excludeSms;
+    public Boolean getOptOut() {
+        return optOut;
     }
 
     /**
      * @param excludeSms the excludeSms to set
      */
-    public void setExcludeSms(Boolean excludeSms) {
-        this.excludeSms = excludeSms;
+    public void setOptOut(Boolean optOut) {
+        this.optOut = optOut;
     }
-
-    
     /**
      * @return the address
      */
@@ -259,7 +239,6 @@ public class ClientDisplay implements Serializable {
 //    public void setAddress(com.smartbt.girocheck.servercommon.model.Address address) {
 //        this.address = address;
 //    }
-    
 //    /**
 //     * @return the active
 //     */

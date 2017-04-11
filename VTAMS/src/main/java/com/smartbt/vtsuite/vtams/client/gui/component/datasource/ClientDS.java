@@ -17,10 +17,8 @@ package com.smartbt.vtsuite.vtams.client.gui.component.datasource;
 
 import com.smartbt.vtsuite.vtams.client.classes.Properties;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseDatasource;
-import com.smartgwt.client.data.DataSourceField;
 import com.smartgwt.client.data.fields.DataSourceBooleanField;
 import com.smartgwt.client.data.fields.DataSourceTextField;
-import com.smartgwt.client.types.FieldType;
 
 /**
  * The Client DataSource
@@ -36,21 +34,22 @@ public class ClientDS extends BaseDatasource {
 
         DataSourceTextField firstNameField = new DataSourceTextField("firstName");
         DataSourceTextField lastNameField = new DataSourceTextField("lastName");
- 
+
         DataSourceTextField addressField = new DataSourceTextField("address");
         DataSourceTextField stateField = new DataSourceTextField("state");
         DataSourceTextField cityField = new DataSourceTextField("city");
         DataSourceTextField zipcodeField = new DataSourceTextField("zipcode");
-         
+
         DataSourceTextField telephoneField = new DataSourceTextField("telephone");
-         
+
         DataSourceTextField emailField = new DataSourceTextField("email");
         DataSourceTextField maskSSField = new DataSourceTextField("maskSS");
         DataSourceBooleanField blackListField = new DataSourceBooleanField("blackList");
- 
+        DataSourceBooleanField optOutField = new DataSourceBooleanField("optOut");
+
         setFetchDataURL(Properties.SEARCH_CLIENTS_WS);
         setAddDataURL(Properties.SAVE_OR_UPDATE_CLIENT_WS);
-        setUpdateDataURL(Properties.SAVE_OR_UPDATE_CLIENT_WS);
+        setUpdateDataURL(Properties.UPDATE_OPTOUT_CLIENTS_WS);
         setRemoveDataURL(Properties.DELETE_CLIENT_WS);
 
         setFields(firstNameField,
@@ -62,7 +61,7 @@ public class ClientDS extends BaseDatasource {
                 zipcodeField,
                 emailField,
                 maskSSField,
-                blackListField
-                );
+                blackListField,
+                optOutField);
     }
 }

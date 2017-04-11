@@ -12,14 +12,12 @@
  */
 package com.smartbt.girocheck.servercommon.manager;
 
-import com.smartbt.girocheck.common.VTSuiteMessages;
 import com.smartbt.girocheck.servercommon.dao.AddressDAO;
 import com.smartbt.girocheck.servercommon.dao.ClientDAO;
 import com.smartbt.girocheck.servercommon.dao.CountryDAO;
 import com.smartbt.girocheck.servercommon.dao.CreditCardDAO;
 import com.smartbt.girocheck.servercommon.dao.PersonalIdentificationDAO;
 import com.smartbt.girocheck.servercommon.dao.StateDAO;
-import com.smartbt.girocheck.servercommon.dao.TerminalDAO;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
@@ -27,8 +25,6 @@ import com.smartbt.girocheck.servercommon.model.Client;
 import com.smartbt.girocheck.servercommon.model.Country;
 import com.smartbt.girocheck.servercommon.model.PersonalIdentification;
 import com.smartbt.girocheck.servercommon.model.State;
-import com.smartbt.vtsuite.vtcommon.Constants;
-import com.smartbt.vtsuite.vtcommon.nomenclators.NomApplication;
 import java.sql.SQLException;
 
 /**
@@ -36,18 +32,18 @@ import java.sql.SQLException;
  * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class ClientManager {
+
     protected static ClientManager INSTANCE;
 
     public ClientManager() {
     }
 
     public static ClientManager get() {
-        if ( INSTANCE == null ) {
+        if (INSTANCE == null) {
             INSTANCE = new ClientManager();
         }
         return INSTANCE;
     }
-
     private ClientDAO clientDAO = ClientDAO.get();
     private AddressDAO addressDAO = AddressDAO.get();
     private CountryDAO countryDAO = CountryDAO.get();
@@ -55,25 +51,25 @@ public class ClientManager {
     private CreditCardDAO creditCardDAO = CreditCardDAO.get();
     private PersonalIdentificationDAO personalIdentificationDAO = PersonalIdentificationDAO.get();
 
-    public Client createOrGet( String ssn, byte[] addressForm ) throws SQLException {
-        return clientDAO.createOrGet( ssn, addressForm );
+    public Client createOrGet(String ssn, byte[] addressForm) throws SQLException {
+        return clientDAO.createOrGet(ssn, addressForm);
     }
-     
-    public void saveOrUpdate( Client client ) {
+
+    public void saveOrUpdate(Client client) {
         client.setBlacklistCard2bank(false);
-        if ( client.getAddress() != null ) {
-            if ( client.getAddress().getCountry() != null && client.getAddress().getCountry().getAbbreviation() != null ) {
-                Country country = countryDAO.getByAbbreviation( client.getAddress().getCountry().getAbbreviation() );
-                if ( country != null ) {
-                    client.getAddress().setCountry( country );
+        if (client.getAddress() != null) {
+            if (client.getAddress().getCountry() != null && client.getAddress().getCountry().getAbbreviation() != null) {
+                Country country = countryDAO.getByAbbreviation(client.getAddress().getCountry().getAbbreviation());
+                if (country != null) {
+                    client.getAddress().setCountry(country);
                 }
             }
-            if ( client.getAddress().getState() != null && client.getAddress().getState().getAbbreviation() != null ) {
-                State state = stateDAO.getByAbbreviation( client.getAddress().getState().getAbbreviation() );
-                if ( state != null ) {
-                    client.getAddress().setState( state );
+            if (client.getAddress().getState() != null && client.getAddress().getState().getAbbreviation() != null) {
+                State state = stateDAO.getByAbbreviation(client.getAddress().getState().getAbbreviation());
+                if (state != null) {
+                    client.getAddress().setState(state);
                 } else {
-                    client.getAddress().setState( null );
+                    client.getAddress().setState(null);
                 }
             }
         }
@@ -100,7 +96,7 @@ public class ClientManager {
 //            transientIdentification.setClient( client );
 //        }
 
-        clientDAO.saveOrUpdate( client );
+        clientDAO.saveOrUpdate(client);
     }
 //
 //    public void saveOrUpdate( Client client ) {
@@ -176,21 +172,25 @@ public class ClientManager {
 ////        clientDAO.saveOrUpdate( client );
 //        clientDAO.merge(client );
 //    }
-    
-        public ResponseDataList searchClients(String searchFilter, int pageNumber, int rowsPerPage, Boolean blackList) throws Exception {
-      
-        return clientDAO.searchClients(searchFilter, pageNumber * rowsPerPage, rowsPerPage, blackList);
-      
+
+    public ResponseDataList searchClients(String searchFilter, int pageNumber, int rowsPerPage, Boolean blackList, Boolean optOut) throws Exception {
+
+
+        return clientDAO.searchClients(searchFilter, pageNumber * rowsPerPage, rowsPerPage, blackList, optOut);
+
     }
-        
-        public PersonalIdentification getIdentificationByClientId(int idClient) throws SQLException{
-            
-            return personalIdentificationDAO.getByClientId(idClient);
-            
-        }
+
+    public PersonalIdentification getIdentificationByClientId(int idClient) throws SQLException {
+
+        return personalIdentificationDAO.getByClientId(idClient);
+
+    }
 
     public ResponseData updateClientBlackList(ClientDisplay clientDisplay) {
         return clientDAO.updateClientBlackList(clientDisplay);
     }
-        
+
+    public ResponseData updateClientOptOut(int id) {
+        return clientDAO.updateClientOptOut(id);
+    }
 }

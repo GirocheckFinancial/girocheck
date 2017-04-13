@@ -39,10 +39,13 @@ public class FilterListenerImp implements FilterListener {
 
     public void ImportActionExecuted() {
     }
-    
+
     public void RotateActionExecuted() {
     }
-    
+
     public void ChangePasswordActionExecuted() {
-    }    
+    }
+
+    public void UpdateOptOutExecuted() {
+    }
 }

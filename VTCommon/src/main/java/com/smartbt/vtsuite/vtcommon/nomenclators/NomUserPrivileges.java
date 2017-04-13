@@ -49,7 +49,8 @@ public enum NomUserPrivileges {
       ALLOW_MANAGE_CARD_INVENTORY(24),
       ALLOW_FEEMANAGEMENT(25),
       ALLOW_CHECKRESEND(26),
-      ALLOW_CLIENT_BLACK_LIST(27)
+      ALLOW_CLIENT_BLACK_LIST(27),
+      ALLOW_SMS_MESSAGES(28)
     ;
     
     

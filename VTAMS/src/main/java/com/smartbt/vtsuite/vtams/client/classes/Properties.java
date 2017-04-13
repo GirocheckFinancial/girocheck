@@ -43,18 +43,13 @@ public class Properties {
      * Parameters: name
      */
     public static final String GET_SYSTEM_PROPERTY_WS = WS_URL + "getSystemProperty";
-
     /**
      * Web Service for get all Customers
      *
      */
     public static final String GET_CUSTOMERS_WS = WS_URL + "getCustomers";
-    
     public static final String GET_AGRUPATION_WS = WS_URL + "getAgrupation";
-    
     public static final String GET_SEARCH_AGRUPATIONS_WS = WS_URL + "searchAgrupations";
-    
-
     /**
      * Web Service for searching Customers, Merchants, Terminals that match the
      * filter.
@@ -62,24 +57,19 @@ public class Properties {
      * Parameters: searchFilter
      */
     //public static final String SEARCH_CUSTOMER_WS = WS_URL + "searchCustomer";
-     /**
+    /**
      * Web Service for list all Agrupations.
      *
      * Parameters: idCustomer
      */
     public static final String LIST_AGRUPATIONS_WS = WS_URL + "listAgrupations";
-    
-    
-    
     /**
      * Web Service for get all the merchants of a Customer.
      *
      * Parameters: idCustomer
      */
     public static final String GET_MERCHANTS_BY_AGRUPATION_WS = WS_URL + "getMerchantsByAgrupation";
-    
     public static final String GET_MERCHANTS_BY_ID_WS = WS_URL + "getMerchantsById";
-    
     public static final String GET_SEARCH_MERCHANTS_WS = WS_URL + "searchMerchants";
     /**
      * Web Service for get all the merchants of a Customer.
@@ -197,7 +187,6 @@ public class Properties {
      * Parameters: id
      */
     public static final String DELETE_PARAMETER_VALUE_WS = WS_URL + "deleteParameterValue";
-
     /**
      * Web Service for search Application Parameters that match the given
      * filter.
@@ -205,7 +194,6 @@ public class Properties {
      * Parameters: searchFilter
      */
     //public static final String SEARCH_APPLICATION_PARAMETERS_WS = WS_URL + "searchApplicationParameters";
-    
     public static final String SEARCH_PARAMETERS_WS = WS_URL + "searchParameters";
     /**
      * Web Service for save or update an application parameter.
@@ -215,14 +203,12 @@ public class Properties {
      * Web Service for delete an application parameter.
      */
     public static final String DELETE_APPLICATION_PARAMETER_WS = WS_URL + "deleteApplicationParameter";
-
     /**
      * Web Service for search all clerks that match the filter.
      *
      * Parameters: idMerchant, searchFilter
      */
     public static final String SEARCH_CLERKS_WS = WS_URL + "searchClerks";
-
     /**
      * Web Service for get all the Customer's clerks given an EntityType and its
      * id.
@@ -230,7 +216,6 @@ public class Properties {
      * Parameters: idMerchant, searchFilter
      */
     public static final String GET_CLERKS_BY_ENTITY_TYPE_WS = WS_URL + "getClerksByEntityType";
-
     /**
      * Web Service for update a Clerk Information (JUST THE ROLE).
      *
@@ -262,9 +247,7 @@ public class Properties {
      * Parameters: id
      */
     public static final String DELETE_ROLE_WS = WS_URL + "deleteRole";
-    
     public static final String DELETE_MERCHANT_WS = WS_URL + "deleteMerchant";
-
     public static final String SEARCH_BOARDING_STATUS_WS = WS_URL + "searchBoardingStatus";
     /**
      * Web Service for get all the Applications.
@@ -292,11 +275,8 @@ public class Properties {
     public static final String UPDATE_USER_WS = WS_URL + "updateUser";
     public static final String ADD_USER_WS = WS_URL + "addUser";
     public static final String DELETE_USER_WS = WS_URL + "deleteUser";
-
     public static final String SEARCH_ROLE_PRIVILEGES_WS = WS_URL + "searchRolePrivileges";
-
     public static final String ADD_ROLE_PRIVILEGE_WS = WS_URL + "addRolePrivilege";
-
     public static final String DELETE_ROLE_PRIVILEGE_WS = WS_URL + "deleteRolePrivilege";
     /**
      * Web Service for search all the Merchant's clients that match the filter.
@@ -322,7 +302,6 @@ public class Properties {
      * Parameters: id
      */
     public static final String DELETE_CLIENT_WS = WS_URL + "deleteClient";
-    
     public static final String DELETE_AGRUPATION_WS = WS_URL + "deleteAgrupation";
     /**
      * Web Service for delete all Merchant's clients.
@@ -330,23 +309,19 @@ public class Properties {
      * Parameters: idMerchant
      */
     public static final String DELETE_ALL_CLIENT_WS = WS_URL + "deleteAllClients";
-
     /**
      * Import clients from csv file.
      *
      * Parameters: idMerchant
      */
     public static final String IMPORT_CLIENTS_WS = WS_URL + "importClients";
-
     /**
      * Web Service to get the States.
      *
      * Parameters: [NONE]
      */
     public static final String LIST_STATES_WS = WS_URL + "listStates";
-    
     public static final String LIST_CARD_PROGRAM_WS = WS_URL + "listCardProgram";
-
     /**
      * Web Service to get the dataTypes.
      *
@@ -359,82 +334,45 @@ public class Properties {
      * Parameters: [NONE]
      */
     public static final String LIST_PHONE_TYPES_WS = WS_URL + "listPhoneTypes";
-
     public static final String SEARCH_AUDIT_LOGS = WS_URL + "searchAuditLogs";
-
     public static final String SAVE_OR_UPDATE_WATCHDOG_ENTITY = WS_URL + "saveOrUpdateWatchdogEntity";
-
     public static final String DELETE_WATCHDOG_ENTITY = WS_URL + "deleteWatchdogEntity";
-
     public static final String DELETE_WATCHDOG_ALERT = WS_URL + "deleteWatchdogAlert";
-
     public static final String DELETE_ALL_WATCHDOG_ALERTS_BY_ENTITY = WS_URL + "deleteAllWatchdogAlertsByEntity";
-
     public static final String GET_WATCHDOG_ENTITIES_BY_ENTITY = WS_URL + "getWatchdogEntitiesByEntity";
-
     public static final String GET_WATCHDOG_ALERTS_BY_ENTITY = WS_URL + "getWatchdogAlertsByEntity";
-
     public static final String GET_WATCHDOG_ENTITY = WS_URL + "getWatchdogEntity";
-
     public static final String GET_WATCHDOGS = WS_URL + "getWatchdogs";
-
     public static final String GET_DASHBOARD_ENVIROMENTAL = WS_URL + "getDashboardEnvironmental";
-
     public static final String GET_MONITORING = WS_URL + "getMonitoring";
-
     public static final String SEARCH_MONITORING = WS_URL + "searchMonitoring";
-
     public static final String START_MONITORING_TERMINAL = WS_URL + "startMonitoringTerminal";
-
     public static final String STOP_MONITORING_TERMINAL = WS_URL + "stopMonitoringTerminal";
-
     public static final String SAVE_OR_UPDATE_MERCHANT_LIST = WS_URL + "saveOrUpdateMerchantList";
-    
     public static final String SAVE_OR_UPDATE_MERCHANT = WS_URL + "saveOrUpdateMerchant";
-    
     public static final String SAVE_OR_UPDATE_AGRUPATION_WS = WS_URL + "saveOrUpdateAgrupation";
     public static final String SAVE_OR_UPDATE_INVENTORY_WS = WS_URL + "saveOrUpdateInventory";
-    
     public static final String LIST_COUNTRY_WS = WS_URL + "listCountry";
-    
     public static final String GET_ADDRESS_IMAGE_FORM_WS = WS_URL + "getAddressFormImage";
-    
     public static final String GET_TRANSACTION_IMAGE_WS = WS_URL + "getTransactionImage";
-    
     public static final String DELETE_SESSION_WS = WS_URL + "deleteSession";
-    
     public static final String CHANGE_PASSWORD_WS = WS_URL + "changePaswword";
-    
     public static final String TRANSACTIONREPORTS_WS = WS_URL + "searchTransactionReport";
-    
     public static final String ENTITYREPORTS_WS = WS_URL + "searchEntityReport";
-    
     public static final String SEARCH_FEESCHEDULE_WS = WS_URL + "searchFeeSchedule";
-    
     public static final String UPDATE_FEESCHEDULE_WS = WS_URL + "updateFeeSchedule";
-    
     public static final String ADD_FEESCHEDULE_WS = WS_URL + "addFeeSchedule";
-    
     public static final String DELETE_FEESCHEDULE_WS = WS_URL + "deleteFeeSchedule";
-    
-     public static final String SEARCH_TXN_METHOD_WS = WS_URL + "searchTransactionMethod";
-     
-     public static final String SEARCH_FEEBUCKETS_WS = WS_URL + "searchFeeBucket";
-     
-     public static final String ADD_FEEBUCKETS_WS = WS_URL + "addFeeBucket";
-     
-     public static final String UPDATE_FEEBUCKETS_WS = WS_URL + "updateFeeBucket";
-     
-     public static final String DELETE_FEEBUCKETS_WS = WS_URL + "deleteFeeBucket";
-     
-     public static final String SEARCH_CHECK_DETAILS_WS = WS_URL + "searchCheckDetails";
-     
-     public static final String RESEND_CHECK_WS = WS_URL + "resendCheck";
-    
-    
-    public static String getUrl(String url){
-        return WS_URL + url;
-    } 
-    
+    public static final String SEARCH_TXN_METHOD_WS = WS_URL + "searchTransactionMethod";
+    public static final String SEARCH_FEEBUCKETS_WS = WS_URL + "searchFeeBucket";
+    public static final String ADD_FEEBUCKETS_WS = WS_URL + "addFeeBucket";
+    public static final String UPDATE_FEEBUCKETS_WS = WS_URL + "updateFeeBucket";
+    public static final String DELETE_FEEBUCKETS_WS = WS_URL + "deleteFeeBucket";
+    public static final String SEARCH_CHECK_DETAILS_WS = WS_URL + "searchCheckDetails";
+    public static final String RESEND_CHECK_WS = WS_URL + "resendCheck";
+    public static final String UPDATE_OPTOUT_CLIENTS_WS = WS_URL + "updateClientOptOut";
 
+    public static String getUrl(String url) {
+        return WS_URL + url;
+    }
 }

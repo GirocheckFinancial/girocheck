@@ -15,17 +15,10 @@
  */
 package com.smartbt.vtsuite.controller;
 
-import com.smartbt.girocheck.servercommon.display.message.BaseResponse;
 import com.smartbt.girocheck.servercommon.display.message.ResponseData;
 import com.smartbt.girocheck.servercommon.display.message.ResponseDataList;
 import com.smartbt.girocheck.servercommon.display.ClientDisplay;
-import com.smartbt.girocheck.servercommon.display.MerchantDisplay;
 import com.smartbt.girocheck.servercommon.manager.ClientManager;
-import com.smartbt.vtsuite.utils.AuditLogMessage;
-import com.smartbt.vtsuite.vtcommon.enums.ActivityFilter;
-import com.smartbt.vtsuite.vtcommon.enums.EntityType;
-import com.smartbt.vtsuite.vtcommon.nomenclators.NomApplication;
-import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -36,8 +29,6 @@ import javax.ws.rs.core.MediaType;/*
  import org.glassfish.jersey.media.multipart.FormDataParam*/
 
 import javax.ws.rs.core.SecurityContext;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 //import org.hibernate.validator.constraints.Email;
 //import org.hibernate.validator.constraints.NotEmpty;
 //import org.hibernate.validator.constraints.Range;
@@ -78,23 +69,30 @@ public class ClientController {
     @Path("searchClients")
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseDataList searchClients(
-          @FormParam("searchFilter") String searchFilter, 
-          @FormParam("blackList") Boolean blackList, 
-          @FormParam("pageNumber") int pageNumber, @FormParam("rowsPerPage") int rowsPerPage) throws Exception {
-//       
-          return manager.searchClients(searchFilter, pageNumber, rowsPerPage, blackList);
+            @FormParam("searchFilter") String searchFilter,
+            @FormParam("blackList") Boolean blackList,
+            @FormParam("optOut") Boolean optOut,
+            @FormParam("pageNumber") int pageNumber, @FormParam("rowsPerPage") int rowsPerPage) throws Exception {
+
+        return manager.searchClients(searchFilter, pageNumber, rowsPerPage, blackList, optOut);
     }
 
-        @PUT
+    @PUT
     @Path("updateClientBlackList")
     @Consumes("application/json")
     @Produces(MediaType.APPLICATION_JSON)
     public ResponseData updateClientBlackList(ClientDisplay clientDisplay) throws Exception {
- 
+
         return manager.updateClientBlackList(clientDisplay);
-        
+
     }
-   
+
+    @POST
+    @Path("updateClientOptOut")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ResponseData updateClientOptOut(@FormParam("id") int id) throws Exception {
+        return manager.updateClientOptOut(id);
+    }
     /**
      * set client to given ClientDisplay
      *
@@ -111,9 +109,6 @@ public class ClientController {
 //        BaseResponse resp = manager.saveOrUpdateClient(client);
 //        return AuditLogMessage.logSaveOrUpdateClient(client.getId(), resp);
 //    }
-
- 
-
     /**
      * delete all clients
      *
@@ -129,7 +124,6 @@ public class ClientController {
 //
 //        return AuditLogMessage.logDeleteAllClients(entityType.toString(), idEntity, manager.deleteAllClients(idEntity, entityType));
 //    }
-
     /**
      * Import CLients from csv file
      *

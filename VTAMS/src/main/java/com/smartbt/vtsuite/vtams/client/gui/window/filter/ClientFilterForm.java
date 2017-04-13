@@ -15,15 +15,10 @@
  */
 package com.smartbt.vtsuite.vtams.client.gui.window.filter;
 
-import com.smartbt.vtsuite.vtams.client.classes.Settings;
+import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseFilterForm;
-import com.smartbt.vtsuite.vtcommon.enums.ActivityFilter;
-import com.smartbt.vtsuite.vtcommon.enums.EntityType;
-import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
-import com.smartgwt.client.widgets.form.fields.CheckboxItem;
+import com.smartbt.vtsuite.vtams.client.gui.component.BaseButtonItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
-import com.smartgwt.client.widgets.form.fields.SpacerItem;
-import java.util.LinkedHashMap;
 
 /**
  * The User Filter Form
@@ -32,6 +27,8 @@ import java.util.LinkedHashMap;
  */
 public class ClientFilterForm extends BaseFilterForm {
 
+    private BaseButtonItem smsReceiveButton;
+
     /**
      * Constructor
      *
@@ -39,23 +36,26 @@ public class ClientFilterForm extends BaseFilterForm {
      */
     public ClientFilterForm() {
         super();
-        setFields( getFormFields());
-    }
-    
-    public FormItem[] getFormFields(){
-        return new FormItem[]{searchText, filterButton};
+        smsReceiveButton = new BaseButtonItem("smsReceiveButton", I18N.GET.BUTTON_SMS_OPT_OUT_TITLE());
+        smsReceiveButton.setDisabled(true);
+        setFields(getFormFields());
     }
 
-    private void checkPrivileges() {
-//        updateButton.setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_UPDATE));
-//        deleteButton.setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_DELETE));
-//        deleteAllButton.setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_DELETE_ALL));
-//        addButton.setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_ADD));
-//        importButton.setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_IMPORT));
-        updateButton.setDisabled(false);
-        deleteButton.setDisabled(false);
-        deleteAllButton.setDisabled(false);
-        addButton.setDisabled(false);
-        importButton.setDisabled(false);
+    public FormItem[] getFormFields() {
+        return new FormItem[]{searchText, filterButton, smsReceiveButton};
+    }
+
+    /**
+     * @return the smsReceiveButton
+     */
+    public BaseButtonItem getSmsReceiveButton() {
+        return smsReceiveButton;
+    }
+
+    /**
+     * @param smsReceiveButton the smsReceiveButton to set
+     */
+    public void setSmsReceiveButton(BaseButtonItem smsReceiveButton) {
+        this.smsReceiveButton = smsReceiveButton;
     }
 }

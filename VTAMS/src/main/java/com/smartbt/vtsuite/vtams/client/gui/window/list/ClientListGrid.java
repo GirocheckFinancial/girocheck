@@ -22,8 +22,6 @@ import com.smartbt.vtsuite.vtams.client.gui.component.datasource.ClientDS;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
 import static com.smartbt.vtsuite.vtcommon.enums.EntityType.CUSTOMER;
 import com.smartgwt.client.types.GroupStartOpen;
-import com.smartgwt.client.widgets.grid.CellFormatter;
-import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.DataArrivedEvent;
 import com.smartgwt.client.widgets.grid.events.DataArrivedHandler;
 
@@ -44,6 +42,7 @@ public class ClientListGrid extends BaseListGrid {
     private TextListGridField zipField = new TextListGridField("zipcode", I18N.GET.LIST_FIELD_ZIP_TITLE(), false);
     private TextListGridField maskSSField = new TextListGridField("maskSS", I18N.GET.LIST_FIELD_MSSN_TITLE(), false);
     private TextListGridField blackListField = new TextListGridField("blackList", "Black List", false);
+    private TextListGridField optOutField = new TextListGridField("optOut", "SMS Opt Out", false);
 //    private TextListGridField statusField = new TextListGridField("active", I18N.GET.LIST_FIELD_ACTIVE_TITLE(), false);
 //    private TextListGridField merchantField = new TextListGridField("merchant", I18N.GET.LIST_FIELD_MERCHANT_TITLE(), true);
 
@@ -80,7 +79,7 @@ public class ClientListGrid extends BaseListGrid {
                             groupBy("merchant");
                             break;
                     }
-                } 
+                }
             }
         });
 
@@ -93,8 +92,9 @@ public class ClientListGrid extends BaseListGrid {
                 //                address2Field,
                 cityField,
                 stateField,
-                zipField, 
+                zipField,
                 maskSSField,
-                blackListField); 
+                blackListField,
+                optOutField);
     }
 }

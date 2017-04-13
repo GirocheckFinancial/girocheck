@@ -20,9 +20,7 @@ import com.smartbt.vtsuite.vtams.client.gui.base.BaseEntityTabSetWindow;
 import com.smartbt.vtsuite.vtams.client.gui.window.tab.ClientTab;
 import com.smartbt.vtsuite.vtams.client.gui.window.tab.RolesTab;
 import com.smartbt.vtsuite.vtams.client.gui.window.tab.UserTab;
-import com.smartbt.vtsuite.vtams.client.gui.window.tab.parameter.EntityParameterValueTab;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
-import com.smartbt.vtsuite.vtcommon.nomenclators.NomApplication;
 import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
 
 /**

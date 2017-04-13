@@ -15,21 +15,29 @@
  */
 package com.smartbt.vtsuite.vtams.client.gui.window.tab;
 
-
+import com.smartbt.vtsuite.vtams.client.classes.Properties;
+import com.smartbt.vtsuite.vtams.client.classes.Settings;
 import com.smartbt.vtsuite.vtams.client.classes.i18n.I18N;
+import com.smartbt.vtsuite.vtams.client.gui.base.BaseDatasource;
 import com.smartbt.vtsuite.vtams.client.gui.base.BaseTab;
 import com.smartbt.vtsuite.vtams.client.gui.listener.FilterListenerImp;
 import com.smartbt.vtsuite.vtams.client.gui.listener.ListListener;
 import com.smartbt.vtsuite.vtams.client.gui.listener.PaginationListener;
+import com.smartbt.vtsuite.vtams.client.gui.window.editor.ClientEditor;
 import com.smartbt.vtsuite.vtams.client.gui.window.filter.ClientFilterForm;
 import com.smartbt.vtsuite.vtams.client.gui.window.list.ClientListGrid;
 import com.smartbt.vtsuite.vtcommon.enums.EntityType;
+import com.smartbt.vtsuite.vtcommon.nomenclators.NomUserPrivileges;
 import com.smartgwt.client.data.Criteria;
 import com.smartgwt.client.data.DSCallback;
 import com.smartgwt.client.data.DSRequest;
 import com.smartgwt.client.data.DSResponse;
 import com.smartgwt.client.data.Record;
 import com.smartgwt.client.data.RecordList;
+import com.smartgwt.client.util.BooleanCallback;
+import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
+import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
 import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
@@ -42,7 +50,7 @@ public class ClientTab extends BaseTab {
 
     private ClientFilterForm filterForm;
     private ClientListGrid listGrid;
-//    private ClientEditor editorWindow;
+    private ClientEditor editorWindow;
     private int idEntity;
     private EntityType entityType;
 
@@ -65,7 +73,7 @@ public class ClientTab extends BaseTab {
         filterForm = new ClientFilterForm();
         listGrid = new ClientListGrid(entityType);
 //
-//        editorWindow = new ClientEditor();
+        editorWindow = new ClientEditor();
 
         addTabSelectedHandler(new TabSelectedHandler() {
             /**
@@ -91,8 +99,8 @@ public class ClientTab extends BaseTab {
 
             @Override
             public void UpdateActionExecuted() {
-//                Update(listGrid.getSelectedRecord());
-            }
+               
+            }           
 
             @Override
             public void ImportActionExecuted() {
@@ -107,6 +115,12 @@ public class ClientTab extends BaseTab {
             @Override
             public void DeleteAllActionExecuted() {
 //                DeleteAll();
+            }
+        });
+        
+        filterForm.getSmsReceiveButton().addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+                receiveSMS(listGrid.getSelectedRecord());
             }
         });
 
@@ -126,20 +140,27 @@ public class ClientTab extends BaseTab {
              *
              */
             public void SelectActionExecuted(Record record) {
-//                if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_UPDATE)) {
-                    Update(record);
-//                }
+//                if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_UPDATE)) {             
+                Update(record);
+//               }
             }
 
             /**
              * Method to execute when a Selection Change event is fired.
              *
              */
-            public void SelectionChangeActionExecuted(Record record) {
-//                filterForm.getDeleteButton().setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_DELETE)
-//                        || record == null || !record.getAttributeAsBoolean("active"));
-//                filterForm.getUpdateButton().setDisabled(!Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_MERCHANT_CUSTOMER_UPDATE)
-//                        || record == null);
+            @Override
+            public void SelectionChangeActionExecuted(Record record) {                
+                if (Settings.INSTANCE.hasPrivilege(NomUserPrivileges.ALLOW_SMS_MESSAGES)) {         
+                    Boolean bOptOut = record.getAttributeAsBoolean("optOut");
+                    if (bOptOut) {                        
+                        filterForm.getSmsReceiveButton().setDisabled(false);
+                    } else {                       
+                        filterForm.getSmsReceiveButton().setDisabled(true);
+                    }
+                }else{                    
+                    filterForm.getSmsReceiveButton().setDisabled(true);
+                }
             }
 
             /**
@@ -149,6 +170,7 @@ public class ClientTab extends BaseTab {
             public void DataArrivedHandlerExecuted() {
                 filterForm.getDeleteButton().setDisabled(true);
                 filterForm.getUpdateButton().setDisabled(true);
+                filterForm.getSmsReceiveButton().setDisabled(true);
             }
         });
 
@@ -217,8 +239,22 @@ public class ClientTab extends BaseTab {
      * @param record the record to update
      */
     public void Update(Record record) {
-//        editorWindow.updateRecord(record);
-//        editorWindow.show();
+        //editorWindow.updateRecord(record);
+        //editorWindow.show();
+    }
+
+    public void receiveSMS(Record record) {
+        record.setAttribute("optOut", Boolean.FALSE);
+        final Record updateRecord = record;
+        SC.confirm(I18N.GET.WINDOW_SMS_OPT_OUT_TITLE(), I18N.GET.SMS_OPT_OUT_VALUE_CONFIRM_ACTION(), new BooleanCallback() {
+            public void execute(Boolean value) {
+                if (value == Boolean.TRUE) {
+                    updateClient(updateRecord);
+                }else{
+                    Filter();
+                }
+            }
+        });
     }
 
     /**
@@ -317,5 +353,22 @@ public class ClientTab extends BaseTab {
 //            }
 //        });
 //        uploadFileEditor.show();
+    }
+
+    public void updateClient(Record record) {
+
+        BaseDatasource ds = new BaseDatasource();
+
+        Criteria criteria = new Criteria();
+        criteria.addCriteria("id", record.getAttributeAsInt("id"));
+
+        ds.setFetchDataURL(Properties.UPDATE_OPTOUT_CLIENTS_WS);
+        ds.fetchData(criteria, new DSCallback() {
+            public void execute(DSResponse response, Object rawData, DSRequest request) {
+                Filter();
+
+            }
+        });
+
     }
 }

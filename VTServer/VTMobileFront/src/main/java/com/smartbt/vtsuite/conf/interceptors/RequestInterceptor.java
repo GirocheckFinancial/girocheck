@@ -17,7 +17,7 @@ package com.smartbt.vtsuite.conf.interceptors;
 
 import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
 import static com.smartbt.vtsuite.controller.v1.GeneralController.*;
-import java.util.HashMap; 
+import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,14 +53,23 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         } catch (Exception e) {
             System.out.println("It was going to throw a NestedTransactionException...   Thread.currentThread().sleep(1000);");
             HibernateUtil.commitTransaction();
-            
+
             Thread.currentThread().sleep(1000);
             HibernateUtil.beginTransaction();
         }
-        
-       
+
         String uri = request.getRequestURI();
         System.out.println("URL = " + uri);
+
+        String lang = request.getHeader("LANG");
+        System.out.println("LANG = " + lang);
+
+        if (lang == null || lang.equalsIgnoreCase("defaultLocale")) {
+            lang = "es";
+        } else {
+            lang = lang.toLowerCase();
+        }
+        request.getSession().setAttribute(LANG, lang);
 
         if (isExcludedURL(uri)) {
             System.out.println("Excluded URL, (not need to check for token)");
@@ -69,26 +78,15 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
 
         String tokenInSession = (String) request.getSession().getAttribute("TOKEN");
         String token = request.getHeader("TOKEN");
-         
+
         System.out.println("JSESSIONID = " + request.getSession().getId());
 
         System.out.println("tokenInSession = " + tokenInSession);
         System.out.println("tokenInHeader = " + token);
-        
-        String lang = request.getHeader("LANG");
-        System.out.println("LANG = " + lang);
-        
-        if(lang == null || lang.equalsIgnoreCase("defaultLocale")){
-            lang = "es";
-        }else{
-            lang = lang.toLowerCase();
-        }
-        request.getSession().setAttribute(LANG, lang);
-        
 
-        if(tokenInSession == null){
-            request.getSession().setAttribute(TOKEN, token); 
-        } 
+        if (tokenInSession == null) {
+            request.getSession().setAttribute(TOKEN, token);
+        }
 
         boolean isValid = (tokenInSession != null && token != null && token.equals(tokenInSession));
 
@@ -109,7 +107,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         } catch (Exception ex) {
             ex.printStackTrace();
             HibernateUtil.rollbackTransaction();
-        }finally{
+        } finally {
             HibernateUtil.getSession().close();
         }
     }

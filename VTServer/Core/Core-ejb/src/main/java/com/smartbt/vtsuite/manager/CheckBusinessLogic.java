@@ -98,7 +98,7 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
 
             if (checkInfoRequestMap.containsKey(ParameterName.ID) && checkInfoRequestMap.get(ParameterName.ID).equals("0")) {
                 CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] ID = 0  (Westech Declined)" , null);
-                throw new TransactionalException(ResultCode.WESTECH_DECLINED, TransactionType.CHECK_INFO, "Westech Declined");
+                throw new TransactionalException(ResultCode.WESTECH_DECLINED, TransactionType.CHECK_INFO, "Girocheck Decline-Please call customer service");
             }
 
             validateCheckAmount(request, checkInfoRequestMap);

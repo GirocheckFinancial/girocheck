@@ -33,9 +33,8 @@ public class Scan {
 
     public CheckInfoRes checkInfo(CheckInfoRequest arg0) throws Exception {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront Scan] Receiving checkInfo at " + (new Date()), null);
-
-        //   return new CheckInfoRes().mock(user, passw);
-        return new CheckInfoRes().build(FrontManager.processTransaction(arg0));
+          //    return new CheckInfoRes().mock("sbt", "sbt");
+       return new CheckInfoRes().build(FrontManager.processTransaction(arg0));
     }
 
     public CertegyInfoRes certegyInfo(CertegyInfoRequest arg0) throws Exception {

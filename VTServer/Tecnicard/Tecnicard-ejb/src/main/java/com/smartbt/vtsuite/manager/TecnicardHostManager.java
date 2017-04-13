@@ -86,8 +86,9 @@ public class TecnicardHostManager {
         CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[TecnicardHostManager] Processing req transaction :: " + request.getTransactionType(), null);
 
         String prodProperty = System.getProperty("PROD");
+        System.out.println("TecnicardHostManager() -> prodProperty = " + prodProperty);
         Boolean isProd = prodProperty != null && prodProperty.equalsIgnoreCase("true");
-        System.out.println("++TecnicardHostManager() -> isProd = " + isProd);
+        System.out.println("TecnicardHostManager() -> isProd = " + isProd);
 
         if (isProd) {
             bizLogic = new TecnicardBusinessLogic();

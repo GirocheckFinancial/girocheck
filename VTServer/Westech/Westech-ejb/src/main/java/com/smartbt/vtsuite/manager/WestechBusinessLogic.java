@@ -36,7 +36,7 @@ import javax.xml.bind.JAXB;
 import javaxt.utils.Base64;
 
 public class WestechBusinessLogic {
-    public static final String WT_USERNAME = "jacky";
+    public static final String WT_USERNAME = "Jacky";
     public static final  String WT_PASSWORD = "12345";
     private static WestechBusinessLogic INSTANCE;
 
@@ -121,6 +121,7 @@ public class WestechBusinessLogic {
 
     
     public String buildIdProofXML(Map map){
+        System.out.println("Printing Request...");
         StringBuilder sb = new StringBuilder();
         sb.append("<IdProofInformation>").append('\n');
         sb.append("<IdNo>").append(map.get(ParameterName.ID)).append("</IdNo>").append('\n');

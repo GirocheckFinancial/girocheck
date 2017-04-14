@@ -65,7 +65,7 @@ public class CoreTransactionManager {
     private Host cardHost;
     private static HostManager hostManager = new HostManager();
     private ApplicationParameterManager applicationParameterManager = new ApplicationParameterManager();
-    private Map<EnumApplicationParameter, Double> amountAplicationParameters; 
+    private Map<EnumApplicationParameter, Double> amountAplicationParameters;
 
     //TODO move this to System Properties
     public static final String ID_SCAN_AUTH_KEY = "48fa49a3-8ca4-4fc5-9a60-93271739969d";
@@ -305,20 +305,6 @@ public class CoreTransactionManager {
                 Iterator it = direxTransactionRequest.getTransactionData().keySet().iterator();
 
             }
-            /*
-        
-             end 
-            
-             */
-
-            if (client != null && client.hasITIN()) {
-                /*
-                 * ITIN value 100
-                 */
-                direxTransactionRequest.getTransactionData().put(ParameterName.SENSITIVEIDTYPE, IdType.OTHERS);
-            } else {
-                direxTransactionRequest.getTransactionData().put(ParameterName.SENSITIVEIDTYPE, IdType.SSN);
-            }
 
             Terminal terminal = terminalManager.findBySerialNumber(terminalId);
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] (terminalId) :: " + terminalId, null);
@@ -390,12 +376,11 @@ public class CoreTransactionManager {
                 direxTransactionRequest.getTransactionData().put(ParameterName.MERCHANT_NAME, terminal.getMerchant().getLegalName());
                 direxTransactionRequest.getTransactionData().put(ParameterName.EMAIL, "girocheck@cardmarte.com");
             }
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] IDPOS$IDTELLERR ", null);
+
             direxTransactionRequest.getTransactionData().put(ParameterName.IDPOS, terminal.getMerchant().getIdPosOrderExp());
             direxTransactionRequest.getTransactionData().put(ParameterName.IDTELLER, terminal.getMerchant().getIdTellerOrderExp());
             direxTransactionRequest.getTransactionData().put(ParameterName.IDTELLERPAGO, terminal.getMerchant().getIdTellerPagoOrderExp());
             direxTransactionRequest.getTransactionData().put(ParameterName.CERTEGY_LOCATION_ID, terminal.getMerchant().getIdIstreamFuzeCash()); //TODO create new parameter for this
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] IDPOS: " + terminal.getMerchant().getIdPosOrderExp() + " IDTELLER: " + terminal.getMerchant().getIdTellerOrderExp(), null);
 
             if (transactionType == TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamTecnicardCheck());
@@ -404,10 +389,7 @@ public class CoreTransactionManager {
             }
 
             transaction.setTerminal(terminal);
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager]transaction.setClient( client ) client has value = " + (client != null), null);
             transaction.setClient(client);
-
-            CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] ASKING FOR PARAMETER.PHONE. ", null);
 
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.PHONE)
                     && direxTransactionRequest.getTransactionData().get(ParameterName.PHONE) != null
@@ -483,23 +465,16 @@ public class CoreTransactionManager {
             if (direxTransactionRequest.getTransactionData().containsKey(ParameterName.OPERATION)) {
                 String operation = (String) direxTransactionRequest.getTransactionData().get(ParameterName.OPERATION);
                 transaction.setOperation(operation);
-                if (operation.contains("01")) {// check
-                    if (cardHost.getHostName().equals("FUZE")) {
-                        direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamFuzeCheck());
-                    } else {
-                        direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamTecnicardCheck());
-                    }
+                if (operation.contains("01")) {// check 
+                    direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamTecnicardCheck());
+
                     direxTransactionRequest.getTransactionData().put(ParameterName.IDSERVICE, "1");
                     direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_TECNICARD, terminal.getMerchant().getIdTecnicardCheck());
-                } else {  // if operation == 02 cash
-                    if (cardHost.getHostName().equals("FUZE")) {
-                        direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamFuzeCash());
-                    } else {
-                        direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamTecnicardCash());
-                    }
+                } else {  // if operation == 02 cash 
+                    direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamTecnicardCash());
+
                     direxTransactionRequest.getTransactionData().put(ParameterName.IDSERVICE, "2");
                     direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_TECNICARD, terminal.getMerchant().getIdTecnicardCash());
-
                 }
             }
 
@@ -565,29 +540,11 @@ public class CoreTransactionManager {
             }
 
             if (!binNumber.isEmpty()) {
-//                try {
-//                    HibernateUtil.beginTransaction();
                 host = hostManager.getHostByBinNumber(binNumber);
-
-//                    HibernateUtil.commitTransaction();
-//                } catch (Exception e) {
-//                    HibernateUtil.rollbackTransaction();
-//                    CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting the host by bin number. ", e.getMessage());
-//                    e.printStackTrace();
-//                }
             }
 
         } else {
-//            try {
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Looking defaultHost", null);
-//                HibernateUtil.beginTransaction();
             host = hostManager.getDefaultHost();
-//                HibernateUtil.commitTransaction();
-//            } catch (Exception e) {
-//                HibernateUtil.rollbackTransaction();
-//                CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Error getting default host", e.getMessage());
-//                e.printStackTrace();
-//            }
         }
 
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CoreTransactionManager] Finding Host result: " + host.getHostName(), null);

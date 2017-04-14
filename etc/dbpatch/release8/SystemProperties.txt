@@ -1,2 +1,8 @@
 CERTEGY_PRIMARY_PROD_WSDL  possible values:  C:/REPO/Dev/girocheck/VTServer/Certegy/Certegy-ejb/src/main/java/com/smartbt/vtsuite/boundary/prod/pcaservice.wsdl
 
+
+GIROCHECK2WESTECH_USERNAME   Value: (For Dev): Jacky
+GIROCHECK2WESTECH_PASSWORD   Value: (For Dev): 12345
+
+WESTECH2GIROCHECK_USERNAME   Value: (For Dev): sbt
+WESTECH2GIROCHECK_PASSWORD   Value: (For Dev): sbt

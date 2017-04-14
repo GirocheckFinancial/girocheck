@@ -445,7 +445,7 @@ public class RegistrationManager {
         MobileClient mobileClient = MobileClientDao.get().getMobileClientByCardNumberAndMaskSSN(maskSSN, cardNumber);
 
         if (mobileClient == null) {
-            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, VTSuiteMessages.CLIENT_DOES_NOT_EXIST);
+            throw new MobileValidationException(Constants.CLIENT_DOES_NOT_EXIST, MobileMessage.CLIENT_DOES_NOT_EXIST.get(lang));
         }
         return mobileClient;
     }
@@ -489,7 +489,13 @@ public class RegistrationManager {
     private void sendEmailOrSMSNotification(MobileClient mobileClient, String sendBy, String lang) throws Exception {
 
         if (sendBy.equalsIgnoreCase("sms")) {
-            String smsMessage = "Thank you for choosing VoltCash. Your password key is: " + mobileClient.getForgotPasswordKey() + ". Ignore if you did not make this request.";
+            String smsMessage;
+            if(lang != null && lang.equalsIgnoreCase("en")){
+                smsMessage = "Thank you for choosing VoltCash. Your Access Code key is: " + mobileClient.getForgotPasswordKey() + ". Ignore if you did not make this request.";
+            }else{
+               smsMessage = "Gracias por preferir VoltCash. Su código de acceso es: " + mobileClient.getForgotPasswordKey() + ". Ignora este mensaje si usted no hizo esta solicitud.";
+            }
+            
             String sendSMSProperty = System.getProperty("SEND_SMS");
             Boolean sendSMS = sendSMSProperty != null && sendSMSProperty.equalsIgnoreCase("true");
 

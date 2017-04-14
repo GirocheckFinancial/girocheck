@@ -77,6 +77,11 @@ public class CreditCardDAO extends BaseDAO<CreditCard> {
             saveOrUpdate(creditCard);
         } else {
             CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CreditCardDAO] createOrGet creditCard already exist.", null);
+            
+            if(creditCard.getClient() == null){
+                creditCard.setClient(client);
+                saveOrUpdate(creditCard);
+            }
         }
         return creditCard;
 

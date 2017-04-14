@@ -296,6 +296,7 @@ public class TransactionWindow extends BaseWindow {
                 String url = urlSimple;
                 Utils.debug("sendURL "+url);
                 Window.open(url, "", "");
+                Utils.debug("After Window.open...");
         } else {
             SC.warn(I18N.GET.MESSAGE_ERROR_ACTION(), I18N.GET.MESSAGE_ERROR_ACTION());
         }

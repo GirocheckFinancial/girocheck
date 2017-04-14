@@ -332,8 +332,8 @@ public class ReportDAO extends BaseDAO<Transaction> {
     private void setDateRange(Date dateStart, Date dateEnd, Criteria criteria) {
         if (dateStart == null && dateEnd == null) {
             System.out.println("Both dates are NULL"); 
-            dateStart =  getDateWithMonthDifference(dateStart, -2);
             dateEnd = new Date();
+            dateStart =  getDateWithMonthDifference(dateEnd, -2); 
         } else {
             if (dateEnd == null) {
                 System.out.println("dateEnd is NULL");

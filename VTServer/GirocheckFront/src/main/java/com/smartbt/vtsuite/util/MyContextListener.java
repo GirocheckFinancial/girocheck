@@ -5,7 +5,13 @@
  */
 package com.smartbt.vtsuite.util;
 
+import com.smartbt.girocheck.servercommon.enums.EnumApplicationParameter;
+import com.smartbt.girocheck.servercommon.manager.ApplicationParameterManager;
 import com.smartbt.girocheck.servercommon.utils.IDScanner;
+import com.smartbt.girocheck.servercommon.utils.bd.HibernateUtil;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -23,27 +29,17 @@ public class MyContextListener
 
     @Override
     public void contextInitialized(ServletContextEvent arg0) {
-//        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-//        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-//        System.out.println("&&&&&&..............................&&&&&&");
-//        System.out.println("&&&&&&......... STARTING............&&&&&&");
-//        System.out.println("&&&&&&..............................&&&&&&");
-//        System.out.println("&&&&&&........TESTING ID SCAN.......&&&&&&");
-//        System.out.println("&&&&&&..............................&&&&&&");
+//        try {
+//            System.out.println("MyContextListener -> contextInitialized");
 //
-//        if (IDScanner.testParseID()) {
-//            System.out.println("&&&&&&............SUCCESS...........&&&&&&");
-//        } else {
-//            System.out.println("&&&&&&......FAILED FIRST ATTEMPT....&&&&&&");
-//
-//            if (IDScanner.testParseID()) {
-//                System.out.println("&&&&&&............SUCCESS...........&&&&&&");
-//            } else {
-//                System.out.println("&&&&&&......FAILED SECOND ATTEMPT....&&&&&&");
-//            }
+//            HibernateUtil.beginTransaction();
+//            System.out.println("HibernateUtil.beginTransaction();");
+//            Map<EnumApplicationParameter, Double> amountAplicationParameters = ApplicationParameterManager.get().getAmountAplicationParameters();
+//            System.out.println("amountAplicationParameters.SIZE() =  " + amountAplicationParameters.size());
+//            HibernateUtil.commitTransaction();
+//            System.out.println("HibernateUtil.commitTransaction();");
+//        } catch (Exception ex) {
+//            Logger.getLogger(MyContextListener.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-//
-//        System.out.println("&&&&&&..............................&&&&&&");
-//        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     }
 }

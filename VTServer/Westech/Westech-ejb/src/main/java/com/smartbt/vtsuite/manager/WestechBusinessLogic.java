@@ -36,8 +36,13 @@ import javax.xml.bind.JAXB;
 import javaxt.utils.Base64;
 
 public class WestechBusinessLogic {
-    public static final String WT_USERNAME = "Jacky";
-    public static final  String WT_PASSWORD = "12345";
+    public static final String WT_USERNAME = System.getProperty("GIROCHECK2WESTECH_USERNAME");//"Jacky";
+    public static final  String WT_PASSWORD = System.getProperty("GIROCHECK2WESTECH_PASSWORD");//"12345";
+    
+//     String WESTECH2GIROCHECK_USERNAME = System.getProperty("WESTECH2GIROCHECK_USERNAME");
+//                String WESTECH2GIROCHECK_PASSWORD = System.getProperty("WESTECH2GIROCHECK_PASSWORD");
+                
+    
     private static WestechBusinessLogic INSTANCE;
 
     private CheckService service;

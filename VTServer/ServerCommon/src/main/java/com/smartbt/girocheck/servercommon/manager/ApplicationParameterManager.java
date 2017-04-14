@@ -21,6 +21,15 @@ import java.util.Map;
  * @author Roberto Rodriguez :: <roberto.rodriguez@smartbt.com>
  */
 public class ApplicationParameterManager {
+    
+    private static ApplicationParameterManager INSTANCE;
+    
+    public static ApplicationParameterManager get(){
+        if(INSTANCE == null){
+            INSTANCE = new ApplicationParameterManager();
+        }
+        return INSTANCE;
+    }
 
     private ApplicationParameterDAO applicationParameterDAO = ApplicationParameterDAO.get();
 

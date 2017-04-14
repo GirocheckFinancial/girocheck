@@ -56,6 +56,28 @@ public class FrontBusinessLogic {
 
             TransactionType transactionType = (TransactionType) transactionData.get( TransactionType.TRANSACTION_TYPE );
 
+            System.out.println("transactionType = " + transactionType);
+            if(transactionType == TransactionType.CHECK_INFO){
+               
+                String WESTECH2GIROCHECK_USERNAME = System.getProperty("WESTECH2GIROCHECK_USERNAME");
+                String WESTECH2GIROCHECK_PASSWORD = System.getProperty("WESTECH2GIROCHECK_PASSWORD");
+                
+                System.out.println("WESTECH2GIROCHECK_USERNAME = " + WESTECH2GIROCHECK_USERNAME);
+                System.out.println("WESTECH2GIROCHECK_PASSWORD = " + WESTECH2GIROCHECK_PASSWORD);
+                
+                String user = (String)transactionData.get(ParameterName.USER);
+                String password = (String)transactionData.get(ParameterName.USER);
+                
+                System.out.println("user = " + user);
+                System.out.println("password = " + password);
+                
+                System.out.println("if = " + (!(user.equals(WESTECH2GIROCHECK_USERNAME) && password.equals(WESTECH2GIROCHECK_PASSWORD))));
+                
+                if(!(user.equals(WESTECH2GIROCHECK_USERNAME) && password.equals(WESTECH2GIROCHECK_PASSWORD))){
+                    return DirexTransactionResponse.forException( ResultCode.LOGIN_FAILED, ResultMessage.LOGIN_FAILED );
+                }
+            }
+            
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront BusinessLogic] Processing "+ transactionType ,null);
             direxTransactionRequest.setTransactionType( transactionType );
 

@@ -38,8 +38,9 @@ import javax.xml.ws.BindingProvider;
 /**
  * Mpowa Business Logic Class
  */
-public class IStream2BusinessLogic {
-
+public class IStream2BusinessLogic { 
+    public static final String ISTREAM_USERNAME = System.getProperty("ISTREAM_USERNAME"); 
+    public static final String ISTREAM_PASSWORD = System.getProperty("ISTREAM_PASSWORD"); 
     private static IStream2BusinessLogic INSTANCE;
 
     public static synchronized IStream2BusinessLogic get() {
@@ -63,8 +64,8 @@ public class IStream2BusinessLogic {
             service = new TLS_Service();
             port = service.getTLSPort();
 
-          // url = "https://stable-1.istreamdeposit.com/TLS?wsdl";
-             url = "https://stable-1.istreamdeposit.com/TLS";
+            // url = "https://stable-1.istreamdeposit.com/TLS?wsdl";
+            url = "https://stable-1.istreamdeposit.com/TLS";
 
 //            if(url == null){
 //                url = "https://bizsrv.tcmsystem.net/IStreamWS/iStreamSrvHost.asmx?WSDL";
@@ -84,31 +85,33 @@ public class IStream2BusinessLogic {
 //USer: GCTLS
 //PW: jpl500
 //LocationId: 4769778
+
     public DirexTransactionResponse process(DirexTransactionRequest request) throws Exception {
         try {
             Map transactionData = request.getTransactionData();
             DirexTransactionResponse direxTransactionResponse = new DirexTransactionResponse();
-            String userName = "GCTLS";// MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);
-            String password = "jpl500"; //MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
-            Integer locationId = 4769778;//MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
+            String userName = ISTREAM_USERNAME; //"GCTLS";
+            String password = ISTREAM_PASSWORD; //"jpl500";  
+            String locationIdStr = MapUtil.getStringValueFromMap(transactionData, ParameterName.TERMINAL_ID_ISTREAM, true);
+            Integer locationId = Integer.parseInt(locationIdStr);
             String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
             String depositName = "Deposit at " + (new Date());
             String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);
-            
-            if(micr != null){
+
+            if (micr != null) {
                 micr = micr.replaceAll("C", "<").replaceAll("A", ":").replaceAll("D", "=");
             }
-            
+
             String cutomerItemId = MapUtil.getStringValueFromMap(transactionData, ParameterName.CHECK_ID, true);
-           
+
             byte[] checkBack = (byte[]) transactionData.get(ParameterName.CHECK_BACK);
             byte[] checkFront = (byte[]) transactionData.get(ParameterName.CHECK_FRONT);
-            
+
             Image tiffImage = new Image();
             tiffImage.setImgBackBinary(checkBack);
             tiffImage.setImgFrontBinary(checkFront);
             Image highQualityImage = new Image();
-            
+
             highQualityImage.setImgBackBinary(checkBack);
             highQualityImage.setImgFrontBinary(checkFront);
             List<AuxField> auxFields = null;
@@ -121,7 +124,7 @@ public class IStream2BusinessLogic {
 
             switch (transactionType) {
                 case ISTREAM2_SEND_SINGLE_ICL:
-                    String log = requestToString(userName, password, "" + locationId, ammount, depositName, micr, cutomerItemId,  checkBack, checkFront, null);
+                    String log = requestToString(userName, password, "" + locationId, ammount, depositName, micr, cutomerItemId, checkBack, checkFront, null);
                     System.out.println("----------- IStrean -> SendSingleICL -----------");
                     System.out.println(log);
                     response = (IMap) port.sendSingleICL(userName, password, locationId, ammount, depositName, micr, cutomerItemId, tiffImage, highQualityImage, auxFields);
@@ -143,7 +146,7 @@ public class IStream2BusinessLogic {
         }
     }
 
-    public static String requestToString(String userName, String password, String locationId, String ammount, String depositName, String micr, String cutomerItemId,   byte[] CHECK_BACK, byte[] CHECK_FRONT, String auxFields) {
+    public static String requestToString(String userName, String password, String locationId, String ammount, String depositName, String micr, String cutomerItemId, byte[] CHECK_BACK, byte[] CHECK_FRONT, String auxFields) {
         StringBuilder s = new StringBuilder();
         s.append("<SendSingleICL>").append('\n');
         s.append("    <userName>").append(userName).append("</userName>").append('\n');
@@ -153,25 +156,25 @@ public class IStream2BusinessLogic {
         s.append("    <depositName>").append(depositName).append("</depositName>").append('\n');
         s.append("    <micr>").append(micr).append("</micr>").append('\n');
         s.append("    <cutomerItemId>").append(cutomerItemId).append("</cutomerItemId>").append('\n');
- 
+
         s.append("    <highQualityImage>").append('\n');
         if (CHECK_BACK != null && CHECK_BACK.length != 0) {
             s.append("    <CHECK_BACK>").append("AN IMAGE").append("</CHECK_BACK>").append('\n');
         }
         if (CHECK_FRONT != null && CHECK_FRONT.length != 0) {
             s.append("    <CHECK_FRONT>").append("AN IMAGE").append("</CHECK_FRONT>").append('\n');
-        } 
+        }
         s.append("    </highQualityImage>").append('\n');
- 
+
         s.append("    <tiffImage>").append('\n');
         if (CHECK_BACK != null && CHECK_BACK.length != 0) {
             s.append("    <CHECK_BACK>").append("AN IMAGE").append("</CHECK_BACK>").append('\n');
         }
         if (CHECK_FRONT != null && CHECK_FRONT.length != 0) {
             s.append("    <CHECK_FRONT>").append("AN IMAGE").append("</CHECK_FRONT>").append('\n');
-        } 
+        }
         s.append("    </tiffImage>").append('\n');
-      //  s.append("    <auxFields>").append(auxFields).append("</auxFields>").append('\n');
+        //  s.append("    <auxFields>").append(auxFields).append("</auxFields>").append('\n');
         s.append("</SendSingleICL>").append('\n');
 
         return s.toString();

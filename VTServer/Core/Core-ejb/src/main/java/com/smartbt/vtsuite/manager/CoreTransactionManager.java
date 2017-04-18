@@ -384,6 +384,7 @@ public class CoreTransactionManager {
 
             if (transactionType == TransactionType.ISTREAM_CHECK_AUTH_LOCATION_CONFIG) {
                 direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_ID_ISTREAM, terminal.getMerchant().getIdIstreamTecnicardCheck());
+                  //todo remove this for version 2 (We eill take this from System Properties)
                 direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_USER_ISTREAM, terminal.getMerchant().getIstreamUser());
                 direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_PASSWORD_ISTREAM, terminal.getMerchant().getIstreamPassword());
             }
@@ -456,7 +457,7 @@ public class CoreTransactionManager {
             // -----------------------------------------------------------------
 
             direxTransactionRequest.getTransactionData().put(ParameterName.HOSTNAME, cardHost.getHostName());
-
+            //todo remove this for version 2 (We eill take this from System Properties)
             if (COMPLEX_TRANSACTION_LIST.contains(transactionType)) {
                 direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_USER_ISTREAM, terminal.getMerchant().getIstreamUser());
                 direxTransactionRequest.getTransactionData().put(ParameterName.TERMINAL_PASSWORD_ISTREAM, terminal.getMerchant().getIstreamPassword());

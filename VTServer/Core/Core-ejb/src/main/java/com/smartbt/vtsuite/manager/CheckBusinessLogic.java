@@ -336,28 +336,6 @@ public class CheckBusinessLogic extends AbstractCommonBusinessLogic {
         CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] extractTecnicardConfirmationInformation(...) DONE", null);
     }
 
-    public void sendIstreamCheckAuthSubmit(DirexTransactionRequest request, String action, Transaction transaction, String checkId) throws Exception {
-
-        DirexTransactionRequest istreamCancelRequest = new DirexTransactionRequest();
-
-        Map istreamCancelMap = request.getTransactionData();
-
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] sendIstreamCheckAuthSubmit pass " + istreamCancelMap.get(ParameterName.TERMINAL_PASSWORD_ISTREAM), null);
-        CustomeLogger.Output(CustomeLogger.OutputStates.Debug, "[CheckBusinessLogic] sendIstreamCheckAuthSubmit user " + istreamCancelMap.get(ParameterName.TERMINAL_USER_ISTREAM), null);
-        istreamCancelRequest.setTransactionType(TransactionType.ISTREAM_CHECK_AUTH_SUBMIT);
-        istreamCancelRequest.getTransactionData().put(ParameterName.ACTION, action);
-        istreamCancelRequest.getTransactionData().put(ParameterName.REQUEST_ID, checkId);
-        istreamCancelRequest.getTransactionData().put(ParameterName.PASSWORD, istreamCancelMap.get(ParameterName.TERMINAL_PASSWORD_ISTREAM));
-        istreamCancelRequest.getTransactionData().put(ParameterName.USER, istreamCancelMap.get(ParameterName.TERMINAL_USER_ISTREAM));
-
-        //------ CREATE ISTREAM_CHECKAUTHSUBMIT SUBTRANSACTION ------
-        CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[CheckBusinessLogic] Saving IstreamCheckAutSubmitSubTransaction", null);
-
-        sendMessageToHost(istreamCancelRequest, NomHost.ISTREAM, ISTREAM_HOST_WAIT_TIME, transaction);
-
-        addSuccessfulSubTransaction(transaction, TransactionType.ISTREAM_CASH_AUTH_SUBMIT);
-    }
-
     public void validateCheckAmount(DirexTransactionRequest request, Map checkInfoRequestMap) throws TransactionalException {
         Double westechAmount = 0D;
         String westechAmountString = "";

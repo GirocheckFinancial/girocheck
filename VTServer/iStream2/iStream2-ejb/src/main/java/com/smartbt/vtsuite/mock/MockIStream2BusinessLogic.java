@@ -15,7 +15,6 @@
  */
 package com.smartbt.vtsuite.mock;
 
-import com.smartbt.vtsuite.manager.*;
 import com.smartbt.girocheck.servercommon.enums.ParameterName;
 import com.smartbt.girocheck.servercommon.enums.ResultCode;
 import com.smartbt.girocheck.servercommon.enums.ResultMessage;
@@ -27,15 +26,14 @@ import com.smartbt.girocheck.servercommon.utils.CustomeLogger;
 import com.smartbt.vtsuite.boundary.util.MapUtil;
 import com.smartbt.vtsuite.boundary.ws.AuxField;
 import com.smartbt.vtsuite.boundary.ws.Image;
-import com.smartbt.vtsuite.boundary.ws.TLS;
-import com.smartbt.vtsuite.boundary.ws.TLS_Service;
+import static com.smartbt.vtsuite.manager.IStream2BusinessLogic.ISTREAM_PASSWORD;
+import static com.smartbt.vtsuite.manager.IStream2BusinessLogic.ISTREAM_USERNAME;
 import static com.smartbt.vtsuite.manager.IStream2BusinessLogic.requestToString;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.ws.BindingProvider;
 
 /**
  * Mpowa Business Logic Class
@@ -55,9 +53,10 @@ public class MockIStream2BusinessLogic {
         try {
             Map transactionData = request.getTransactionData();
             DirexTransactionResponse direxTransactionResponse = DirexTransactionResponse.forSuccess();
-            String userName = MapUtil.getStringValueFromMap(transactionData, ParameterName.USER, true);
-            String password = MapUtil.getStringValueFromMap(transactionData, ParameterName.PASSWORD, true);
-            Integer locationId = MapUtil.getIntegerValueFromMap(transactionData, ParameterName.LOCATION_ID, true);
+            String userName = ISTREAM_USERNAME; //"GCTLS";
+            String password = ISTREAM_PASSWORD; //"jpl500";  
+            String locationIdStr = MapUtil.getStringValueFromMap(transactionData, ParameterName.TERMINAL_ID_ISTREAM, true);
+            Integer locationId = Integer.parseInt(locationIdStr);
             String ammount = MapUtil.getStringValueFromMap(transactionData, ParameterName.AMMOUNT, true);
             String depositName = "Deposit at " + (new Date());
             String micr = MapUtil.getStringValueFromMap(transactionData, ParameterName.MICR, true);

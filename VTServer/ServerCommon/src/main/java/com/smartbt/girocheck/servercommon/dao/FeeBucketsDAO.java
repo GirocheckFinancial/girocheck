@@ -26,67 +26,67 @@ import org.hibernate.transform.Transformers;
  *
  * @author Alejo
  */
+public class FeeBucketsDAO extends BaseDAO<FeeBuckets> {
 
-
-public class FeeBucketsDAO extends BaseDAO<FeeBuckets>{
-    
     protected static FeeBucketsDAO dao;
-    
+
     public static FeeBucketsDAO get() {
-        if ( dao == null ) {
+        if (dao == null) {
             dao = new FeeBucketsDAO();
         }
         return dao;
     }
-     
-    public FeeBuckets getFees(String merchantId, String operation, float amount){
 
-        System.out.println("[FeeBucketsDAO] getFees() params: merchant id: " + merchantId+" operation: " + operation+" amount: " +amount);
+    public FeeBuckets getFees(String merchantId, String operation, float amount) {
+
+        System.out.println("[FeeBucketsDAO] getFees() params: merchant id: " + merchantId + " operation: " + operation + " amount: " + amount);
         FeeBuckets fee;
-        
-           int idMerchant = Integer.parseInt(merchantId);
-     
-            Criteria criteria = HibernateUtil.getSession().createCriteria( FeeBuckets.class ).
-                    createAlias( "feeSchedule", "feeSchedule" ).
-                    createAlias( "feeSchedule.method", "method" ). 
-                    add( Restrictions.eq( "feeSchedule.merchant", idMerchant ) ).
-                    add( Restrictions.eq( "method.operation", operation ) ).
-                    add( Restrictions.le( "minimum", amount ) ).
-                    addOrder(Order.desc("minimum") );
 
-            criteria.setMaxResults( 1 );
+        int idMerchant = Integer.parseInt(merchantId);
 
-            fee = (FeeBuckets)criteria.uniqueResult();
-            if(fee == null){
-                System.out.println("[FeeBucketsDAO] getFees() No Fee Match for the entered data. Then looking in the default FeeSchedule");
-                return getDefaultFeesValues(operation, amount); 
-            }
-            else{
-                System.out.println("[FeeBucketsDAO] getFees() fee result: "+fee.getFixed());
-                 return fee;
-            } 
+        Criteria criteria = HibernateUtil.getSession().createCriteria(FeeBuckets.class).
+                createAlias("feeSchedule", "feeSchedule").
+                createAlias("feeSchedule.method", "method").
+                add(Restrictions.eq("feeSchedule.merchant", idMerchant)).
+                add(Restrictions.eq("method.operation", operation)).
+                add(Restrictions.le("minimum", amount)).
+                addOrder(Order.desc("minimum"));
+
+        criteria.setMaxResults(1);
+
+        fee = (FeeBuckets) criteria.uniqueResult();
+        if (fee == null) {
+            System.out.println("[FeeBucketsDAO] getFees() No Fee Match for the entered data. Then looking in the default FeeSchedule");
+            fee = getDefaultFeesValues(operation, amount);
+        }
+        System.out.println("[FeeBucketsDAO] getFees() fee result: getId() = " + fee.getId());
+        System.out.println("[FeeBucketsDAO] getFees() fee result: getFixed() = " + fee.getFixed());
+        System.out.println("[FeeBucketsDAO] getFees() fee result: getPercentage() = " + fee.getPercentage());
+        System.out.println("[FeeBucketsDAO] getFees() fee result: getMinimum() = " + fee.getMinimum());
+        return fee;
     }
-    
-     public FeeBuckets getDefaultFeesValues(String operation, float amount){
-        Criteria criteria = HibernateUtil.getSession().createCriteria( FeeBuckets.class ).
-                    createAlias( "feeSchedule", "feeSchedule" ).
-                    createAlias( "feeSchedule.method", "method" ). 
-                    add( Restrictions.eq( "feeSchedule.isdefault", true ) ).
-                    add( Restrictions.eq( "method.operation", operation ) ).
-                    add( Restrictions.le( "minimum", amount ) ).
-                    addOrder(Order.desc("minimum") );
 
-            criteria.setMaxResults( 1 );
+    public FeeBuckets getDefaultFeesValues(String operation, float amount) {
+        System.out.println("getDefaultFeesValues(" + operation + ", " + amount + ")");
+        Criteria criteria = HibernateUtil.getSession().createCriteria(FeeBuckets.class).
+                createAlias("feeSchedule", "feeSchedule").
+                createAlias("feeSchedule.method", "method").
+                add(Restrictions.eq("feeSchedule.isdefault", true)).
+                add(Restrictions.eq("method.operation", operation)).
+                add(Restrictions.le("minimum", amount)).
+                addOrder(Order.desc("minimum"));
 
-            return (FeeBuckets)criteria.uniqueResult();
+        criteria.setMaxResults(1);
+
+        return (FeeBuckets) criteria.uniqueResult();
     }
-     
-    public ResponseDataList searchFeeBuckets( int idFeeSchedule,int firstResult, int maxResult ) {
 
-        Criteria criteria = HibernateUtil.getSession().createCriteria( FeeBuckets.class )
-                .createAlias( "feeSchedule", "feeSchedule" )
-                .add( Restrictions.eq( "feeSchedule.id", idFeeSchedule ) );
-        
+    public ResponseDataList searchFeeBuckets(int idFeeSchedule, int firstResult, int maxResult) {
+
+        Criteria criteria = HibernateUtil.getSession().createCriteria(FeeBuckets.class)
+                .createAlias("feeSchedule", "feeSchedule")
+                .add(Restrictions.eq("feeSchedule.id", idFeeSchedule));
+
         if (firstResult >= 0) {
             criteria.setFirstResult(firstResult * maxResult);
             criteria.setMaxResults(maxResult);
@@ -95,16 +95,16 @@ public class FeeBucketsDAO extends BaseDAO<FeeBuckets>{
         criteria.setMaxResults(maxResult);
 
         ProjectionList projectionList = Projections.projectionList()
-                .add( Projections.property( "minimum" ).as( "minimum" ) )
-                .add( Projections.property( "fixed" ).as( "fixed" ) )
-                .add( Projections.property( "percentage" ).as( "percentage" ) )
-                .add( Projections.property( "id" ).as( "id" ) );
-        criteria.setProjection( projectionList );
-        criteria.setResultTransformer(Transformers.aliasToBean(FeeBucketsDisplay.class));       
+                .add(Projections.property("minimum").as("minimum"))
+                .add(Projections.property("fixed").as("fixed"))
+                .add(Projections.property("percentage").as("percentage"))
+                .add(Projections.property("id").as("id"));
+        criteria.setProjection(projectionList);
+        criteria.setResultTransformer(Transformers.aliasToBean(FeeBucketsDisplay.class));
         List<FeeBucketsDisplay> bucketsDisplayList = (List<FeeBucketsDisplay>) criteria.list();
 
         Criteria counterCriteria = HibernateUtil.getSession().createCriteria(FeeBuckets.class);
-        Long total = (Long)counterCriteria.setProjection(Projections.rowCount()).uniqueResult();
+        Long total = (Long) counterCriteria.setProjection(Projections.rowCount()).uniqueResult();
         ResponseDataList response = new ResponseDataList();
         response.setData(bucketsDisplayList);
         Integer totalPages = (int) Math.ceil((float) total / (float) maxResult);;
@@ -112,39 +112,37 @@ public class FeeBucketsDAO extends BaseDAO<FeeBuckets>{
         response.setStatus(Constants.CODE_SUCCESS);
         response.setStatusMessage(VTSuiteMessages.SUCCESS);
         return response;
-    } 
-    
-    public FeeBucketsDisplay addFeeBucket(float minimum,float percentage, float fixed,FeeSchedules feeSchedule) throws ValidationException, NoSuchAlgorithmException {
+    }
 
-        if(feeSchedule==null){
-            String sql = "INSERT INTO fee_buckets(minimum,fixed,percentage) VALUES("+minimum+","+fixed+","+percentage+")"; 
+    public FeeBucketsDisplay addFeeBucket(float minimum, float percentage, float fixed, FeeSchedules feeSchedule) throws ValidationException, NoSuchAlgorithmException {
+
+        if (feeSchedule == null) {
+            String sql = "INSERT INTO fee_buckets(minimum,fixed,percentage) VALUES(" + minimum + "," + fixed + "," + percentage + ")";
             int updatedRows = HibernateUtil.getSession().createSQLQuery(sql).executeUpdate();
-        }else{
-            String sql = "INSERT INTO fee_buckets(minimum,fixed,percentage,fee_schedule_id) VALUES("+minimum+","+fixed+","+percentage+","+feeSchedule.getId()+")"; 
+        } else {
+            String sql = "INSERT INTO fee_buckets(minimum,fixed,percentage,fee_schedule_id) VALUES(" + minimum + "," + fixed + "," + percentage + "," + feeSchedule.getId() + ")";
             int updatedRows = HibernateUtil.getSession().createSQLQuery(sql).executeUpdate();
         }
-        
+
         FeeBucketsDisplay display = new FeeBucketsDisplay();
         return display;
     }
-    
-     public FeeBucketsDisplay updateFeeBucket(float minimum, float percentage,float fixed,FeeSchedules feeSchedule,int id) throws ValidationException, NoSuchAlgorithmException {
-        
-        String sql = "UPDATE fee_buckets SET minimum="+minimum+",fixed="+fixed+",percentage="+percentage+" WHERE id="+id; 
+
+    public FeeBucketsDisplay updateFeeBucket(float minimum, float percentage, float fixed, FeeSchedules feeSchedule, int id) throws ValidationException, NoSuchAlgorithmException {
+
+        String sql = "UPDATE fee_buckets SET minimum=" + minimum + ",fixed=" + fixed + ",percentage=" + percentage + " WHERE id=" + id;
         int updatedRows = HibernateUtil.getSession().createSQLQuery(sql).executeUpdate();
-        
+
         FeeBucketsDisplay display = new FeeBucketsDisplay();
         return display;
     }
-   
-       public void deleteFeeBucket(int id) {         
-         
-         
-         String sql = "delete from fee_buckets WHERE id = " + id;
- 
+
+    public void deleteFeeBucket(int id) {
+
+        String sql = "delete from fee_buckets WHERE id = " + id;
+
         int updatedRows = HibernateUtil.getSession().createSQLQuery(sql).executeUpdate();
-        
-  }
-     
-    
+
+    }
+
 }

@@ -15,7 +15,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.0
  * 
  */
-@WebService(name = "CheckServiceSoap", targetNamespace = "http://10.10.11.152/eFraudAPI")
+@WebService(name = "CheckServiceSoap", targetNamespace = "http://GC-APP-03/eFraudAPI")
 public interface CheckServiceSoap {
 
 
@@ -30,22 +30,22 @@ public interface CheckServiceSoap {
      * @return
      *     returns java.lang.String
      */
-    @WebMethod(operationName = "CheckProcess", action = "http://10.10.11.152/eFraudAPI/CheckProcess")
-    @WebResult(name = "CheckProcessResult", targetNamespace = "http://10.10.11.152/eFraudAPI")
-    @RequestWrapper(localName = "CheckProcess", targetNamespace = "http://10.10.11.152/eFraudAPI", className = "_152._11._10._10.efraudapi.CheckProcess")
-    @ResponseWrapper(localName = "CheckProcessResponse", targetNamespace = "http://10.10.11.152/eFraudAPI", className = "_152._11._10._10.efraudapi.CheckProcessResponse")
+    @WebMethod(operationName = "CheckProcess", action = "http://GC-APP-03/eFraudAPI/CheckProcess")
+    @WebResult(name = "CheckProcessResult", targetNamespace = "http://GC-APP-03/eFraudAPI")
+    @RequestWrapper(localName = "CheckProcess", targetNamespace = "http://GC-APP-03/eFraudAPI", className = "_152._11._10._10.efraudapi.CheckProcess")
+    @ResponseWrapper(localName = "CheckProcessResponse", targetNamespace = "http://GC-APP-03/eFraudAPI", className = "_152._11._10._10.efraudapi.CheckProcessResponse")
     public String checkProcess(
-        @WebParam(name = "username", targetNamespace = "http://10.10.11.152/eFraudAPI")
+        @WebParam(name = "username", targetNamespace = "http://GC-APP-03/eFraudAPI")
         String username,
-        @WebParam(name = "password", targetNamespace = "http://10.10.11.152/eFraudAPI")
+        @WebParam(name = "password", targetNamespace = "http://GC-APP-03/eFraudAPI")
         String password,
-        @WebParam(name = "checkFront", targetNamespace = "http://10.10.11.152/eFraudAPI")
+        @WebParam(name = "checkFront", targetNamespace = "http://GC-APP-03/eFraudAPI")
         byte[] checkFront,
-        @WebParam(name = "checkBack", targetNamespace = "http://10.10.11.152/eFraudAPI")
+        @WebParam(name = "checkBack", targetNamespace = "http://GC-APP-03/eFraudAPI")
         byte[] checkBack,
-        @WebParam(name = "idProof", targetNamespace = "http://10.10.11.152/eFraudAPI")
+        @WebParam(name = "idProof", targetNamespace = "http://GC-APP-03/eFraudAPI")
         byte[] idProof,
-        @WebParam(name = "idProof2dBarcode", targetNamespace = "http://10.10.11.152/eFraudAPI")
+        @WebParam(name = "idProof2dBarcode", targetNamespace = "http://GC-APP-03/eFraudAPI")
         String idProof2DBarcode);
 
 }

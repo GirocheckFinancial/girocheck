@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://10.10.11.152/eFraudAPI" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://10.10.11.152/eFraudAPI" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://GC-APP-03/eFraudAPI" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://GC-APP-03/eFraudAPI" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://10.10.11.152/eFraudAPI">
+    <s:schema elementFormDefault="qualified" targetNamespace="http://GC-APP-03/eFraudAPI">
       <s:element name="CheckProcess">
         <s:complexType>
           <s:sequence>
@@ -38,7 +38,7 @@
   <wsdl:binding name="CheckServiceSoap" type="tns:CheckServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CheckProcess">
-      <soap:operation soapAction="http://10.10.11.152/eFraudAPI/CheckProcess" style="document" />
+      <soap:operation soapAction="http://GC-APP-03/eFraudAPI/CheckProcess" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -50,7 +50,7 @@
   <wsdl:binding name="CheckServiceSoap12" type="tns:CheckServiceSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="CheckProcess">
-      <soap12:operation soapAction="http://10.10.11.152/eFraudAPI/CheckProcess" style="document" />
+      <soap12:operation soapAction="http://GC-APP-03/eFraudAPI/CheckProcess" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -61,10 +61,10 @@
   </wsdl:binding>
   <wsdl:service name="CheckService">
     <wsdl:port name="CheckServiceSoap" binding="tns:CheckServiceSoap">
-      <soap:address location="http://10.10.11.152/eFraudAPI/CheckService.asmx" />
+      <soap:address location="http://GC-APP-03/eFraudAPI/CheckService.asmx" />
     </wsdl:port>
     <wsdl:port name="CheckServiceSoap12" binding="tns:CheckServiceSoap12">
-      <soap12:address location="http://10.10.11.152/eFraudAPI/CheckService.asmx" />
+      <soap12:address location="http://GC-APP-03/eFraudAPI/CheckService.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

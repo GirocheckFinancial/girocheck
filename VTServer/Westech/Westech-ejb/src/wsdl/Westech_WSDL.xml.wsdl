@@ -60,10 +60,10 @@
 </wsdl:binding>
 <wsdl:service name="CheckService">
 <wsdl:port name="CheckServiceSoap" binding="tns:CheckServiceSoap">
-<soap:address location="http://10.10.11.152/CheckService.asmx"/>
+<soap:address location="http://GC-APP-03/CheckService.asmx"/>
 </wsdl:port>
 <wsdl:port name="CheckServiceSoap12" binding="tns:CheckServiceSoap12">
-<soap12:address location="http://10.10.11.152/CheckService.asmx"/>
+<soap12:address location="http://GC-APP-03/CheckService.asmx"/>
 </wsdl:port>
 </wsdl:service>
 </wsdl:definitions>

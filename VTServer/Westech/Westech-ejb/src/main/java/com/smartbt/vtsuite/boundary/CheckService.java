@@ -16,20 +16,20 @@ import javax.xml.ws.WebServiceException;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "CheckService", targetNamespace = "http://10.10.11.152/eFraudAPI", wsdlLocation = "http://10.10.11.152/eFraudAPI/CheckService.asmx?WSDL")
+@WebServiceClient(name = "CheckService", targetNamespace = "http://GC-APP-03/eFraudAPI", wsdlLocation = "http://GC-APP-03/eFraudAPI/CheckService.asmx?WSDL")
 public class CheckService
     extends Service
 {
 
     private final static URL CHECKSERVICE_WSDL_LOCATION;
     private final static WebServiceException CHECKSERVICE_EXCEPTION;
-    private final static QName CHECKSERVICE_QNAME = new QName("http://10.10.11.152/eFraudAPI", "CheckService");
+    private final static QName CHECKSERVICE_QNAME = new QName("http://GC-APP-03/eFraudAPI", "CheckService");
 
     static {
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://10.10.11.152/eFraudAPI/CheckService.asmx?WSDL");
+            url = new URL("http://GC-APP-03/eFraudAPI/CheckService.asmx?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -52,7 +52,7 @@ public class CheckService
      */
     @WebEndpoint(name = "CheckServiceSoap")
     public CheckServiceSoap getCheckServiceSoap() {
-        return super.getPort(new QName("http://10.10.11.152/eFraudAPI", "CheckServiceSoap"), CheckServiceSoap.class);
+        return super.getPort(new QName("http://GC-APP-03/eFraudAPI", "CheckServiceSoap"), CheckServiceSoap.class);
     }
 
     /**
@@ -62,7 +62,7 @@ public class CheckService
      */
     @WebEndpoint(name = "CheckServiceSoap12")
     public CheckServiceSoap getCheckServiceSoap12() {
-        return super.getPort(new QName("http://10.10.11.152/eFraudAPI", "CheckServiceSoap12"), CheckServiceSoap.class);
+        return super.getPort(new QName("http://GC-APP-03/eFraudAPI", "CheckServiceSoap12"), CheckServiceSoap.class);
     }
 
     private static URL __getWsdlLocation() {

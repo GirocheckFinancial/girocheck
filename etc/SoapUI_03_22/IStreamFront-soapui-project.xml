@@ -303,9 +303,9 @@
             <!--Optional:-->
             <checkNumber>1</checkNumber>
             <!--Optional:-->
-            <checkCAR>1</checkCAR>
+            <checkCAR>12.88</checkCAR>
             <!--Optional:-->
-            <checkLAR>1</checkLAR>
+            <checkLAR>12.88</checkLAR>
             <!--Optional:-->
             <micrAcountNumber>1</micrAcountNumber>
             <!--Optional:-->

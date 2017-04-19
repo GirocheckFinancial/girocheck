@@ -86,6 +86,10 @@ public class FrontBusinessLogic {
             CustomeLogger.Output(CustomeLogger.OutputStates.Info, "[IStreamFront BusinessLogic] Sent message to FrontIStreamOutQueue, correlationId:: " + checkId,null);
             jmsManager.send( direxTransactionRequest, JMSManager.get().getFrontIStreamOutQueue(), direxTransactionRequest.getCorrelation() );
 
+            if(transactionType == TransactionType.CHECK_INFO){
+                return DirexTransactionResponse.forSuccess();
+            }
+            
             ObjectMessage tmsg = null;
 
                 Message message = jmsManager.receive( jmsManager.getFrontIStreamInQueue(), direxTransactionRequest.getCorrelation(), wait_time );

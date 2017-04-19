@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "TLS", targetNamespace = "http://web.service.fileloader.tc.com/", wsdlLocation = "https://stable-1.istreamdeposit.com/TLS?wsdl")
+@WebServiceClient(name = "TLS", targetNamespace = "http://web.service.fileloader.tc.com/", wsdlLocation = "https://www.istreamdeposit.com/TLS?wsdl")
 public class TLS_Service
     extends Service
 {
@@ -30,7 +30,7 @@ public class TLS_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("https://stable-1.istreamdeposit.com/TLS?wsdl");
+            url = new URL("https://www.istreamdeposit.com/TLS?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

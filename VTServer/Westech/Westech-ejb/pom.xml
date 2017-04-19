@@ -118,10 +118,10 @@
                         </goals>
                         <configuration>
                             <wsdlFiles>
-                                <wsdlFile>10.10.11.152/eFraudAPI/CheckService.asmx.wsdl</wsdlFile>
+                                <wsdlFile>GC-APP-03/eFraudAPI/CheckService.asmx.wsdl</wsdlFile>
                             </wsdlFiles>
                             <packageName></packageName>
-                            <wsdlLocation>http://10.10.11.152/eFraudAPI/CheckService.asmx?WSDL</wsdlLocation>
+                            <wsdlLocation>http://GC-APP-03/eFraudAPI/CheckService.asmx?WSDL</wsdlLocation>
                             <staleFile>${project.build.directory}/jaxws/stale/CheckService.asmx.stale</staleFile>
                         </configuration>
                         <id>wsimport-generate-CheckService.asmx</id>

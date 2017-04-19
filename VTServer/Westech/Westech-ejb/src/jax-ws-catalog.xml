@@ -2,5 +2,5 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="file:/C:/REPO/Dev/girocheck/VTServer/Westech/Westech-ejb/src/main/java/com/smartbt/vtsuite/boundary/Westech_WSDL.xml" uri="wsdl/Westech_WSDL.xml.wsdl"/>
     <system systemId="http://61.12.87.130/eFraudAPI/CheckService.asmx?WSDL" uri="wsdl/61.12.87.130/eFraudAPI/CheckService.asmx.wsdl"/>
-    <system systemId="http://10.10.11.152/eFraudAPI/CheckService.asmx?WSDL" uri="wsdl/10.10.11.152/eFraudAPI/CheckService.asmx.wsdl"/>
+    <system systemId="http://GC-APP-03/eFraudAPI/CheckService.asmx?WSDL" uri="wsdl/GC-APP-03/eFraudAPI/CheckService.asmx.wsdl"/>
 </catalog>
